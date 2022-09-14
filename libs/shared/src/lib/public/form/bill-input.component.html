@@ -1,0 +1,27 @@
+<div class="input-group" style="width: 100%" [formGroup]="form">
+  <table class="table table-bordered table-hover file-row-table" width="100%">
+    <thead>
+    <tr>
+      <th><span style="line-height: 20px;">企业名称</span></th>
+      <th><span style="line-height: 20px;">纳税人识别号</span></th>
+      <th><span style="line-height: 20px;">纳税人地址</span></th>
+      <th style="width: 80px;">
+      </th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr >
+      <td>{{item.companyName}}</td>
+      <td>{{item.taxpayerSegistrationNumber}}</td>
+      <td>{{item.taxpayerAddress}}</td>
+      <td>
+        <ng-container>
+          <a class="xn-click-a" (click)="onEdit(item)" style="margin-right: 6px;">补充</a>
+          <a class="xn-click-a" (click)="onView(item)">查看</a>
+        </ng-container>
+      </td>
+    </tr>
+    </tbody>
+  </table>
+</div>
+<span class="xn-input-alert">{{alert}}</span>

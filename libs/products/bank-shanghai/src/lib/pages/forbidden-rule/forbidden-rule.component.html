@@ -1,0 +1,191 @@
+<section class="content-header">
+  <h1>{{tabConfig.title}}</h1>
+</section>
+<section class="content">
+  <div class="box">
+    <div class="box-body">
+      <ul class="nav nav-tabs" *ngIf="!tabConfig.hideTitle">
+        <ng-container *ngFor="let tab of tabConfig.tabList;let i=index">
+          <li [ngClass]="{'active': tab.value===defaultValue}">
+            <a class="xn-click-a" data-toggle="tab" (click)="initData(tab.value)">{{tab.label}}</a>
+          </li>
+        </ng-container>
+      </ul>
+
+      <div class="tab-content">
+        <div class="tab-pane active" style="padding: 15px 0">
+          <collapse-condition-form
+            defaultRows="1"
+            colNum="3"
+            showColon="true"
+            [shows]="shows"
+            [form]="form"
+          ></collapse-condition-form>
+          <div class="col-sm-12 form-group text-right no-padding">
+            <!-- 头按钮 -->
+            <ng-container
+              *ngIf="currentSubTab?.edit && currentSubTab?.edit?.headButtons && currentSubTab?.edit?.headButtons.length">
+              <span *ngFor="let btn of currentSubTab.edit.headButtons">
+                <ng-container [ngSwitch]="btn.operate">
+                  <ng-container *ngSwitchDefault>
+                    <button type="button" class="btn btn-primary"
+                      [disabled]="!selectedItems.length && btn.disabled && btn.disabled === true"
+                      (click)="handleHeadClick(btn)">{{btn.label}}</button>
+                  </ng-container>
+
+                </ng-container>
+              </span>
+            </ng-container>
+            <ng-container *ngIf="currentSubTab.canSearch">
+              <button class="btn btn-primary" (click)="searchMsg()">查询</button>
+              <button class="btn btn-danger" (click)="reset()">重置</button>
+            </ng-container>
+          </div>
+          <!--列表交易子标签页切换,当且子标签状态多种时，显示切换标签导航-->
+          <ng-container *ngIf="currentTab.subTabList.length>1">
+            <ul class="nav nav-pills sub-ul">
+              <ng-container *ngFor="let sub of currentTab.subTabList">
+                <li role="presentation" [ngClass]="{'active': sub.value === subDefaultValue}"
+                  (click)="handleSubTabChange(sub.value)">
+                  <a class="xn-click-a">{{sub.label}}</a>
+                </li>
+              </ng-container>
+            </ul>
+          </ng-container>
+          <!--子列表-->
+          <table class="table table-bordered table-striped text-center">
+            <thead>
+              <tr class="table-head">
+                <!-- 全选按钮 -->
+                <th *ngIf="currentSubTab.canChecked" class="input-check" style='width:4%'>全选/取消
+                  <input type="checkbox" name="all" [checked]="isAllChecked()" [disabled]="!listInfo.length"
+                    (change)="checkAll()" />
+                </th>
+                <th style='width:3%'>序号</th>
+                <!-- 表头，搜索功能 -->
+                <th *ngFor="let head of heads" [ngStyle]="{'width':head.width}"
+                  style="max-width: 70px;word-wrap:break-word">
+                  <ng-container *ngIf="head.sort;else normal">
+                    <span [ngClass]="onSortClass(head?.value)" (click)="onSort(head?.value)">{{head.label}}</span>
+                  </ng-container>
+                  <ng-template #normal>{{head.label}}</ng-template>
+                </th>
+                <!-- 行操作 -->
+                <th *ngIf="currentSubTab?.edit && currentSubTab?.edit?.rowButtons && currentSubTab?.edit?.rowButtons?.length" 
+                  style='width: 20%'>
+                  操作
+                </th>
+              </tr>
+            </thead>
+            <tbody>
+              <ng-container *ngIf="listInfo.length;else block">
+                <tr *ngFor="let item of listInfo;let i=index">
+                  <!-- 行选则 -->
+                  <td style='width:4%' *ngIf="currentSubTab.canChecked">
+                    <input type="checkbox" name="single" [checked]="item['checked']" (change)="singleChecked(item,i)" />
+                  </td>
+                  <!--序号-->
+                  <td style='width:3%'>{{i + 1}}</td>
+                  <!-- 列内容 -->
+                  <td *ngFor="let head of currentSubTab.headText" [ngStyle]="{'width':head.width}"
+                    class="text-overflow" >
+                    <!-- 根据head type 类型配置显示方式 -->
+                    <ng-container [ngSwitch]="head.type">
+                      <!-- mainFlowId-->
+                      <ng-container *ngSwitchCase="'mainFlowId'">
+                        <a href="javaScript:void(0)"
+                          (click)="hwModeService.viewProcess(item[head.value])">{{item[head.value]}}</a>
+                      </ng-container>
+                      <!--contract-->
+                      <ng-container *ngSwitchCase="'contract'">
+                        <ng-container *ngIf="item[head.value]">
+                          <ng-container *ngIf="judgeDataType(jsonTransForm(item[head.value])); else block3">
+                            <div *ngFor="let sub of item[head.value] | xnJson; let i=index">
+                              <a href="javaScript:void(0)" (click)="showContract(sub)">{{sub.label}}</a>
+                            </div>
+                          </ng-container>
+                          <ng-template #block3>
+                            <a href="javaScript:void(0)" (click)="showContract(jsonTransForm(item[head.value]))">
+                              {{jsonTransForm(item[head.value])['label']}}</a>
+                          </ng-template>
+                        </ng-container>
+                      </ng-container>
+                      <!--图片文件file-->
+                      <ng-container *ngSwitchCase="'file'">
+                        <ng-container *ngIf="item[head.value]">
+                          <div *ngFor="let sub of item[head.value] | xnJson">
+                            <a href="javaScript:void(0)" (click)="viewFiles(sub)">{{sub.fileName}}</a>
+                          </div>
+                        </ng-container>
+                      </ng-container>
+                      <ng-container *ngSwitchCase="'date'">
+                        <ng-container *ngIf="item[head.value]">
+                          <div>{{item[head.value] | xnDate: 'date'}}</div>
+                        </ng-container>
+                      </ng-container>
+                      <ng-container *ngSwitchCase="'longdatetime'">
+                        <ng-container *ngIf="item[head.value]">
+                          <div>{{item[head.value] | xnDate: 'longdatetime'}}</div>
+                        </ng-container>
+                      </ng-container>
+                      <!-- 应收账款金额 -->
+                      <ng-container *ngSwitchCase="'receive'">
+                          <ng-container *ngIf="item[head.value]">
+                              <div>{{item[head.value].toFixed(2) | xnMoney}}</div>
+                          </ng-container>
+                      </ng-container>
+                      <!-- 适用渠道 -->
+                      <!-- <ng-container *ngSwitchCase="'channel'">
+                        <div>{{ { 'type':item['productType'],'selectBank':item['bankType'] } | xnSelectDeepTransform:'productType_sh' }}</div>
+                      </ng-container> -->
+                      <ng-container *ngSwitchCase="'channel'">
+                        <div>{{ item[head.value] | xnSelectTransform: 'channel_sh' }}</div>
+                      </ng-container>
+                      <!-- 长文本 -->
+                      <ng-container *ngSwitchCase="'long-text'">
+                        <span data-toggle="tooltip" trigger="hover" data-placement="top" title="{{item[head.value]}}" style="cursor: pointer;">
+                          {{item[head.value]}}
+                        </span>
+                      </ng-container>
+                      <ng-container *ngSwitchCase="'qrsMatchMethod'">
+                        <div [innerHTML]="item[head.value] | xnSelectTransform:'qrsMatchMethod'"></div>
+                      </ng-container>
+                      <!--默认-->
+                      <ng-container *ngSwitchDefault>
+                        <div [innerHTML]="item[head.value] | xnGatherType: {head:head,row:item}"></div>
+                      </ng-container>
+                    </ng-container>
+                  </td>
+                  <!-- 行按钮 -->
+                  <td *ngIf="currentSubTab?.edit &&currentSubTab?.edit?.rowButtons && currentSubTab?.edit?.rowButtons.length"
+                    style='width: 20%'>
+                    <span *ngFor="let btn of currentSubTab.edit.rowButtons" class="operate-btn">
+                      <ng-container [ngSwitch]="btn.operate">
+                        <ng-container *ngSwitchCase="'isEnable_rule'">
+                          <a href="javaScript:void(0)" class="xn-click-a" (click)="handleRowClick(item,btn,i)">{{item.status ? '禁用' : '启用'}}</a>
+                        </ng-container>
+                        <ng-container *ngSwitchDefault>
+                          <a href="javaScript:void(0)" class="xn-click-a" (click)="handleRowClick(item,btn,i)">{{btn.label}}</a>
+                        </ng-container>
+                      </ng-container>
+                    </span>
+                  </td>
+                </tr>
+              </ng-container>
+            </tbody>
+          </table>
+        </div>
+        <xn-pagination [rows]="pageConfig.pageSize" [first]="pageConfig.first" [totalRecords]="pageConfig.total"
+              [pageSizeOptions]="[5,10,20,30,50,100]" (pageChange)="onPage($event)"></xn-pagination>
+      </div>
+    </div>
+  </div>
+</section>
+
+<ng-template #block>
+  <tr>
+    <td [attr.colspan]="calcAttrColspan()">
+      <div class="empty-message"></div>
+    </td>
+  </tr>
+</ng-template>

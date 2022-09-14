@@ -1,0 +1,142 @@
+<modal #modal [backdrop]="'static'" [keyboard]="false" [animation]="false">
+  <modal-header [showClose]="false">
+    <h4 class="modal-title">新增合同</h4>
+  </modal-header>
+  <modal-body>
+    <div class="flex-row">
+      <!-- 左侧 -->
+      <div class="this-left">
+        <div class="contract-info" *ngIf="!map">
+          <div class="this-title">
+            <div class="this-text">
+              合同名称
+              <span class="required-label">*</span>
+            </div>
+            <div class="this-control">
+              <input class="form-control xn-input-border-radius" [(ngModel)]="contractTitle" type="text" [disabled]="asset">
+            </div>
+          </div>
+
+          <div class="this-title">
+            <div class="this-text">
+              合同编号
+              <span class="required-label">*</span>
+            </div>
+            <div class="this-control">
+              <input class="form-control xn-input-border-radius" [(ngModel)]="contractNum" type="text" [disabled]="asset">
+            </div>
+          </div>
+
+          <div class="this-title">
+            <div class="this-text">
+              合同金额
+              <span class="required-label">*</span>
+            </div>
+            <div class="this-control">
+              <input #moneyInput class="form-control xn-input-border-radius" required type="text" placeholder="单位: 元人民币" (input)="onInput()"
+                [disabled]="asset">
+            </div>
+            <div class="this-control inline">
+              <span class="xn-money-alert" #moneyAlertRef>{{moneyAlert}}</span>
+            </div>
+          </div>
+
+          <div class="this-title">
+            <div class="this-text">
+              签订日期
+              <span class="required-label">*</span>
+            </div>
+            <div class="this-control">
+              <input class="form-control xn-input-border-radius" #dateInput [(ngModel)]="contractDate" type="text" placeholder="格式: 20170731"
+                (change)="onDateInput()" [disabled]="asset">
+            </div>
+            <div class="this-control inline">
+              <span class="xn-input-alert">{{dateAlert}}</span>
+            </div>
+          </div>
+
+          <div class="this-title">
+            <div class="this-text">
+              合同买方
+              <span class="required-label">*</span>
+            </div>
+            <div class="this-control">
+              <input class="form-control xn-input-border-radius" [(ngModel)]="contractBuyer" type="text" [disabled]="asset">
+            </div>
+          </div>
+
+          <div class="this-title">
+            <div class="this-text">
+              供应商
+              <span class="required-label">*</span>
+            </div>
+            <div class="this-control">
+              <input class="form-control xn-input-border-radius" [(ngModel)]="supplier" type="text" [disabled]="supplierInit!==''">
+            </div>
+          </div>
+
+          <div class="this-title">
+            <div class="this-text">
+              合同图片
+              <span class="required-label">*</span>
+            </div>
+            <div class="this-control">
+              <app-xn-mfile-input [row]="rows[0]" [form]="mainForm"></app-xn-mfile-input>
+            </div>
+          </div>
+
+        </div>
+
+        <div>
+          <div class="" *ngFor="let row of shows">
+            <div [class.hide-select]="!row.required&&!map">
+              <div class="show-title xn-control-label">
+                {{row.title}}
+                <span *ngIf="row.required == false && row.required !== 0 && map" class="required-label">*</span>
+                <span *ngIf="row.required !== false" class="required-label">*</span>
+              </div>
+              <div class="show-input">
+                <xn-input [row]="row" [form]="mainForm"></xn-input>
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- 右侧 -->
+      <div class="this-right" *ngIf="fileType === 'img'">
+        <div class="img-container" #imgContainer>
+          <div class="img-wrapper" #outerImg>
+            <img #innerImg class="this-img" src="{{fileSrc}}" *ngIf="!!fileSrc">
+          </div>
+        </div>
+
+      </div>
+
+      <div class="this-right" *ngIf="fileType === 'pdf'">
+        <div class="pdf-container">
+          <iframe class="this-pdf"></iframe>
+        </div>
+      </div>
+    </div>
+
+  </modal-body>
+  <div class="modal-footer">
+    <div class="page">
+      <xn-page [total]="total" [size]="pageSize" [showTotal]="false" (change)="onPage($event)"></xn-page>
+    </div>
+    <div class="btn-ro">
+      <a class="button-rotate rotate-left" title="点击旋转图片" (click)="rotateImg('left')" *ngIf="!!fileSrc">
+        <i class="fa fa-undo fa-s"></i>
+      </a>
+      <a class="button-rotate rotate-right" title="点击旋转图片" (click)="rotateImg('right')" *ngIf="!!fileSrc">
+        <i class="fa fa-repeat fa-s"></i>
+      </a>
+    </div>
+
+    <span style="padding-right: 30px; color: #e15f63">{{errorMsg}}</span>
+    <button type="button" class="btn btn-default" (click)="onCancel()">取消</button>
+    <button type="button" class="btn btn-danger" (click)="onSubmit()" [disabled]="!isValid()">提交信息</button>
+  </div>
+</modal>

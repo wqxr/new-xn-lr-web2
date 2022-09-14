@@ -1,0 +1,55 @@
+<!--发票批量查验列表-->
+<section class="content-header">
+  <span>发票批量查验记录</span>
+</section>
+<section class="content">
+  <div class="box">
+    <div class="box-body">
+      <div class="input-group" style="width: 100%">
+        <table class="table table-bordered table-hover file-row-table text-center">
+          <thead>
+          <tr>
+            <th>记录编号</th>
+            <th>查验开始时间</th>
+            <th>查验结束时间</th>
+            <th>当前状态</th>
+            <th>发票状态正常数量</th>
+            <th>发票状态异常数量</th>
+            <th>操作</th>
+          </tr>
+          </thead>
+          <tbody>
+          <ng-container *ngIf="list.length;else block">
+            <tr *ngFor="let item of list">
+              <td>{{item.id}}</td>
+              <td>{{item?.checkStartTime | xnDate: 'longdatetime'}}</td>
+              <td>{{item?.checkEndTime | xnDate: 'longdatetime'}}</td>
+              <td>{{ statusMap[item.currentStatus] }}</td>
+              <td>{{item.normalCount}}</td>
+              <td>{{item.abnormalCount}}</td>
+              <td>
+                <a (click)="checkDetailInfo(item)" class="xn-click-a small-font">查看</a>
+              </td>
+            </tr>
+          </ng-container>
+          <ng-template #block>
+            <tr>
+              <td [attr.colspan]="10">
+                <div style="padding: 3rem;text-align: center;color: #c5c5c5;background-color: #fdfdfd">
+                  暂无数据！
+                </div>
+              </td>
+            </tr>
+          </ng-template>
+          </tbody>
+        </table>
+      </div>
+      <xn-pagination [rows]="pageSize" [first]="first" [totalRecords]="total"
+                     [pageSizeOptions]="[10,20,30,50,100]"
+                     (pageChange)="onPage($event)"></xn-pagination>
+      <div class="box-footer" style="float:left; border-top: none;">
+        <button type="button" class="btn btn-default pull-right" (click)="onCancel()">返回</button>
+      </div>
+    </div>
+  </div>
+</section>

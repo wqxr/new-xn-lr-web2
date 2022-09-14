@@ -1,0 +1,45 @@
+<modal #modal [backdrop]="'static'" [keyboard]="false" [animation]="false" (onDismiss)="oncancel()">
+  <modal-header [showClose]="true" style='text-align:left'
+    *ngIf="params?.type!=='delete-unuse-rule' && params?.type!=='delete-module'">
+    <h4>此规则目前被用于以下模型(共<span style="color: #cc0029;">{{moduleList.length}}</span>个)</h4>
+    <div *ngIf="params?.type==='edit'"><span style="color: #cc0029;">修改</span>规则后，以下模型将自动使用新规则，请确认是否<span
+        style="color: #cc0029;margin-top: 20px;">修改</span>?</div>
+    <div *ngIf="params?.type==='delete'"><span style="color: #cc0029;">删除</span>规则后，以下模型将自动使用新规则，请确认是否<span
+        style="color: #cc0029;margin-top: 20px;">删除</span>?</div>
+  </modal-header>
+  <modal-body>
+    <div style="height: 100px;padding: 40px 25px;font-weight: bold;" *ngIf="params?.type==='delete-unuse-rule'">
+      请确认是否<span style="color: #cc0029;">删除</span>规则：（{{params?.ruleName}}） ？
+    </div>
+    <div style="height: 100px;padding: 40px 25px;font-weight: bold;" *ngIf="params?.type==='delete-module'">
+      请确认是否<span style="color: #cc0029;">删除</span>抽样模型: {{params?.modelName}} ？
+    </div>
+    <div style='max-height:400px;overflow-y: scroll;overflow-x: hidden'
+      *ngIf="params?.type!=='delete-unuse-rule' && params?.type!=='delete-module'">
+      <div style="padding: 5px 25px" class="row form-group">
+        <div class="col-sm-12">
+          <table class="table table-bordered table-striped text-center">
+            <thead>
+              <tr>
+                <th>模型编号</th>
+                <th>模型名称</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor='let item of moduleList'>
+                <td>{{item.modelNum}}</td>
+                <td>{{item.modelName}}</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </modal-body>
+  <modal-footer style="border-top: none;">
+    <button type="button" class="btn btn-default" (click)="oncancel()">关闭</button>
+    <button type="button" class="btn btn-danger" (click)="onOk()" *ngIf="params?.type==='edit'">继续修改</button>
+    <button type="button" class="btn btn-danger" (click)="onDelete()" *ngIf="params?.type ==='delete' || params?.type ==='delete-unuse-rule'">删除</button>
+    <button type="button" class="btn btn-danger" (click)="deleteModel()" *ngIf="params?.type ==='delete-module'">删除</button>
+  </modal-footer>
+</modal>

@@ -1,0 +1,17 @@
+<ul class="nav nav-tabs" style='margin-top: 20px;'>
+  <ng-container>
+    <li class="active">
+      <a class="xn-click-a" data-toggle="tab">
+        <span class="pull-right-container" *ngIf="!!count_jd_zs">
+          <span class="label label-primary pull-right">{{count_jd_zs}}</span>
+        </span>
+        待办列表-保理通-金地-前海中晟
+      </a>
+    </li>
+  </ng-container>
+</ul>
+<!--金地-前海中晟业务列表-->
+<ng-container>
+  <zs-gemdale-home-comm-list-component [supers]="{label:ZsGemdaleTodo,value:'ZsGemdaleTodo'}">
+  </zs-gemdale-home-comm-list-component>
+</ng-container>

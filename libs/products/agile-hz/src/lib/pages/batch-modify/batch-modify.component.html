@@ -1,0 +1,172 @@
+<section class="content">
+  <div class="box">
+    <div class="box-header">
+      <h3 class="box-title">批量补充信息</h3>
+    </div>
+    <!-- /.box-header -->
+
+    <div class="box-body">
+      <form class="form-horizontal">
+        <div class="row form-group">
+          <div class="col-sm-3 xn-control-label">
+            已选交易：
+          </div>
+          <div class="col-sm-6">
+            <table class=" table table-bordered  text-center table-striped">
+              <thead>
+                <tr>
+                  <ng-container *ngFor="let head of heads">
+                    <th>{{ head.label }}</th>
+                  </ng-container>
+                </tr>
+              </thead>
+            </table>
+            <div class="scroll-height">
+              <table class=" head-info table table-bordered  text-center table-striped">
+                <tbody>
+                  <tr *ngFor="let item of rows; let i = index">
+                    <ng-container *ngFor="let head of heads">
+                      <td style="word-break: break-all;">
+                        <ng-container [ngSwitch]="true">
+                          <ng-container *ngSwitchCase="head.value === 'mainFlowId'">
+                            <!-- 交易ID -->
+                            <a [innerHTML]="item[head.value]" href="javaScript:void (0)"
+                              (click)="viewProcess(item[head.value])"></a>
+                          </ng-container>
+                          <!-- 总部公司 -->
+                          <ng-container *ngSwitchCase="head.value === 'headquarters'">
+                            <div [innerHTML]="item[head.value]"></div>
+                          </ng-container>
+                          <!-- 交易金额 -->
+                          <ng-container *ngSwitchCase="head.value ==='receive'">
+                            <ng-container
+                              *ngIf=" item[head.value] !==undefiend &&item[head.value] !==null && item[head.value]!==0">
+                              <div> {{item[head.value].toFixed(2)| xnMoney}}</div>
+                            </ng-container>
+                          </ng-container>
+                          <ng-container *ngSwitchCase="
+                              ['priorityLoanDate','factoringEndDate'].includes( head.value)">
+                            <div>
+                              {{ formatDate(item[head.value]) }}
+                            </div>
+                          </ng-container>
+                          <ng-container *ngSwitchDefault>
+                            <div [innerHTML]="
+                                item[head.value]
+                                  | xnGatherType: { head: head, row: item }
+                              "></div>
+                          </ng-container>
+                        </ng-container>
+                      </td>
+                    </ng-container>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+          <div class="col-sm-3 xn-control-desc"></div>
+        </div>
+
+        <div class="row form-group">
+          <div class="col-sm-3 xn-control-label">
+            补充信息：
+          </div>
+          <div class="col-sm-6">
+            <div class="checkbox">
+              <div *ngFor="let info of infos; let i = index" style='display:flex'>
+                <input type="checkbox" name="i" (change)="onInfoChange(info)" />
+                <p style='width:100px'> {{ info.label }}</p>
+                <div style='margin-left:50px;width:400px'><span
+                    style='text-align: left;color: #ccc;'>{{info.memo}}</span></div>
+              </div>
+            </div>
+          </div>
+          <div class="col-sm-3 xn-control-desc"></div>
+        </div>
+
+        <div class="row form-group" *ngIf="infos[0].checked">
+          <div class="col-sm-3 xn-control-label">
+            保理融资到期日：
+          </div>
+          <div class="col-sm-6">
+            <xn-date-picker #datepicker [placeholder]="'请录入保理融资到期日，格式为：20210101'" [value]="data?.factoringEndDate"
+              [options]="options" (changeDate)="selectedDate($event, 'factoringEndDate')"></xn-date-picker>
+            <div *ngIf="errors.factoringEndDate" class="text-error">
+              请录入正确的保理融资到期日，模式如：20210101
+            </div>
+          </div>
+          <div class="col-sm-3 xn-control-desc"></div>
+        </div>
+        <div class="row form-group" *ngIf="infos[1].checked">
+          <div class="col-sm-3 xn-control-label">
+            预计放款日期：
+          </div>
+          <div class="col-sm-6">
+            <xn-date-picker [placeholder]="'请录入预计放款日期，格式为：20210101'" [value]="data?.priorityLoanDate"
+              [options]="options" (changeDate)="selectedDate($event, 'priorityLoanDate')"></xn-date-picker>
+            <div *ngIf="errors.priorityLoanDate" class="text-error">
+              请录入正确的预计放款日期，模式如：20210101
+            </div>
+          </div>
+          <div class="col-sm-3 xn-control-desc"></div>
+        </div>
+        <div class="row form-group" *ngIf="infos[2].checked">
+          <div class="col-sm-3 xn-control-label">
+            资金渠道：
+          </div>
+          <div class="col-sm-6">
+            <div class="col-sm-4 padding-0">
+              <select class="form-control col-sm-4" (change)="moneyChannelChange($event.target.value)">
+                <option *ngFor="let option of moneyChannelOptions" value="{{ option.value }}">{{ option.label }}
+                </option>
+              </select>
+            </div>
+          </div>
+          <div class="col-sm-3 xn-control-desc"></div>
+        </div>
+        <div class="row form-group" *ngIf="infos[3].checked">
+          <div class="col-sm-3 xn-control-label">
+            付款账户信息 ：
+          </div>
+          <div class="col-sm-6">
+            <div class="col-sm-6 padding-0">
+              <select class="form-control col-sm-4" (change)="bankChange($event.target.value)">
+                <option *ngFor="let option of bankOptions" value="{{ option.value }}">{{ option.label }}</option>
+              </select>
+            </div>
+            <div class="col-sm-6 padding-0">
+              <select class="form-control col-sm-4" (change)="accountChange($event.target.value)">
+                <option *ngFor="let option of accountOptions" value="{{ option.value }}">{{ option.label }}</option>
+              </select>
+            </div>
+          </div>
+        </div>
+        <div class="row form-group" *ngIf="infos[4].checked">
+          <div class="col-sm-3 xn-control-label">
+            资产转让折扣率：
+          </div>
+          <div class="col-sm-6">
+            <input class="form-control col-sm-4" type="text" (input)="discountRateChange($event.target.value)"
+              placeholder="请输入0~100之间的数字,支持两位小数">
+            <div *ngIf="errors.discountRate" class="text-error">
+              请输入0~100之间的数字,支持两位小数
+            </div>
+          </div>
+          <div class="col-sm-3 xn-control-desc"></div>
+        </div>
+      </form>
+    </div>
+    <!-- /.box-body -->
+    <div class="text-right box-footer">
+      <button class="btn btn-default" type="button" (click)="goBack()">
+        返回
+      </button>
+
+      <button class="btn btn-primary" type="button" (click)="submit()">
+        提交
+      </button>
+    </div>
+  </div>
+  <!-- /.box -->
+</section>
+<!-- /.content -->

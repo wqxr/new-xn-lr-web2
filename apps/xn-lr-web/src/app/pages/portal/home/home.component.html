@@ -1,0 +1,54 @@
+<!--首页-->
+<div [ngClass]="[store.isPhone ? 'h5-home' : 'home']">
+  <div class="original">
+    <div [ngClass]="[store.isPhone ? 'h5-portal-panel' : 'portal-panel', store.isPhone ? 'flex-center' : '']">
+      <home-title title="我们的初心" *ngIf="!store.isPhone"></home-title>
+      <div class="desc-box">
+        <div class="desc" *ngIf="!store.isPhone">链融科技成立初心是打造产融发展联盟，运用金融科技技术，引进跨界专家团队，解决实体经济的金融普惠难题，使中小微企业正常的生产、流通获得有效资金支持，改善金融企业的客户经营场景，提高资金使用的“安全性、流动性、效益性”。</div>
+        <div class="desc" *ngIf="store.isPhone">深圳市链融科技股份有限公司（简称“链融科技”）成立于2017年，注册地在深圳前海，注册资本10000万元。作为一家金融科技公司，链融科技积极响应国家普惠金融战略，依托云计算、大数据、区块链、人工智能以及物联网等新兴技术在供应链金融场景的应用，聚集金融、供应链、科技、运营以及风控等跨界专家团队，确立了“平台、场景、联盟、服务”全新的商业模式，以数字化、标准化、电子化、可视化的方式，为产融各方提供专业化的供应链金融科技服务，让产融生态内“真实、合法、有效的交易快速获得资金支持”，带动产融生态各方善赢发展。</div>
+      </div>
+    </div>
+  </div>
+  <div class="advantage">
+    <div [ngClass]="[store.isPhone ? 'h5-advantage-panel' : 'portal-panel']">
+      <home-title title="我们的优势"></home-title>
+      <div class="card-box" #advantageBox>
+        <div [ngClass]="['card', store.isPhone ? '' : 'float-shadow', store.isPhone && index === currentAdvCard ? 'h5-float-shadow' : '' ]" *ngFor="let card of cardList;let index = index" #advantageCard>
+          <div class="card-box-img">
+            <img [src]="store.isPhone ? card.h5Src : card.src">
+          </div>
+          <div class="advantage-content">
+            <div class="title">{{card.title}}</div>
+            <div class="line-center">
+              <div class="line"></div>
+            </div>
+            <div class="desc">{{card.desc}}</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="practice" [ngStyle]="style">
+    <div [ngClass]="[store.isPhone ? 'h5-portal-panel' : 'portal-panel']">
+      <home-title title="经营实践" titleColor="#fff"></home-title>
+      <div class="card-box">
+        <div class="card" *ngFor="let card of practiceList;">
+          <div class="value">{{card.value}}+</div>
+          <div class="label">{{card.label}}</div>
+          <div class="line-top"></div>
+          <div class="rect rect-left"></div>
+          <div class="rect rect-right"></div>
+          <div class="rect-small rect-small-left"></div>
+          <div class="rect-small rect-small-right"></div>
+        </div>
+      </div>
+      <div class="deadline">截止时间：{{ deadline }}</div>
+    </div>
+  </div>
+  <div class="partner">
+    <div [ngClass]="[store.isPhone ? 'h5-partner-panel' : 'portal-panel']">
+      <home-title title="合作伙伴"></home-title>
+      <carousel [imgList]="imgList"></carousel>
+    </div>
+  </div>
+</div>

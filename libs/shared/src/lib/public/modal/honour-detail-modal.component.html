@@ -1,0 +1,98 @@
+<modal #modal [backdrop]="'static'" [keyboard]="false" [animation]="false" (onDismiss)="close()">
+  <modal-header [showClose]="true">
+    <h4 class="modal-title">查看商票详情</h4>
+  </modal-header>
+  <modal-body>
+
+    <div class="box-body">
+      <table class="table table-bordered table-striped">
+        <tbody>
+          <tr *ngIf="data.appId">
+            <td class="col-sm-4">出票企业ID</td>
+            <td>{{data.appId}}</td>
+          </tr>
+          <tr *ngIf="data.appName">
+            <td>出票企业名称</td>
+            <td>{{data.appName}}</td>
+          </tr>
+          <tr *ngIf="data.issueDate">
+            <td>汇票出票日期</td>
+            <td>{{data.issueDate}}</td>
+          </tr>
+          <tr *ngIf="data.dueDate">
+            <td>汇票到期日</td>
+            <td>{{data.dueDate}}</td>
+          </tr>
+          <tr *ngIf="data.billNumber">
+            <td>汇票票据号码</td>
+            <td>{{data.billNumber}}</td>
+          </tr>
+          <tr *ngIf="data.drawerName">
+            <td>出票人全称</td>
+            <td>{{data.drawerName}}</td>
+          </tr>
+          <tr *ngIf="data.drawerAccount">
+            <td>出票人账号</td>
+            <td>{{data.drawerAccount}}</td>
+          </tr>
+          <tr *ngIf="data.drawerBankNumber">
+            <td>出票人开户银行</td>
+            <td>{{data.drawerBankNumber}}</td>
+          </tr>
+          <tr *ngIf="data.payeeName">
+            <td>收款人全称</td>
+            <td>{{data.payeeName}}</td>
+          </tr>
+          <tr *ngIf="data.payeeAccount">
+            <td>收款人账号</td>
+            <td>{{data.payeeAccount}}</td>
+          </tr>
+          <tr *ngIf="data.payeeBankNumber">
+            <td>收款人开户银行</td>
+            <td>{{data.payeeBankNumber}}</td>
+          </tr>
+          <tr *ngIf="data.billAmount">
+            <td>票据金额</td>
+            <td>{{data.billAmount}}</td>
+          </tr>
+          <tr *ngIf="data.acceptorName">
+            <td>承兑人全称</td>
+            <td>{{data.acceptorName}}</td>
+          </tr>
+          <tr *ngIf="data.acceptorAccount">
+            <td>承兑人账号</td>
+            <td>{{data.acceptorAccount}}</td>
+          </tr>
+          <tr *ngIf="data.acceptorBankNumber">
+            <td>承兑人开户行行号</td>
+            <td>{{data.acceptorBankNumber}}</td>
+          </tr>
+          <tr *ngIf="data.acceptorBankName">
+            <td>承兑人开户行名称</td>
+            <td>{{data.acceptorBankName}}</td>
+          </tr>
+          <tr *ngIf="data.isBillTransfer">
+            <td>能否转让</td>
+            <td>{{data.isBillTransfer}}</td>
+          </tr>
+          <tr *ngIf="data.isUseQuota">
+            <td>是否占用核心企业额度</td>
+            <td>{{data.isUseQuota}}</td>
+          </tr>
+          <tr *ngIf="data.mainFlowId">
+            <td>主流程ID</td>
+            <td>{{data.mainFlowId}}</td>
+          </tr>
+          <tr>
+            <td>预案平台顺序号</td>
+            <td>{{data?.platformSeq}}</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+  </modal-body>
+  <modal-footer>
+    <button type="button" class="btn btn-danger" (click)="close()">确定</button>
+  </modal-footer>
+</modal>

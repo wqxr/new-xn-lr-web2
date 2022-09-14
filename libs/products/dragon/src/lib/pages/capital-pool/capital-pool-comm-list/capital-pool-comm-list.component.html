@@ -1,0 +1,544 @@
+<section class="content">
+  <div class="box">
+    <div class="box-header">
+      <h3 class="box-title">{{ title }}列表</h3>
+    </div>
+    <!-- /.box-header -->
+
+    <div class="box-body">
+      <!--搜索项-->
+      <div *ngIf="displayShow" class="clearfix">
+        <div class="item-box col-md-4" *ngFor="let row of shows">
+          <div class="item-label">
+            <label>{{ row.title }}:</label>
+          </div>
+          <div class="item-control">
+            <ng-container>
+              <app-dynamic-input
+                [row]="row"
+                [form]="mainForm"
+                [formModule]="formModule"
+              ></app-dynamic-input>
+            </ng-container>
+          </div>
+        </div>
+      </div>
+      <div *ngIf="!displayShow" class="clearfix">
+        <div class="item-box col-md-4" *ngFor="let row of shows.slice(0, 6)">
+          <div class="item-label">
+            <label>{{ row.title }}:</label>
+          </div>
+          <div class="item-control">
+            <ng-container>
+              <app-dynamic-input
+                [row]="row"
+                [form]="mainForm"
+                [formModule]="formModule"
+              ></app-dynamic-input>
+            </ng-container>
+          </div>
+        </div>
+      </div>
+      <div>
+        <div
+          class="center-block"
+          style="border-bottom: 1px solid #ccc; float: left"
+        ></div>
+        <div
+          class="center-block"
+          style="border-bottom: 1px solid #ccc; float: right"
+        ></div>
+      </div>
+      <div class="showClass" (click)="show()">
+        <a *ngIf="!displayShow" class="xn-click-a"
+          ><i class="fa fa-angle-double-down" aria-hidden="true"></i>更多
+        </a>
+        <a class="xn-click-a" *ngIf="displayShow"
+          ><i class="fa fa-angle-double-up" aria-hidden="true"></i>收起
+        </a>
+      </div>
+      <!--按钮组项-->
+      <div
+        class="form-group clearfix"
+        *ngIf="base?.superConfig.list?.headButtons"
+      >
+        <div class="col-sm-12 btn-label btn-cus">
+          <div class="col-sm-6 text-left btn-cus" *ngIf="isShowTradingBtn">
+            <ng-container *ngIf="!isAgencyUser">
+              <button
+                (click)="generate()"
+                [disabled]="!btnStatusBool"
+                class="btn btn-primary"
+              >
+                生成合同
+              </button>
+              <button
+                (click)="generateAndSign()"
+                [disabled]="!btnStatusBool"
+                class="btn btn-primary"
+              >
+                生成并签署合同
+              </button>
+              <!-- <button
+                (click)="doPush()"
+                class="btn btn-primary"
+                [disabled]="selectedItems.length === 0"
+              >
+                推送企业
+              </button> -->
+              <!-- <button
+                (click)="uploadFiles()"
+                [disabled]="!btnStatusBool"
+                class="btn btn-info"
+              >
+                批量上传文件
+              </button> -->
+            </ng-container>
+            <ng-container *ngIf="!isAgencyUser">
+              <button
+                type="button"
+                (click)="batchModify()"
+                [disabled]="!btnStatusBool"
+                class="btn btn-primary"
+              >
+                批量补充信息
+              </button>
+            </ng-container>
+            <div class="btn-group" *ngIf="!isAgencyUser">
+              <button
+                type="button"
+                class="btn btn-default dropdown-toggle"
+                data-toggle="dropdown"
+                aria-expanded="false"
+              >
+                更多
+                <span class="caret"></span>
+              </button>
+              <ul class="dropdown-menu" role="menu">
+                <li>
+                  <a
+                    href="javaScript:void (0)"
+                    (click)="doPush()"
+                    [ngClass]="{ disabled: selectedItems.length === 0 }"
+                    >推送企业</a
+                  >
+                </li>
+
+                <li>
+                  <a
+                    href="javaScript:void (0)"
+                    (click)="doPushAdd()"
+                    [ngClass]="{ disabled: selectedItems.length === 0 }"
+                    >推送企业(补充协议)</a
+                  >
+                </li>
+
+                <li>
+                  <a
+                    href="javaScript:void (0)"
+                    (click)="uploadFiles()"
+                    [ngClass]="{ disabled: !btnStatusBool }"
+                  >
+                    批量上传文件</a
+                  >
+                </li>
+              </ul>
+            </div>
+          </div>
+          <div class="col-sm-6 text-right btn-cus">
+            <ng-container *ngIf="isShowTradingBtn">
+              <button
+                type="button"
+                *ngIf="!isAgencyUser"
+                (click)="changeProcess()"
+                [disabled]="!btnStatusBool"
+                class="btn btn-danger"
+              >
+                变更
+              </button>
+              <button
+                type="button"
+                *ngIf="!isAgencyUser"
+                (click)="removeCapital()"
+                [disabled]="!btnStatusBool"
+                class="btn btn-danger"
+              >
+                移除交易
+              </button>
+              <ng-container *ngIf="!isAgencyUser">
+                <button
+                  type="button"
+                  (click)="exportCapital()"
+                  [disabled]="!rows.length"
+                  class="btn btn-primary"
+                >
+                  导出清单
+                </button>
+              </ng-container>
+
+              <button
+                type="button"
+                (click)="downloadSelectedAttach()"
+                [disabled]="!rows.length"
+                class="btn btn-primary"
+              >
+                下载附件
+              </button>
+            </ng-container>
+            <ng-container
+              *ngFor="let btn of base?.superConfig.list?.headButtons"
+            >
+              <a
+                *ngIf="btn.type === 'a' && btn.search"
+                (click)="onSearch()"
+                class="{{ btn.class }}"
+                >{{ btn.title }}</a
+              >
+              <a
+                *ngIf="btn.type === 'a' && btn.clearSearch"
+                (click)="clearSearch()"
+                class="{{ btn.class }}"
+                >{{ btn.title }}</a
+              >
+            </ng-container>
+          </div>
+        </div>
+      </div>
+      <!--table内容项-->
+      <div style="width: 100%">
+        <div
+          class="table-head"
+          [ngStyle]="{ 'padding-right': rows.length >= 5 ? '17px' : '0px' }"
+        >
+          <table
+            class="table table-bordered table-striped text-center"
+            style="margin-bottom: 0px !important"
+          >
+            <thead class="headstyle">
+              <tr class="table-head">
+                <th colspan="2" style="width: 50px">
+                  <input
+                    type="checkbox"
+                    class="ml"
+                    [disabled]="rows.length === 0"
+                    (change)="handleAllSelect()"
+                    [checked]="allChecked"
+                  />全选/取消
+                </th>
+                <ng-container *ngFor="let head of heads">
+                  <th
+                    *ngIf="head.sort"
+                    [ngClass]="onSortClass(head.checkerId)"
+                    (click)="onSort(head.checkerId)"
+                  >
+                    {{ head.title }}
+                  </th>
+                  <th *ngIf="!head.sort">{{ head.title }}</th>
+                </ng-container>
+                <!--执行移除或添加-->
+              </tr>
+            </thead>
+          </table>
+        </div>
+        <div class="table-body">
+          <table>
+            <tbody>
+              <ng-container *ngIf="rows && rows.length; else block">
+                <tr *ngFor="let row of rows; let i = index">
+                  <td style="width: 50px">
+                    <input
+                      *ngIf="
+                        isCapitalPool ||
+                        (showSign && !isShowPbtn) ||
+                        isShowTradingBtn
+                      "
+                      class="capital-pool-check"
+                      type="checkbox"
+                      [checked]="row.checked"
+                      (change)="inputChange(row, i)"
+                    />
+                  </td>
+                  <td
+                    *ngFor="let head of heads"
+                    [ngClass]="onTextClass(head['type'])"
+                    style="max-width: 70px; word-wrap: break-word"
+                  >
+                    <ng-container [ngSwitch]="true">
+                      <!-- 交易ID -->
+                      <ng-container
+                        *ngSwitchCase="head.checkerId === 'mainFlowId'"
+                      >
+                        <a
+                          [innerHTML]="row[head.checkerId]"
+                          href="javaScript:void (0)"
+                          (click)="viewProcess(row[head.checkerId])"
+                        ></a>
+                      </ng-container>
+                      <!-- 总部公司 -->
+                      <ng-container
+                        *ngSwitchCase="head.type === 'headquarters'"
+                      >
+                        <div [innerHTML]="row[head.checkerId]"></div>
+                      </ng-container>
+                      <ng-container
+                        *ngSwitchCase="head.type === 'discountRate'"
+                      >
+                        <ng-container
+                          *ngIf="
+                            row[head.checkerId] && row[head.checkerId] !== ''
+                          "
+                        >
+                          <div>{{ row[head.checkerId].toFixed(2) }}%</div>
+                        </ng-container>
+                      </ng-container>
+
+                      <!-- 、保理融资到期日 -->
+                      <ng-container
+                        *ngSwitchCase="head.checkerId === 'priorityLoanDate'"
+                      >
+                        <div>
+                          {{ row[head.checkerId] | xnDate: "date" }}
+                        </div>
+                      </ng-container>
+                      <!--致总部公司通知书（二次转让）-->
+                      <ng-container
+                        *ngSwitchCase="head.checkerId === 'notice2'"
+                      >
+                        <a
+                          *ngIf="!!row[head.checkerId]; else emptyContent"
+                          href="javaScript:void (0)"
+                          (click)="viewContract(row[head.checkerId])"
+                          >{{ (row[head.checkerId] | xnJson)[0].label }}</a
+                        >
+                      </ng-container>
+                      <!--致项目公司通知书（二次转让）-->
+                      <ng-container
+                        *ngSwitchCase="head.checkerId === 'projectNotice2'"
+                      >
+                        <a
+                          *ngIf="!!row[head.checkerId]; else emptyContent"
+                          href="javaScript:void (0)"
+                          (click)="viewContract(row[head.checkerId])"
+                          >{{ (row[head.checkerId] | xnJson)[0].label }}</a
+                        >
+                      </ng-container>
+                      <!--总部公司回执（二次转让）-->
+                      <ng-container
+                        *ngSwitchCase="head.checkerId === 'receipt2'"
+                      >
+                        <a
+                          *ngIf="!!row[head.checkerId]"
+                          href="javaScript:void (0)"
+                          class="a-block"
+                          (click)="viewContract(row[head.checkerId])"
+                          >{{ (row[head.checkerId] | xnJson)[0].label }}</a
+                        >
+                        <a
+                          (click)="fileView(row.receipt2Yyj)"
+                          *ngIf="row.receipt2Yyj && row.receipt2Yyj !== ''"
+                          class="a-block"
+                          href="javaScript:void (0)"
+                          >企业回传文件</a
+                        >
+                        <p *ngIf="row.receipt2Yyj === ''">未回传文件</p>
+                        <a
+                          (click)="
+                            uploadContract(
+                              row,
+                              head,
+                              ContractCreateType.CodeReceipt2
+                            )
+                          "
+                          style="margin-top: 5px"
+                          class="a-block"
+                          href="javaScript:void (0)"
+                          >上传文件</a
+                        >
+                      </ng-container>
+                      <!--项目公司回执（二次转让）-->
+                      <ng-container
+                        *ngSwitchCase="head.checkerId === 'projectReceipt2'"
+                      >
+                        <a
+                          *ngIf="!!row[head.checkerId]; else emptyContent"
+                          href="javaScript:void (0)"
+                          class="a-block"
+                          (click)="viewContract(row[head.checkerId])"
+                          >{{ (row[head.checkerId] | xnJson)[0].label }}</a
+                        >
+                      </ng-container>
+                      <!--项目公司回执（一次转让）-->
+                      <ng-container
+                        *ngSwitchCase="head.checkerId === 'projectReceipt1'"
+                      >
+                        <a
+                          *ngIf="!!row[head.checkerId]; else emptyContent"
+                          href="javaScript:void (0)"
+                          class="a-block"
+                          (click)="viewContract(row[head.checkerId])"
+                          >{{ (row[head.checkerId] | xnJson)[0].label }}</a
+                        >
+                      </ng-container>
+                      <!--《债权转让及账户变更通知的补充说明》-->
+                      <ng-container
+                        *ngSwitchCase="head.checkerId === 'changeNoticeAdd'"
+                      >
+                        <a
+                          *ngIf="!!row[head.checkerId]; else emptyContent"
+                          href="javaScript:void (0)"
+                          class="a-block"
+                          (click)="viewContract(row[head.checkerId])"
+                          >{{ (row[head.checkerId] | xnJson)[0].label }}</a
+                        >
+                      </ng-container>
+                      <!--付款确认书（项目公司致保理商）-->
+                      <ng-container
+                        *ngSwitchCase="head.checkerId === 'factoringPayConfirm'"
+                      >
+                        <a
+                          *ngIf="!!row[head.checkerId]"
+                          href="javaScript:void (0)"
+                          class="a-block"
+                          (click)="viewContract(row[head.checkerId])"
+                          >{{ (row[head.checkerId] | xnJson)[0].label }}</a
+                        >
+                        <a
+                          (click)="fileView(row.factoringPayConfirmYyj)"
+                          *ngIf="row.factoringPayConfirmYyj !== ''"
+                          class="a-block"
+                          href="javaScript:void (0)"
+                          >企业回传文件</a
+                        >
+                        <p *ngIf="row.factoringPayConfirmYyj === ''"></p>
+                      </ng-container>
+                      <!--付款确认书（总部致券商）-->
+                      <ng-container
+                        *ngSwitchCase="head.checkerId === 'brokerPayConfirm'"
+                      >
+                        <a
+                          *ngIf="!!row[head.checkerId]"
+                          href="javaScript:void (0)"
+                          class="a-block"
+                          (click)="viewContract(row[head.checkerId])"
+                          >{{ (row[head.checkerId] | xnJson)[0].label }}</a
+                        >
+                        <a
+                          (click)="fileView(row.brokerPayConfirmYyj)"
+                          *ngIf="row.brokerPayConfirmYyj !== ''"
+                          class="a-block"
+                          href="javaScript:void (0)"
+                          >企业回传文件</a
+                        >
+                        <p *ngIf="row.brokerPayConfirmYyj === ''">未回传文件</p>
+                        <a
+                          (click)="
+                            uploadContract(
+                              row,
+                              head,
+                              ContractCreateType.CodeBrokerPayConfirm
+                            )
+                          "
+                          style="margin-top: 5px"
+                          class="a-block"
+                          href="javaScript:void (0)"
+                          >上传文件</a
+                        >
+                      </ng-container>
+                      <!-- 是否推送企业 -->
+                      <ng-container
+                        *ngSwitchCase="head.type === 'isSignContract'"
+                      >
+                        <div>
+                          {{
+                            row[head.checkerId]
+                              | xnPushType: row[head.checkerId]
+                          }}
+                        </div>
+                      </ng-container>
+                      <!--项目公司是否退回-->
+                      <ng-container
+                        *ngSwitchCase="head.checkerId === 'returnBack'"
+                      >
+                        <a
+                          *ngIf="
+                            row[head.checkerId] && row[head.checkerId] === 1;
+                            else noReturn
+                          "
+                          href="javaScript:void (0)"
+                          class="a-block"
+                          (click)="viewReturnBack(row)"
+                          >是</a
+                        >
+                        <ng-template #noReturn>
+                          <p>否</p>
+                        </ng-template>
+                      </ng-container>
+                      <!--是否有冻结三-->
+                      <ng-container
+                        *ngSwitchCase="head.checkerId === 'freezeThree'"
+                      >
+                        <div *ngIf="row[head.checkerId] === 1">
+                          <div
+                            [ngStyle]="{
+                              color: row[head.checkerId] === 1 ? 'red' : 'black'
+                            }"
+                            [innerHTML]="
+                              row[head.checkerId]
+                                | xnSelectTransform: 'freezeStatus'
+                            "
+                          ></div>
+                        </div>
+                      </ng-container>
+                      <ng-container *ngSwitchDefault>
+                        <ng-container
+                          *ngIf="
+                            row[head.checkerId] && row[head.checkerId] !== ''
+                          "
+                        >
+                          <div
+                            [innerHTML]="
+                              row[head.checkerId]
+                                | xnGatherType: { head: head, row: row }
+                            "
+                          ></div>
+                        </ng-container>
+                      </ng-container>
+                    </ng-container>
+                  </td>
+                </tr>
+              </ng-container>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <xn-pagination
+        [rows]="pageSize"
+        [first]="first"
+        [totalRecords]="total"
+        [pageSizeOptions]="[10, 20, 50, 100, 500, 1000]"
+        (pageChange)="onPage($event)"
+      ></xn-pagination>
+    </div>
+    <!-- /.box-body -->
+    <div class="text-right box-footer">
+      <button class="btn btn-default" type="button" (click)="goBack()">
+        返回
+      </button>
+    </div>
+  </div>
+  <!-- /.box -->
+</section>
+<!-- /.content -->
+
+<ng-template #block>
+  <tr>
+    <td [attr.colspan]="heads.length + 2">
+      <div class="empty-message"></div>
+    </td>
+  </tr>
+</ng-template>
+
+<ng-template #emptyContent>
+  <p>无</p>
+</ng-template>

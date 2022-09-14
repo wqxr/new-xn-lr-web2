@@ -1,0 +1,76 @@
+<div class="input-group" style="width: 100%" [formGroup]="form">
+  <table class="table table-bordered table-hover file-row-table" aria-rowindex='' width="100%">
+    <thead>
+      <tr>
+        <th align="center">
+          <span style="line-height: 20px;">应付账款序号</span>
+        </th>
+        <th>
+          <span style="line-height: 20px;">基础交易合同编号</span>
+        </th>
+        <th>
+          <span style="line-height: 20px;">发票号码</span>
+        </th>
+        <th>
+          <span style="line-height: 20px;">发票总金额</span>
+        </th>
+        <th>
+          <span style="line-height: 20px;">应付账款金额</span>
+        </th>
+        <th>
+          <span style="line-height: 20px;">应收账款到期日</span>
+        </th>
+        <th>
+          <span style="line-height: 20px;">债权单位名称</span>
+        </th>
+        <th>
+          <span style="line-height: 20px;">债权单位联系人</span>
+        </th>
+        <th>
+          <span style="line-height: 20px;">债权单位联系人手机号</span>
+        </th>
+        <th>
+          <span style="line-height: 20px;">债权单位银行账户</span>
+        </th>
+        <th>
+          <span style="line-height: 20px;">债权单位银行开户行</span>
+        </th>
+        <th>
+          <span style="line-height: 20px;">债务单位名称</span>
+        </th>
+
+
+        <th>
+          <span style="line-height: 20px;">注册状态</span>
+        </th>
+        <th>
+          <div class="btn btn-default btn-file xn-table-upload">
+            <span class="hidden-xs xn-input-font">上传Excel</span>
+            <input type="file" (change)="onUploadExcel($event)">
+          </div>
+        </th>
+      </tr>
+    </thead>
+    <tbody>
+      <ng-container *ngFor="let item of items; let i = index;">
+        <tr>
+          <td>{{ item.num }}</td>
+          <td>{{ item.contractId }}</td>
+          <td>{{ item.invoiceNum }}</td>
+          <td>{{ item.invoiceAmount }}</td>
+          <td>{{ item.receivable }}</td>
+          <td>{{ item.expiryTime }}</td>
+          <td>{{ item.debtUnit }}</td>
+          <td>{{ item.debtUser }}</td>
+          <td>{{ item.mobile }}</td>
+          <td>{{ item.debtAccount }}</td>
+          <td>{{ item.debtBank }}</td>
+          <td>{{ item.projectCompany }}</td>
+          <td>{{ item.registered === true ? '已注册' : '未注册' }}</td>
+          <td></td>
+        </tr>
+      </ng-container>
+    </tbody>
+  </table>
+</div>
+<span class="xn-input-alert">{{alert}}</span>

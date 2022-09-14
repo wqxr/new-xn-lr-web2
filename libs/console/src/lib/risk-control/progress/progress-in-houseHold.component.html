@@ -1,0 +1,8 @@
+<div class="houseHold">
+  <app-progress-in-house-hold-home *ngIf="show==='home'" [customerInfo]="customerInfo" (chooseTurn)="choose($event)"></app-progress-in-house-hold-home>
+  <app-progress-in-house-hold-edit *ngIf="show==='edit'" (onChange)="choose($event)"></app-progress-in-house-hold-edit>
+  <app-progress-in-house-hold-add [item]="item" [customerInfo]="customerInfo" *ngIf="show==='add'" (onChange)="choose($event)"></app-progress-in-house-hold-add>
+  <app-progress-in-house-hold-view [item]="item" *ngIf="show==='view'" (onChange)="choose($event)"></app-progress-in-house-hold-view>
+</div>
+
+<!-- /.content -->

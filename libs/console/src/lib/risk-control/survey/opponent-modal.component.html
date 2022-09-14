@@ -1,0 +1,23 @@
+<modal #modal [backdrop]="'static'" [keyboard]="false" [animation]="false">
+  <form class="form-horizontal" (ngSubmit)="onSubmit()" [formGroup]="mainForm" *ngIf="!!mainForm">
+    <modal-header [showClose]="false">
+      <h4 class="modal-title">{{pageTitle}}</h4>
+    </modal-header>
+    <modal-body>
+      <div class="content-box clearfix">
+        <ng-container *ngIf="rows && rows.length">
+          <div class="col-sm-6 form-group" *ngFor="let item of rows">
+            <div class="col-sm-4 required-star">{{item.title}}</div>
+            <div class="col-sm-8">
+              <app-xn-input-wind [form]="mainForm" [row]="item"></app-xn-input-wind>
+            </div>
+          </div>
+        </ng-container>
+      </div>
+    </modal-body>
+    <modal-footer>
+      <button type="button" class="btn btn-default" (click)="onCancel()">取消</button>
+      <button type="submit" class="btn btn-success" [disabled]="!mainForm.valid">提交</button>
+    </modal-footer>
+  </form>
+</modal>

@@ -1,0 +1,135 @@
+<div [formGroup]="form">
+  <div style='display:flex'>
+    <div style='flex:1'>
+      <div class="btn btn-default btn-file xn-table-upload block" (click)="onBeforeUpload(row)">
+        <span class="hidden-xs xn-input-font">批量上传图片</span>
+      </div>
+      <div class="btn btn-default btn-file xn-table-upload block"
+        [class.disabled]="!btnStatus" (click)="handleVerification(btnStatus)">
+        <span class="hidden-xs xn-input-font">批量查验</span>
+      </div>
+      <div class="btn btn-default btn-file xn-table-upload block"
+        (click)="deleteAll(btnStatus)" [class.disabled]="!btnStatus">
+        <span class="hidden-xs xn-input-font">批量删除</span>
+      </div>
+    </div>
+    <!-- 选择文件input 隐藏在这里 -->
+    <input [attr.id]="row.checkerId" style="width: 0px;" type="file" (change)="onUpload($event)" multiple />
+    <!--分步提交显示查看示例-->
+    <a *ngIf="row.options?.help && !!row.stepId" class='teach' content-type="template" href='javascript:void(0)'
+     placement='left' [tooltip]="contractExamples" max-width='450px'>查看示例</a>
+  </div>
+
+  <table class="table table-bordered text-center">
+    <thead>
+      <tr class="table-head">
+        <!-- 全选按钮 -->
+        <!-- title -->
+        <th>序号</th>
+        <th *ngFor="let head of currentTab.heads">
+          {{ head.label }}
+        </th>
+        <!-- 行操作 -->
+        <th>操作</th>
+        <th>
+          <span style="line-height: 20px"></span>
+          <input type="checkbox" (click)="handleAllSelect()" [checked]="checkedAllStatus" />全选/取消&nbsp;&nbsp;
+        </th>
+      </tr>
+    </thead>
+    <tbody>
+      <ng-container *ngIf="items?.length; else block">
+        <tr *ngFor="let item of items; let i = index">
+          <td>
+            <span>{{ i + 1 }}</span>
+          </td>
+          <td [ngStyle]="{
+              color: preInvoiceList.includes(item.invoiceNum)
+                ? '#5ae459'
+                : 'inherit'
+            }">
+            {{ item.invoiceNum || "" }}
+          </td>
+          <td>{{ item.invoiceCode || "" }}</td>
+          <td>{{ item.invoiceDate }}</td>
+          <td class="money-color">{{ item.amount || "" | xnMoney }}</td>
+          <td class="money-color">{{ item.invoiceAmount || "" | xnMoney }}</td>
+          <!-- <td class="money-color">{{item.transferMoney  | xnMoney}}</td> -->
+
+          <td>
+            <ng-container *ngIf="
+                (item?.tag && item?.tag === 'artificial') ||
+                  (item?.away && item?.away === 'edit');
+                else block1
+              ">
+              <span class="tag-color">人工验证</span>
+            </ng-container>
+            <ng-template #block1>
+              <span [ngClass]="{
+                  'tag-color':
+                    item.status === 4 ||
+                    item.status === 2 ||
+                    item.status === 6 ||
+                    item.status === 7 ||
+                    item.status === 8
+                }">{{ item.status | xnInvoiceStatus }}</span>
+            </ng-template>
+          </td>
+          <td class='tdSet'>
+            <a class="xn-click-a" (click)="onOpenImage(i)">{{
+              item.fileName
+            }}</a>
+          </td>
+          <td>
+            <a class="xn-click-a tag-color a-btn" [hidden]="item?.tag && item?.tag === 'artificial'"
+              (click)="onEdit(item, i, item.tag && item?.tag === 'artificial')" *ngIf="item.status === 2">手工查验</a>
+            <a class="xn-click-a a-btn" (click)="inspection(item)" [hidden]="
+                item.status === 1 ||
+                item.status === 2 ||
+                item.status === 3 ||
+                item.status === 4 ||
+                item.status === 6 ||
+                item.status === 7 ||
+                item.status === 8
+              ">
+              查验</a>
+            <a class="xn-click-a a-btn a-block" (click)="onRemove(item)" *ngIf="item.fileId">删除</a>
+          </td>
+          <td>
+            <input type="checkbox" (change)="handleSelect(i)" [checked]="item && item.clicked" />
+          </td>
+        </tr>
+      </ng-container>
+      <tr *ngIf="amountAll > 0">
+        <td>合计</td>
+        <td>/</td>
+        <td>/</td>
+        <td>/</td>
+        <td class="money-color">{{ amount | xnMoney }}</td>
+        <td class="money-color">{{ amountAll | xnMoney }}</td>
+        <!-- <td class="money-color">{{transferAmount | xnMoney}}</td> -->
+        <td>/</td>
+        <td>/</td>
+        <td *ngIf="orgType === 3">/</td>
+        <ng-container *ngIf="orgType !== 3">
+          <td>/</td>
+          <td>/</td>
+        </ng-container>
+      </tr>
+    </tbody>
+  </table>
+</div>
+
+<ng-template #block>
+  <tr>
+    <td [attr.colspan]="10">
+      <div class="empty-message"></div>
+    </td>
+  </tr>
+</ng-template>
+<span class="xn-input-alert" *ngIf="alert !== '必填字段'">{{ alert }}</span>
+<!-- <div class="plat-table-footer">更新时间：{{ updateTime }}</div> -->
+<ng-template #contractExamples>
+  <flow-invoice-template [template]='row.flowId'>
+  </flow-invoice-template>
+</ng-template>

@@ -1,0 +1,60 @@
+<modal #modal [backdrop]="'static'" [keyboard]="false" [animation]="false" (onDismiss)="oncancel()">
+  <modal-header [showClose]="true" style='text-align:left'>
+    <h4>专项计划选择</h4>
+  </modal-header>
+  <modal-body>
+   <div style="max-height: calc(100vh - 300px);overflow-y: scroll;">
+    <div class="this-left">
+      <div class="form-group col-sm-12">
+        <div class="col-sm-2">请选择：</div>
+        <div class="col-sm-10" style='text-align: right;'>
+          <input #input class="xn-input-font xn-input-border-radius" type="text" placeholder="搜索专项计划名称"
+            style='border:1px solid #ccc;height: 28px;' [(ngModel)]='projectName' autocomplete="off"
+            (input)="onInput($event)" />
+          <input #input class="xn-input-font xn-input-border-radius" type="text" placeholder="搜索资产池名称"
+            style='border:1px solid #ccc;height: 28px;' [(ngModel)]='capitalPoolName' autocomplete="off"
+            (input)="onInput1($event)" />
+          <select class="xn-input-font" style='height:28px' (change)='changeSignType($event)'>
+            <option value="">选择项目来源
+            </option>
+            <option *ngFor="let option of styleList" value="{{option.value}}">{{option.label}}</option>
+          </select>
+        </div>
+      </div>
+    </div>
+    <div style="padding: 5px 60px">
+      <table class="table table-bordered text-center">
+        <thead>
+          <tr>
+            <th>序号</th>
+            <th>专属计划名称</th>
+            <th>资产池名称</th>
+            <th>来源</th>
+            <th>选择</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor='let item of datalist01;let i=index'>
+            <td>{{i+1}}</td>
+            <td>{{item.projectName}}</td>
+            <td>{{item.capitalPoolName}}</td>
+            <td>{{item.type | xnSelectTransform:"productType_dw"}}</td>
+            <td>
+              <input type="radio" name="single" [checked]="item['checked']" (change)="singleChecked(item,i)" />
+            </td>
+
+          </tr>
+        </tbody>
+      </table>
+      <div style='height:50px'>
+        <xn-pagination [rows]="pageSize" [first]="first" [totalRecords]="total" [pageSizeOptions]="[10,20,30,50,100]"
+          (pageChange)="onPage($event)"></xn-pagination>
+      </div>
+    </div>
+   </div>
+  </modal-body>
+  <modal-footer>
+    <button type="button" class="btn btn-default" (click)="oncancel()">取消</button>
+    <button type="button" class="btn btn-success" (click)="onOk()">确定</button>
+  </modal-footer>
+</modal>

@@ -1,0 +1,23 @@
+<div class="form-group" *ngFor="let row of shows">
+  <div class="col-sm-4 xn-control-label">
+    {{row.title}}
+    <span *ngIf="row.required !== false" class="required-label">*</span>
+  </div>
+  <div class="col-sm-4">
+    <xn-input [row]="row" [form]="mainForm"></xn-input>
+  </div>
+</div>
+<div class="form-group">
+    <div class="col-sm-3 text-right">
+      <br>
+      <p *ngIf="json1.stockName !== ''">公司名称： {{json1.stockName}}</p>
+      <p *ngIf="json1.stockId !== ''">股票代码： {{json1.stockId}}</p>
+      <p *ngIf="json1.ratting !== ''">评级： {{json1.ratting}}</p>
+      <p *ngIf="json1.score !== ''">总分： {{json1.score}}</p>
+      <br>
+      <p *ngFor="let detai of datalist1">{{detai.indexName}}: {{ detai.score }}</p>
+    </div>
+    <div class="col-sm-6 text-left">
+      <div #chart1 class="chartbox chart-height-400"></div>
+    </div>
+</div>

@@ -1,0 +1,48 @@
+<section class="content-header">
+  <h1>
+    {{pageTitle}}
+  </h1>
+</section>
+
+<section class="content">
+  <div class="box">
+    <div class="box-header">
+      <h3 class="box-title">{{tableTitle}}</h3>
+    </div>
+    <!-- /.box-header -->
+    <div class="box-body">
+
+      <table class="table table-bordered table-striped">
+        <thead>
+          <tr>
+            <th>主流程ID</th>
+            <th>企业名称</th>
+            <th>订单状态</th>
+            <th>业务失败说明</th>
+            <th>转账金额</th>
+            <th>转账说明</th>
+            <th>操作</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let item of items">
+            <td>{{item.mainFlowId}}</td>
+            <td>{{item.appName}}</td>
+            <td>{{item.status | xnTradeStatus}}</td>
+            <td>{{item.failDesc}}</td>
+            <td>{{item.payAmt}}</td>
+            <td>{{item.desc}}</td>
+            <td>
+              <a class="xn-click-a" (click)="onView(item.mainFlowId)" style="margin-left: 6px;">查看</a>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+
+      <xn-page [total]="total" [size]="pageSize" (change)="onPage($event)"></xn-page>
+    </div>
+    <!-- /.box-body -->
+  </div>
+
+</section>
+<!-- /.content -->

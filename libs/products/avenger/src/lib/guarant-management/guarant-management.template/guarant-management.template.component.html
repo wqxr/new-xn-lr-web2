@@ -1,0 +1,92 @@
+<section class="content-header">
+  <h1>{{tabConfig.title}}</h1>
+</section>
+<section class="content">
+  <div class="box">
+    <div class="box-body">
+      <ul class="nav nav-tabs">
+        <ng-container *ngFor="let tab of tabConfig.tabList;let i=index">
+          <li [ngClass]="{'active': tab.value===label}">
+            <a class="xn-click-a" data-toggle="tab" (click)="initData(tab.value)">{{tab.label}}</a>
+          </li>
+        </ng-container>
+      </ul>
+      <div class="tab-content">
+        <div class="tab-pane active" style="padding: 15px 0">
+
+          <div class="form-group col-sm-6 flex" *ngFor="let row of shows">
+            <div class="title xn-control-label">
+              {{row.title}}
+              <span *ngIf="row.required !== false" class="required-label">*</span>
+            </div>
+            <div class="label">
+              <ng-container>
+                <xn-input [row]="row" [form]="form"></xn-input>
+              </ng-container>
+            </div>
+          </div>
+
+          <div class="col-sm-12 form-group text-right">
+            <!-- 头按钮 -->
+            <ng-container *ngIf="currentTab.canSearch">
+              <button class="btn btn-primary" (click)="searchMsg()">查询</button>
+              <button class="btn btn-danger" (click)="reset()">重置</button>
+            </ng-container>
+          </div>
+          <div>
+            <table class="table table-bordered table-striped text-center">
+              <thead>
+                <tr class="table-head">
+                  <!-- 全选按钮 -->
+
+                  <!-- title -->
+                  <th *ngFor="let head of currentTab.headText">
+                    <ng-container *ngIf="head.sort;else normal">
+                      <span [ngClass]="onSortClass(head?.value)" (click)="onSort(head?.value)">{{head.label}}</span>
+                    </ng-container>
+                    <ng-template #normal>{{head.label}}</ng-template>
+                  </th>
+                  <!-- 行操作 -->
+                  <th>操作</th>
+                </tr>
+              </thead>
+              <tbody>
+                <ng-container *ngIf="data.length;else block">
+                  <tr *ngFor="let item of data;let i=index">
+
+
+                    <!-- 列内容 -->
+                    <td>{{item.appId}}</td>
+                    <td><a>{{item.orgName}}</a></td>
+                    <td>{{item.supplierType | xnSelectTransform:'companyType'}}</td>
+                    <td><a href='javascript:void(0)' (click)="openCompanyDetail(item)">{{item.monitorFile}}</a></td>
+                    <td>{{item.monitorTime}}</td>
+                    <td><a href='javascript:void(0)' (click)="openCheckDetail(item)">{{item.checkFile}}</a></td>
+                    <td>{{item.checkTime}}</td>
+                    <td [ngStyle]="{'color':item.warningNum>0?'red':'black'}">{{item.warningNum}}</td>
+                    <td [ngStyle]="{'color':item.tipsNum>0?'red':'black'}">{{item.tipsNum}}</td>
+                    <!-- 行按钮 -->
+                    <td>
+                      <a href='javascript:void(0)' (click)="openguarantManagementReport(item)">查看历史报告</a>
+                      <a href='javascript:void(0)' (click)="Viewexceptions(item)"> 查看异常</a>
+                    </td>
+                  </tr>
+                </ng-container>
+              </tbody>
+            </table>
+          </div>
+          <xn-pagination [rows]="pageConfig.pageSize" [first]="pageConfig.first" [totalRecords]="pageConfig.total"
+            [pageSizeOptions]="[5,10,20,30,50,100]" (pageChange)="onPage($event)"></xn-pagination>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<ng-template #block>
+  <tr>
+    <td [attr.colspan]=" currentTab.headText.length+2">
+      <div class="empty-message"></div>
+    </td>
+  </tr>
+</ng-template>

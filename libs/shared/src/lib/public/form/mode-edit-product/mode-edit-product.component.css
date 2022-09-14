@@ -1,0 +1,25 @@
+.row {
+  padding-right: 15px;
+  padding-left: 15px;
+}
+
+.row a {
+  cursor: pointer;
+}
+
+.ctr-wrap .fir-sx {
+  margin-top: 10px;
+}
+
+.ctr-wrap:first-child .fir-sx {
+  margin-top: 0;
+}
+
+:host ::ng-deep.ant-checkbox-group-item {
+  width: 45%;
+}
+
+.xn-input-font {
+  font-weight: normal;
+  margin-right: 10px;
+}

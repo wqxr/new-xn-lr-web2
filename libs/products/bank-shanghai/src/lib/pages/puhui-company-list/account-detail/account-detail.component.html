@@ -1,0 +1,78 @@
+<section class="content-header">
+  <h1>普惠记账簿详情</h1>
+</section>
+<section class="content">
+  <div class="box">
+    <div class="box-body">
+      <div class="tab-content">
+        <div class="tab-pane active" style="padding: 15px 0">
+          <!-- tab标签页 -->
+          <ng-container>
+            <nz-tabset nzTabPosition="left" nzSize="small" (nzSelectChange)="onTabChange($event)">
+              <nz-tab nzTitle="企业信息">
+                <ng-content *ngTemplateOutlet="formTemplate"></ng-content>
+              </nz-tab>
+              <nz-tab nzTitle="受益人信息">
+                <ng-content *ngTemplateOutlet="formTemplate"></ng-content>
+              </nz-tab>
+              <nz-tab nzTitle="经办人信息">
+                <ng-content *ngTemplateOutlet="formTemplate"></ng-content>
+              </nz-tab>
+              <nz-tab [nzTitle]="titleTemplate">
+                <ng-template #titleTemplate>
+                  <span style="margin-right: 20px;">对公账户信息</span>
+                  <button type="button" class="{{'btn btn-xs ' + (eAccountStatus | xnSelectTransform:'accountActiveStatusClassName')}}">
+                    {{ eAccountStatus | xnSelectTransform:'accountActiveStatus'}}
+                  </button>
+                </ng-template>
+                <ng-content *ngTemplateOutlet="formTemplate"></ng-content>
+              </nz-tab>
+            </nz-tabset>
+          </ng-container>
+        </div>
+      </div>
+    </div>
+  </div>
+  <nav class="navbar navbar-default" style="display: flex;align-items: center;">
+    <div style="flex: 1;padding-right: 20px;text-align: right;">
+      <button nz-button nzType="default" class="dft-btn dft-text" (click)="goBack()">
+        返回
+      </button>
+    </div>
+  </nav>
+</section>
+
+<ng-template #formTemplate>
+  <nz-skeleton [nzActive]="true" [nzLoading]="!checkShows.length">
+    <ng-container *ngIf="checkShows.length">
+      <div class="form-group" *ngFor="let row of checkShows">
+        <ng-container *ngIf="row.options.readonly">
+          <!-- 标题,审核状态 -->
+          <ng-container *ngFor="let item of titleModel">
+            <div *ngIf="row.checkerId === item.checkerId" class="rowTitle">
+              <h3>{{item.title}}</h3>
+            </div>
+          </ng-container>
+          <ng-container>
+            <div *ngIf="row.checkerId === 'socieBankAccountNo'" style="padding: 5px 20px;">
+              <h4>绑定对公账号信息</h4>
+            </div>
+            <div *ngIf="row.checkerId === 'acctNo'" style="padding: 5px 20px;">
+              <h4>普惠记账簿电子账户</h4>
+            </div>
+          </ng-container>
+          <div class="col-sm-12" style="margin-bottom: 5px;">
+            <div class="col-sm-2 xn-control-label" *ngIf="!showMaxRow(row)">
+              {{ row.title }}
+            </div>
+            <div [ngClass]="[showMaxRow(row)?'col-sm-12':'col-sm-8']">
+              <app-dynamic-input [row]="row" [form]="mainForm" [svrConfig]="svrConfig" formModule="dragon-input">
+              </app-dynamic-input>
+            </div>
+            <div *ngIf="!showMaxRow(row)" class="col-sm-2 xn-control-desc"></div>
+          </div>
+        </ng-container>
+      </div>
+    </ng-container>
+  </nz-skeleton>
+</ng-template>

@@ -1,0 +1,96 @@
+<div [ngClass]="[store.isPhone ? 'h5-about' : 'about']">
+  <div class="tab" [ngClass]="[store.isPhone ? 'h5-tab-panel' : '', 'tab']">
+    <div #tabNav [ngClass]="[store.isPhone ? '' :'portal-panel', 'tab-nav']">
+      <div (click)="onSelectChange(tab)" [ngClass]="['tab-nav-item', tab.id === currentTab.id ? 'active' : '']" *ngFor="let tab of tabList;">{{tab.name}}</div>
+    </div>
+  </div>
+  <div [ngClass]="[store.isPhone ? 'h5-portal-panel' :'portal-panel']" [ngSwitch]="currentTab.id">
+    <div *ngSwitchCase="1">
+      <div class="introduction">
+        <img [src]="[store.isPhone ? 'assets/images/pic/company-pic-h5.png' : 'assets/images/pic/company-pic.png']" alt="公司介绍" />
+        <div>
+          <div>
+            深圳市链融科技股份有限公司（简称“链融科技”）成立于2017年，注册资本10000万元。链融科技是一家科技公司，积极响应国家普惠金融战略，依托云计算、大数据、区块链、人工智能、物联网等新兴技术，聚集产业、金融、科技、运营、风控等跨界专家团队，确立“平台、场景、联盟、服务”的商业模式，以标准化、数字化、可视化、智能化方式，提供专业产融服务，让生态内“真实、合法、有效的交易快速获得资金支持”，带动生态各方善赢发展。
+          </div>
+          <div [ngStyle]="{'text-indent': store.isPhone ? '2em' : 'unset'}">
+            链融科技的控股股东是深圳市柏霖控股有限公司，其业务已覆盖保险、银行、基金、供应链金融、金融科技、商业保理等多元领域。柏霖控股致力于服务实体经济，目前总资产200多亿元。
+          </div>
+        </div>
+      </div>
+    </div>
+    <div *ngSwitchCase="2">
+      <div class="culture">
+        <div>
+          <div *ngFor="let culture of cultureList;">
+            <div class="title">{{culture.title}}</div>
+            <div class="desc">{{culture.desc}}</div>
+          </div>
+        </div>
+        <img [src]="[store.isPhone ? 'assets/images/pic/culture-pic-h5.png' : 'assets/images/pic/culture-pic.png']" alt="企业文化" />
+      </div>
+    </div>
+    <div *ngSwitchCase="3">
+      <nz-spin nzSimple nzTip="数据加载中..." [nzSpinning]="logSpinning" [ngStyle]="{textAlign: 'center', marginTop: logSpinning ? '50px' : '0'}"></nz-spin>
+      <div class="about-log" *ngIf="!logSpinning">
+        <div *ngIf="companyLogList.length > 0;else noCompanyLog;"></div>
+        <div #logBox>
+          <div class="about-log-item" *ngFor="let log of companyLogList;let key = index;">
+            <div class="date" *ngIf="!store.isPhone">{{log.happenTime | date: 'yyyy-MM-dd'}}</div>
+            <div [ngClass]="{'point': true, 'first-point': key === 0, 'last-point': key === companyLogList.length - 1 && companyLogList.length - 1 !== 0}"></div>
+            <div class="title">
+              {{log.title}}
+              <div class="date" *ngIf="store.isPhone">{{log.happenTime | date: 'yyyy-MM-dd'}}</div>
+            </div>
+          </div>
+        </div>
+        <div class="line" #line></div>
+        <ng-template #noCompanyLog>
+          <nz-empty></nz-empty>
+        </ng-template>
+      </div>
+    </div>
+    <div *ngSwitchCase="4">
+      <div class="qualification">
+        <div class="qualification-box">
+          <div class="item" *ngFor="let qualification of qualificationList;">
+            <img [src]="qualification.src" alt="">
+            <div class="title">
+              <div class="line"></div>
+              <div class="txt">{{qualification.title}}</div>
+              <div class="line"></div>
+            </div>
+            <div class="move-list" [attr.id]="qualification.id + '__wrapper'">
+              <div class="move-content" [attr.id]="qualification.id + '__list'">
+                <div class="qualification-content" *ngFor="let item of qualification.list">
+                  {{item}}
+                </div>
+              </div>
+              <div class="move-content-copy" [attr.id]="qualification.id + '__boundary'"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div *ngSwitchCase="5">
+      <div class="contact">
+        <div class="info">
+          <div *ngFor="let info of infoList;">
+            <div class="info-label" lang="zh">{{info.label}}</div><div>：</div><div class="info-value" *ngIf="!info.isImg;else isImg">{{info.value}}</div>
+            <ng-template #isImg>
+              <img [src]="info.value" alt="公众号"/>
+            </ng-template>
+          </div>
+        </div>
+        <div class="map">
+          <nz-spin nzSimple nzTip="地图加载中..." [nzSpinning]="spinning"></nz-spin>
+          <div id="baidu-map" #map style="width: 100%;height: 100%;"></div>
+        </div>
+        <div *ngIf="store.isPhone" class="code">
+          <img src="assets/images/pic/footer-QRcode-h5.png" alt="">
+          <div class="txt">长按关注链融科技公众号</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+

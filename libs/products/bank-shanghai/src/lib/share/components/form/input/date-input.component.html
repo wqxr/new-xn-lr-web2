@@ -1,0 +1,15 @@
+<div [formGroup]="form">
+  <div class="input-group date" #datepicker data-provide="datepicker-inline">
+    <input type="text" #datepickerInput class="form-control datepicker" [placeholder]="row.placeholder" [readonly]="row.options.readonly"
+    [formControlName]="row.name" (blur)="onBlur()">
+    <span class="input-group-addon" [ngStyle]="{'pointer-events': !!row.options.readonly ? 'none' : 'auto'}">
+      <i class="glyphicon glyphicon-calendar"></i>
+    </span>
+  </div>
+</div>
+<!-- when has err -->
+<ng-container *ngIf="!!alert">
+  <div class="has-error">
+    <span class="help-block error-alert">{{alert}}</span>
+  </div>
+</ng-container>

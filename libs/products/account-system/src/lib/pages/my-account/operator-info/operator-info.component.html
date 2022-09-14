@@ -1,0 +1,91 @@
+<xn-page-header-wrapper>
+  <form
+    style="position: relative"
+    nz-form
+    nzLayout="vertical"
+    [formGroup]="form"
+    *ngIf="loading; else loadingTemplate"
+  >
+    <xn-formly
+      [form]="form"
+      [options]="options"
+      [model]="model"
+      [fields]="showFields"
+    >
+    </xn-formly>
+
+    <ng-container *ngIf="!isCheckStatus()">
+      <div class="status-box">
+        <div class="active-status">
+          {{ operatorInfo.isActivate | xnOption: infoActiveOptions }}
+        </div>
+      </div>
+      <div class="record-link">
+        <a (click)="viewRecord()">查看流程记录</a>
+      </div>
+    </ng-container>
+
+    <!-- 审核信息 -->
+    <div *ngIf="isCheckStatus()">
+      <xn-account-check-card
+        [accountId]="accountId"
+        [recordType]="recordType"
+        [form]="checkForm"
+        [model]="checkModel"
+      ></xn-account-check-card>
+    </div>
+  </form>
+
+  <xn-footer-toolbar style="align-items: center">
+    <button nz-button nzType="default" (click)="goBack()">返回</button>
+    <button
+      *ngIf="pageType === PageType.VIEW"
+      nz-button
+      nzType="primary"
+      (click)="editOperatorFrom()"
+    >
+      修改
+    </button>
+    <!-- 取消修改 -->
+    <button
+      *ngIf="canCancelModify()"
+      nz-button
+      nzType="primary"
+      (click)="cancelModifiyInfo()"
+    >
+      取消修改
+    </button>
+    <button
+      *ngIf="pageType === PageType.EDIT"
+      [disabled]="!form.valid"
+      nz-button
+      nzType="primary"
+      (click)="submitForm()"
+    >
+      提交
+    </button>
+    <!-- 提交审核 -->
+    <button
+      *ngIf="isCheckStatus()"
+      nz-button
+      nzType="primary"
+      [disabled]="!checkForm.valid"
+      (click)="submitCheckForm()"
+    >
+      提交
+    </button>
+    <!-- 确认修改 -->
+    <button
+      *ngIf="pageType === PageType.CONFIRM"
+      nz-button
+      nzType="primary"
+      (click)="confirmModifiyInfo()"
+    >
+      确认修改
+    </button>
+  </xn-footer-toolbar>
+</xn-page-header-wrapper>
+
+<ng-template #loadingTemplate>
+  <nz-skeleton [nzActive]="true"></nz-skeleton>
+</ng-template>

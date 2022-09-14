@@ -1,0 +1,57 @@
+<div class="input-group" *ngIf="isNew" [formGroup]="form">
+  <button type="button" class="btn btn-default" [ngClass]="{'disabled overlay': uploading}" (click)="upload.value='';upload.click()">
+    <i class="fa fa-refresh fa-spin" *ngIf="uploading"></i>上传文件</button>
+  <span class="text-danger">{{alert}}</span>
+  <input #upload type="file" (change)="onUploadExcel($event)">
+</div>
+<div class="service-fee-table">
+  <xn-thead-fixed [theadText]="theadText" [tableTemplate]="table">
+    <ng-template #table>
+      <table class="table table-bordered table-hover text-center table-display">
+        <tbody>
+          <tr *ngFor="let item of data;">
+            <td>{{item.appId}}</td>
+            <td>
+              <span *ngIf="!item.newOrgName">{{item.orgName}}</span>
+              <span *ngIf="item.newOrgName">
+                <del>{{item.orgName}}</del>
+                <span class="text-warning">{{item.newOrgName}}</span>
+              </span>
+            </td>
+            <td>
+              <span *ngIf="!item.newOrgType">{{item.orgType}}</span>
+              <span *ngIf="item.newOrgType">
+                <del>{{item.orgType}}</del>
+                <span class="text-warning">{{item.newOrgType}}</span>
+              </span>
+            </td>
+            <td>
+              <span *ngIf="!item.newUsePromise">{{item.usePromise}}</span>
+              <span *ngIf="item.newUsePromise">
+                <del>{{item.usePromise}}</del>
+                <span class="text-warning">{{item.newUsePromise}}</span>
+              </span>
+            </td>
+            <td>
+              <span *ngIf="!item.newFactoringFWF">{{item.factoringFWF}}</span>
+              <span *ngIf="item.newFactoringFWF">
+                <del>{{item.factoringFWF}}</del>
+                <span class="text-warning">{{item.newFactoringFWF}}</span>
+              </span>
+            </td>
+            <td>
+              <span *ngIf="!item.newValidDate">{{item.validDate}}</span>
+              <span *ngIf="item.newValidDate">
+                <del>{{item.validDate}}</del>
+                <span class="text-warning">{{item.newValidDate}}</span>
+              </span>
+            </td>
+            <td>
+              {{item.remark}}
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </ng-template>
+  </xn-thead-fixed>
+</div>

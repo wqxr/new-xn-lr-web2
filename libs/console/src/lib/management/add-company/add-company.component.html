@@ -1,0 +1,101 @@
+<section class="content-header">
+  </section>
+  <section class="content">
+      <div class="panel panel-default">
+        <div class="panel-heading">
+          <span class="panel-title">新增企业账户</span>
+        </div>
+        <div class="panel-body">
+          <div class="form-group">
+            <div class="col-sm-2"></div>
+            <div class="col-sm-10">
+              <input type="checkbox" (click)='getAdminInfo($event)' value=""
+              class="flat-red">&nbsp;&nbsp;开启管理员和企业信息实名校验
+            </div>
+
+          </div>
+          <div class="form-group">
+            <div class="col-sm-1"></div>
+            <div class="col-sm-10">
+                <form class="form-horizontal"  [formGroup]="step1Form" novalidate>
+                    <div>
+                      <div class="box-header">
+                        <span>系统管理员信息</span>
+                      </div>
+                      <!-- /.box-header -->
+                      <div class="box-body">
+                        <div class="form-group" *ngFor="let row of step1">
+                          <div class="col-sm-3 xn-control-label labelwidth">
+                            <span *ngIf="row.required !== false && row.required !== 0" class="required-label">*</span>
+                            <span class='speciallabel'>{{row.title}}</span>
+                          </div>
+                          <div class="col-sm-6">
+                            <xn-input [row]="row" [form]="step1Form"></xn-input>
+                          </div>
+                          <div class="col-sm-3 xn-control-desc">
+                            {{row.memo}}
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </form>
+                <!-- </ng-container> -->
+                <form class="form-horizontal" [formGroup]="step2Form" novalidate>
+                    <div>
+                      <div class="box-header textheader">
+                        <h3 class="box-title">企业信息</h3>
+                      </div>
+                      <!-- /.box-header -->
+                      <div class="box-body">
+                        <div class="form-group" *ngFor="let row of step2">
+                          <div class="col-sm-3 labelwidth xn-control-label">
+                            <span *ngIf="row.required !== false && row.required !== 0" class="required-label">*</span>
+                            <span class='speciallabel'>{{row.title}}</span>
+                          </div>
+                          <div class="col-sm-6">
+                            <xn-input [row]="row" [form]="step2Form"></xn-input>
+                          </div>
+                          <div class="col-sm-3 xn-control-desc">
+                            {{row.memo}}
+                          </div>
+                        </div>
+                      </div>
+                      <!-- /.box-body -->
+                    </div>
+                    <!-- /.box -->
+                  </form>
+                  <form class="form-horizontal" [formGroup]="step3Form" novalidate>
+                    <div>
+                      <div class="box-header textheader">
+                        <h3 class="box-title">授权文件</h3>
+                      </div>
+                      <!-- /.box-header -->
+                      <div class="box-body">
+                        <div class="form-group" *ngFor="let row of step3">
+                          <div class="col-sm-3 labelwidth xn-control-label">
+                            <span *ngIf="row.required !== false && row.required !== 0" class="required-label">*</span>
+                            <span class='speciallabel'>{{row.title}}</span>
+                          </div>
+                          <div class="col-sm-7">
+                            <xn-input [row]="row" [form]="step3Form"></xn-input>
+                          </div>
+                          <div class="col-sm-3 xn-control-desc">
+                            {{row.memo}}
+                          </div>
+                        </div>
+                      </div>
+                      <!-- /.box-body -->
+                    </div>
+                    <!-- /.box -->
+
+                  </form>
+            </div>
+          </div>
+          <!--tips-->
+        </div>
+        <div class="panel-footer text-right clearfix">
+          <button type="button" class="btn btn-default pull-left" (click)="onCancel()">返回</button>
+          <button type="submit" class="btn btn-primary" [disabled]="!onStepValid()" (click)="onFinish()">提交</button>
+        </div>
+      </div>
+  </section>

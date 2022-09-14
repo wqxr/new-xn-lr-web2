@@ -1,0 +1,47 @@
+<div class="registry-help">
+  <div class="portal-panel">
+<!--    <div class="title">《平台注册操作指引》</div>-->
+    <div class="help-box">
+      <div class="step-box">
+        <div class="wrap" #stepBoxWrap>
+          <div class="slider" #slider></div>
+          <div class="step" *ngFor="let step of stepList;let index = index;">
+            <div>{{step.level}}</div>
+            <a (click)="current=step;" [href]="'/portal/help#'+index" [ngClass]="{'current': current.name === step.name}">{{step.name}}</a>
+          </div>
+        </div>
+      </div>
+      <div class="content-box" #contentBox>
+        <div class="step" *ngFor="let step of stepList;let index = index;">
+          <div [id]="index" class="target-fix"></div>
+          <div class="step-name">{{step.name}}<span *ngIf="step.desc">{{step.desc}}</span></div>
+          <div *ngIf="index === stepList.length - 1" class="step-last">
+            <div><span>1、</span>填写完整信息（可参考以下样例）。</div>
+            <div><span>2、</span>填写完后打印下来<span style="font-weight: bolder;color: rgba(31, 43, 56, 1);">每页加盖公章+尾页法定代表人签字或加盖私章</span>,在<a (click)="current=stepList[5]" href="/portal/help#5">注册流程第六步</a>上传</div>
+            <div><span>3、</span>将<b>原件寄回</b>以下地址，并将快递单号填写到<a (click)="current=stepList[5]" href="/portal/help#5">注册流程的第六步</a></div>
+            <div><span></span><b>收件地址：广东省深圳市福田区民生金融大厦14层深圳市链融科技股份有限公司</b></div>
+            <div><span></span><b>收件人：运行部授权函</b></div>
+            <div><span></span><b>联系电话：0755-29966132。</b></div>
+            <div><b>《授权确认函》样例：</b></div>
+          </div>
+          <div class="step-tip" [ngStyle]="{order: step.order.stepTip}" *ngIf="!!step.tip">
+            <span>温馨提示：</span>
+            <span [innerHTML]="step.tip | html"></span>
+          </div>
+          <div class="step-sub-tip" [ngStyle]="{order: step.order.stepSubTip}" *ngIf="!!step.subTip">{{step.subTip}}</div>
+<!--          <div class="step-content" [ngStyle]="{order: step.order.stepContent}">-->
+<!--            <div class="step-item" *ngFor="let item of step.contentList;">-->
+<!--              <div class="serial">{{item.serial}}</div>-->
+<!--              <div class="desc" [innerHTML]="item.desc | html"></div>-->
+<!--            </div>-->
+<!--          </div>-->
+          <div class="step-img" [ngStyle]="step.imgStyle">
+            <img [src]="'assets/images/register/register00'+(index+1)+'.png'" alt="">
+            <step-tip *ngFor="let item of step.contentList;" [tipStyle]="item.tipStyle" [serial]="item.serial" [desc]="item.desc"></step-tip>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+

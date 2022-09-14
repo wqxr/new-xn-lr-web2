@@ -1,0 +1,200 @@
+<div [formGroup]="form">
+  <table class="table-hover table table-bordered file-row-table">
+    <tr>
+      <td class="input-check">
+        <input type="checkbox" name="single"
+          [checked]="items.businessLicenseFile !=='' && row.flowId==='platform_check_information'"
+          [disabled]="row.flowId==='platform_check_information'"
+          (change)="singelChecked($event,checker[0],checker[1])" /><span>营业执照</span>
+      </td>
+      <td class="input-check">
+        <input type="checkbox" name="single"
+          [checked]="items.companyDecision !=='' && row.flowId==='platform_check_information'"
+          [disabled]="row.flowId==='platform_check_information'"
+          (change)="singelChecked($event,checker[10],checker[11])" /><span>公司章程/股东会/董事会决议</span>
+      </td>
+      <td class="input-check">
+        <input type="checkbox" name="single"  [checked]="items.authorizationFile !=='' && row.flowId==='platform_check_information'" [disabled]="row.flowId==='platform_check_information'"
+          (change)="singelChecked($event,checker[12],checker[13])" /><span>授权文件</span>
+      </td>
+    </tr>
+    <tr>
+      <td class="input-check">
+        <input type="checkbox" name="single"
+          [checked]="items.orgLegalCard !=='' && row.flowId==='platform_check_information'"
+          [disabled]="row.flowId==='platform_check_information'"
+          (change)="singelChecked($event,checker[2],checker[3])" /><span>法定代表人身份证</span>
+      </td>
+      <td class="input-check">
+        <input type="checkbox" name="single"
+          [checked]="items.certUserCard !=='' && row.flowId==='platform_check_information'"
+          [disabled]="row.flowId==='platform_check_information'"
+          (change)="singelChecked($event,checker[6],checker[7])" /><span>数字证书使用人身份证</span>
+      </td>
+    </tr>
+    <tr>
+      <td class="input-check">
+        <input type="checkbox" name="single"
+          [checked]="items.orgLegalCert !=='' && row.flowId==='platform_check_information'"
+          [disabled]="row.flowId==='platform_check_information'"
+          (change)="singelChecked($event,checker[4],checker[5])" /><span>法定代表人证明书</span>
+      </td>
+      <td class="input-check">
+        <input type="checkbox" name="single"
+          [checked]="items.certUserAuthorize !=='' && row.flowId==='platform_check_information'"
+          [disabled]="row.flowId==='platform_check_information'"
+          (change)="singelChecked($event,checker[8],checker[9])" /><span>数字证书使用人授权书</span>
+      </td>
+    </tr>
+  </table>
+  <div class="panel-body" #fileGroup *ngIf="row.flowId!=='platform_check_information'">
+    <ng-container *ngFor="let row of checker;let i=index">
+      <div class="form-group" *ngIf="row.checked===true">
+          <div class="col-sm-2 xn-control-label">
+            {{row.title}}
+          </div>
+          <div class="col-sm-8">
+            <xn-input [row]="row" [form]="mainForm" [svrConfig]="svrConfig">
+            </xn-input>
+          </div>
+          <div class="col-sm-2 xn-control-desc">
+            <a (click)="authorizationFile()" class="xn-click-a xn-block"
+               *ngIf="row.checkerId === 'authorizationFile'">下载授权文件</a>
+          </div>
+      </div>
+    </ng-container>
+
+  </div>
+  <div class="panel-body" #fileGroup *ngIf="row.flowId&&row.flowId==='platform_check_information'">
+    <ng-container *ngFor="let row of checker;let i=index">
+      <div class="form-group" *ngIf="items[row.checkerId]!==''">
+          <div class="col-sm-2 xn-control-label">
+              {{checker[i].title}}
+          </div>
+          <div class="col-sm-8">
+            <xn-input [row]="row" [form]="mainForm" [svrConfig]="svrConfig">
+            </xn-input>
+          </div>
+        </div>
+
+    <!-- </ng-container> -->
+    <!-- <div class="form-group" *ngIf="items.businessLicenseFile && items.businessLicenseFile!==''">
+        <div class="col-sm-3 xn-control-label">
+          营业执照
+        </div>
+        <div class="col-sm-9">
+
+            <div *ngFor="let item of items.businessLicenseFile | xnJson" class="filetable">
+                  <a class="xn-click-a" (click)="onViewFile(items)">{{item.fileName}}</a>
+              </div>
+        </div>
+        <div class="col-sm-3 xn-control-desc"></div>
+      </div>
+      <div class="form-group" *ngIf="(items.businessLicenseFileDate && items.businessLicenseFileDate!=='') || items.businessLicenseFile!==''">
+        <div class="col-sm-3 xn-control-label">
+          营业执照失效日期
+        </div>
+        <div class="col-sm-9">
+            <xn-date4-input [row]="row" [form]="form"></xn-date4-input>
+
+          <input type='text' class="form-control xn-input-font xn-input-border-radius"   [value]='items.businessLicenseFileDate'>
+        </div>
+        <div class="col-sm-3 xn-control-desc"></div>
+      </div>
+      <div class="form-group" *ngIf="items.orgLegalCard && items.orgLegalCard!==''">
+        <div class="col-sm-3 xn-control-label">
+          法定代表人身份证
+        </div>
+        <div class="col-sm-9">
+            <div *ngFor="let item of items.orgLegalCard | xnJson" class="filetable">
+                <a class="xn-click-a" (click)="onViewFile(item)">{{item.fileName}}</a>
+            </div>
+        </div>
+        <div class="col-sm-3 xn-control-desc"></div>
+      </div>
+      <div class="form-group" *ngIf="items.orgLegalCard && items.orgLegalCard!==''">
+        <div class="col-sm-3 xn-control-label">
+          法定代表人身份证失效日期
+        </div>
+        <div class="col-sm-9">
+          <input type='text' class="form-control xn-input-font xn-input-border-radius"  [value]='items.orgLegalCardDate'>
+        </div>
+        <div class="col-sm-3 xn-control-desc"></div>
+      </div>
+      <div class="form-group" *ngIf="items.orgLegalCert && items.orgLegalCert!==''">
+          <div class="col-sm-3 xn-control-label">
+          法定代表人证明书
+          </div>
+          <div class="col-sm-9">
+              <div *ngFor="let item of items.orgLegalCert | xnJson" class="filetable">
+                  <a class="xn-click-a" (click)="onViewFile(item)">{{item.fileName}}</a>
+              </div>
+          </div>
+          <div class="col-sm-3 xn-control-desc"></div>
+        </div>
+        <div class="form-group" *ngIf="(items.orgLegalCertDate && items.orgLegalCertDate!=='') || items.orgLegalCert!=='' ">
+          <div class="col-sm-3 xn-control-label">
+              法定代表人证明书失效日期
+          </div>
+          <div class="col-sm-9">
+            <input type='text' class="form-control xn-input-font xn-input-border-radius"  [value]='items.orgLegalCertDate'>
+          </div>
+          <div class="col-sm-3 xn-control-desc"></div>
+        </div>
+      <div class="form-group" *ngIf="items.certUserCard && items.certUserCard!==''">
+        <div class="col-sm-3 xn-control-label">
+          数字证书使用人身份证
+        </div>
+        <div class="col-sm-9">
+            <div *ngFor="let item of items.certUserCard | xnJson" class="filetable">
+                <a class="xn-click-a" (click)="onViewFile(item)">{{item.fileName}}</a>
+            </div>
+        </div>
+      </div>
+      <div class="form-group" *ngIf="(items.certUserCardDate && items.certUserCardDate!=='')||  items.certUserCard!==''">
+        <div class="col-sm-3 xn-control-label">
+          数字证书使用人身份证失效日期
+        </div>
+        <div class="col-sm-9">
+          <input type='text' class="form-control xn-input-font xn-input-border-radius"  [value]='items.certUserCardDate'>
+        </div>
+      </div>
+      <div class="form-group" *ngIf="items.certUserAuthorize && items.certUserAuthorize!==''">
+        <div class="col-sm-3 xn-control-label">
+          数字证书使用人授权书
+        </div>
+        <div class="col-sm-9">
+            <div *ngFor="let item of items.certUserAuthorize | xnJson" class="filetable">
+                <a class="xn-click-a" (click)="onViewFile(item)">{{item.fileName}}</a>
+            </div>
+        </div>
+      </div>
+      <div class="form-group" *ngIf="(items.certUserAuthorizeDate && items.certUserAuthorizeDate!=='')||items.certUserAuthorize!==''">
+        <div class="col-sm-3 xn-control-label">
+          数字证书使用人授权书失效日期
+        </div>
+        <div class="col-sm-9">
+          <input type='text' class="form-control xn-input-font xn-input-border-radius"   [value]='items.certUserAuthorizeDate'>
+        </div>
+      </div>
+      <div class="form-group" *ngIf="items.companyDecision && items.companyDecision!==''" >
+        <div class="col-sm-3 xn-control-label">
+          公司章程/股东会/董事会决议
+        </div>
+        <div class="col-sm-9">
+            <div *ngFor="let item of items.companyDecision | xnJson" class="filetable">
+                <a class="xn-click-a" (click)="onViewFile(item)">{{item.fileName}}</a>
+            </div>
+        </div>
+      </div>
+      <div class="form-group" *ngIf="(items.companyDecisionDate && items.companyDecisionDate!=='') || items.companyDecision!==''">
+        <div class="col-sm-3 xn-control-label">
+          公司章程/股东会/董事会决议失效日期
+        </div>
+        <div class="col-sm-9">
+          <input type='text' class="form-control xn-input-font xn-input-border-radius"  [value]='items.companyDecisionDate'>
+        </div>
+      </div> -->
+</ng-container>
+  </div>
+</div>

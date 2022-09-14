@@ -1,0 +1,52 @@
+<section class="content-header">
+  <h1>
+    {{pageTitle}}
+    <small>{{pageDesc}}</small>
+  </h1>
+</section>
+
+<section class="content">
+
+  <div class="panel panel-default">
+    <table class="table table-bordered table-striped">
+      <thead>
+        <tr class="info">
+          <th class="col-sm-12" colspan="3">发票验证管理</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td class="col-sm-2">
+            <div>
+              <label style="color: #3c8dbc"><input type="checkbox" [checked]="isInvoice"
+                  (click)="checkLogin($event)">是否开启发票验证</label>
+            </div>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="panel panel-default">
+    <table class="table table-bordered table-striped">
+      <thead>
+        <tr class="info">
+          <th class="col-sm-12" colspan="3">金蝶云审批管理</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td class="col-sm-2">
+            <div>
+              <label style="color: #3c8dbc"><input type="checkbox" [checked]="isJindieApproval"
+                  (click)="checkJindie($event)">是否开启金蝶云审批</label>
+            </div>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+
+</section>
+<!-- /.content -->

@@ -1,0 +1,17 @@
+<div class="showscore" #showscore>
+  <div class="form-group">
+    <div class="col-sm-3 text-right">
+      <br>
+      <p *ngIf="json2.stockName !== ''">公司名称： {{json2.stockName}}</p>
+      <p *ngIf="json2.stockId !== ''">股票代码： {{json2.stockId}}</p>
+      <p *ngIf="json2.ratting !== ''">评级： {{json2.ratting}}</p>
+      <p *ngIf="json2.score !== ''">总分： {{json2.score}}</p>
+      <br>
+      <p *ngFor="let detai of datalist2">{{detai.date}}得分: {{ detai.score }}</p>
+    </div>
+    <div class="col-sm-6 text-left">
+      <div #chart2 class="chartbox chart-height-400"></div>
+    </div>
+  </div>
+  <!-- <div #chart2 class="chartbox chart-height-400"></div> -->
+</div>

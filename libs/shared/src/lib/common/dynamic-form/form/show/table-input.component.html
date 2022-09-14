@@ -1,0 +1,202 @@
+<div>
+  <table class="table table-bordered text-center" style='float:left'
+    *ngIf="row.type==='paltformMsg' ||row.type==='businessFactor'">
+    <thead>
+      <tr class="table-head">
+        <!-- 全选按钮 -->
+        <!-- title -->
+        <ng-container *ngFor="let head of heads">
+          <th>{{ head.label }}</th>
+        </ng-container>
+      </tr>
+    </thead>
+    <tbody *ngIf="row.type==='paltformMsg'">
+      <ng-container>
+        <tr>
+          <ng-container>
+            <td>{{items.operatorName}}</td>
+            <td>{{items.memo}}</td>
+            <td [ngStyle]="{'color':items.isBackUp===1?'red':'black'}">
+              {{items.isBackUp  | xnSelectTransform:'isBackFile'}}</td>
+          </ng-container>
+        </tr>
+      </ng-container>
+    </tbody>
+    <tbody *ngIf="row.type==='businessFactor'">
+      <ng-container>
+        <tr>
+          <ng-container>
+            <td style=' max-width: 70px;
+            word-wrap:break-word'><a href="javaScript:void (0)"
+                (click)="hwModeService.viewProcess(items?.mainFlowId)">{{items.mainFlowId}}</a></td>
+            <td>{{items.headquarters}}</td>
+            <td>{{items.projectCompany}}</td>
+            <td>{{items.debtUnit}}</td>
+            <td>{{items.receive}}</td>
+            <td>{{items.discountRate}}</td>
+            <td>{{items.factoringEndDate | xnDate:'date'}}</td>
+          </ng-container>
+        </tr>
+      </ng-container>
+    </tbody>
+  </table>
+  <ng-container *ngIf="row.type==='historyLoan'">
+    <table class="table table-bordered text-center" style='float:left;'>
+      <thead>
+        <tr class="table-head">
+          <!-- 全选按钮 -->
+          <!-- title -->
+          <th>序号</th>
+          <th>供应商名称</th>
+          <th>历史业务笔数</th>
+          <th>历史业务总额</th>
+          <th>历史笔均金额</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngIf="items.length>0;">
+          <td>1</td>
+          <td>{{debtUnit}}</td>
+          <td>{{items.length}}</td>
+          <td>{{amountReceive}}</td>
+          <td>{{averagePrice}}</td>
+        </tr>
+
+      </tbody>
+    </table>
+    <p>详情列表</p>
+    <div style="width:100%;" class="historyDetail">
+      <div class="table-head">
+        <table class="table table-bordered text-center" style='float:left;margin-bottom:0px'>
+          <thead>
+            <tr class="table-head">
+              <!-- 全选按钮 -->
+              <!-- title -->
+              <th>序号</th>
+              <th>交易id</th>
+              <th>总部公司
+              </th>
+              <th>项目公司
+              </th>
+              <th>供应商
+              </th>
+              <th>应收账款金额
+              </th>
+              <th>资产转让折扣率
+              </th>
+              <th>保理融资到期日
+
+              </th>
+            </tr>
+          </thead>
+        </table>
+      </div>
+      <div class="table-body">
+        <table>
+          <tbody>
+            <ng-container *ngIf="items.length>0;">
+              <tr *ngFor="let item of items;let i=index">
+                <ng-container>
+                  <td>{{i+1}}</td>
+                  <td><a href="javaScript:void (0)"
+                      (click)="hwModeService.viewProcess(item?.mainFlowId)">{{item.mainFlowId}}</a></td>
+                  <td>{{item.headquarters}}</td>
+                  <td>{{item.projectCompany}}</td>
+                  <td>{{item.debtUnit}}</td>
+                  <td>{{item.receive}}</td>
+                  <td>{{item.discountRate}}</td>
+                  <td>{{item.factoringEndDate| xnDate:'date'}}</td>
+
+
+                </ng-container>
+              </tr>
+            </ng-container>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </ng-container>
+  <ng-container *ngIf="row.type!=='paltformMsg' && row.type!=='businessFactor' && row.type!=='historyLoan'">
+    <ng-container *ngFor='let heads of allheads'>
+      <p>{{heads.title}}</p>
+      <div style="width:100%;margin-bottom: 20px;" [class]="heads['label']">
+        <div class="table-head">
+          <table class="table">
+            <thead>
+              <tr>
+                <!-- title -->
+                <th style='width:6%'>序号</th>
+                <ng-container *ngFor="let head of heads.heads">
+                  <th>{{ head.label }}</th>
+                </ng-container>
+              </tr>
+            </thead>
+          </table>
+        </div>
+        <div class="table-body">
+          <table class="table" *ngIf="row.type==='holdersInfo';else block3">
+            <tbody>
+              <ng-container>
+                <tr *ngFor="let item of items;let i=index">
+                  <td style='width:6%'>{{ i+1 }}</td>
+                  <td *ngFor="let head of heads.heads">
+                    <ng-container [ngSwitch]="head.type">
+                      <ng-container *ngSwitchCase="'date'">
+                        <p>{{item[head.value] | xnDate:'date'}}</p>
+                      </ng-container>
+                      <ng-container *ngSwitchCase="'mainFlowId'">
+                        <a href="javaScript:void (0)"
+                          (click)="hwModeService.DragonviewProcess(item?.mainFlowId)">{{item.mainFlowId}}</a>
+                      </ng-container>
+                      <!-- 原告 被告 -->
+                      <ng-container *ngSwitchCase="'list'">
+                        <ng-container *ngIf="item[head.value] && item[head.value]!=='' && item[head.value]!==[]">
+                          <div [innerHTML]="item[head.value] | xnArrayListToString:'Name'"></div>
+                        </ng-container>
+                      </ng-container>
+                      <ng-container *ngSwitchDefault>
+                        <div [innerHTML]="item[head.value] | xnGatherType: {head:head,row:item}"></div>
+                      </ng-container>
+                    </ng-container>
+                  </td>
+                </tr>
+              </ng-container>
+            </tbody>
+          </table>
+          <ng-template #block3>
+            <table class="table">
+              <tbody>
+                <ng-container>
+                  <tr *ngFor="let item of items[heads['label']];let i=index">
+                    <td style='width:6%'>{{ i+1 }}</td>
+                    <td *ngFor="let head of heads.heads">
+                      <ng-container [ngSwitch]="head.type">
+                        <ng-container *ngSwitchCase="'date'">
+                          <p>{{item[head.value] | xnDate:'date'}}</p>
+                        </ng-container>
+                        <ng-container *ngSwitchCase="'mainFlowId'">
+                          <a href="javaScript:void (0)"
+                            (click)="hwModeService.DragonviewProcess(item?.mainFlowId)">{{item.mainFlowId}}</a>
+                        </ng-container>
+                        <!-- 原告 被告 -->
+                        <ng-container *ngSwitchCase="'list'">
+                          <ng-container *ngIf="item[head.value] && item[head.value]!=='' && item[head.value]!==[]">
+                            <div [innerHTML]="item[head.value] | xnArrayListToString:'Name'"></div>
+                          </ng-container>
+                        </ng-container>
+                        <ng-container *ngSwitchDefault>
+                          <div [innerHTML]="item[head.value] | xnGatherType: {head:head,row:item}"></div>
+                        </ng-container>
+                      </ng-container>
+                    </td>
+                  </tr>
+                </ng-container>
+              </tbody>
+            </table>
+          </ng-template>
+        </div>
+      </div>
+    </ng-container>
+  </ng-container>
+
+</div>

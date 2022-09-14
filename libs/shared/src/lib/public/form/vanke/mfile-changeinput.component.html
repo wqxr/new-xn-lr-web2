@@ -1,0 +1,38 @@
+<div class="input-group" [formGroup]="form">
+  <div class="input-group-btn">
+    <div class="btn btn-default btn-file" [ngClass]="myClass" style='float: left;width: 120px;border-radius: 5px;float:left;color:#3c8dbc'>
+      <span class="hidden-xs xn-input-font">上传文件</span>
+      <input type="hidden" [formControlName]="row.name">
+      <input  *ngIf="row.name!=='businessLicenseFile'" type="file" (change)="onSelect($event)" [disabled]="delButtonStatus" (click)="onBeforeSelect($event)"
+             multiple>
+      <input *ngIf="row.name==='businessLicenseFile' || row.name==='businessUpload' || row.name==='certificateUpload' || row.name==='userChangeUpload'" type="file" (change)="onSelect($event)" [disabled]="delButtonStatus" (click)="onBeforeSelectone($event)">
+    </div>
+    <p class='detailP' *ngIf='!row.show'>请上传图片或PDF</p>
+  </div>
+</div>
+
+<span class="xn-input-alert">{{alert}}</span>
+<ng-container *ngIf="files.length > 0 && !row.show ">
+  <div class="table-box">
+    <table class="table table-hover file-row-table">
+      <tbody>
+      <tr *ngFor="let file of files">
+        <ng-container *ngIf="!!file.fileName">
+          <td>
+            <a class="xn-click-a" (click)="onView(file)">{{file?.fileName}}</a>
+          </td>
+          <td *ngIf="ctrl.value!==''">
+            <button type="button" [disabled]="delButtonStatus" class="specialclose close" (click)="onRemove(file.fileId)">
+              <span>&times;</span></button>
+          </td>
+        </ng-container>
+        <ng-container *ngIf="!!file.label">
+          <td>
+            <a class="xn-click-a" (click)="showContract(file.id, file.secret,file.label)">{{file.label}}</a>
+          </td>
+        </ng-container>
+      </tr>
+      </tbody>
+    </table>
+  </div>
+</ng-container>

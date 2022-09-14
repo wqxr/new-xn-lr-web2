@@ -1,0 +1,84 @@
+<section class="content-header">
+  <h4>查看复核流程</h4>
+</section>
+
+<section class="content">
+  <div class="flow-process blue-text" *ngIf="showProgress">
+    <span><i nz-icon nzType="check-circle" nzTheme="fill"></i>
+      上海银行已审核，当前为：查看复核流程
+    </span>
+  </div>
+
+  <form nz-form [nzLayout]="nzLayout" *ngIf="svrConfig && rows.length;else emptyTpl" [formGroup]="mainForm">
+    <ng-container *ngFor="let panel of rows">
+      <div nz-row [nzGutter]="24" class="margin-bottom">
+        <div nz-col [nzSpan]="24">
+          <nz-card
+          style="width:'100%';"
+          class="card-panel"
+          [nzBodyStyle]="{'padding': '24px 48px'}"
+          [nzBordered]="false"
+          [nzTitle]="cardTitle"
+          [nzHoverable]="false"
+          >
+            <ng-container *ngFor="let row of panel.fieldGroup">
+              <div nz-row [nzGutter]="row.rowSpan">
+                <div nz-col [nzSpan]="checker.checkerSpan" *ngFor="let checker of row.checkerGroup">
+                  <nz-form-item>
+                    <nz-form-label [nzSpan]="nzLayout === 'horizontal' ? 6 : 24" [nzRequired]="!!checker.required" [nzFor]="checker.checkerId">
+                      <span class="input-label">{{ checker.title }}</span>
+                    </nz-form-label>
+                    <nz-form-control [nzSpan]="nzLayout === 'horizontal' ? 18 : 24" [attr.id]="checker.checkerId">
+                      <app-dynamic-show
+                        [row]="checker" 
+                        [form]="mainForm" 
+                        [formModule]="formModule"
+                        [svrConfig]="svrConfig">
+                      </app-dynamic-show>
+                    </nz-form-control>
+                  </nz-form-item>
+                </div>
+              </div>
+            </ng-container>
+          </nz-card>
+          <ng-template #cardTitle>
+            <span class="card-title">{{panel.text}}</span>
+          </ng-template>
+        </div>
+      </div>
+    </ng-container>
+  </form>
+
+  <ng-template #emptyTpl>
+    <ng-container *ngFor="let panel of rows">
+      <div nz-row [nzGutter]="24" class="margin-bottom">
+        <div nz-col [nzSpan]="24">
+          <nz-card
+          style="width:'100%';"
+          class="card-panel"
+          [nzBodyStyle]="{'padding': '24px 48px'}"
+          [nzBordered]="false"
+          [nzTitle]="cardTitle"
+          [nzHoverable]="false"
+          >
+            <nz-skeleton [nzActive]="true" [nzLoading]="true"></nz-skeleton>
+          </nz-card>
+          <ng-template #cardTitle>
+            <span class="card-title">{{panel.text}}</span>
+          </ng-template>
+        </div>
+      </div>
+    </ng-container>
+  </ng-template>
+
+</section>
+<nav class="navbar navbar-default white-panel">
+  <div class="container-fluid">
+    <span class="pull-right btn-linheight">
+      <button nz-button nzType="default" class="dft-btn dft-text" (click)="onGoBack()">
+        返回
+      </button>
+    </span>
+  </div>
+</nav>
+

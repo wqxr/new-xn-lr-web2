@@ -1,0 +1,53 @@
+<section class="content-header">
+  <h1>
+    {{pageTitle}}
+    <small>{{pageDesc}}</small>
+  </h1>
+</section>
+
+<section class="content">
+  <div class="box">
+    <div class="box-header">
+      <h3 class="box-title">{{tableTitle}}</h3>
+      <button class=" btn btn-primary" (click)="setRead()" style="float: right;">标记为已读</button>
+    </div>
+    <!-- /.box-header -->
+    <div class="box-body">
+      <table class="table table-bordered table-striped">
+        <thead>
+        <tr>
+          <th>来自</th>
+          <th>标题</th>
+          <th>相关的交易</th>
+          <th>时间</th>
+          <th>状态</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr *ngFor="let item of items">
+          <td>{{item.senderAppName}}</td>
+          <td>
+            <div>
+              <div *ngFor="let contract of item.msgObj.contracts">
+                收到 <a class="xn-click-a"
+                      (click)="onViewContract(item, contract.id, contract.secret,contract.label)">{{contract.label}}</a>
+              </div>
+            </div>
+          </td>
+          <td><a class="xn-click-a" (click)="onViewMainFlow(item.mainFlowId)">{{item.mainFlowId}}</a></td>
+          <td>{{item.createTime | xnDate}}</td>
+          <td>
+            <span style="color: #ff5500" *ngIf="item.status === 0">未读</span>
+            <span style="color: #cccccc" *ngIf="item.status === 1">已读</span>
+          </td>
+        </tr>
+        </tbody>
+      </table>
+
+      <xn-page [total]="total" [size]="pageSize" (change)="onPage($event)"></xn-page>
+    </div>
+    <!-- /.box-body -->
+  </div>
+
+</section>
+<!-- /.content -->

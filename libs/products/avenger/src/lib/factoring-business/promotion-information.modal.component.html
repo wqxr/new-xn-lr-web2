@@ -1,0 +1,69 @@
+<modal #modal [backdrop]="'static'" [keyboard]="false" [animation]="false">
+  <modal-body>
+    <div style="max-height: calc(100vh - 200px);overflow: auto;padding: 0 100px">
+      <h2 class="text-center">{{pageTitle}}</h2>
+      <p style="margin: 10px 0"><strong>尊敬的 {{params.customerName}}:</strong></p>
+      <p class="xn-text-indent">
+        感谢您一直以来对链融生态联盟的支持与厚爱！恭喜您幸运成为链融平台万科供应商 <strong>保理业务优选客户</strong>，
+        本平台为您打造了一款特色保理融资产品，该产品能有效解决您向万科提供服务所产生的采购端资金需求。
+      </p>
+      <p class="xn-text-indent"> </p>
+      <div style="padding: 5px 60px">
+        <table class="table table-bordered text-center">
+          <tbody>
+          <tr>
+            <th class="th-title">最大额度</th>
+            <td>{{params.maxAmount / 10000}} 万元</td>
+          </tr>
+          <tr>
+            <th class="th-title">保理费用</th>
+            <td>
+              <p>年化{{params.totalFLV }}%
+              （含保理使用费{{params.factoringUseFLV }}%，保理服务费{{params.factoringServiceFLV }}%),</p>
+              <p>平台服务费{{params.platformServiceFLV }}%</p>
+            </td>
+          </tr>
+          <tr>
+            <th class="th-title">用款期限</th>
+            <td>{{params.nowlimit}} 天（循环滚动）</td>
+          </tr>
+          <tr>
+            <th class="th-title">增信条件</th>
+            <td>法人/实际控制人连带责任保证担保</td>
+          </tr>
+          <tr>
+            <th class="th-title">业务模式</th>
+            <td>基于贵司为履行万科项目合同所产生的采购需求，为贵司与上游供应商之间的真实交易提供保理融资。</td>
+          </tr>
+          <tr>
+            <th class="th-title">放款安排</th>
+            <td>业务审查通过后向贵司供应商发放保理融资款</td>
+          </tr>
+          <tr>
+            <th class="th-title">还款安排</th>
+            <td>保理业务到期之日贵司向保理商转账还款</td>
+          </tr>
+          <tr>
+            <th class="th-title">产品特点</th>
+            <td>额度、费用、期限受贵司在链融平台办理万科ABS业务量及业务频率影响，随业务发生频次实时更新，满足您个性化的融资需求。</td>
+          </tr>
+          </tbody>
+        </table>
+      </div>
+      <p class="xn-text-indent">欢迎致电或微信详询！</p>
+      <p class="xn-text-indent">专属 <strong>客户经理</strong> {{params.userName}}，联系方式：{{params.mobile}}（微信同号）。</p>
+      <p class="xn-text-indent">致敬</p>
+      <p>商祺！</p>
+      <div class="text-right">
+        <p><strong>链融科技供应链服务平台</strong></p>
+        <p><strong>{{date| xnDate :'zh-cn'}}</strong></p>
+      </div>
+    </div>
+  </modal-body>
+  <modal-footer>
+    <div class="text-center">
+      <button type="button" class="btn btn-default" (click)="handleClick(null)">关闭</button>
+      <button type="button" *ngIf='isShowApplyButtom' class="btn btn-success" (click)="handleClick('apply')">马上申请</button>
+    </div>
+  </modal-footer>
+</modal>

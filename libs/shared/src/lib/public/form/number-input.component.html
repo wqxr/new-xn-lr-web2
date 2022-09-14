@@ -1,0 +1,25 @@
+<div class="input-group" style="width: 100%" [formGroup]="form">
+  <table class="table table-bordered table-hover file-row-table" width="100%">
+    <thead>
+    <tr>
+      <th><span style="line-height: 20px;">资产名称</span></th>
+      <th><span style="line-height: 20px;">商品归类</span></th>
+      <th><span style="line-height: 20px;">单位</span></th>
+      <th><span style="line-height: 20px;">数量</span></th>
+      <th><span style="line-height: 20px;">最小交易单位</span></th>
+      <th><span style="line-height: 20px;">规格型号</span></th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr *ngFor="let item of items">
+        <td>{{item.property}}</td>
+        <td>{{item.sort | xnClassify}}</td>
+        <td>{{item.unit}}</td>
+        <td>{{item.member}}</td>
+        <td><span *ngIf="item.sort === 'transaction'">{{item.dealunit + item.unit}}</span></td>
+        <td>{{item.specifications}}</td>
+    </tr>
+    </tbody>
+  </table>
+</div>
+<span class="xn-input-alert">{{alert}}</span>

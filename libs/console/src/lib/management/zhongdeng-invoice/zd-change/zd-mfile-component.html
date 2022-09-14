@@ -1,0 +1,33 @@
+<div class="display-content" style='height:calc(100vh - 100px)'>
+        <ng-container *ngIf="fileType === 'pdf'">
+          <div class="display-content" id='container' style='height:calc(100vh - 100px)'>
+            <div class="pdf-container" id='thisCanvas1'>
+              <!-- <canvas class="this-pdf" id="thisCanvas"></canvas> -->
+            </div>
+          </div>
+        </ng-container>
+      </div>
+       <div>
+         <div class="clearfix">
+          <div class="button-group">
+             <button id="left" type="button" class="btn btn-sm btn-default" (click)="rotateImg('left')">左旋
+              <i class="fa  fa-undo"></i></button>
+            <button id="right" type="button" class="btn btn-sm btn-default" (click)="rotateImg('right')">右旋
+              <i class="fa fa-repeat"></i></button>
+            <button id='large'  type="button" class="btn btn-sm btn-default" (click)="scaleImg('large')">放大<i
+                class="fa fa-search-plus"></i></button>
+            <button id="small" type="button" class="btn btn-sm btn-default" (click)="scaleImg('small')">缩小<i
+                class="fa fa-search-minus"></i></button>
+            <!-- <button type="button" class="btn btn-success" (click)="downLoadFiles()">下载附件</button> -->
+            <!--文件为pdf时显示-->
+             <!-- <ng-container *ngIf="fileType === 'pdf'">
+              <button id="prev" type="button" class="btn btn-sm btn-primary">上一页</button>
+              <button id="next" type="button" class="btn btn-sm btn-primary">下一页</button>
+            </ng-container> -->
+          </div>
+          <!-- <div class="page">
+            <dragonXn-page [total]="total" [size]="pageSize" [showTotal]="false" (change)="onPage($event)"></dragonXn-page>
+          </div>
+        </div> -->
+      </div>
+</div>

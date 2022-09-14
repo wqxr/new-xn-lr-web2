@@ -1,0 +1,27 @@
+<section class="ensure">
+  <h1 class="title">保证金</h1>
+  <div class="detail row">
+    <div class="col-sm-6">
+      <div>保证金比例：<span>{{entry.depositRate}}</span></div>
+      <div>资产总额：<span>{{entry.contractAmount | number : '1.2-3'}}</span></div>
+      <div>保证金金额：<span>{{entry.depositAmount | number : '1.2-3'}}</span></div>
+    </div>
+    <div class="col-sm-6">
+      <div>保证金账户户名：<span>{{entry.depositAccountName}}</span></div>
+      <div>保证金账户账号：<span>{{entry.depositAccountNumber}}</span></div>
+      <div>保证金账户开户行：<span>{{entry.depositAccountBank}}</span></div>
+    </div>
+  </div>
+  <h1 class="title">控货手段</h1>
+  <div class="detail">
+    <textarea class="form-control" name="controlGoods" [(ngModel)]="entry.controlGoods"></textarea>
+  </div>
+  <h1 class="title">甩货机制</h1>
+  <div class="detail">
+    <textarea class="form-control" name="throwGoods" [(ngModel)]="entry.throwGoods"></textarea>
+  </div>
+  <div class="detail text-right">
+    <button type="button" class="btn btn-danger" (click)="reset()">重置</button>
+    <button type="button" class="btn btn-primary" (click)="save()" [disabled]="!validBtn()">保存</button>
+  </div>
+</section>

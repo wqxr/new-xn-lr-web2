@@ -1,0 +1,156 @@
+* {
+  margin: 0;
+  padding: 0;
+  -webkit-box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  box-sizing: border-box;
+  outline: none;
+}
+
+*:before, *:after {
+  -webkit-box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  box-sizing: border-box;
+  pointer-events: none;
+}
+
+html {
+  -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
+}
+
+a {
+  color: #2b2b2b;
+  text-decoration: none;
+}
+
+a:focus {
+  outline: none;
+}
+
+address, caption, cite, code, dfn, b, i, th, var, dt {
+  font-style: normal;
+  font-weight: normal;
+}
+
+area {
+  outline: none;
+}
+
+hr {
+  margin: 20px 0;
+  border: 0;
+  border-top: 1px solid #eee;
+}
+
+h1, h2, h3, h4, h5, h6 {
+  font-size: 100%;
+  font-family: inherit;
+  font-weight: normal;
+  line-height: 1.1;
+  color: inherit;
+  margin: 0;
+  padding: 0;
+}
+
+h1 small, h2 small, h3 small, h4 small, h5 small, h6 small, h1 .small, h2 .small, h3 .small, h4 .small, h5 .small, h6 .small {
+  font-weight: normal;
+  line-height: 1;
+  color: #777;
+  font-size: 65%;
+}
+
+caption, th {
+  text-align: left;
+}
+
+ol, ul {
+  list-style: none;
+}
+
+img {
+  vertical-align: middle;
+}
+
+.img-responsive {
+  display: block;
+  max-width: 100%;
+  height: auto;
+  margin: 0 auto;
+}
+
+.img-circle {
+  border-radius: 50%;
+}
+
+.hidden {
+  display: none !important;
+}
+
+.clear:after {
+  content: "";
+  display: block;
+  height: 0;
+  line-height: 0;
+  clear: both;
+  visibility: hidden;
+}
+
+.clear {
+  *zoom: 1;
+}
+
+.fl {
+  float: left;
+}
+
+.fr {
+  float: right;
+}
+
+.inner {
+  width: 1200px;
+  margin: 0 auto;
+}
+
+.text-center {
+  text-align: center;
+}
+
+.title {
+  font-size: 26px;
+  text-align: center;
+  margin-bottom: 25px;
+}
+
+.in-title {
+  position: relative
+}
+
+.in-title:before {
+  position: absolute;
+  content: '';
+  width: 106px;
+  height: 23px;
+  left: -120px;
+  top: 50%;
+  transform: translateY(-50%);
+  background-image: url(../../../assets/lr/img/icon01.png)
+}
+
+.in-title:after {
+  position: absolute;
+  content: '';
+  width: 106px;
+  height: 23px;
+  right: -222px;
+  top: 50%;
+  transform: rotate(-180deg) translateY(-50%);
+  transform-origin: 0 0;
+  background: url(../../../assets/lr/img/icon01.png) no-repeat 0 0 / 100% auto;
+}
+
+.sub-title {
+  font-size: 16px;
+  color: #999;
+  text-align: center;
+}

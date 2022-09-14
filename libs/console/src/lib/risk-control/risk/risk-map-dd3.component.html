@@ -1,0 +1,23 @@
+<div class="showscore" #showscore>
+  <div class="row form-group">
+    <div class="innerbox">
+      <div class="list">
+        <br>
+        <p *ngIf="json2.stockName !== ''">公司名称： {{json2.stockName}}</p>
+        <p *ngIf="json2.stockId !== ''">股票代码： {{json2.stockId}}</p>
+        <p *ngIf="json2.score !== ''">总分： {{json2.score}}</p>
+        <br>
+        <div class="form-group">
+          <input #bottom type="text" class="form-control" placeholder="请输入展示得分下限" autofocus>
+        </div>
+        <div class="form-group">
+          <input #top type="text" class="form-control" placeholder="请输入展示得分上限" autofocus>
+        </div>
+        <div class="form-group">
+          <button (click)="reset(top.value, bottom.value)" class="btn btn-primary btn-lg btn-block">查询</button>
+        </div>
+      </div>
+      <div #chart2 class="chartbox chart-height-400"></div>
+    </div>
+  </div>
+</div>

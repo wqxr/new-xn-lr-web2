@@ -1,0 +1,45 @@
+<div [formControl]="formControl" ngDefaultControl>
+  <xn-table
+    [data]="invoiceList"
+    [columns]="columns"
+    [size]="'middle'"
+    [page]="{
+      show: false
+    }"
+    [scroll]="{ y: '400px' }"
+  >
+    <!-- 金额 -->
+    <ng-template
+      xn-table-row="moneyTpl"
+      let-item
+      let-index="index"
+      let-column="column"
+    >
+      <ng-container *ngIf="item[column.index]">
+        {{ item[column.index] | xnMoney }} 元
+      </ng-container>
+    </ng-template>
+    <!-- 退回原因 -->
+    <ng-template
+      xn-table-row="reasonTpl"
+      let-item
+      let-index="index"
+      let-column="column"
+    >
+      <nz-select
+        nzMode="multiple"
+        nzShowSearch
+        nzAllowClear
+        nzPlaceHolder="请选择原因"
+        [(ngModel)]="item.reason"
+        (ngModelChange)="onSelectChange($event, item, index)"
+      >
+        <nz-option
+          *ngFor="let reason of listOfReason"
+          [nzLabel]="reason.label"
+          [nzValue]="reason.value"
+        ></nz-option>
+      </nz-select>
+    </ng-template>
+  </xn-table>
+</div>

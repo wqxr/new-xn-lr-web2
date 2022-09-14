@@ -1,0 +1,140 @@
+<div>
+  <ng-container *ngIf="svrConfig.stepList.length > 0; else block1">
+    <div *ngFor="let step of svrConfig.stepList" class="stepDiv">
+      <h4>
+        {{ step.name }} &nbsp;<span *ngIf="step.required === '1'">(必传)</span>
+        <ng-container *ngIf="step.operateType === '1'">
+          <i
+            *ngIf="step.result_status === 2"
+            nz-icon
+            nzIconfont="iconrefuse"
+          ></i>
+          <i
+            *ngIf="step.result_status === 1"
+            nz-icon
+            nzIconfont="iconsuccess-green"
+          ></i>
+        </ng-container>
+      </h4>
+      <div *ngIf="step.step_memo !== ''" class="pcorrect">
+        <p>审核意见</p>
+        <span *ngFor="let data of step.step_memo | xnJson">{{
+          data.opinion
+        }}</span>
+      </div>
+
+      <div class="form-group step" *ngFor="let row of step.checkerIdList">
+        <ng-container *ngIf="showRow(row)">
+          <div
+            class="xn-control-label"
+            [ngClass]="{
+              'required-label-strong':
+                hwModeService.checkRequiredAndReadonly(row).bold,
+              'required-star': hwModeService.checkRequiredAndReadonly(row).star,
+              'col-sm-1': row.stepId === 'checkStandardStep',
+              'col-sm-2': row.stepId !== 'checkStandardStep'
+            }"
+          >
+            {{ row.title }}
+          </div>
+          <div
+            [ngClass]="{
+              'col-sm-10': row.stepId === 'checkStandardStep',
+              'col-sm-8': row.stepId !== 'checkStandardStep'
+            }"
+          >
+            <app-dynamic-input
+              [row]="row"
+              [step]="step"
+              [form]="mainForm"
+              formModule="dragon-input"
+              [svrConfig]="svrConfig"
+            >
+            </app-dynamic-input>
+          </div>
+          <div
+            class="col-sm-1 stepbtn"
+            *ngIf="!!row.other && getRowOther(row).type === 2"
+          >
+            <span>
+              <a
+                class="xn-click-a"
+                (click)="onRowOtherClick(getRowOther(row).value, row)"
+              >
+                {{ getRowOther(row).value }}
+              </a>
+            </span>
+            <!-- isPreTrade 是否是Pre融资业务(0：不是，1：是，2：未知) -->
+            <div class="stepBtn-sub" *ngIf="row?.type === 'account-info'">
+              {{ getPreTrade(row) }}
+            </div>
+          </div>
+        </ng-container>
+      </div>
+      <div *ngIf="step.operateType === '1'" class="operatebtn">
+        <button
+          type="button"
+          class="btn btn-danger"
+          (click)="disAgree(step)"
+          [disabled]="step.result_status === 2"
+        >
+          不同意
+        </button>
+        <button
+          type="button"
+          class="btn btn-success"
+          (click)="onAgree(step)"
+          [disabled]="step.result_status === 1"
+        >
+          同意
+        </button>
+      </div>
+      <div
+        class="step-warp"
+        *ngIf="step.result_status === 1 && step.operateType !== '1'"
+      ></div>
+    </div>
+    <!--添加备注-->
+    <div class="stepDiv" *ngIf="!!shows">
+      <div class="form-group step">
+        <div class="col-sm-2 xn-control-label">
+          {{ shows[shows.length - 1].title }}
+        </div>
+        <div class="col-sm-8">
+          <app-dynamic-input
+            [row]="shows[shows.length - 1]"
+            [form]="mainForm"
+            formModule="dragon-input"
+            [svrConfig]="svrConfig"
+          >
+          </app-dynamic-input>
+        </div>
+      </div>
+    </div>
+  </ng-container>
+  <ng-template #block1>
+    <div class="form-group" *ngFor="let row of shows">
+      <ng-container *ngIf="showRow(row)">
+        <div
+          class="col-sm-3 xn-control-label"
+          [ngClass]="{
+            'required-label-strong':
+              hwModeService.checkRequiredAndReadonly(row).bold,
+            'required-star': hwModeService.checkRequiredAndReadonly(row).star
+          }"
+        >
+          {{ row.title }}
+        </div>
+        <div class="col-sm-6">
+          <app-dynamic-input
+            [row]="row"
+            [form]="mainForm"
+            [svrConfig]="svrConfig"
+            formModule="dragon-input"
+          >
+          </app-dynamic-input>
+        </div>
+      </ng-container>
+    </div>
+  </ng-template>
+</div>

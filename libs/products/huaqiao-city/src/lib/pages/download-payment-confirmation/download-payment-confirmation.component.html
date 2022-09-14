@@ -1,0 +1,297 @@
+<section class="content-header" *ngIf="!tabConfig.hideTitle">
+  <h1>{{tabConfig.title}}</h1>
+</section>
+<section class="content">
+  <div class="box">
+    <div class="box-body">
+      <ul class="nav nav-tabs" *ngIf="!tabConfig.hideTitle">
+        <ng-container *ngFor="let tab of tabConfig.tabList;let i=index">
+          <li [ngClass]="{'active': tab.value===defaultValue}">
+            <a class="xn-click-a" data-toggle="tab" (click)="initData(tab.value)">{{tab.label}}</a>
+          </li>
+        </ng-container>
+      </ul>
+
+      <div class="tab-content">
+        <div class="tab-pane active" style="padding: 15px 0">
+          <div *ngIf='!displayShow' style='clear:both'>
+            <div class="item-box col-sm-4" *ngFor="let row of shows">
+              <div class="item-label">
+                <label style='min-width: 180px !important'>{{row.title}}:</label>
+              </div>
+              <div class="item-control">
+                <app-dynamic-input [row]="row" [form]="form" [formModule]="formModule"></app-dynamic-input>
+              </div>
+            </div>
+          </div>
+          <div *ngIf='displayShow' style='clear:both'>
+            <div class="item-box col-sm-4" *ngFor="let row of shows.slice(0, 3)">
+              <div class="item-label">
+                <label style='min-width: 180px !important'>{{row.title}}:</label>
+              </div>
+              <div class="item-control">
+                <app-dynamic-input [row]="row" [form]="form" [formModule]="formModule"></app-dynamic-input>
+              </div>
+            </div>
+          </div>
+          <ng-container *ngIf="shows.length>3">
+            <div>
+              <div class="center-block" style='border-bottom: 1px solid #ccc;float:left'></div>
+              <div class="center-block" style='border-bottom: 1px solid #ccc;float:right'></div>
+            </div>
+            <div class='showClass' (click)='show()'>
+              <a *ngIf='displayShow' class="xn-click-a"><i class="fa fa-angle-double-down" aria-hidden="true"></i>更多
+              </a>
+              <a class="xn-click-a" *ngIf='!displayShow'><i class="fa fa-angle-double-up" aria-hidden="true"></i>收起
+              </a>
+            </div>
+          </ng-container>
+
+          <div class="col-sm-6 form-group text-left" style='clear:both'>
+            <!-- 左头按钮 -->
+            <ng-container
+              *ngIf="currentSubTab.edit && currentSubTab.edit.leftheadButtons && currentSubTab.edit.leftheadButtons.length">
+              <span *ngFor="let btn of currentSubTab.edit.leftheadButtons">
+                <ng-container *ngIf="btn?.showButton">
+                    <button type="button" class="btn btn-primary"
+                    [disabled]="!listInfo.length && btn.disabled&&btn.disabled===true"
+                    (click)="handleHeadClick(btn)">{{btn.label}}</button>
+                </ng-container>
+              </span>
+            </ng-container>
+          </div>
+          <div class="col-sm-6 form-group text-right">
+            <!-- 右头按钮 -->
+            <ng-container
+              *ngIf="currentSubTab.edit && currentSubTab.edit.rightheadButtons && currentSubTab.edit.rightheadButtons.length">
+              <span *ngFor="let btn of currentSubTab.edit.rightheadButtons">
+                <ng-container *ngIf="btn?.showButton">
+                  <ng-container *ngIf="btn.operate === 'batch_operate';else rightBtn">
+                    <div class="btn-group">
+                      <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown"
+                        aria-expanded="false">批量操作
+                        <span class="caret"></span>
+                      </button>
+                      <ul class="dropdown-menu" role="menu">
+                        <ng-container *ngIf="defaultValue === 'A'">
+                          <li>
+                            <a href="javaScript:void(0)" (click)="batchOperate(btn,'qrsDownload')">下载付确</a>
+                          </li>
+                        </ng-container>
+                      </ul>
+                    </div>
+                  </ng-container>
+                  <ng-template #rightBtn>
+                    <button type="button" class="btn btn-primary"
+                    [disabled]="!selectedItems.length && btn.disabled&&btn.disabled===true"
+                    (click)="handleHeadClick(btn)">{{btn.label}}</button>
+                  </ng-template>
+                </ng-container>
+              </span>
+            </ng-container>
+            <ng-container *ngIf="currentSubTab.canSearch">
+              <button class="btn btn-primary" (click)="searchMsg()">查询</button>
+              <button class="btn btn-danger" (click)="reset()">重置</button>
+            </ng-container>
+          </div>
+          <!--列表交易子标签页切换,当且子标签状态多种时，显示切换标签导航-->
+          <ng-container *ngIf="currentTab.subTabList.length>1">
+            <ul class="nav nav-pills sub-ul">
+              <ng-container *ngFor="let sub of currentTab.subTabList">
+                <li role="presentation" [ngClass]="{'active': sub.value === subDefaultValue}"
+                  (click)="handleSubTabChange(sub.value)">
+                  <a class="xn-click-a">{{sub.label}}</a>
+                </li>
+              </ng-container>
+            </ul>
+          </ng-container>
+          <!--子列表-->
+          <div class="height">
+            <div class="head-height table-head">
+              <table class="table table-bordered table-hover text-center table-display relative" style='width:100%'
+                [style.left.px]="headLeft">
+                <thead>
+                  <tr>
+                    <!-- 全选按钮 -->
+                    <th style='width:100px' *ngIf="currentSubTab.canChecked" class="input-check">全选/取消
+                      <input type="checkbox" name="all" [checked]="isAllChecked()" [disabled]="!listInfo.length"
+                        (change)="checkAll()" />
+                    </th>
+                    <th style='width:50px'>序号</th>
+                    <!-- 表头，搜索功能 -->
+                    <th *ngFor="let head of heads" style="width: 150px;word-wrap:break-word">
+                      <ng-container *ngIf="head.sort;else normal">
+                        <span [ngClass]="onSortClass(head?.value)" (click)="onSort(head?.value)">{{head.label}}</span>
+                      </ng-container>
+                      <ng-template #normal>{{head.label}}</ng-template>
+                    </th>
+                    <!-- 行操作 -->
+                    <th
+                      *ngIf="currentSubTab?.edit && currentSubTab?.edit?.rowButtons && currentSubTab?.edit?.rowButtons?.length">
+                      操作
+                    </th>
+                  </tr>
+                </thead>
+              </table>
+            </div>
+            <div class="table-height" (scroll)="onScroll($event)">
+              <table class="table table-bordered table-hover text-center table-display" style='width:100%'>
+                <tbody style="width: 100%;">
+                  <ng-container *ngIf="listInfo.length;else block">
+                    <tr *ngFor="let item of listInfo;let i=index">
+                      <!-- 行选则 -->
+                      <td style='width:100px' *ngIf="currentSubTab.canChecked">
+                        <input type="checkbox" name="single" [checked]="item['checked']" (change)="singleChecked(item,i)" />
+                      </td>
+                      <!--序号-->
+                      <td style='width:50px'>{{i + 1}}</td>
+                      <!-- 列内容 -->
+                      <td *ngFor="let head of heads" style="width: 150px;word-wrap:break-word">
+                        <!-- 根据head type 类型配置显示方式 -->
+                        <ng-container [ngSwitch]="head.type">
+                          <!-- mainFlowId-->
+                          <ng-container *ngSwitchCase="'mainFlowId'">
+                            <a href="javaScript:void(0)"
+                              (click)="dragonviewProcess(item[head.value])">{{item[head.value]}}</a>
+                          </ng-container>
+                          <!--invoiceNum-->
+                          <ng-container *ngSwitchCase="'invoiceNum'">
+                            <ng-container *ngIf="arrayLength(item.numberList).length>=1;">
+                              <div>
+                                <a class="xn-click-a" href="javaScript:void(0)"
+                                  (click)="viewMore(arrayLength(item.numberList),item.uuid,item.isProxy)"
+                                  [innerHtml]="(arrayLength(item.numberList) | xnArrayTruncate:2:'等;')">
+                                </a>
+                              </div>
+                            </ng-container>
+                          </ng-container>
+                          <!--contract-->
+                          <ng-container *ngSwitchCase="'contract'">
+                            <ng-container *ngIf=" item[head.value]&& item[head.value]!==''">
+                              <ng-container *ngIf="judgeDataType(jsonTransForm(item[head.value])); else block3">
+                                <div *ngFor="let sub of item[head.value] | xnJson; let i=index">
+                                  <a href="javaScript:void(0)" (click)="showContract(sub)">{{sub.label}}</a>
+                                </div>
+                              </ng-container>
+                              <ng-template #block3>
+                                <a href="javaScript:void(0)" (click)="showContract(jsonTransForm(item[head.value]))">
+                                  {{jsonTransForm(item[head.value])['label']}}</a>
+                              </ng-template>
+                            </ng-container>
+                          </ng-container>
+                          <!--图片文件file-->
+                          <ng-container *ngSwitchCase="'file'">
+                            <ng-container *ngIf="item[head.value] && item[head.value]!==''">
+                              <ng-container *ngIf="defaultValue==='B';else bFile">
+                                <a href="javaScript:void(0)" (click)="viewFiles(item['pdfProjectFiles'])">
+                                  {{item['transNumber']}}
+                                </a>
+                              </ng-container>
+                              <ng-template #bFile>
+                                <div>{{item[head.value]}}</div>
+                              </ng-template>
+                              <!-- <div *ngFor="let sub of item[head.value] | xnJson">
+                                <a href="javaScript:void(0)" (click)="viewFiles(sub)">{{sub.fileName}}</a>
+                              </div> -->
+                            </ng-container>
+                          </ng-container>
+                          <ng-container *ngSwitchCase="'date'">
+                            <ng-container *ngIf="item[head.value] && item[head.value]!==''">
+                              <div>
+                                {{item[head.value] | xnDate: 'date'}}
+                              </div>
+                            </ng-container>
+                          </ng-container>
+                          <!-- 应收账款金额 -->
+                          <ng-container *ngSwitchCase="'receive'">
+                              <ng-container *ngIf=" item[head.value] !==undefiend && item[head.value] !==null && item[head.value]!==0">
+                                  <div>{{item[head.value] | xnMoney}}</div>
+                              </ng-container>
+                          </ng-container>
+                          <!-- 是否已提单  -->
+                          <ng-container *ngSwitchCase="'isSponsor'">
+                            <div [innerHTML]="item[head.value] | xnSelectTransform:'defaultRadio'"></div>
+                          </ng-container>
+                          <!-- 系统校验结果 -->
+                          <ng-container *ngSwitchCase="'verifyStatus'">
+                            <div [innerHTML]="item[head.value] | xnSelectTransform:'verifyStatus'"></div>
+                          </ng-container>
+                          <!-- 收款单位是否注册 -->
+                          <ng-container *ngSwitchCase="'isRegisterSupplier'">
+                            <div [innerHTML]="item[head.value] | xnSelectTransform:'defaultRadio'"></div>
+                          </ng-container>
+                          <!-- 交易状态 -->
+                          <ng-container *ngSwitchCase="'tradeStatus'">
+                            <ng-container *ngIf=" item[head.value] !==undefiend && item[head.value] !==null">
+                              <div [innerHTML]="item[head.value] | xnMainFlowStatus : 53"></div>
+                            </ng-container>
+                          </ng-container>
+                          <!-- 交易步骤 -->
+                          <ng-container *ngSwitchCase="'currentStep'">
+                            <ng-container *ngIf="!!item[head.value]">
+                              <div [innerHTML]="item[head.value] | xnGatherType: {head:head,row:item}"></div>
+                            </ng-container>
+                          </ng-container>
+                          <!-- 作废状态 -->
+                          <ng-container *ngSwitchCase="'scfStatus'">
+                            <div [innerHTML]="item[head.value] | xnSelectTransform:'scfStatus'"></div>
+                          </ng-container>
+                          <!-- 渠道 -->
+                          <ng-container *ngSwitchCase="'financingType'">
+                            <ng-container *ngIf="!!item['productType'] || !!item['bankType']">
+                              <div>{{ { 'type':item['productType'],'selectBank':item['bankType'] } | xnSelectDeepTransform:'productType_dw' }}</div>
+                            </ng-container>
+                          </ng-container>
+                          <!-- 付确签章状态 -->
+                          <ng-container *ngSwitchCase="'signStatus'">
+                            <div [innerHTML]="item[head.value] | xnSelectTransform:'signStatus'"></div>
+                          </ng-container>
+                          <!-- 付款确认书校验结果 -->
+                          <ng-container *ngSwitchCase="'verifyPayConfimStatus'">
+                            <div [innerHTML]="item[head.value] | xnSelectTransform:'verifyPayConfimStatus'"></div>
+                          </ng-container>
+                          <!-- 资产转让折扣率 -->
+                          <ng-container *ngSwitchCase="'discountRate'">
+                            <ng-container *ngIf="item[head.value]===0 || !!item[head.value]">
+                              <div>{{item[head.value].toFixed(2)}}%</div>
+                            </ng-container>
+                          </ng-container>
+
+                          <!--默认-->
+                          <ng-container *ngSwitchDefault>
+                            <div [innerHTML]="item[head.value] | xnGatherType: {head:head,row:item}"></div>
+                          </ng-container>
+                        </ng-container>
+                      </td>
+                      <!-- 行按钮 -->
+                      <td
+                        *ngIf="currentSubTab?.edit &&currentSubTab?.edit?.rowButtons && currentSubTab?.edit?.rowButtons.length">
+                        <div *ngFor="let btn of currentSubTab.edit.rowButtons" class="operate-btn">
+                          <ng-container [ngSwitch]="btn.operate">
+                            <ng-container *ngSwitchDefault>
+                              <a href="javaScript:void(0)" (click)="handleRowClick(item,btn,i)">{{btn.label}}</a>
+                            </ng-container>
+                          </ng-container>
+                        </div>
+                      </td>
+                    </tr>
+                  </ng-container>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+        <xn-pagination [rows]="pageConfig.pageSize" [first]="pageConfig.first" [totalRecords]="pageConfig.total"
+              [pageSizeOptions]="[5,10,20,30,50,100]" (pageChange)="onPage($event)"></xn-pagination>
+      </div>
+    </div>
+  </div>
+</section>
+
+<ng-template #block>
+  <tr>
+    <td [attr.colspan]="calcAttrColspan()">
+      <div class="empty-message"></div>
+    </td>
+  </tr>
+</ng-template>

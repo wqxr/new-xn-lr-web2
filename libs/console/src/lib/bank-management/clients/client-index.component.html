@@ -1,0 +1,64 @@
+<section class="content-header">
+  <h1>
+    客户业务统计
+  </h1>
+</section>
+
+<section class="content">
+  <div class="box">
+    <div class="box-body">
+      <div class="tab-content">
+        <div class="tab-pane active">
+          <div class="form-group col-sm-6 flex" *ngFor="let row of shows">
+            <div class="search-title xn-control-label">
+              {{row.title}}：
+            </div>
+            <div class="label flex-g">
+              <xn-input [row]="row" [form]="mainForm"></xn-input>
+            </div>
+          </div>
+          <div class="text-right content-p col-sm-12">
+            <a class="btn btn-primary" (click)="searchMsg()">查询</a>
+            <a class="btn btn-danger" (click)="reset()">重置</a>
+          </div>
+          <div class="content-p">
+            <table class="table table-bordered table-striped text-center table-hover">
+              <thead>
+              <tr>
+                <th>客户名称</th>
+                <th>监管（托管账户）</th>
+                <th>协议状态</th>
+                <th>已处理笔数</th>
+                <th>已处理累计金额</th>
+                <th>待处理笔数</th>
+                <th>待处理累计金额</th>
+              </tr>
+              </thead>
+              <tbody>
+              <ng-container *ngIf="data.length;else block">
+                <tr *ngFor="let item of data">
+                  <td>{{item.supplierOrgName}}</td>
+                  <td>{{item.deputeAccount}}</td>
+                  <td>{{item.status}}</td>
+                  <td>{{item.doneNumber}}</td>
+                  <td>{{item.doneMoney|xnMoney}}</td>
+                  <td>{{item.waitingNumber}}</td>
+                  <td>{{item.waitingMoney |xnMoney}}</td>
+                </tr>
+              </ng-container>
+              </tbody>
+            </table>
+          </div>
+          <ng-template #block>
+            <td colspan="7">
+              <div class="empty-message"></div>
+            </td>
+          </ng-template>
+          <xn-page [total]="total" [size]="pageSize" (change)="onPage($event)"></xn-page>
+        </div>
+
+      </div>
+    </div>
+  </div>
+</section>
+

@@ -1,0 +1,129 @@
+<section class="content-header">
+  <h1>待替换发票交易列表</h1>
+</section>
+
+<section class="content">
+  <div class="box box-body">
+    <form>
+      <div class="form-group col-sm-5 flex">
+        <div class="title xn-control-label">供应商：</div>
+        <div class="label">
+          <input #input
+                 class="form-control xn-input-font xn-input-border-radius"
+                 name="supplierOrgName"
+                 [(ngModel)]="form.supplierOrgName"
+                 type="text"
+                 autocomplete="off"/>
+        </div>
+      </div>
+      <div class="form-group col-sm-5 flex">
+        <div class="xn-control-label" style="width: 120px;">待替换发票金额：</div>
+        <div class="label">
+          <input #input
+                 class="form-control xn-input-font xn-input-border-radius half-width"
+                 name="waitMoneyFirst"
+                 placeholder="最小金额"
+                 [(ngModel)]="form.waitMoneyFirst"
+                 type="text"
+                 autocomplete="off"/>
+          <span style="font-size: 16px;color:#000;">-</span>
+          <input #input
+                 class="form-control xn-input-font xn-input-border-radius half-width"
+                 name="waitMoneySecond"
+                 placeholder="最大金额"
+                 [(ngModel)]="form.waitMoneySecond"
+                 type="text"
+                 autocomplete="off"/>
+        </div>
+      </div>
+      <div class="form-group col-sm-5 flex">
+        <div class="title xn-control-label">交易ID：</div>
+        <div class="label">
+          <input #input
+                 class="form-control xn-input-font xn-input-border-radius"
+                 name="mainFlowId"
+                 [(ngModel)]="form.mainFlowId"
+                 type="text"
+                 autocomplete="off"/>
+        </div>
+      </div>
+      <div class="form-group col-sm-5 flex">
+        <div class="xn-control-label" style="width: 120px;">应收账款金额：</div>
+        <div class="label">
+          <input #input
+                 class="form-control xn-input-font xn-input-border-radius half-width"
+                 name="receivableFirst"
+                 placeholder="最小金额"
+                 [(ngModel)]="form.receivableFirst"
+                 type="text"
+                 autocomplete="off"/>
+          <span style="font-size: 16px;color:#000;">-</span>
+          <input #input
+                 class="form-control xn-input-font xn-input-border-radius half-width"
+                 name="receivableSecond"
+                 placeholder="最大金额"
+                 [(ngModel)]="form.receivableSecond"
+                 type="text"
+                 autocomplete="off"/>
+        </div>
+      </div>
+      <div class="col-sm-12 text-right form-group">
+        <a class="btn btn-primary"
+           (click)="searchMsg()">查询</a>
+        <a class="btn btn-danger"
+           (click)="reset()">重置</a>
+      </div>
+    </form>
+    <table class="table table-bordered table-striped text-center">
+      <thead>
+      <tr>
+        <th>交易ID</th>
+        <th>供应商</th>
+        <th>应收账款金额</th>
+        <th>待替换发票金额</th>
+        <th>下一发票回款日</th>
+        <th>操作</th>
+      </tr>
+      </thead>
+      <tbody *ngIf="data.length > 0; else: block">
+      <tr *ngFor="let item of data">
+        <td>
+          <a href="javaScript:void (0)"
+             (click)="viewProcess(item)">{{
+            item.mainFlowId
+            }}</a>
+        </td>
+        <td>{{ item.supplierOrgName }}</td>
+        <td>{{ item.receivable | number: '1.2-3' }}</td>
+        <td>{{ item.waitMoney | number: '1.2-3' }}</td>
+        <!-- 下一发票回款日 -->
+        <td>
+          {{ item.nextDate }}
+          <!-- {{ item.nextDate | xnDate: 'date' }} -->
+        </td>
+        <!-- 操作 -->
+        <td>
+          <a href="javaScript:void (0)"
+             class="xn-click-a"
+             (click)="viewProcess(item)">查看</a>
+        </td>
+      </tr>
+      </tbody>
+    </table>
+    <div class="print">
+      <xn-pagination [rows]="pageSize"
+                     [first]="first"
+                     [totalRecords]="total"
+                     [pageSizeOptions]="[10, 20, 30, 50, 100]"
+                     (pageChange)="onPage($event)"></xn-pagination>
+    </div>
+  </div>
+</section>
+<!-- 列表为空时 -->
+<ng-template #block>
+  <tr>
+    <td colspan="6">
+      <div class="empty-message"></div>
+    </td>
+  </tr>
+</ng-template>

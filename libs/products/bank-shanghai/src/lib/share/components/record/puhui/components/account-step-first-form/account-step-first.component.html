@@ -1,0 +1,63 @@
+<section *ngIf="svrConfig">
+  <form class="form-horizontal">
+    <div class="panel panel-default">
+      <div class="panel-body">
+        <div class="form-group" *ngFor="let row of firstRows; let i = index">
+          <!-- 标题 -->
+          <ng-container>
+            <div *ngIf="row.checkerId==='orgName'" class="checkerTitle">
+              <h3 class="checkerHead">企业信息</h3>
+              <a (click)="downloadTp()">下载普惠记账簿开户指引</a>
+            </div>
+          </ng-container>
+          <ng-container>
+            <div *ngIf="row.checkerId==='bankAccountNo'" class="checkerTitle">
+              <h3 class="checkerHead">绑定对公账号信息</h3>
+            </div>
+            <div *ngIf="row.checkerId==='bankAccountNo'" class="checkerTitle">
+              <div style="color: #f59a23;">
+                <p>绑定对公账户有以下2个用途：</p>
+                <p>1.普惠账户申请后会创建上海银行普惠电子账户，审核通过后需要通过绑定对公账户向电子账户打入指定金额激活普惠电子账户。</p>
+                <p>2.上海银行保理款项放款至普惠电子账户后，仅可提现至绑定银行对公账号。</p>
+              </div>
+            </div>
+          </ng-container>
+          <!-- 股东信息 -->
+          <ng-container *ngIf="row.checkerId.split('shrhldList').length > 1">
+            <div>
+              <div class="col-sm-2 xn-control-label"></div>
+              <app-dynamic-input [row]="row" [form]="mainForm" [formModule]="formModule" [svrConfig]="svrConfig">
+              </app-dynamic-input>
+              <div class="col-sm-2 xn-control-desc"></div>
+            </div>
+          </ng-container>
+          <ng-container *ngIf="row.checkerId.split('shrhldList').length <= 1">
+            <ng-container>
+              <div class="col-sm-2 xn-control-label required-label-strong required-star">
+                {{ row.title }}
+              </div>
+              <div class="col-sm-8">
+                <app-dynamic-input [row]="row" [form]="mainForm" [formModule]="formModule" [svrConfig]="svrConfig">
+                </app-dynamic-input>
+              </div>
+              <div class="col-sm-2 xn-control-desc">
+                {{ row.memo }}
+                <span *ngIf="!!row.other && getRowOther(row).type === 1" [ngStyle]="{'color': getRowOther(row).color}">
+                  *{{getRowOther(row).value}}
+                </span>
+              </div>
+            </ng-container>
+          </ng-container>
+        </div>
+      </div>
+      <div class="panel-footer text-right">
+        <button type="button" class="btn btn-default pull-left" (click)="onCancel()">
+          返回
+        </button>
+        <button type="submit" class="btn btn-primary" [disabled]="!mainForm?.valid && !readonly" (click)="toSecond()">
+          下一步
+        </button>
+      </div>
+    </div>
+  </form>
+</section>

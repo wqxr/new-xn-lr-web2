@@ -1,0 +1,60 @@
+<div [formGroup]="form">
+  <div *ngIf='!row.options?.readonly' style='display:flex'>
+    <div style='flex:1'>
+      <dragon-xn-mfile-input [row]="fileUpload[0]" [form]="mainForm"></dragon-xn-mfile-input>
+    </div>
+    <!--分步提交显示查看示例-->
+    <a *ngIf="row.options?.help && !!row.stepId" class='teach' content-type="template" href='javascript:void(0)'
+      placement='left' [tooltip]="contractExamples" max-width='450px' >查看示例</a>
+  </div>
+
+  <table class="table table-bordered text-center" style="float: left">
+    <thead>
+      <tr class="table-head">
+        <!-- 全选按钮 -->
+        <!-- title -->
+        <th>序号</th>
+        <th>合同扫描件</th>
+        <!-- 行操作 -->
+        <th *ngIf="
+            svrConfig.record.flowId !== 'vanke_financing_sign' &&
+            svrConfig.record.flowId !== 'oct_financing_sign' && !row.options?.readonly
+          ">
+          操作
+        </th>
+      </tr>
+    </thead>
+
+    <tbody>
+      <ng-container *ngIf="items.length > 0">
+        <tr *ngFor="let item of items; let i = index">
+          <ng-container>
+            <td>
+              <span>{{ i + 1 }}</span>
+            </td>
+            <td class='tdSet'>
+              <a href="javascript:void(0)" (click)="fileView(item)">
+                {{
+                  (item | xnJson).length > 1
+                    ? (item | xnJson)[0].fileName + "，..."
+                    : (item | xnJson)[0].fileName
+                }}
+              </a>
+            </td>
+            <td *ngIf="
+                svrConfig.record.flowId !== 'vanke_financing_sign' &&
+                svrConfig.record.flowId !== 'oct_financing_sign' && !row.options?.readonly
+              ">
+              <a href="javascript:void(0)" (click)="changeFile(item, i + 1)">修改</a>
+              &nbsp;&nbsp;&nbsp;<a href="javascript:void(0)" (click)="deleteFile(items, i)">删除</a>
+            </td>
+          </ng-container>
+        </tr>
+      </ng-container>
+    </tbody>
+  </table>
+</div>
+<ng-template #contractExamples>
+  <flow-contract-template [template]='row.flowId'>
+  </flow-contract-template>
+</ng-template>

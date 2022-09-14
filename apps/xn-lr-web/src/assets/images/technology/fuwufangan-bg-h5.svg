@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="60px" height="38px" viewBox="0 0 60 38" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <title>H5-fuwufangan-bg@1x</title>
+    <defs>
+        <linearGradient x1="50%" y1="0%" x2="50%" y2="100%" id="linearGradient-1">
+            <stop stop-color="#FFC8CC" stop-opacity="0" offset="0%"></stop>
+            <stop stop-color="#E62129" offset="100%"></stop>
+        </linearGradient>
+    </defs>
+    <g id="门户优化_定_v2.0" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="13-技术体系优化" transform="translate(-40.000000, -2226.000000)">
+            <g id="H5-fuwufangan-bg" transform="translate(40.000000, 2226.000000)">
+                <path d="M30,3.57885183 L59.0076826,20.5 L30,37.4211482 L0.992317428,20.5 L30,3.57885183 Z" id="多边形" stroke="url(#linearGradient-1)"></path>
+                <polygon id="多边形" fill="#E62129" transform="translate(30.000000, 3.500000) scale(1, -1) translate(-30.000000, -3.500000) " points="30 0 36 3.5 30 7 24 3.5"></polygon>
+            </g>
+        </g>
+    </g>
+</svg>

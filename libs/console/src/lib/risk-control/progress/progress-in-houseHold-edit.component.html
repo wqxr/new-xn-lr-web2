@@ -1,0 +1,127 @@
+<div class="houseHold">
+  <div class="title clearfix">
+    <span class="text">编辑客户访谈</span>
+    <div class="pull-right">
+      <a class="btn btn-primary">确定编辑</a>
+      <a class="btn btn-primary" (click)="onBack()">返回客户访谈列表</a>
+    </div>
+  </div>
+  <div class="info">访谈信息</div>
+  <div class="info-box">
+    <div class="row form-group">
+      <div class="col-sm-6 flex">
+        <div class="label-text text-right required-star">首访客户类型</div>
+        <div class="label-input">
+          <select class="form-control" required>
+            <option value="1">供应商</option>
+            <option value="2">核心企业</option>
+            <option value="3">保理商</option>
+            <option value="4">下游采购商</option>
+            <option value="5">金融机构</option>
+            <option value="6">平台</option>
+          </select>
+        </div>
+      </div>
+      <div class="col-sm-6 flex">
+        <div class="label-text text-right required-star">受访公司名称</div>
+        <div class="label-input">
+          <input type="text" class="form-control">
+        </div>
+      </div>
+    </div>
+    <div class="row form-group">
+      <div class="col-sm-6 flex">
+        <div class="label-text text-right required-star">访谈方式</div>
+        <div class="label-input">
+          <select class="form-control">
+            <option value="1">走访</option>
+            <option value="2">电话访问</option>
+          </select>
+        </div>
+      </div>
+      <div class="col-sm-6 flex">
+        <div class="label-text text-right required-star">访谈日期</div>
+        <div class="label-input">
+          <input type="text" class="form-control">
+        </div>
+      </div>
+    </div>
+    <div class="flex form-group">
+      <div class="label-text text-right required-star">随访人员</div>
+      <div class="label-input">
+        <div class="form-group">
+          <a class="btn btn-danger">+请选择人员</a>
+        </div>
+        <table class="table table-bordered table-striped table-max">
+          <thead>
+            <tr>
+              <th>姓名</th>
+              <th>工号</th>
+              <th>联系方式</th>
+              <th>操作</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let item of followUp">
+              <td>{{item.name}}</td>
+              <td>{{item.number}}</td>
+              <td>{{item.contract}}</td>
+              <td>
+                <a class="xn-click-a">查看</a>
+                <a class="xn-click-a">编辑</a>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+    <div class="flex form-group">
+      <div class="label-text text-right required-star">随访人员</div>
+      <div class="label-input">
+        <div class="form-group">
+          <a class="btn btn-danger">+请选择人员</a>
+        </div>
+        <table class="table table-bordered table-striped table-max">
+          <thead>
+            <tr>
+              <th>姓名</th>
+              <th>职务</th>
+              <th>联系方式</th>
+              <th>操作</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let item of beFollowUp">
+              <td>{{item.name}}</td>
+              <td>{{item.job}}</td>
+              <td>{{item.contract}}</td>
+              <td>
+                <a class="xn-click-a">查看</a>
+                <a class="xn-click-a">编辑</a>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+    <div class="flex form-group">
+      <div class="label-text text-right">访谈目的</div>
+      <div class="label-input">
+        <textarea class="form-control" rows="3"></textarea>
+      </div>
+    </div>
+    <div class="flex form-group">
+      <div class="label-text text-right required-star">访谈内容</div>
+      <div class="label-input">
+        <textarea class="form-control" rows="3"></textarea>
+      </div>
+    </div>
+    <div class="flex form-group">
+      <div class="label-text text-right">后续跟进事项</div>
+      <div class="label-input">
+        <textarea class="form-control" rows="3"></textarea>
+      </div>
+    </div>
+  </div>
+</div>
+

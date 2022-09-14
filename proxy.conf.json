@@ -1,0 +1,27 @@
+{
+  "/api": {
+    "target": "http://t1.lrscft.com",
+    "secure": false,
+    "changeOrigin": true
+  },
+  "/avenger": {
+    "target": "http://t1.lrscft.com",
+    "secure": false,
+    "changeOrigin": true
+  },
+  "/dragon": {
+    "target": "http://t1.lrscft.com",
+   "secure": false,
+   "changeOrigin": true
+  },
+  "/middle-ground": {
+    "target": "http://t1.lrscft.com",
+   "secure": false,
+   "changeOrigin": true
+  },
+  "/bill": {
+    "target": "http://t1.lrscft.com",
+    "secure": false,
+    "changeOrigin": true
+  }
+}

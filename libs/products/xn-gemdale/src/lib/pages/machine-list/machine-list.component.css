@@ -1,0 +1,274 @@
+
+.table-head .sorting, .table-head .sorting_asc, .table-head .sorting_desc {
+  /*position: relative;*/
+  cursor: pointer
+}
+
+.table-head .sorting:after, .table-head .sorting_asc:after, .table-head .sorting_desc:after {
+  /*position: absolute;*/
+  /*bottom: 8px;*/
+  /*right: 8px;*/
+  /*display: block;*/
+  font-family: 'Glyphicons Halflings';
+  opacity: 0.5;
+}
+
+.table-head .sorting:after {
+  content: "\e150";
+  opacity: 0.2
+}
+
+.table-head .sorting_asc:after {
+  content: "\e155"
+}
+
+.table-head .sorting_desc:after {
+  content: "\e156"
+}
+
+
+.tab-heads {
+  margin-bottom: 10px;
+  display: flex
+}
+
+.tab-buttons {
+  flex: 1;
+}
+
+.tab-search {
+  text-align: right;
+}
+
+.form-control {
+  display: inline-block;
+  border-radius: 4px;
+  box-shadow: inset 0 1px 1px rgba(0, 0, 0, .075);
+  width: 200px
+}
+
+.btn {
+  vertical-align: top
+}
+
+.small-font {
+  font-size: 12px
+}
+
+.item-box {
+  position: relative;
+  display: flex;
+  margin-bottom: 10px;
+}
+
+.item-box i {
+  position: absolute;
+  top: 11px;
+  right: 23px;
+  opacity: 0.5;
+  cursor: pointer;
+}
+
+.plege {
+  color: #3c8dbc
+}
+
+.plege.active {
+  color: #ff3000;
+}
+
+tbody tr:hover {
+  background-color: #e6f7ff;
+  transition: all 0.1s linear
+}
+
+.form-control {
+  border-radius: 0;
+  -webkit-box-shadow: none;
+  box-shadow: none;
+  border-color: #d2d6de;
+}
+
+.item-label label {
+  min-width: 150px;
+  padding-right: 8px;
+  font-weight: normal;
+  line-height: 34px;
+  text-align:right;
+
+}
+
+.item-control {
+  flex: 1;
+}
+
+.item-control select {
+  width: 100%
+}
+
+.fr {
+  float: right
+}
+
+.money-control {
+  display: flex;
+  line-height: 35px;
+}
+
+.text-right {
+  text-align: right
+}
+
+.list-title {
+  max-width: 280px !important;
+}
+
+ul li {
+  list-style-type: none;
+}
+
+.item-list {
+  position: absolute;
+  max-height: 200px;
+  width: 375px;
+  padding: 0px;
+  z-index: 1;
+  background: #fff;
+  overflow-y: auto;
+  border: 1px solid #DDD;
+}
+
+.item-list li {
+  padding: 2px 12px;
+}
+
+.item-list li:hover {
+  background-color: #ccc;
+}
+
+.btn-label {
+  margin-bottom: 10px;
+}
+
+.btn-more {
+  margin-top: 10px;
+}
+
+.btn-more-a {
+  position: relative;
+  left: 50%;
+  transform: translateX(-50%)
+}
+
+.btn-cus {
+  border: 0;
+  margin: 0;
+  padding: 0
+}
+
+
+
+.item-label label {
+  min-width: 150px;
+  padding-right: 8px;
+  font-weight: normal;
+  line-height: 34px;
+  text-align:right;
+
+}
+
+.operate-btn {
+  min-width: 90px;
+}
+
+.center-block{
+clear: both;
+border-bottom: 1px solid #ccc;
+width: 43.9%;
+height: 1px;
+}
+.showClass{
+width: 12.5%;
+margin: 0 auto;
+border: 1px solid #ccc;
+text-align: center;
+border-top: 0px;
+clear:both;
+border-bottom-left-radius: 10px;
+border-bottom-right-radius: 10px;
+}
+
+.head-height .sorting, .table-head .sorting_asc, .table-head .sorting_desc {
+  /*position: relative;*/
+  cursor: pointer
+}
+
+.head-height .sorting:after, .table-head .sorting_asc:after, .table-head .sorting_desc:after {
+  font-family: 'Glyphicons Halflings';
+  opacity: 0.5;
+}
+
+.head-height .sorting:after {
+  content: "\e150";
+  opacity: 0.2
+}
+
+.head-height .sorting_asc:after {
+  content: "\e155"
+}
+
+.head-height .sorting_desc:after {
+  content: "\e156"
+}
+
+ul.sub-ul {
+  margin-bottom: 5px;
+  border-bottom: 1px solid #3c8dbc;
+}
+
+ul.sub-ul > li > a {
+  padding: 5px 35px;
+  border-top: none;
+  background-color: #F2F2F2;
+}
+
+ul.sub-ul > li.active > a {
+  background-color: #3c8dbc;
+}
+.table-body table tr td{
+  border:1px solid #cccccc30;
+  text-align: center;
+}
+.table-display tr td {
+  width: 150px ;
+  vertical-align: middle;
+}
+.height {
+  overflow-x: hidden;
+}
+.relative {
+  position: relative
+}
+.head-height {
+  position: relative;
+  overflow: hidden;
+}
+.table-height {
+  max-height: 600px;
+  overflow: scroll;
+}
+.table {
+  table-layout: fixed;
+  width: 3000px;
+  border-collapse: separate;
+  border-spacing: 0;
+}
+.table-display {
+  margin: 0;
+}
+.disabled {
+  pointer-events: none;
+  filter: alpha(opacity=50); /*IE滤镜，透明度50%*/
+  -moz-opacity: 0.5; /*Firefox私有，透明度50%*/
+  opacity: 0.5; /*其他，透明度50%*/
+}

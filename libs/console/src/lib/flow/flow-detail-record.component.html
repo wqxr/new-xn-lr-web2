@@ -1,0 +1,92 @@
+<div class="box no-top">
+  <div class="box-body">
+    <!-- 第一行 -->
+    <div>
+      <app-flow-process [steped]="steped" [proxy]="proxy"></app-flow-process>
+    </div>
+
+    <!-- 日志 -->
+    <div class="this-log clearfix" *ngFor="let row of params.logs">
+      <div class="this-log-seq">
+        <span class="tc-15-step-num this-seq">{{row.mainFlowSeq}}</span>
+      </div>
+      <div class="this-log-line">
+        <span class="this-operator-action">【{{row.flowName}}】</span>
+        <span class="this-operator-name">{{row.orgName}}</span>
+        <span *ngIf="row.operatorTime">在 {{row.operatorTime | xnDate : 'longdatetime'}} {{row.operatorDesc}}。</span>
+        <p *ngIf="row.flowId === 'financing_platform' && row.appId === xn.user.appId" class="pull-right">
+          <a class="pull-left" style="margin-right: 10px" routerLink="/console/record/view/{{bill}}"
+            *ngFor="let bill of params.billRegister.slice(0,1); let i = index">查看出票登记{{params.billRegister.length > 1
+            ? i+1 : ''}}</a>
+          <a class="pull-left" style="margin-right: 10px" routerLink="/console/record/view/{{bill}}"
+            *ngFor="let bill of params.billRegister.slice(1); let i = index">登记{{i+2}}</a>
+        </p>
+        <!--===============================================================================================-->
+        <!--0429对于问题合同进行重新签署-->
+        <ng-container
+          *ngIf="row.appId==='103628' && row.flowId==='financing6'&& row.mainFlowSeq===4 && row.appId===xn.user.appId && params.mainFlowId==='contract_20200402_32159'&& row.contracts&&row.contracts.length">
+          <a href="javaScript:void(0)" (click)="repSignCons(row.contracts)">补签合同</a>
+        </ng-container>
+        <!--===============================================================================================-->
+        <!--对于万科供应商(特殊供应商)生成错误，供应商重新生成合同，并签署合同-->
+        <!-- <ng-container
+         // *ngIf="row.appId==='100789'&&row.appId===xn.user.appId&&xn.user.orgType === 1&&row.contracts&&row.contracts.length">
+          <a href="javaScript:void(0)" (click)="supplierRepSignVankeCons(row)">重新签署合同</a>
+        </ng-container>
+        &lt;!&ndash;===============================================================================================&ndash;&gt;
+        &lt;!&ndash;对于万科供应商生成错误，保理商在此重新生成合同并重新签署&ndash;&gt;
+        <ng-container *ngIf="row.appId===xn.user.appId&&xn.user.orgType === 3&&row.contracts&&row.contracts.length">
+        <a href="javaScript:void(0)" (click)="factoringRepSignVankeCons(row.contracts)">补签合同</a>
+        </ng-container>-->
+        <!-- <ng-container
+         // *ngIf="row.appId==='100006'&&params.mainFlowId==='contract_20200106_29992'&&row.appId===xn.user.appId&&row.contracts&&row.contracts.length">
+          <a href="javaScript:void(0)" (click)="againSignCons(row.contracts)">保理商盖章</a>
+        </ng-container>
+
+        <ng-container
+          //*ngIf="row.appId==='103111'&&params.mainFlowId==='contract_20200106_29992'&&row.appId===xn.user.appId&&row.contracts&&row.contracts.length">
+          <a href="javaScript:void(0)" (click)="againSignCon(row.appId)">供应商签署合同</a>
+        </ng-container>
+        <ng-container
+         // *ngIf="(row.appId==='100293'||row.appId==='金地（集团）股份有限公司')&&params.mainFlowId==='contract_20200106_29992'&&xn.user.appId==='100293'&&row.contracts&&row.contracts.length">
+          <a href="javaScript:void(0)" (click)="againSignCon(row.appId)">总部公司签署合同</a>
+        </ng-container> -->
+        <!-- <ng-container
+       // *ngIf="row.appId==='100293'&&params.mainFlowId==='contract_20200106_29992'&&row.appId===xn.user.appId&&row.contracts&&row.contracts.length">
+        <a href="javaScript:void(0)" (click)="againSignCon()">补签合同</a>
+      </ng-container> -->
+        <!--===============================================================================================-->
+        <!--flowIdIsNotChild 不是子流程，不可查看-->
+        <ng-container *ngIf="normalHasOrCanViewDetail(row) && factorViewPermission">
+          <a class="pull-right" style="margin-right: 10px" routerLink="/console/record/view/{{row.recordId}}">查看子流程</a>
+        </ng-container>
+        <!--针对特殊登陆角色显示查看的子流程-->
+        <ng-container *ngIf="intermediaryHasOrCanViewDetail(row)">
+          <a class="pull-right" style="margin-right: 10px" href="javaScript:void (0)"
+            (click)="checkSubprocess(row)">查看子流程</a>
+        </ng-container>
+        <br>
+        <div *ngIf="row.contracts.length > 0">
+          <ng-container *ngIf="row.flowId === 'financing6' && params.headquarters === '雅居乐地产控股有限公司';else contracts">
+          </ng-container>
+          <ng-template #contracts>
+            <ng-container *ngFor="let contract of row.contracts">
+              <a class="xn-click-a" style="margin-right: 10px;" *ngIf="!!contract.label"
+                (click)="showContract(contract)">
+                <span *ngIf="!contract.hide">《{{contract.label}}》</span>
+              </a>
+            </ng-container>
+          </ng-template>
+        </div>
+      </div>
+    </div>
+  </div>
+  <!-- /.box-body -->
+
+  <div class="box-footer">
+    <button type="button" class="btn btn-default" (click)="onBuildXml()" *ngIf="showBuildBtn">生成保理上报XML</button>
+    <button type="button" class="btn btn-default" (click)="download()">下载附件</button>
+    <button type="button" class="btn btn-default" (click)="addMap()" *ngIf="showMapBtn">补录客户地图</button>
+    <button type="button" class="btn btn-default pull-right" (click)="onCancel()">返回</button>
+  </div>
+</div>

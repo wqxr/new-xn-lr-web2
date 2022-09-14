@@ -1,0 +1,21 @@
+<div style="display:flex">
+  <div style="width:100%">
+    <select class="form-control xn-input-font" [disabled]="readonly" [(ngModel)]="formValue.type" (change)="selectChange($event)"
+      [ngClass]="myClass" (blur)="onBlur()">
+      <option value="0">请选择</option>
+      <option *ngFor="let option of row.selectOptions" value="{{ option.value }}">{{option.label}}</option>
+    </select>
+    <div *ngIf="formValue.type===0">
+      <span class="xn-input-alert">{{selAlert}}</span>
+    </div>
+  </div>
+
+  <div style="width:30%" *ngIf="formValue.type===3 || formValue.type===5">
+    <div class="item-control">
+      <input #input class="form-control xn-input-font xn-input-border-radius" [ngClass]="myClass" type="text"
+        [placeholder]="row.placeholder" [(ngModel)]="formValue.value" (blur)="onBlur1($event)" [disabled]="readonly"
+        (change)="inputChange($event)" autocomplete="off" />
+    </div>
+    <div><span class="xn-input-alert">{{alert}}</span></div>
+  </div>
+</div>

@@ -1,0 +1,17 @@
+<section>
+  <div class="panel-body">
+    <div *ngFor="let show of shows; let i = index">
+      <div class="form-group col-sm-12">
+        <div class="col-sm-2 xn-control-label" [ngClass]="{
+          'required-label-strong': !row.options.readonly,
+          'required-star': !row.options.readonly }">
+          {{ show.title }}
+        </div>
+        <div class="col-sm-8">
+          <app-dynamic-input [row]="show" [form]="EarningOwnerFrom" formModule="dragon-input">
+          </app-dynamic-input>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>

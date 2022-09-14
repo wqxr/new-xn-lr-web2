@@ -1,0 +1,90 @@
+<modal #modal [backdrop]="'static'" [keyboard]="false" [animation]="false">
+    <form class="form-horizontal" (ngSubmit)="handleSubmit()">
+        <modal-header [showClose]="false">
+            <h4 class="modal-title">{{pageTitle}}</h4>
+        </modal-header>
+        <modal-body>
+            <div class="edit-content" style='min-height:400px;max-height:600px;overflow-y:auto;height:400px'>
+                <!-- 上层信息 -->
+                <div class="form-group clearfix">
+                    <div class="col-sm-12 form-group">
+                        <div class="col-sm-3 text-right">
+                            保理商名称
+                        </div>
+                        <div class="col-sm-8">
+                            <input class="form-control xn-input-border-radius" type="text" name="factor" value="广州恒泽商业保理有限公司" readonly>
+                        </div>
+                    </div>
+                    <div class="col-sm-12 form-group">
+                        <div class="col-sm-3 text-right">
+                            申请付款单位
+                        </div>
+                        <div class="col-sm-8">
+                            <input class="form-control xn-input-border-radius" type="text" name="payer" [value]="params.projectCompany" readonly>
+                        </div>
+                    </div>
+                    <div class="col-sm-12 form-group">
+                        <div class="col-sm-3 text-right">
+                            收款单位
+                        </div>
+                        <div class="col-sm-8">
+                            <input class="form-control xn-input-border-radius" type="text"  [value]="params.debtUnit" name="payee" value="" readonly>
+                        </div>
+                    </div>
+                    <div class="col-sm-12 form-group">
+                        <div class="col-sm-3 text-right">
+                            应收账款金额
+                        </div>
+                        <div class="col-sm-8">
+                            <input class="form-control xn-input-border-radius" type="text"   [value]="params.receive" name="money" value="" readonly>
+                        </div>
+                    </div>
+                    <div class="col-sm-12 form-group">
+                        <div class="col-sm-3 text-right">
+                            <label>退回企业</label><span class="required-label">*</span>
+                        </div>
+                        <div class="col-sm-8">
+                            <input type="checkbox" value="payer" checked disabled>付款单位
+                        </div>
+                    </div>
+                    <div class="col-sm-12 form-group">
+                        <div class="col-sm-3 text-right">
+                            <label>退回修改内容</label><span class="required-label">*</span>
+                        </div>
+                        <div class="col-sm-8">
+                            <label class="radio" *ngFor='let sub of rejectInfo'>
+                                <input (change)="singelChecked(sub,sub.value)"  type="checkbox">{{sub.value}}
+                            </label>
+                        </div>
+                    </div>
+                    <div class="col-sm-12 form-group">
+                        <div class="col-sm-3 text-right">
+                            <label>退回原因</label>
+                        </div>
+                        <div class="col-sm-8">
+                            <input class="form-control xn-input-border-radius" type="text" name="reason" [(ngModel)]='reason'>
+                        </div>
+                    </div>
+                    <div class="col-sm-12 form-group">
+                        <div class="col-sm-3 text-right">
+                            <label>问题描述</label>
+                        </div>
+                        <div class="col-sm-8">
+                            <textarea class="form-control xn-input-border-radius" name="description" [(ngModel)]='question'></textarea>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </modal-body>
+
+        <div class="modal-footer">
+        <div class="clearfix">
+            <div class="button-group">
+            <!-- <button type="button" class="btn btn-danger add" (click)='terminate()'>中止流程</button> -->
+            <button type="button" class="btn btn-default" (click)="handleCancel()">取消</button>
+            <button type="submit" class="btn btn-danger" (click)="handleSubmit()">退回</button>
+            </div>
+        </div>
+        </div>
+    </form>
+</modal>

@@ -1,0 +1,268 @@
+<section class="content-header">
+  <h1>
+    {{pageTitle}}
+    <small>{{pageDesc}}</small>
+  </h1>
+</section>
+
+<section class="content">
+  <div class="box">
+    <div class="box-body">
+
+      <div class="bill-details has-border bill-details-nopadding-top">
+        <div class="bill-details-title">
+          <div class="row">
+            <div class="col-xs-10">
+              <font class="f-tilte-2">利息计算器</font>
+            </div>
+          </div>
+        </div>
+
+        <div class="row d-ticket-empty">
+
+        </div>
+
+        <form class="form-horizontal f-tools-offer" role="form">
+          <!--本金-->
+          <div class="form-group col-xs-12">
+            <label for="bill_amount" class="col-xs-3 control-label no-padding-right l-ticket-title"><font>*</font>本金:</label>
+              <div class="col-xs-9">
+                <div class="row clear-row-margin">
+                  <div class="col-xs-12 clear-col-padding">
+                    <div class="col-xs-5 clear-col-padding">
+                      <input type="text" class="form-control" placeholder="" #BillAmount (input)="inputMoney()">
+                    </div>
+                    <div class="col-xs-2 clear-col-padding d-ticket-percent">
+                      <font>元</font>
+                    </div>
+                    <p class="help-block d-bill-help-block displaynone bill_amount_errorp" *ngIf="errorAmount">
+                      <i class="fa fa-minus-circle"></i> <font>请输入本金</font>
+                    </p>
+                  </div>
+                </div>
+              </div>
+          </div>
+
+          <!--起始日-->
+          <div class="form-group col-xs-12">
+            <label for="discount_date_1" class="col-xs-3 control-label no-padding-right l-ticket-title"><font>*</font>起始日:</label>
+              <div class="col-xs-9">
+                <div class="row clear-row-margin">
+                  <div class="col-xs-12 clear-col-padding">
+                    <div class="col-xs-5 clear-col-padding">
+                      <input type="text" class="form-control date-picker" name="discount_date" id="startDate" #StartDate placeholder="" data-date-format="yyyy-mm-dd">
+                    </div>
+                    <div class="col-xs-2"></div>
+                    <p class="help-block d-bill-help-block displaynone bill_amount_errorp" *ngIf="errorStartDate">
+                      <i class="fa fa-minus-circle"></i> <font>请选择起始日</font>
+                    </p>
+                  </div>
+                </div>
+              </div>
+          </div>
+
+          <!--截止日-->
+          <div class="form-group col-xs-12">
+            <label for="expire_date_1" class="col-xs-3 control-label no-padding-right l-ticket-title"><font>*</font>截止日:</label>
+              <div class="col-xs-9">
+                <div class="row clear-row-margin">
+                  <div class="col-xs-12 clear-col-padding">
+                    <div class="col-xs-5 clear-col-padding">
+                      <input type="text" class="form-control date-picker" name="expire_date" id="expireDate" #ExpireDate placeholder="" data-date-format="yyyy-mm-dd">
+                    </div>
+                    <div class="col-xs-2"></div>
+                    <p class="help-block d-bill-help-block displaynone bill_amount_errorp" *ngIf="errorExpireDate">
+                      <i class="fa fa-minus-circle"></i> <font>请选择截止日</font>
+                    </p>
+                    <p class="help-block d-bill-help-block displaynone bill_amount_errorp" *ngIf="errorMaxDate">
+                        <i class="fa fa-minus-circle"></i> <font>截止日必须大于起始日</font>
+                      </p>
+                  </div>
+                </div>
+              </div>
+          </div>
+
+          <!--使用费率-->
+          <div class="form-group col-xs-12">
+            <label for="month_rate" class="col-xs-3 control-label no-padding-right l-ticket-title"><font>*</font>使用费率:</label>
+            <div class="col-xs-9">
+              <div class="row clear-row-margin">
+                <div class="col-xs-12 clear-col-padding">
+                  <div class="col-xs-5 clear-col-padding">
+                    <input type="text" class="form-control" #UseRate placeholder="">
+                  </div>
+                  <div class="col-xs-2 clear-col-padding d-ticket-percent">
+                    <font>%</font>
+                  </div>
+                  <p class="help-block d-bill-help-block displaynone bill_amount_errorp" *ngIf="errorUseRate">
+                    <i class="fa fa-minus-circle"></i> <font>请输入使用费率</font>
+                  </p>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!--服务费率-->
+          <div class="form-group col-xs-12">
+            <label for="month_rate" class="col-xs-3 control-label no-padding-right l-ticket-title"><font>*</font>服务费率:</label>
+            <div class="col-xs-9">
+              <div class="row clear-row-margin">
+                <div class="col-xs-12 clear-col-padding">
+                  <div class="col-xs-5 clear-col-padding">
+                    <input type="text" class="form-control" #ServiceRate placeholder="">
+                  </div>
+                  <div class="col-xs-2 clear-col-padding d-ticket-percent">
+                    <font>%</font>
+                  </div>
+                  <p class="help-block d-bill-help-block displaynone bill_amount_errorp" *ngIf="errorServiceRate">
+                    <i class="fa fa-minus-circle"></i> <font>请输入服务费率</font>
+                  </p>
+                </div>
+              </div>
+            </div>
+          </div>
+           <!--平台服务费率-->
+          <div class="form-group col-xs-12">
+            <label for="month_rate" class="col-xs-3 control-label no-padding-right l-ticket-title"><font>*</font>平台服务费率:</label>
+            <div class="col-xs-9">
+              <div class="row clear-row-margin">
+                <div class="col-xs-12 clear-col-padding">
+                  <div class="col-xs-5 clear-col-padding">
+                    <input type="text" class="form-control" #platformServiceSate placeholder="">
+                  </div>
+                  <div class="col-xs-2 clear-col-padding d-ticket-percent">
+                    <font>%</font>
+                  </div>
+                  <p class="help-block d-bill-help-block displaynone bill_amount_errorp" *ngIf="errorServiceRate">
+                    <i class="fa fa-minus-circle"></i> <font>请输入平台服务费率</font>
+                  </p>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!--开始计算-->
+          <div class="form-group col-xs-12">
+            <div class="col-xs-11" style="text-align:center">
+              <button class="btn btn-blue btn-tools-calculator" (click)="calculate()">
+                  开始计算
+              </button>
+            </div>
+          </div>
+
+          <input type="hidden" name="s_code" id="s_code" value="2020" />
+          <input type="hidden" name="oper_flag" id="oper_flag" value="1" />
+          <input type="hidden" name="month_rate" id="month_rate" value="" />
+          <input type="hidden" name="token" id="token" value="272d9a42b0c044cca3768ac9d00be001"/>
+        </form>
+
+        <!--计息天数-->
+        <div class="form-group col-xs-offset-1 col-xs-10" style="margin-top:30px;">
+          <label class="col-xs-3 control-label no-padding-right l-ticket-title" style="text-align: right;"><font>*</font>计息天数:</label>
+          <div class="col-xs-9">
+            <div class="row clear-row-margin">
+              <div class="col-xs-12 clear-col-padding">
+                <div class="col-xs-4 clear-col-padding">
+                  <input type="text" class="form-control" #CalcDay value="0" readonly="readonly" />
+                </div>
+                <div class="col-xs-4 clear-col-padding d-ticket-percent">
+                  <font>天</font>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!--使用费-->
+        <div class="form-group col-xs-offset-1 col-xs-10">
+          <label class="col-xs-3 control-label no-padding-right l-ticket-title" style="text-align: right;"><font>*</font>使用费:</label>
+          <div class="col-xs-9">
+            <div class="row clear-row-margin">
+              <div class="col-xs-12 clear-col-padding">
+                <div class="col-xs-4 clear-col-padding">
+                  <input type="text" class="form-control" #UseRateData value="0" readonly="readonly" />
+                </div>
+                <div class="col-xs-4 clear-col-padding d-ticket-percent">
+                  <font>元</font>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!--服务费-->
+        <div class="form-group col-xs-offset-1 col-xs-10">
+          <label class="col-xs-3 control-label no-padding-right l-ticket-title" style="text-align: right;"><font>*</font>服务费:</label>
+          <div class="col-xs-9">
+            <div class="row clear-row-margin">
+              <div class="col-xs-12 clear-col-padding">
+                <div class="col-xs-4 clear-col-padding">
+                  <input type="text" class="form-control" #ServiceRateData value="0" readonly="readonly" />
+                </div>
+                <div class="col-xs-4 clear-col-padding d-ticket-percent">
+                  <font>元</font>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+          <!--平台服务费-->
+          <div class="form-group col-xs-offset-1 col-xs-10">
+            <label class="col-xs-3 control-label no-padding-right l-ticket-title" style="text-align: right;"><font>*</font>平台服务费:</label>
+            <div class="col-xs-9">
+              <div class="row clear-row-margin">
+                <div class="col-xs-12 clear-col-padding">
+                  <div class="col-xs-4 clear-col-padding">
+                    <input type="text" class="form-control" #PlatServiceRateData value="0" readonly="readonly" />
+                  </div>
+                  <div class="col-xs-4 clear-col-padding d-ticket-percent">
+                    <font>元</font>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+        <!--服务费+使用费+平台服务费-->
+        <div class="form-group col-xs-offset-1 col-xs-10">
+          <label class="col-xs-3 control-label no-padding-right l-ticket-title" style="text-align: right;"><font>*</font>使用费 + 服务费+平台服务费:</label>
+          <div class="col-xs-9">
+            <div class="row clear-row-margin">
+              <div class="col-xs-12 clear-col-padding">
+                <div class="col-xs-4 clear-col-padding">
+                  <input type="text" class="form-control" #userServiceData value="0" readonly="readonly" />
+                </div>
+                <div class="col-xs-4 clear-col-padding d-ticket-percent">
+                  <font>元</font>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!--本金减去使用费减去服务费减平台服务费-->
+        <div class="form-group col-xs-offset-1 col-xs-10">
+          <label class="col-xs-3 control-label no-padding-right l-ticket-title" style="text-align: right;"><font>*</font>本金 - 使用费 - 服务费-平台服务费:</label>
+            <div class="col-xs-9">
+              <div class="row clear-row-margin">
+                <div class="col-xs-12 clear-col-padding">
+                  <div class="col-xs-4 clear-col-padding">
+                    <input type="text" class="form-control" #totalData value="0" readonly="readonly" />
+                  </div>
+                  <div class="col-xs-4 clear-col-padding d-ticket-percent">
+                    <font>元</font>
+                  </div>
+                </div>
+              </div>
+            </div>
+        </div>
+
+      </div>
+    </div>
+    <!-- /.box-body -->
+  </div>
+
+
+
+</section>
+<!-- /.content -->

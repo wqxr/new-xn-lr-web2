@@ -1,0 +1,53 @@
+<div class="inMemo" *ngIf="inMemo !== ''">{{inMemo}}</div>
+<div class="input-group">
+  <ng-container *ngIf="row.checkerId!=='contractTemplate'">
+    <select class="form-control xn-input-font" (change)="onSelectChange($event.target.value)"
+      [(ngModel)]="selectValue" [ngClass]="myClass" [disabled]="isDisabled">
+      <option value="">请选择</option>
+      <option *ngFor="let option of row.selectOptions" value="{{option.value}}">{{option.label}}</option>
+    </select>
+  </ng-container>
+  <!-- <input type="hidden" [formControlName]="row.name"> -->
+  <span class="input-group-btn">
+    <button type="button" class="btn btn-default btn-flat xn-input-font"
+      [disabled]="(row.checkerId!=='contractTemplate' ? !selectType : ctrl.disabled) || isDisabled"
+      [ngClass]="myClass"
+      (click)="onSelect()">选择</button>
+  </span>
+</div>
+<span class="xn-input-alert" *ngIf="alert">{{alert}}</span>
+<div style="width: 100%;margin-top: 15px;" *ngIf="selectType || row.checkerId==='contractTemplate'">
+  <div class="table-head">
+    <table class="table">
+      <thead>
+        <tr>
+          <th style='width:6%'>序号</th>
+          <th *ngFor="let head of config[row.checkerId].heads" [ngStyle]="{'width':head.width}">{{head.label}}</th>
+        </tr>
+      </thead>
+    </table>
+  </div>
+  <div class="table-body" *ngIf="items.length>0">
+    <table class="table">
+      <tbody>
+        <ng-container>
+          <tr *ngFor="let item of items;let i=index">
+            <td style='width:6%'>{{(i+1)}}</td>
+            <td *ngFor="let head of config[row.checkerId].heads" [ngStyle]="{'width':head.width}" style="max-width: 70px;word-wrap:break-word">
+              <ng-container [ngSwitch]="row.checkerId">
+                <ng-container *ngSwitchCase="'contractTemplate'">
+                  <ng-container *ngIf=" item && item!==''">
+                      <a href="javaScript:void(0)" (click)="showContract(item)">{{item.label}}</a>
+                  </ng-container>
+                </ng-container>
+                <ng-container *ngSwitchDefault>
+                  <div [innerHTML]="item"></div>
+                </ng-container>
+              </ng-container>
+            </td>
+          </tr>
+        </ng-container>
+      </tbody>
+    </table>
+  </div>
+</div>

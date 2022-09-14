@@ -1,0 +1,89 @@
+<section class="content-header">
+  <h1>{{tabConfig.title}}</h1>
+</section>
+<section class="content">
+  <div class="box">
+    <div class="box-body">
+      <div class="tab-content">
+        <div class="tab-pane active" style="padding: 15px 0;">
+          <div class="col-md-8 col-md-offset-2" style="margin-bottom: 20px;">
+            <h4>规则配置</h4>
+          </div>
+          <div style='clear:both'>
+            <div class="item-box form-group col-md-8 col-md-offset-2" *ngFor="let row of shows.slice(0,3)">
+              <div [class.required-star]="row.required !== false && row.required !== 0"
+                style="min-width: 70px;line-height: 35px;margin-right: 25px;text-align: right;">
+                {{row.title}}</div>
+              <div class="item-control">
+                <app-dynamic-input [row]="row" [form]="form" [formModule]="formModule"></app-dynamic-input>
+              </div>
+            </div>
+          </div>
+          <div style='clear:both'>
+            <div class="item-box col-md-8 col-md-offset-2">
+              <div style="min-width: 63px;line-height: 35px;margin-right: 25px;text-align: right;">
+                抽样要求</div>
+            </div>
+            <div class="item-box form-group col-md-7 col-md-offset-3" *ngFor="let row of shows.slice(3,shows.length-4)">
+              <ng-container [ngSwitch]="row.checkerId">
+                <!-- requireScope 其他要求-->
+                <ng-container *ngSwitchCase="'requireScope'">
+                  <div [class.required-star]="row.required !== false && row.required !== 0"
+                    style="min-width: 89px;line-height: 35px;margin-right: 25px;text-align: right;">
+                    {{row.title}}
+                  </div>
+                  <div class="item-control">
+                    <app-dynamic-input [row]="row" [form]="form" [formModule]="formModule"></app-dynamic-input>
+                  </div>
+                </ng-container>
+                <!-- receiveScope 金额要求-->
+                <ng-container *ngSwitchCase="'receiveScope'">
+                  <div [class.required-star]="row.required !== false && row.required !== 0"
+                    style="min-width: 89px;line-height: 35px;margin-right: 25px;text-align: right;">
+                    {{row.title}}
+                  </div>
+                  <div class="item-control">
+                    <app-dynamic-input [row]="row" [form]="form" [formModule]="formModule"></app-dynamic-input>
+                  </div>
+                </ng-container>
+                <!--默认-->
+                <ng-container *ngSwitchDefault>
+                  <div [class.required-star]="row.required !== false && row.required !== 0"
+                    style="min-width: 89px;line-height: 35px;margin-right: 25px;text-align: right;">
+                    {{row.title}}</div>
+                  <div class="item-control">
+                    <app-dynamic-input [row]="row" [form]="form" [formModule]="formModule"></app-dynamic-input>
+                    <div class="checkbox col-md-12" *ngIf="showCheckBox" [formGroup]="form">
+                      <label class="col-md-3">
+                        <input type="checkbox" formControlName="project" name="project" (change)="contractScopeChecked($event)"> 工程类
+                      </label>
+                      <label class="col-md-3">
+                        <input type="checkbox" formControlName="trade" name="trade" (change)="contractScopeChecked($event)"> 贸易类
+                      </label>
+                      <label class="col-md-3">
+                        <input type="checkbox" formControlName="design" name="design" (change)="contractScopeChecked($event)"> 设计类
+                      </label>
+                      <label>
+                        <input type="checkbox" formControlName="supervise" name="supervise" (change)="contractScopeChecked($event)"> 监理类
+                      </label>
+                      <!-- <div style="font-size: 12px;color: #e15f63;" *ngIf="showCheckBox && !checkBoxData.length>0">请勾选类型
+                      </div> -->
+                    </div>
+                  </div>
+                </ng-container>
+              </ng-container>
+
+            </div>
+          </div>
+          <div class="panel-footer col-md-12">
+            <button class="btn btn-default pull-left" type="button" (click)="back()">返回</button>
+            <button class="btn btn-primary" type="submit" [disabled]='unSubmit' (click)="toSubmit()">
+              提交
+            </button>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+</section>

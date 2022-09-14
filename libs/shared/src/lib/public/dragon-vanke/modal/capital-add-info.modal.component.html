@@ -1,0 +1,81 @@
+<modal #modal [backdrop]="'static'" [keyboard]="false" [animation]="false" (onDismiss)="oncancel()">
+  <modal-header [showClose]="true" style='text-align:left'>
+    <h4 class="modal-title">补充信息</h4>
+  </modal-header>
+  <modal-body>
+    <div style='height:400px;overflow-y: scroll;overflow-x: hidden;'>
+      <div style="padding: 5px 60px" class="row form-group">
+        <div class="col-sm-1 xn-control-label">
+          层级列表
+        </div>
+        <div class="col-sm-11">
+          <table class="table table-bordered text-center">
+            <thead>
+              <tr>
+                <th>层级名称</th>
+                <th>层级金额</th>
+                <th>认购价格%</th>
+                <th>产品到期日</th>
+                <th>操作</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor='let item of datalist01;let i=index'>
+                <td>{{item.investTierName}}</td>
+                <td>{{item.tierReceive.toFixed(2) |xnMoney}}</td>
+                <td>{{item.purchaseRatio.toFixed(2) |xnMoney}}</td>
+                <td>{{item.productendTime | xnDate :'date'}}</td>
+                <td><a href="javaScript:void(0)" (click)='changeRece(item,i)'>修改</a></td>
+              </tr>
+              <tr *ngIf='datalist01.length>0'>
+                <td>汇总</td>
+                <td>{{totalReceive | xnMoney}}</td>
+                <td>/</td>
+                <td>/</td>
+                <td>/</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+      </div>
+      <div style="padding: 5px 60px" class="row form-group">
+        <div class="col-sm-1 xn-control-label">
+          投资机构信息
+        </div>
+        <div class="col-sm-11">
+          <div style="padding: 2px 5px;width: 120px" class="btn btn-default btn-file xn-table-upload block"
+            (click)='choseAgency()'>
+            <span class="hidden-xs xn-input-font">选择投资机构</span>
+          </div>
+          <table class="table table-bordered text-center">
+            <thead>
+              <tr>
+                <th>序号</th>
+                <th>投资机构</th>
+                <th>认购金额</th>
+                <th>所属层级</th>
+                <th>操作</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor='let item of dataAgency;let i=index'>
+                <td>{{i+1}}</td>
+                <td>{{item.orgName}}</td>
+                <td>{{item.purchaseMoney.toFixed(2) | xnMoney}}</td>
+                <td>{{item.investTierName}}</td>
+                <td><a href="javaScript:void(0)" (click)='changeAgency(item,i)'>修改</a>&nbsp;&nbsp;<a
+                    href="javaScript:void(0)" (click)='deleteAgency(i)'>删除</a></td>
+              </tr>
+            </tbody>
+          </table>
+
+        </div>
+      </div>
+    </div>
+  </modal-body>
+  <modal-footer>
+    <button type="button" class="btn btn-default" (click)="oncancel()">取消</button>
+    <button type="button" class="btn btn-success" (click)="onOk()">确定</button>
+  </modal-footer>
+</modal>

@@ -1,0 +1,78 @@
+/* flow-process css */
+.flow-process {
+  border: 1px solid #ddd;
+  padding: 4px;
+  margin-bottom: 10px;
+  border-radius: 3px;
+  background-color: #FFFFFF;
+}
+.flow-process span {
+  padding: 0 16px;
+  line-height: 50px;
+  font-size: 16px;
+  color: #1D67C7;
+}
+.blue-text {
+  color: #1D67C7;
+}
+/* bottom btn css */
+.white-panel {
+  background-color: #FFFFFF !important;
+  box-shadow: 0 0 4px 0 rgba(31,43,56,0.10);
+  position: fixed;
+  width: 100%;
+  bottom: 0px;
+  right: 0px;
+  margin-bottom: 0px;
+}
+.btn-linheight {
+  line-height: 45px;
+  padding: 15px !important;
+}
+.btn-linheight button {
+  margin-right: 8px;
+}
+
+/* form font css */
+.input-label {
+  font-family: PingFangSC-Regular;
+  font-size: 14px;
+  font-weight: lighter;
+  color: #707880;
+}
+.input-text {
+  font-family: PingFangSC-Medium;
+  font-size: 14px;
+  color: #1F2B38;
+  font-weight: bold;
+}
+/* bkg css */
+.card-panel {
+  background: #FFFFFF;
+  box-shadow: 0 0 4px 0 rgba(31,43,56,0.10);
+}
+.card-title {
+  font-family: PingFangSC-Semibold;
+  font-size: 16px;
+  color: #1F2B38;
+  letter-spacing: 0;
+  font-weight: bold;
+}
+/* btn css */
+.dft-btn {
+  background: #FFFFFF;
+  border: 1px solid #1D67C7;
+  border-radius: 2px;
+  border-radius: 2px;
+}
+.dft-text {
+  font-family: PingFangSC-Regular;
+  font-size: 14px;
+  color: #1D67C7;
+  text-align: center;
+  line-height: 14px;
+}
+.pry-btn {
+  border-radius: 2px;
+  border-radius: 2px;
+}

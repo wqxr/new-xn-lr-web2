@@ -1,0 +1,60 @@
+<!--
+  ~ Copyright(c) 2017-2019, 深圳市链融科技股份有限公司
+  ~ Beijing Xiwei Technology Co., Ltd.
+  ~ All rights reserved.
+  ~
+  ~ @file：contract-input.component.ts
+  ~ @summary：合同文件
+  ~ @version: 1.0
+  ~ ***********************************************************************
+  ~ revision             author            reason             date
+  ~ 1.0                 zhyuanan          增加功能1         2019-05-18
+  ~ ***********************************************************************
+  -->
+
+<div class="box no-top">
+  <div class="box-body">
+    <!-- 第一行 -->
+    <div class="app-flow-process">
+      <xn-avenger-flow-process-component [mainFlowId]="mainFlowId" [showAll]="showAll"></xn-avenger-flow-process-component>
+    </div>
+
+    <!-- 日志 -->
+    <div class="this-log clearfix" *ngFor="let row of params.logs">
+      <div class="this-log-seq">
+        <span class="tc-15-step-num this-seq">{{row.mainFlowSeq}}</span>
+      </div>
+      <div class="this-log-line">
+        <span class="this-operator-action">【{{row.flowName}}】</span>
+        <span class="this-operator-name">{{row.orgName}}</span>
+        <span *ngIf="row.operatorTime">在 {{row.operatorTime | xnDate : 'longdatetime'}} {{row.operatorDesc}}。</span>
+        <!--flowIdIsNotChild 不是子流程，不可查看-->
+        <ng-container *ngIf="normalHasOrCanViewDetail(row) && !this.nocanWatchDetail.includes(row.flowId)">
+          <a class="pull-right" style="margin-right: 10px"
+             routerLink="/console/record/avenger/detail/view/{{row.recordId}}">查看子流程</a>
+        </ng-container>
+        <!--针对特殊登陆角色显示查看的子流程-->
+        <ng-container *ngIf="intermediaryHasOrCanViewDetail(row)">
+          <a class="pull-right" style="margin-right: 10px" href="javaScript:void (0)" (click)="checkSubprocess(row)">查看子流程</a>
+        </ng-container>
+        <br>
+        <div *ngIf="row.contracts.length > 0">
+            <ng-container *ngFor="let contract of row.contracts">
+              <a class="xn-click-a" style="margin-right: 10px;" *ngIf="!!contract.label"
+                 (click)="showContract(contract)">
+                <span *ngIf="!contract.hide">《{{contract.label}}》</span>
+              </a>
+            </ng-container>
+        </div>
+      </div>
+    </div>
+  </div>
+  <!-- /.box-body -->
+
+  <div class="box-footer">
+    <!-- <button type="button" class="btn btn-default" (click)="onBuildXml()" *ngIf="showBuildBtn&& proxy!===50&&">生成保理上报XML</button> -->
+    <button type="button" class="btn btn-default" (click)="download()">下载附件</button>
+    <button type="button" class="btn btn-default" (click)="addMap()" *ngIf="showMapBtn">补录客户地图</button>
+    <button type="button" class="btn btn-default pull-right" (click)="onCancel()">返回</button>
+  </div>
+</div>

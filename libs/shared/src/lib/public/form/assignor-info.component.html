@@ -1,0 +1,47 @@
+<div class="input-group" style="width: 100%" [formGroup]="form">
+  <table class="table table-bordered table-hover file-row-table" aria-rowindex='' width="100%">
+    <thead>
+      <tr>
+        <th>交易ID</th>
+        <th>收款单位</th>
+        <th>组织机构代码</th>
+        <th>工商注册号</th>
+        <th>法定代表人</th>
+        <th>所属行业</th>
+        <th>注册地址</th>
+        <th>文件名</th>
+        <th>操作</th>
+        <th>验证一致性</th>
+      </tr>
+    </thead>
+    <tbody>
+      <ng-container *ngFor="let item of items; let i = index;">
+        <tr>
+          <td>{{item['交易ID']}}</td>
+          <td>{{item['收款单位']}}</td>
+          <td>{{item['组织机构代码']}}</td>
+          <td>{{item['工商注册号']}}</td>
+          <td>{{item['法定代表人']}}</td>
+          <td>{{item['所属行业']}}</td>
+          <td>{{item['注册地址']}}</td>
+          <td>
+            <a class="xn-click-a" (click)="onView(item.file)">{{item.file && item.file.fileName}}</a>
+          </td>
+          <td>
+            <!-- <a class="xn-click-a" (click)="onViewInvoice(item)">上传</a> -->
+            <div class="btn btn-default btn-file xn-table-upload">
+              <span class="hidden-xs xn-input-font">上传文件</span>
+              <input type="file" (change)="onUploadExcel($event, i)">
+            </div>
+          </td>
+          <td>
+            <p [ngClass]="{'red': item.status === false}" *ngIf="item.status !== '' && item.status !== undefiled ">
+              {{item.status === false ? '主体信息不一致': '主体信息一致'}}
+            </p>
+          </td>
+        </tr>
+      </ng-container>
+    </tbody>
+  </table>
+</div>
+<span class="xn-input-alert">{{alert}}</span>

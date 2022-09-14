@@ -1,0 +1,79 @@
+<section class="content-header">
+  <h1>
+    {{pageTitle}}
+    <small>{{pageDesc}}</small>
+  </h1>
+</section>
+
+<section class="content">
+  <div class="box">
+    <div class="box-body">
+
+      <div class="bill-details has-border bill-details-nopadding-top">
+        <div class="bill-details-title">
+          <div class="row">
+            <div class="col-xs-10">
+              <font class="f-tilte-2">智能风控</font>
+            </div>
+          </div>
+        </div>
+        <form class="form-horizontal f-tools-offer" role="form">
+          <!--请输入股票代码-->
+          <div class="form-group col-xs-12">
+            <label for="bill_amount" class="col-xs-3 control-label no-padding-right l-ticket-title">
+              <font>*</font>请输入股票代码:</label>
+            <div class="col-xs-9">
+              <div class="row clear-row-margin">
+                <div class="col-xs-12 clear-col-padding">
+                  <div class="col-xs-5 clear-col-padding">
+                    <input type="text" class="form-control" placeholder="" #stockId>
+                  </div>
+                  <p class="d-bill-help-block displaynone bill_amount_errorp no-mbottom" *ngIf="errorStockId">
+                    <i class="fa fa-minus-circle"></i>
+                    <font>请输入股票代码</font>
+                  </p>
+                  <p class="d-bill-help-block displaynone bill_amount_errorp no-mbottom" *ngIf="errorEnterprise">
+                    <i class="fa fa-minus-circle"></i>
+                    <font>暂无该企业的风险评级</font>
+                  </p>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!--开始查询-->
+          <div class="form-group col-xs-12">
+            <div class="col-xs-11" style="text-align:center">
+              <button class="btn btn-primary btn-tools-calculator" (click)="calculate()">
+                开始查询
+              </button>
+            </div>
+          </div>
+        </form>
+
+        <table class="table table-bordered table-striped table-max" *ngIf="items.length > 0">
+          <tbody>
+            <tr>
+              <th>股票代码</th>
+              <th>日期</th>
+              <th>分数</th>
+              <th>评级</th>
+              <th>pd</th>
+            </tr>
+            <tr *ngFor="let item of items">
+              <td>{{item.stockId}}</td>
+              <td>{{item.dateKey}}</td>
+              <td>{{item.score}}</td>
+              <td>{{item.rating}}</td>
+              <td>{{item.pd}}</td>
+            </tr>
+          </tbody>
+        </table>
+
+      </div>
+      <!-- /.box-body -->
+    </div>
+  </div>
+
+</section>
+<!-- /.content -->

@@ -1,0 +1,15 @@
+<!-- select表单 和 text内容 -->
+<div [formGroup]="form">
+  <p>
+    <select class="form-control xn-input-font" name="firstValue" (change)="inputChange($event,'firstValue')" [value]='formValue.firstValue'
+            [ngClass]="myClass" (blur)="onBlur()">
+      <option value="">请选择</option>
+      <option *ngFor="let option of row.selectOptions" value="{{option.value}}">{{option.label}}</option>
+    </select>
+  </p>
+  <textarea [value]='formValue.secondValue' name="secondValue" (change)="inputChange($event,'secondValue')"
+            class="form-control xn-input-textarea xn-input-font xn-input-border-radius"
+            rows="6" [ngClass]="myClass" placeholder="请输入自查结论" (blur)="onBlur()"
+            autocomplete="off"></textarea>
+</div>
+<span class="xn-input-alert">{{alert}}</span>

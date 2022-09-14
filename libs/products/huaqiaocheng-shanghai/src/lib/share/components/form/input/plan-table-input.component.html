@@ -1,0 +1,64 @@
+<div class="input-group" style="width: 100%; display: block" [formGroup]="form">
+  <div class="tables">
+    <div class="head-height">
+      <table class="table table-bordered table-hover text-center table-display relative" [style.left.px]="headLeft">
+        <thead>
+          <tr>
+            <ng-container *ngFor="let item of heads?.headText">
+              <td>
+                <span>{{item.label}}</span>
+              </td>
+            </ng-container>
+          </tr>
+        </thead>
+      </table>
+    </div>
+    <div class="table-height" (scroll)="onScroll($event)">
+      <table class="table table-bordered table-hover text-center table-display">
+        <tbody>
+          <ng-container *ngIf="items.length">
+            <ng-container *ngFor="let item of items">
+              <tr>
+                <td *ngFor="let head of heads?.headText">
+                  <ng-container *ngIf="head?.options">
+                    <span *ngIf="head.options.type==='money'" [ngClass]="head.options.style">
+                      <ng-container *ngIf="!!item[head.value] || item[head.value]===0">
+                        {{item[head.value] | number:'1.2-2' | xnMoney: 'true'}}
+                      </ng-container>
+                    </span>
+                    <span *ngIf="head.options.type==='rate'" [ngClass]="head.options.style">
+                      <ng-container *ngIf="!!item[head.value] || item[head.value] !== 0">
+                        {{item[head.value] | number: '1.2-2'}}%
+                      </ng-container>
+                    </span>
+                    <span *ngIf="head.options.type==='def'" [ngClass]="head.options.style">
+                      {{item[head.value]}}
+                    </span>
+                    <span *ngIf="head.options.type==='boolean'" [ngStyle]="{'color':item[head.value]===0?'red':'black'}">
+                      {{item[head.value]===1?'是':'否'}}
+                    </span>
+                    <!--当有多张内容时-->
+                    <div *ngIf="head.options.type==='multiple'">
+                      <ng-container *ngIf="hwModeService.arrayLength(item[head.value]);else block2">
+                        <a class="xn-click-a" href="javaScript:void(0)" (click)="viewMore(item[head.value])"
+                          [innerHtml]="(item[head.value] | xnStringToArray:2:'等;')">
+                        </a>
+                      </ng-container>
+                      <ng-template #block2>
+                        <div [innerHtml]="(item[head.value] | xnStringToArray:2:'等;')"></div>
+                      </ng-template>
+                    </div>
+                    <span *ngIf="head.options.type==='date'">
+                      {{(item[head.value] || '') | xnDate: 'stringtodate'}}
+                    </span>
+                  </ng-container>
+                  <span *ngIf="!head.options">{{item[head.value]}}</span>
+                </td>
+              </tr>
+            </ng-container>
+          </ng-container>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>

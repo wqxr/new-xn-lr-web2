@@ -1,0 +1,38 @@
+<modal #modal [backdrop]="'static'" [keyboard]="false" [animation]="false">
+  <modal-header [showClose]="false">
+    <h4 class="modal-title">合同修改</h4>
+  </modal-header>
+  <modal-body>
+    <div class="clearfix contract">
+      <div class="col-sm-3" style="padding: 0">
+        <div class="form-group" *ngFor="let item of rows">
+          <div [class.required-star]="item.required">{{item.title}}</div>
+          <xn-input [form]="mainForm" [row]="item"></xn-input>
+        </div>
+        <div class="form-group">
+          <div [class.required-star]="true">合同有效期类型</div>
+          <select class="form-control" [(ngModel)]="contractValidityType" (change)="changeSelect(contractValidityType)">
+            <option value="">-请选择-</option>
+            <option *ngFor="let item of contractDateStatus" [value]="item.value">{{item.label}}</option>
+          </select>
+        </div>
+        <div class="form-group" *ngIf="contractValidityType==='固定期限'">
+          <div [class.required-star]="false">合同有效期</div>
+          <app-public-date-input-component (dateOutput)="dateInput($event)"
+                                           [dataValue]="{value:contractValidity}"></app-public-date-input-component>
+        </div>
+      </div>
+      <!--右侧合同-->
+      <div class="col-sm-9" style="overflow-y: auto">
+        <div #szca class="pdf-container">
+        </div>
+        <div class="text-right text-padding">
+          <button type="button" class="btn btn-default" (click)="onCancel()">取消</button>
+          <button type="button" class="btn btn-danger" (click)="save()"
+                  [disabled]="!contractValidityType || contractValidityType===''">提交信息
+          </button>
+        </div>
+      </div>
+    </div>
+  </modal-body>
+</modal>

@@ -1,0 +1,52 @@
+<modal #modal [backdrop]="'static'" [keyboard]="false" [animation]="false">
+  <modal-header [showClose]="true">
+    <h4 class="modal-title">审核标准</h4>
+  </modal-header>
+  <modal-body>
+    <div class="box-modal box-x">
+      <div class="box-modal" style="overflow-y: auto">
+        <div *ngFor="let item of examData" class="flex box-border margin-c ">
+          <div class="flex-title font-warp">
+            <p>{{item.titleLeft}}</p>
+            <p>{{item.valueLeft}}</p>
+          </div>
+          <div class="flex-title font-warp">
+            <p class="notice-color">{{item.titleCenter}}</p>
+            <p *ngIf="item.display" [class]="item.color">{{item.valueCenter}}</p>
+          </div>
+          <div class="flex-title font-warp">
+            <p>{{item.titleRight}}</p>
+            <p>{{item.valueRight}}</p>
+          </div>
+        </div>
+        <div class="margin-c flex">
+          <div class="flex-title font-warp">
+            <p>企业发起业务时填写的账号</p>
+            <p *ngIf="params?.financingAccount">{{params?.financingAccount}}</p>
+          </div>
+          <div class="flex-title font-warp">
+            <p class="notice-color">参考标准：等于</p>
+            <p [ngClass]="viewIndex===true?'pass-color':'fail-color'">{{viewIndex===true?'等于':'不等于'}}</p>
+          </div>
+          <div class="flex-title font-warp">
+            <p>基础合同约定账号</p>
+            <p *ngIf="params?.baseAccount">{{params?.baseAccount}}</p>
+          </div>
+          <div class="flex-title font-warp">
+            <p class="notice-color">参考标准：等于</p>
+            <p [ngClass]="viewIndex1===true?'pass-color':'fail-color'">{{viewIndex1===true?'等于':'不等于'}}</p>
+          </div>
+          <div class="flex-title font-warp">
+            <p>汇付数字证书费用账号</p>
+            <p *ngIf="params?.sendAccount">{{params?.sendAccount}}</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </modal-body>
+  <modal-footer>
+    <!--<button type="button" class="btn btn-default" (click)="cancel()">取消</button>-->
+    <button type="button" class="btn btn-default" (click)="failPass()">不通过</button>
+    <button type="button" class="btn btn-primary" (click)="successPass()">通过</button>
+  </modal-footer>
+</modal>

@@ -1,0 +1,269 @@
+<xn-page-header-wrapper>
+  <div>
+    <!-- 基本信息 -->
+    <nz-card nzTitle="基本信息" *ngIf="loading; else loadingTemplate">
+      <div nz-row>
+        <div nz-col nzSpan="14">
+          <div nz-row>
+            <div nz-col>
+              <div id="u809">
+                <img id="u809Img" src="assets/lr/img/account/u646.svg" />
+              </div>
+            </div>
+            <div
+              nz-col
+              nzSpan="20"
+              [ngStyle]="{ 'margin-top': showAccountInfo() ? '0' : '15px' }"
+            >
+              <p style="display: flex">
+                <span class="company-title">{{ accountInfo.appName }}</span>
+                <span class="active-status">{{
+                  accountInfo.accountStatus | xnOption: accountStatusOptions
+                }}</span>
+              </p>
+              <p *ngIf="accountInfo?.virAcctNo" class="company-account">
+                电子账本账号: {{ accountInfo.virAcctNo }}
+                <span style="margin-left: 20px"
+                  >银行:
+                  {{
+                    accountInfo.bankType | xnOption: accountBankTypeOptions
+                  }}</span
+                >
+              </p>
+            </div>
+          </div>
+        </div>
+        <div style="text-align: right" nz-col nzSpan="10">
+          <p *ngIf="canApplyAccount()">
+            <button nz-button nzType="primary" (click)="supplyAccountInfo()">
+              去开户
+            </button>
+          </p>
+          <p *ngIf="confirmApplyAccount()">
+            <button nz-button nzType="primary" (click)="confirmAccountInfo()">
+              确认开户
+            </button>
+          </p>
+          <p *ngIf="canActiveAccount()">
+            <button nz-button nzType="primary" (click)="activeAccount()">
+              去激活
+            </button>
+          </p>
+          <p *ngIf="confirmModify()">
+            <button nz-button nzType="primary" (click)="confirmAccountInfo()">
+              确认修改
+            </button>
+          </p>
+        </div>
+      </div>
+      <div nz-row *ngIf="showAccountInfo()">
+        <a nz-button nzType="link" (click)="viewAccountInfo()">查看账户信息</a>
+        <nz-divider class="tip-divider" nzType="vertical"></nz-divider>
+        <a nz-button nzType="link" (click)="viewBusinessInfo()">查看工商信息</a>
+        <nz-divider class="tip-divider" nzType="vertical"></nz-divider>
+        <a nz-button nzType="link" (click)="viewOperatorInfo()"
+          >查看经办人信息</a
+        >
+      </div>
+    </nz-card>
+    <!-- 余额 -->
+    <nz-card
+      style="margin-top: 10px"
+      nzTitle="余额"
+      [nzExtra]="extraTemplate1"
+      *ngIf="loading; else loadingTemplate"
+    >
+      <div nz-row>
+        <div style="padding-left: 50px; color: #858585" nz-col nzSpan="6">
+          <p>
+            <span style="margin-right: 5px">账户总余额</span>
+            <span
+              style="cursor: pointer"
+              nz-popover
+              nzPopoverTitle="其他金额信息"
+              [nzPopoverContent]="contentTemplate"
+              nzPopoverPlacement="right"
+              nzPopoverTrigger="hover"
+              ><i nz-icon nzType="question-circle" nzTheme="outline"></i
+            ></span>
+          </p>
+          <p>
+            <span
+              class="account-money"
+              >{{ balanceInfo.totalBalance | atMoney }}</span
+            >
+            <span>元</span>
+          </p>
+        </div>
+        <div style="padding-left: 50px; color: #858585" nz-col nzSpan="6">
+          <p>
+            <span>可提现余额</span>
+          </p>
+          <p>
+            <span
+              class="account-money"
+              >{{ balanceInfo.withdrawableBalance | atMoney }}</span
+            >
+            <span>元</span>
+          </p>
+        </div>
+        <div style="text-align: right" nz-col nzSpan="12">
+          <p *ngIf="canAddAccount() && balanceInfo.withdrawableBalance">
+            <button nz-button nzType="primary" (click)="withdraw($event)">
+              提现
+            </button>
+          </p>
+        </div>
+      </div>
+    </nz-card>
+    <ng-template #extraTemplate1>
+      <ng-container *ngIf="canAddAccount()">
+        <a nz-button nzType="link" (click)="bindAccount()"
+          >绑定银行卡账户 <i nz-icon nzType="right" nzTheme="outline"></i
+        ></a>
+      </ng-container>
+    </ng-template>
+    <!-- 交易明细记录 -->
+    <nz-card
+      style="margin-top: 10px"
+      nzTitle="交易明细记录"
+      [nzExtra]="extraTemplate2"
+      *ngIf="loading; else loadingTemplate"
+    >
+      <xn-table
+        [data]="listInfo"
+        [columns]="columns"
+        [size]="'middle'"
+        [loading]="loadingTable"
+        [scroll]="{ y: '400px' }"
+        [page]="{
+          front: false,
+          total: '共' + pageConfig.total + '条记录',
+          showQuickJumper: true,
+          showSize: true,
+          pageSizes: [5, 10, 20, 30, 50, 100]
+        }"
+        [widthMode]="{
+          type: 'strict',
+          strictBehavior: 'truncate'
+        }"
+        [total]="pageConfig.total"
+        [pageIndex]="pageConfig.pageIndex"
+        [pageSize]="pageConfig.pageSize"
+        (change)="handleTableChange($event)"
+      >
+        <!-- 交易方向 -->
+        <ng-template
+          xn-table-row="directionTpl"
+          let-item
+          let-index="index"
+          let-column="column"
+        >
+          {{ item[column.index] | xnOption: tradeDirectionOptions }}
+        </ng-template>
+        <!-- 交易状态 -->
+        <ng-template
+          xn-table-row="statusTpl"
+          let-item
+          let-index="index"
+          let-column="column"
+        >
+          <ng-container *ngIf="item[column.index]">
+            {{ item[column.index] | xnOption: tradeStatusOptions }}
+          </ng-container>
+        </ng-template>
+        <!-- 动账金额类型 -->
+        <ng-template
+          xn-table-row="amyTpl"
+          let-item
+          let-index="index"
+          let-column="column"
+        >
+          <ng-container *ngIf="item[column.index]">
+            {{ item[column.index] | xnOption: tranAmtTypeOptions }}
+          </ng-container>
+        </ng-template>
+        <!-- 金额 -->
+        <ng-template
+          xn-table-row="amountTpl"
+          let-item
+          let-index="index"
+          let-column="column"
+        >
+          <ng-container *ngIf="showMoney(item[column.index]); else noMony">
+            {{ item[column.index] | atMoney }} 元
+          </ng-container>
+        </ng-template>
+      </xn-table>
+    </nz-card>
+    <ng-template #extraTemplate2>
+      <div nz-row>
+        <div nz-col nzSpan="8">
+          <nz-select
+            style="width: 100%; padding-right: 10px"
+            [nzAllowClear]="true"
+            [(ngModel)]="query.tradeDirection"
+            (ngModelChange)="onSelectChange($event)"
+            nzPlaceHolder="请选择交易方向"
+          >
+            <nz-option nzValue="2" nzLabel="转入"></nz-option>
+            <nz-option nzValue="1" nzLabel="转出"></nz-option>
+          </nz-select>
+        </div>
+        <div nz-col nzSpan="16">
+          <nz-range-picker
+            [(ngModel)]="query.date"
+            nzFormat="yyyy-MM-dd HH:mm:ss"
+            [nzShowTime]="true"
+            (nzClear)="onDateClear($event)"
+            (ngModelChange)="onDateChange($event)"
+          >
+          </nz-range-picker>
+        </div>
+      </div>
+    </ng-template>
+  </div>
+</xn-page-header-wrapper>
+
+<ng-template #contentTemplate>
+  <div style="width: 400px">
+    <div nz-row>
+      <div nz-col nzSpan="12" class="left-title">冻结余额</div>
+      <span nz-col nzSpan="12" class="right-money"
+        >{{ balanceInfo.freezeBalance | atMoney }} <span>元</span></span
+      >
+    </div>
+    <div nz-row>
+      <div nz-col nzSpan="12" class="left-title">冻结金额</div>
+      <div nz-col nzSpan="12" class="right-money">
+        {{ balanceInfo.freezeAmount | atMoney }} <span>元</span>
+      </div>
+    </div>
+    <div nz-row>
+      <div nz-col nzSpan="12" class="left-title">司法冻结余额</div>
+      <div nz-col nzSpan="12" class="right-money">
+        {{ balanceInfo.judicialFreezeBalance | atMoney }} <span>元</span>
+      </div>
+    </div>
+    <div nz-row>
+      <div nz-col nzSpan="12" class="left-title">非绑定卡入金余额</div>
+      <div nz-col nzSpan="12" class="right-money">
+        {{ balanceInfo.unboundCardBalance | atMoney }} <span>元</span>
+      </div>
+    </div>
+    <div nz-row>
+      <div nz-col nzSpan="12" class="left-title">在途资金</div>
+      <div nz-col nzSpan="12" class="right-money">
+        {{ balanceInfo.intransitAmount | atMoney }} <span>元</span>
+      </div>
+    </div>
+  </div>
+</ng-template>
+
+<ng-template #loadingTemplate>
+  <nz-skeleton [nzActive]="true"></nz-skeleton>
+</ng-template>
+
+<ng-template #noMony>
+  <span class="account-money">--</span>
+</ng-template>

@@ -1,0 +1,46 @@
+<section class="content">
+    <div class="box">
+      <div class="content-header">
+        <h1>{{pageTitle}}</h1>
+      </div>
+      <div class="box-body">
+          <ul class="nav nav-tabs">
+              <ng-container *ngFor="let tab of tabConfig.tabList;let i=index">
+                <li [ngClass]="{'active': tab.value===label}" *ngIf="tab.value!=='do_up'">
+                  <a class="xn-click-a" data-toggle="tab" (click)="initData(tab.value)">{{tab.label}}</a>
+                </li>
+                <li [ngClass]="{'active': tab.value===label}" *ngIf="(tab.value==='do_up') && isShow">
+                  <a class="xn-click-a" data-toggle="tab" (click)="initData(tab.value)">{{tab.label}}</a>
+                </li>
+              </ng-container>
+            </ul>
+       <div class="tab-content">
+        <div class="tab-pane active" style="padding: 15px 0">
+          <div class="col-sm-6 item-box"  *ngFor="let item of shows">
+            <div class="item-label" style='margin-right:10px;'>
+              <span>{{item.title}}:</span>
+            </div>
+            <div class="item-control">
+              <xn-input [form]="form" [row]="item"></xn-input>
+            </div>
+          </div>
+
+
+        <div class="form-group text-right">
+          <button class="btn btn-primary" (click)="handleAdd()">新增</button>
+          <button class="btn btn-primary" (click)="download()" [disabled]="!headBtnStatus">下载所选附件</button>
+          <button class="btn btn-danger" (click)="deleteRow()" [disabled]="!headBtnStatus">删除</button>
+          <button class="btn btn-primary" (click)="getData()">查询</button>
+          <button class="btn btn-danger" (click)="reset()">重置</button>
+        </div>
+        <app-public-edit-table-component [data]="data" [heads]="currentTab.headText"
+                                         [config]="config"
+                                         (handleRow)="handleRow($event)"
+                                         (headBtn)="headBtn($event)" [type]='type'></app-public-edit-table-component>
+       <xn-pagination [rows]="pageConfig.pageSize" [first]="pageConfig.first" [totalRecords]="pageConfig.total"
+            [pageSizeOptions]="[5,10,20,30,50,100]" (pageChange)="onPage($event)"></xn-pagination>
+        </div>
+        </div>
+      </div>
+    </div>
+  </section>

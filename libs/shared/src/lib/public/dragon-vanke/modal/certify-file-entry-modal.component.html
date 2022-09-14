@@ -1,0 +1,186 @@
+<modal #modal [backdrop]="'static'" [keyboard]="false" [animation]="false">
+  <form class="form-horizontal">
+    <modal-header [showClose]="false">
+      <h4 class="modal-title">{{title}}</h4>
+    </modal-header>
+    <modal-body>
+      <!-- 深圳CA -->
+      <div class="form-group clearfix">
+        <!--左侧合同选择-->
+
+        <!--右侧合同签署-->
+        <div class="col-sm-7 text-padding" style="overflow: auto;height:65vh">
+          <ng-container *ngIf="fileType === 'img'">
+            <div class="img-container" #imgContainer>
+              <div class="img-wrapper" #outerImg>
+                <img #innerImg class="this-img" src="{{ fSrc }}">
+              </div>
+            </div>
+          </ng-container>
+          <ng-container *ngIf="fileType === 'pdf'">
+            <div class="pdf-container">
+              <canvas class="this-pdf" id="thisCanvas"></canvas>
+            </div>
+          </ng-container>
+        </div>
+        <div class="col-sm-5 text-padding info">
+          <div class="form-group">
+            <div class="col-sm-2 xn-control-label">
+              证书编号
+            </div>
+            <div class="col-sm-8">
+              <input #input [readonly]="paramType===OperateExt.VIEW" [(ngModel)]='certificateNo' name="certificateNo"
+                (input)='certiNoenter($event)' class="form-control xn-input-font xn-input-border-radius" type="text"
+                autocomplete="off" />
+            </div>
+            <div class='col-sm-2' *ngIf='paramType===OperateExt.ENTER'>
+              <button class="btn btn-success" [disabled]='!certificateNo' (click)='onSearch()'>查询</button>
+            </div>
+            <p *ngIf='!!searchResult' style='margin-left:19%;margin-bottom:0px'><span style='color:red'>{{searchResult}}</span></p>
+            <p *ngIf='!!alert' style='margin-left:19%;margin-bottom:0px'><span style='color:red'>{{alert}}</span></p>
+          </div>
+          <div class="form-group">
+            <div class="col-sm-2 xn-control-label">
+              企业名称
+            </div>
+            <div class="col-sm-8">
+              <input #input readonly [(ngModel)]='companyName' name="companyName"
+                class="form-control xn-input-font xn-input-border-radius" type="text" autocomplete="off" />
+            </div>
+          </div>
+          <div class="form-group">
+            <div class="col-sm-2 xn-control-label">
+              资质文件企业名称
+            </div>
+            <div class="col-sm-8">
+              <input #input [readonly]="paramType===OperateExt.VIEW" [(ngModel)]='certify_app_name' name="appName"
+                class="form-control xn-input-font xn-input-border-radius" type="text" autocomplete="off" />
+            </div>
+          </div>
+          <div class="form-group" *ngFor='let row of checkers'>
+            <div class="col-sm-2 xn-control-label">
+              {{row.title}}
+            </div>
+            <div class="col-sm-8">
+              <app-dynamic-input [row]="row" [form]="mainForm" formModule="dragon-input">
+              </app-dynamic-input>
+            </div>
+          </div>
+          <div class="form-group" *ngFor="let item of certifileList;let i=index">
+            <div class="col-sm-2 xn-control-label">
+              选择资质类别和等级
+            </div>
+            <div class="col-sm-8">
+              <nz-select class='col-sm-6' nzShowSearch nzServerSearch [ngModelOptions]="{standalone: true}"
+                nzPlaceHolder="请选择" [(ngModel)]="item.certify_classes" [nzShowArrow]="false"
+                [nzDisabled]="paramType===OperateExt.VIEW" [nzFilterOption]="nzFilterOption" (nzOnSearch)="search($event,i)" (ngModelChange)='onFirstChange($event,i)'>
+                <nz-option *ngFor="let o of item.listOfOption" [nzLabel]="o" [nzValue]="o"> </nz-option>
+              </nz-select>
+              <nz-select class='col-sm-6' nzShowSearch nzServerSearch [ngModelOptions]="{standalone: true}"
+                nzPlaceHolder="请选择" [(ngModel)]="item.certify_grade" [nzShowArrow]="false"
+                [nzDisabled]="paramType===OperateExt.VIEW" [nzFilterOption]="nzFilterOption"
+                (nzOnSearch)="onSecondChange($event,i,item.certify_classes)">
+                <nz-option *ngFor="let o of item.secondOption" [nzLabel]="o" [nzValue]="o"> </nz-option>
+              </nz-select>
+            </div>
+            <ng-container *ngIf='paramType===OperateExt.ENTER'>
+              <div class='col-sm-1' *ngIf='certifileList.length===i+1'>
+                <a class="xn-click-a" (click)="addCettify()"><i style='font-size:25px' nz-icon
+                    nzIconfont="iconadd"></i></a>
+              </div>
+              <div class='col-sm-1'>
+                <a class="xn-click-a" (click)="MinusCettify(i)"><i style='font-size:25px' nz-icon
+                    nzIconfont="iconunfold"></i></a>
+              </div>
+            </ng-container>
+          </div>
+        </div>
+      </div>
+    </modal-body>
+    <modal-footer>
+      <div class="clearfix">
+        <div class="button-group">
+          <ng-container>
+            <button
+              id="left"
+              type="button"
+              class="btn btn-sm btn-default"
+              (click)="rotateImg('left')"
+            >
+              左旋 <i class="fa fa-undo"></i>
+            </button>
+            <button
+              id="right"
+              type="button"
+              class="btn btn-sm btn-default"
+              (click)="rotateImg('right')"
+            >
+              右旋 <i class="fa fa-repeat"></i>
+            </button>
+            <button
+              id="large"
+              type="button"
+              class="btn btn-sm btn-default"
+              (click)="scaleImg('large')"
+            >
+              放大<i class="fa fa-search-plus"></i>
+            </button>
+            <button
+              id="small"
+              type="button"
+              class="btn btn-sm btn-default"
+              (click)="scaleImg('small')"
+            >
+              缩小<i class="fa fa-search-minus"></i>
+            </button>
+          </ng-container>
+          <!--文件为pdf时显示-->
+          <ng-container *ngIf="fileType === fileExt.PDF">
+            <a>
+              跳转到第
+              <input
+                type="text"
+                value=""
+                class="page-input"
+                id="getpageNum"
+                style="width: 40px"
+              />
+              页
+            </a>
+            <button id="gotoPage" type="button" class="btn btn-sm btn-primary">
+              跳转
+            </button>
+            <button id="prev" type="button" class="btn btn-sm btn-primary">
+              上一页
+            </button>
+            <button id="next" type="button" class="btn btn-sm btn-primary">
+              下一页
+            </button>
+            <span
+              >页码: <span id="page_num">加载中</span> /
+              <span id="page_count">加载中</span></span
+            >
+          </ng-container>
+          <button type="button" class="btn btn-default" (click)="onDownload()">
+            下载
+          </button>
+          <button type="button" class="btn btn-default" (click)="onCancel()">
+            关闭
+          </button>
+          <ng-container *ngIf='paramType===OperateExt.ENTER'>
+            <button type="submit" class="btn btn-success" (click)='onSubmit()' [disabled]="valid()">提交</button>
+          </ng-container>
+        </div>
+        <div *ngIf="fileType !== fileExt.VIDEO" class="page">
+          <xn-page
+            [total]="total"
+            [size]="pageSize"
+            [showTotal]="false"
+            (change)="onPage($event)"
+          ></xn-page>
+        </div>
+      </div>
+
+    </modal-footer>
+  </form>
+</modal>

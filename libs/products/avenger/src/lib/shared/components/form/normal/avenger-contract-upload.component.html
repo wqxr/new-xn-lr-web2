@@ -1,0 +1,52 @@
+<div [formGroup]="form">
+  <div style="padding: 2px 5px" class="btn btn-default btn-file xn-table-upload block">
+          <span class="hidden-xs xn-input-font" (click)="handleAdd()">新增一份合同</span>
+        </div>
+  <table class="table table-bordered text-center">
+    <thead>
+      <tr class="table-head">
+        <!-- 全选按钮 -->
+        <!-- title -->
+
+        <th *ngFor="let head of currentTab.headText">
+          {{head.label}}
+        </th>
+        <!-- 行操作 -->
+        <th>操作</th>
+        <th>
+          <span style="line-height:20px"></span>
+          <input type="checkbox">全选/取消&nbsp;&nbsp;
+        </th>
+      </tr>
+    </thead>
+
+    <tbody>
+        <ng-container  *ngIf="data.length;else block" >
+            <tr *ngFor="let sub of data;let i=index" >
+              <td>
+                <span>{{i+1}}</span>
+              </td>
+              <td>
+                  {{sub.contractId}}
+              </td>
+              <td>{{(sub.receiveType|xnJson).firstValue | xnSelectTransform:'moneyType' }}-{{(sub.receiveType|xnJson).secondValue | xnSelectTransform:sub.twoselect}}-{{(sub.receiveType|xnJson).thirdValue | xnSelectTransform:sub.threeselect}}</td>
+              <td><a  href='javascript:void(0)' (click)="fileView(sub)" *ngFor="let sub of sub.contractFile | xnJson; let i=index">{{sub.fileName}}</a></td>
+              <td><a href='javascript:void(0)' (click)='ContractSupplement(sub,i)'>补充 </a><a href='javascript:void(0)' (click)="cleardata(i)">删除</a></td>
+              <td>
+                <input type="checkbox" (change)="handleSelect(i)" [checked]="item && item.clicked">
+              </td>
+            </tr>
+          </ng-container>
+
+    </tbody>
+  </table>
+</div>
+<span class="xn-input-alert">{{alert}}</span>
+
+<ng-template #block>
+  <tr>
+    <td [attr.colspan]="6">
+      <div class="empty-message"></div>
+    </td>
+  </tr>
+</ng-template>

@@ -1,0 +1,163 @@
+
+<section class="content-header">
+  <h4>上海银行复核列表</h4>
+</section>
+<div class="content">
+  <!--  btnsClass="md10 lg5 text-right" -->
+  <nz-card [nzBordered]="false">
+    <xn-search-form
+      #searchForm
+      fromClass="antcol-19"
+      btnsClass="antcol-5 text-right"
+      [fields]="showFields"
+      [extraButtonRender]="extraButtonTpl"
+      (search)="onSearch($event)"
+      (reset)="onReset(searchForm)"
+    ></xn-search-form>
+
+    <ng-template #extraButtonTpl>
+      <xn-custom-field
+        #customSearchField
+        [data]="customSearchFields"
+        [key]="'templateOptions.label'"
+        [showBtnTitle]="false"
+        [scroll]="{ x: '250px', y: '300px'}"
+        (save)="searchFormResetFields(searchForm, $event)"
+      ></xn-custom-field>
+    </ng-template>
+
+    <nz-divider></nz-divider>
+
+    <!-- 表头按钮组 -->
+    <div nz-row class="table-head-btn">
+      <ng-container *ngFor="let key of tableHeadBtnConfig">
+        <div nz-col nzSm="12" nzMd="12" nzSpan="12" [ngClass]="{'text-right': key === 'right'}">
+          <ng-container *ngFor="let btn of tableHeadBtn[key]">
+            <nz-space nzDirection="horizontal">
+              <nz-space-item class="no-margin">
+                <ng-container [ngSwitch]="btn.type">
+                  <ng-container *ngSwitchCase="'dropdown'">
+                    <button nz-button nzType="primary" nz-dropdown [nzDropdownMenu]="menu">
+                      {{btn.label}}<i nz-icon nzType="down"></i>
+                    </button>
+                    <nz-dropdown-menu #menu="nzDropdownMenu">
+                      <ul nz-menu *ngIf="btn.children && btn.children.length">
+                        <ng-container *ngFor="let childBtn of btn.children">
+                          <li nz-menu-item style="text-align: left;">
+                            <!-- <ng-container *ngIf="childBtn.btnKey === '';else normalBtnTpl">
+                            </ng-container> -->
+                            <!-- <ng-template #normalBtnTpl> -->
+                              <a href="javaScript:void(0)" (click)='handleHeadClick(childBtn)'>
+                                {{childBtn.label}}
+                              </a>
+                            <!-- </ng-template> -->
+                          </li>
+                        </ng-container>
+                      </ul>
+                    </nz-dropdown-menu>
+                  </ng-container>
+                  <ng-container *ngSwitchCase="'normal'">
+                    <ng-container *ngIf="btn.btnKey === 'custom_table_fields';else normalBtnTpl">
+                      <!-- <button nz-button nzType="link" (click)="onView()">查看 pdf</button> -->
+                      <xn-custom-field
+                        #customHeadField
+                        nz-col
+                        [nzSpan]="2"
+                        key="title"
+                        title="自定义表格字段"
+                        [data]="customTableColumns"
+                        [scroll]="{ x: '230px', y: '260px'}"
+                        (save)="tableResetColumns($event)"
+                      ></xn-custom-field>
+                    </ng-container>
+                    <ng-template #normalBtnTpl>
+                      <button nz-button nzType="primary" type="button" (click)="handleHeadClick(btn)">
+                        <i nz-icon nzType="upload" nzTheme="outline"></i>{{btn.label}}
+                      </button>
+                    </ng-template>
+                  </ng-container>
+                </ng-container>
+              </nz-space-item>
+            </nz-space>
+          </ng-container>
+        </div>
+      </ng-container>
+    </div>
+    <xn-table
+      #reviewTable
+      [data]="data"
+      [columns]="columns"
+      [size]="'middle'"
+      [loading]="loading"
+      [scroll]="{ x: '500px', y: '700px' }"
+      [page]="{
+        front: false,
+        total: '共'+pageConfig.total+'条记录',
+        showQuickJumper: true,
+        showSize: true,
+        pageSizes: [10, 20, 30, 50, 100]
+      }"
+      [size]="'middle'"
+      [widthMode] = "{
+        type: 'strict', 
+        strictBehavior: 'truncate'
+      }"
+      [footer]="footerSumTpl"
+      [total]="pageConfig.total"
+      [pageIndex]="pageConfig.pageIndex"
+      [pageSize]="pageConfig.pageSize"
+      (change)="handleTableChange($event, searchForm)"
+    >
+    <ng-template xn-table-row="percentTpl" let-item let-index="index" let-column="column">
+      <ng-container *ngIf="!!item[column.index] || [0].includes(item[column.index])">
+        {{ item[column.index] | number:'1.2-2' | xnPercentage:'0.00%'}}
+      </ng-container>
+    </ng-template>
+    <ng-template xn-table-row="rateTpl" let-item let-index="index" let-column="column">
+      <ng-container *ngIf="!!item[column.index] || [0].includes(item[column.index])">
+        {{ item[column.index] | number:'1.2-2'}}%
+      </ng-container>
+    </ng-template>
+    <ng-template xn-table-row="moneyTpl" let-item let-index="index" let-column="column">
+      {{ item[column.index] | number:'1.2-2' | xnMoney: 'true'}}
+    </ng-template>
+    <ng-template xn-table-row="dateTpl" let-item let-index="index" let-column="column">
+      {{ item[column.index] | xnDate:'date'}}
+    </ng-template>
+    <ng-template xn-table-row="dateTimeTpl" let-item let-index="index" let-column="column">
+      {{ item[column.index] | xnDate:'longdatetime'}}
+    </ng-template>
+    <ng-template xn-table-row="filesTpl" let-item let-index="index" let-column="column">
+      <ng-container *ngIf="!!item[column.index]">
+        <!-- <div *ngFor="let sub of item[column.index] | xnJson">
+          <a href="javaScript:void(0)" (click)="viewFiles(sub)">{{sub.fileName}}</a>
+        </div> -->
+        <a href="javaScript:void(0)" (click)="AntViewFiles(item[column.index])">文件</a>
+      </ng-container>
+    </ng-template>
+    <ng-template xn-table-row="tradeStatusTpl" let-item let-index="index" let-column="column">
+      <ng-container *ngIf="!!item[column.index]">
+        <div [innerHTML]="formatMainFlowStatus(item['tradeStatus'], item['statusEx'])"></div>
+      </ng-container>
+    </ng-template>
+    <ng-template xn-table-row="reviewStatusTpl" let-item let-index="index" let-column="column">
+      <ng-container *ngIf="!!item['tradeStatus']">
+        <div [innerHTML]="formatShFlowStatus(item['tradeStatus'], item['statusEx'])"></div>
+      </ng-container>
+    </ng-template>
+    <ng-template xn-table-row="multipleMatchTpl" let-item let-index="index" let-column="column">
+      {{ item[column.index] | xnSelectTransform: column.index.toString()}}
+    </ng-template>
+    <ng-template xn-table-row="factoringEndDateTpl" let-item let-index="index" let-column="column">
+      {{ item[column.index] | xnSelectTransform: 'defaultRadio'}}
+    </ng-template>
+    </xn-table>
+  </nz-card>
+  <ng-template #footerSumTpl>
+    <span>
+      <i nz-icon [nzType]="!!selectedList.length ? 'check-circle' : 'exclamation-circle'" nzTheme="fill"
+        [ngStyle]="{'color': !!selectedList.length ? '#1D67C7' : '#b0aaaa9c'}"></i>
+      已选{{selectedList.length}}项
+    </span>
+  </ng-template>
+</div>

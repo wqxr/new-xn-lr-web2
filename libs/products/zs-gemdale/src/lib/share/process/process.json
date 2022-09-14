@@ -1,0 +1,100 @@
+[{
+  "id": 501,
+  "sublist": [{
+    "id": "financing_5000",
+    "name": "万科供应商保理业务起点",
+    "status": 0
+  },
+    {
+      "id": "financing_5001",
+      "name": "万科供应商保理业务起点",
+      "status": 0
+    }],
+  "type": 0
+},
+  {
+    "id": 502,
+    "sublist": [{
+      "id": "data_verification_5000",
+      "name": "资料初审",
+      "status": 0
+    }],
+    "type": 0
+  },
+  {
+    "id": 503,
+    "sublist": [{
+      "id": "risk_verification_5000",
+      "name": "风险审核",
+      "status": 0
+    }],
+    "type": 0
+  },
+  {
+    "id": 504,
+    "sublist": [{
+      "id": "supplier_sign_5000",
+      "name": "万科和上游签署合同",
+      "status": 0
+    },
+      {
+        "id": "supplier_sign_5001",
+        "name": "万科和上游签署合同",
+        "status": 0
+      }],
+    "type": 0
+  },
+  {
+    "id": 101,
+    "sublist": [{
+      "id": "wait_verification_500",
+      "name": "待审批",
+      "status": 0
+    }],
+    "type": 0
+  },
+  {
+    "id": 102,
+    "sublist": [{
+      "id": "verificating_500",
+      "name": "审批中",
+      "status": 0
+    }],
+    "type": 0
+  },
+  {
+    "id": 103,
+    "sublist": [{
+      "id": "factoring_sign_500",
+      "name": "保理商签署合同",
+      "status": 0
+    }],
+    "type": 0
+  },
+  {
+    "id": 104,
+    "sublist": [{
+      "id": "wait_loan_500",
+      "name": "待放款",
+      "status": 0
+    }],
+    "type": 0
+  },
+  {
+    "id": 105,
+    "sublist": [{
+      "id": "loaded_500",
+      "name": "已放款",
+      "status": 0
+    }],
+    "type": 0
+  },
+  {
+    "id": 106,
+    "sublist": [{
+      "id": "repayment_500",
+      "name": "已回款",
+      "status": 0
+    }],
+    "type": 0
+  }]

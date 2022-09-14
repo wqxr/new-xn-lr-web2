@@ -1,0 +1,234 @@
+<section class="content">
+  <div class="box box-default">
+    <div class="box-header">
+      <h4>CA详情</h4>
+    </div>
+    <div class="box-body">
+      <!--内容-->
+      <form class="form-horizontal" style="width: 60%">
+        <div class="form-group">
+          <label class="col-sm-3 control-label">机构ID</label>
+          <div class="col-sm-9">
+            <p class="form-control-static">{{data.appId}}</p>
+          </div>
+        </div>
+        <div class="form-group">
+          <label class="col-sm-3 control-label">应用名称</label>
+          <div class="col-sm-9">
+            <p class="form-control-static">{{data.appName}}</p>
+          </div>
+        </div>
+        <div class="form-group">
+          <label class="col-sm-3 control-label">申请订单编号</label>
+          <div class="col-sm-9">
+            <p class="form-control-static">{{data.applyId}}</p>
+          </div>
+        </div>
+        <div class="form-group">
+          <label class="col-sm-3 control-label">步骤</label>
+          <div class="col-sm-9">
+            <p class="form-control-static">{{data.step | xnCaStep}}</p>
+          </div>
+        </div>
+        <div class="form-group">
+          <label class="col-sm-3 control-label">业务单状态</label>
+          <div class="col-sm-9">
+            <p class="form-control-static">{{data.status|xnCaStatus: data.step}}</p>
+          </div>
+        </div>
+        <div class="form-group">
+          <label class="col-sm-3 control-label">机构名称</label>
+          <div class="col-sm-9">
+            <p class="form-control-static">{{data.orgName}}</p>
+          </div>
+        </div>
+        <div class="form-group">
+          <label class="col-sm-3 control-label">机构代码</label>
+          <div class="col-sm-9">
+            <p class="form-control-static">{{data.orgCode}}</p>
+          </div>
+        </div>
+        <div class="form-group">
+          <label class="col-sm-3 control-label">机构地址</label>
+          <!--orgAddressBool=!orgAddressBool-->
+          <div class="col-sm-9">
+            <input type="text" class="form-control" *ngIf="orgAddressBool" (blur)="setBaseInfo('orgAddress')"
+                   name="orgAddress" [(ngModel)]="data.orgAddress">
+            <p class="form-control-static" *ngIf="!orgAddressBool">{{data.orgAddress}}
+              <a href="javaScript:void(0)" class="fa fa-edit" (click)="orgAddressBool=!orgAddressBool"></a>
+            </p>
+          </div>
+        </div>
+        <div class="form-group">
+          <label class="col-sm-3 control-label">机构注册地址</label>
+          <div class="col-sm-9">
+            <input type="text" class="form-control" *ngIf="orgRegAddressBool"
+                   (blur)="setBaseInfo('orgRegAddress')" name="orgRegAddress" [(ngModel)]="data.orgRegAddress">
+            <p class="form-control-static" *ngIf="!orgRegAddressBool">{{data.orgRegAddress}}
+              <a href="javaScript:void(0)" class="fa fa-edit" (click)="orgRegAddressBool=!orgRegAddressBool"></a>
+            </p>
+          </div>
+        </div>
+        <!--机构所在城市，省份二级选项框-->
+        <div class="form-group">
+          <label class="col-sm-3 control-label">所在省份</label>
+          <div class="col-sm-9">
+            <p class="form-control-static" *ngIf="!areaBool">{{data.orgProvince}}
+              <a href="javaScript:void(0)" class="fa fa-edit" (click)="areaBool=!areaBool"></a>
+            </p>
+            <!--<input type="text" class="form-control" name="orgProvince" [(ngModel)]="data.orgProvince">-->
+            <select *ngIf="areaBool" class="form-control" name="orgProvince" [(ngModel)]="data.orgProvince"
+                    style="width: 200px"
+                    (change)="onChange(data.orgProvince)">
+              <option value="">请选择</option>
+              <option [value]="option.value" *ngFor="let option of china.first">{{option.label}}</option>
+            </select>
+          </div>
+        </div>
+        <div class="form-group">
+          <label class="col-sm-3 control-label">所在城市</label>
+          <div class="col-sm-9">
+            <p class="form-control-static" *ngIf="!areaBool">{{data.orgCity}}
+              <!--<a href="javaScript:void(0)" class="fa fa-edit" (click)="areaBool=!areaBool"></a>-->
+            </p>
+            <!--<input type="text" class="form-control" name="orgCity" [(ngModel)]="data.orgCity">-->
+            <select class="form-control" (blur)="setBaseInfo('orgCity')" *ngIf="areaBool" name="orgCity"
+                    [(ngModel)]="data.orgCity" style="width: 200px">
+              <option value="">请选择</option>
+              <option [value]="option.value" *ngFor="let option of citys">{{option.label}}</option>
+            </select>
+          </div>
+        </div>
+        <div class="form-group">
+          <label class="col-sm-3 control-label">机构企业邮箱</label>
+          <div class="col-sm-6">
+            <input type="text" class="form-control" *ngIf="orgEmailBool" (blur)="setBaseInfo('orgEmail')"
+                   name="orgEmail" [(ngModel)]="data.orgEmail" [class.alert-boder]="alert1">
+            <p class="form-control-static" *ngIf="!orgEmailBool">{{data.orgEmail}}
+              <a href="javaScript:void(0)" class="fa fa-edit" (click)="orgEmailBool=!orgEmailBool"></a>
+            </p>
+          </div>
+          <div class="col-sm-3 alert-text" *ngIf="alert1">请输入正确邮箱格式</div>
+        </div>
+        <div class="form-group">
+          <label class="col-sm-3 control-label">机构邮编</label>
+          <div class="col-sm-6">
+            <input type="text" class="form-control" *ngIf="orgZipCodeBool" [class.alert-boder]="alert2"
+                   (blur)="setBaseInfo('orgZipCode')"
+                   name="orgZipCode" [(ngModel)]="data.orgZipCode">
+            <p class="form-control-static" *ngIf="!orgZipCodeBool">{{data.orgZipCode}}
+              <a href="javaScript:void(0)" class="fa fa-edit" (click)="orgZipCodeBool=!orgZipCodeBool"></a>
+            </p>
+          </div>
+          <div class="col-sm-3 alert-text" *ngIf="alert2">请输入6位数字邮政编码</div>
+        </div>
+        <div class="form-group">
+          <label class="col-sm-3 control-label">证书申请服务期限（天）</label>
+          <div class="col-sm-9">
+            <p class="form-control-static">{{data.applyValidate}}</p>
+          </div>
+        </div>
+        <div class="form-group">
+          <label class="col-sm-3 control-label">证书申请有效期（天）</label>
+          <div class="col-sm-9">
+            <p class="form-control-static">{{data.certValidate}}</p>
+          </div>
+        </div>
+        <div class="form-group">
+          <label class="col-sm-3 control-label">物流单号</label>
+          <div class="col-sm-9">
+            <p class="form-control-static">{{data.expressId}}</p>
+          </div>
+        </div>
+        <div class="form-group">
+          <label class="col-sm-3 control-label">经办人名称</label>
+          <div class="col-sm-6">
+            <p class="form-control-static" *ngIf="!userNameBool">{{data.userName}}
+              <a href="javaScript:void(0)" class="fa fa-edit" (click)="userNameBool=!userNameBool"></a>
+            </p>
+            <input type="text" class="form-control" *ngIf="userNameBool" [class.alert-boder]="alert3"
+                   (blur)="setBaseInfo('userName')"
+                   name="userName" [(ngModel)]="data.userName">
+          </div>
+          <div class="col-sm-3 alert-text" *ngIf="alert3">请输入中文名称</div>
+        </div>
+        <div class="form-group">
+          <label class="col-sm-3 control-label">经办人手机号</label>
+          <div class="col-sm-6">
+            <p class="form-control-static" *ngIf="!userMobileBool">{{data.userMobile}}
+              <a href="javaScript:void(0)" class="fa fa-edit" (click)="userMobileBool=!userMobileBool"></a>
+            </p>
+            <input type="text" class="form-control" *ngIf="userMobileBool" [class.alert-boder]="alert4"
+                   (blur)="setBaseInfo('userMobile')"
+                   name="userMobile" [(ngModel)]="data.userMobile">
+          </div>
+          <div class="col-sm-3 alert-text" *ngIf="alert4">请输入正确11位手机号码</div>
+        </div>
+        <div class="form-group">
+          <label class="col-sm-3 control-label">经办人证件类型</label>
+          <div class="col-sm-9">
+            <p class="form-control-static" *ngIf="!userCertTypeBool">
+              {{data.userCertType | xnSelectTransform:userCertType}}
+              <a href="javaScript:void(0)" class="fa fa-edit" (click)="userCertTypeBool=!userCertTypeBool"></a>
+            </p>
+            <select class="form-control" (blur)="setBaseInfo('userCertType')" *ngIf="userCertTypeBool"
+                    name="userCertType"
+                    [(ngModel)]="data.userCertType" style="width: 200px">
+              <option value="">请选择</option>
+              <option [value]="option.value" *ngFor="let option of userCertType">{{option.label}}</option>
+            </select>
+          </div>
+        </div>
+        <div class="form-group">
+          <label class="col-sm-3 control-label">经办人证件号码</label>
+          <div class="col-sm-6">
+            <p class="form-control-static" *ngIf="!userCertNOBool">{{data.userCertNO}}
+              <a href="javaScript:void(0)" class="fa fa-edit" (click)="userCertNOBool=!userCertNOBool"></a>
+            </p>
+            <input type="text" class="form-control" *ngIf="userCertNOBool" [class.alert-boder]="alert5"
+                   (blur)="setBaseInfo('userCertNO')"
+                   name="userCertNO" [(ngModel)]="data.userCertNO">
+          </div>
+          <div class="col-sm-3 alert-text" *ngIf="alert5">请输入正确证件号码</div>
+        </div>
+        <div class="form-group">
+          <label class="col-sm-3 control-label">经办人邮箱</label>
+          <div class="col-sm-6">
+            <p class="form-control-static" *ngIf="!userEmailBool">{{data.userEmail}}
+              <a href="javaScript:void(0)" class="fa fa-edit" (click)="userEmailBool=!userEmailBool"></a>
+            </p>
+            <input type="text" class="form-control" *ngIf="userEmailBool" [class.alert-boder]="alert6"
+                   (blur)="setBaseInfo('userEmail')"
+                   name="userEmail" [(ngModel)]="data.userEmail">
+          </div>
+          <div class="col-sm-3 alert-text" *ngIf="alert6">请输入正确邮箱格式</div>
+        </div>
+        <!--文件信息-->
+        <ng-container *ngIf="!!mainForm">
+          <div class="form-group" *ngFor="let row of shows">
+            <label class="col-sm-3 control-label">{{row.title}}</label>
+            <div class="col-sm-9" style="position: relative">
+              <xn-input [row]="row" [form]="mainForm"></xn-input>
+              <a style="position: absolute;top:0;right:-20px" href="javaScript:void(0)"
+                 class="fa fa-check"
+                 (click)="setFileinfo(row)"></a>
+            </div>
+          </div>
+        </ng-container>
+        <div class="form-group">
+          <label class="col-sm-3 control-label">被驳回描述</label>
+          <div class="col-sm-9">
+            <textarea class="form-control" readonly rows="3" name="errDesc" [(ngModel)]="data.errDesc"></textarea>
+          </div>
+        </div>
+        <div class="text-right">
+          <button type="button" class="btn btn-primary" (click)="resetCa()">提交</button>
+        </div>
+      </form>
+    </div>
+    <div class="box-footer text-right box-default">
+      <button class="btn btn-default" (click)="goBack()">返回</button>
+    </div>
+  </div>
+</section>
+

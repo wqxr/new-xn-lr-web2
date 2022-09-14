@@ -1,0 +1,44 @@
+<section class="content-header" style='display:flex'>
+  <h1>
+    {{pageTitle}}
+  </h1>
+  <div style='flex:1;text-align: right;'>
+    <button class="btn btn-primary" (click)="downLoadTemp()">下载使用说明</button>
+    <button class="btn btn-primary" (click)="clearText()">清除文本内容</button>
+    <button class="btn btn-primary" (click)="submit()">提交</button>
+
+
+  </div>
+</section>
+
+<section class="content">
+  <div class="box">
+    <div class="box-body">
+      <div style='display:flex'>
+        <div class='regis'>
+          <span>登记证明编号</span><span style='color:red'>*</span> &nbsp;&nbsp;
+          <input style='flex:3' type='text' class="form-control xn-input-font xn-input-border-radius"
+            [(ngModel)]='registerConfirmNumber'>
+        </div>
+        <div class='divtype'>
+          <span>数据类型:</span> &nbsp;&nbsp;
+          <ng-container *ngFor='let item of zhongdengType;let i=index'>
+            <nz-tag nzMode="checkable" class='tagstyle' (nzCheckedChange)="checkChange($event,item,i)"
+              [nzChecked]="false" [nzColor]="item.color">{{item.name}}</nz-tag>
+          </ng-container>
+        </div>
+        <div style='display:flex;width:10%'>
+          <div class="xn-control-label">
+            {{ shows[0].title }}:
+          </div>
+          <div style='margin-left:10px'>
+            <xn-select-input [form]="mainForm" [row]="shows[0]"></xn-select-input>
+          </div>
+        </div>
+      </div>
+      <div class='editor' contenteditable="true" #text ngDefaultControl (mouseup)='getText1()'
+        [(ngModel)]='zhongdengType[currentIndex].afterText'>
+      </div>
+    </div>
+  </div>
+</section>

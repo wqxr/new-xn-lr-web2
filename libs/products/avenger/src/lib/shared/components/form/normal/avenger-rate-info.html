@@ -1,0 +1,18 @@
+<table class="table-hover table table-bordered file-row-table">
+  <tr>
+    <ng-container *ngFor='let sub of datalist;let i=index'>
+      <td style="width: 130px">{{sub.name}}</td>
+      <td class='readonlystyle' *ngIf='i===0'>{{sub.value}}%</td>
+      <td class='readonlystyle' *ngIf='i===1'>{{sub.value}}天</td>
+      <td class='readonlystyle' *ngIf='i===2'>{{sub.value}}</td>
+
+    </ng-container>
+  </tr>
+  <tr>
+    <ng-container *ngFor='let sub of twodatalist;let i=index'>
+      <td style="width: 130px">{{sub.name}}</td>
+      <td class='readonlystyle'>{{sub.value}}%</td>
+    </ng-container>
+  </tr>
+
+</table>

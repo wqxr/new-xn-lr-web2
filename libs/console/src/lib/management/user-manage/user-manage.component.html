@@ -1,0 +1,62 @@
+<section class="content-header">
+  <h1>
+    {{pageTitle}}
+    <small>{{pageDesc}}</small>
+    <button *ngIf="!isProd" style="float: right" (click)="navToNew()" nz-button nzType="primary">新版用户管理</button>
+  </h1>
+</section>
+
+<section class="content">
+  <div class="box">
+    <div class="box-header">
+      <h3 class="box-title">{{tableTitle}}</h3>
+      <button  class=" btn btn-primary" (click)="onViewAdd(items)" style="float: right;">增加用户</button>
+    </div>
+    <!-- /.box-header -->
+    <div class="box-body">
+
+      <table class="table table-bordered table-striped">
+        <thead>
+        <tr>
+          <th>用户姓名</th>
+          <th>用户ID</th>
+          <th>用户角色</th>
+          <th>证件号码</th>
+          <th>手机号</th>
+          <th>邮件</th>
+          <th>操作</th>
+          <th>是否接收短信</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr *ngFor="let item of items">
+          <td>{{item.userName}}</td>
+          <td>{{item.userId}}</td>
+          <td>
+            <div *ngFor="let role of item.userRoleList"><p *ngIf="role.roleName">{{role.roleName}}</p></div>
+            <div *ngIf="item.userRoleList.length === 0"><p>{{readonlyMan}}</p></div>
+          </td>
+          <td>{{item.cardType}}：{{item.cardNo}}</td>
+          <td>{{item.mobile}}</td>
+          <td>{{item.email}}</td>
+          <td>
+            <a class="xn-click-a" (click)="onViewEdit(item)">修改</a>
+            <a class="xn-click-a" *ngIf="!isAdmin(item.userRoleList)" (click)="onViewDelete(item)">删除</a>
+            <a class="xn-click-a" *ngIf="!isAdmin(item.userRoleList)" (click)="onAdminMove(item)">转移</a>
+            <a class="xn-click-a" *ngIf="isFactoryAdmin" (click)="onPower(item)">权限</a>
+          </td>
+          <td>
+            <div>
+              <label style="color: #3c8dbc"><input type="checkbox" [checked]="item.isSms === 1 ? true : false" (click)="checkLogin($event, item.userId)"><span class="receive">接收短信</span></label>
+            </div>
+          </td>
+        </tr>
+        </tbody>
+      </table>
+
+    </div>
+    <!-- /.box-body -->
+  </div>
+
+</section>
+<!-- /.content -->

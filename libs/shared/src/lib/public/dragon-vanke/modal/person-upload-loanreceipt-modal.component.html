@@ -1,0 +1,83 @@
+<modal #modal [backdrop]="'static'" [keyboard]="false" [animation]="false" (onDismiss)="onCancel()">
+  <modal-header [showClose]="true" style='text-align:left'>
+
+    <h4 class="modal-title">{{pageTitle}}</h4>
+  </modal-header>
+  <modal-body>
+    <div style='display:flex;margin-bottom:15px' *ngIf='type===1'>
+      <div>
+        <div class="btn btn-default btn-file xn-table-upload asset">
+          <span class="hidden-xs xn-input-font">上传文件</span>
+          <input type="file" (change)="onUploadFile($event,'',0)" (click)="onBeforeUpload($event)">
+        </div>
+      </div>
+      <p class='detailP'>{{imgType}}</p>
+    </div>
+
+    <div class="table-head">
+      <table class="table table-bordered text-center" style='float:left;margin-bottom:0px'>
+        <thead>
+          <tr class="table-head">
+            <!-- 全选按钮 -->
+            <!-- title -->
+            <th>序号</th>
+            <th *ngFor='let item of shows'>{{item.label}}</th>
+          </tr>
+        </thead>
+      </table>
+    </div>
+    <div class="table-body">
+      <table>
+        <tbody>
+          <ng-container>
+            <tr *ngFor='let item of datalist01;let j=index'>
+              <td>{{j+1}}</td>
+              <td *ngFor="let head of shows">
+                <ng-container [ngSwitch]="head.type">
+                  <ng-container *ngSwitchCase="'file'">
+                    <ng-container *ngIf='type===2; else block1  '>
+                      <div class="btn btn-default btn-file xn-table-upload asset">
+                        <span class="hidden-xs xn-input-font">上传文件</span>
+                        <input type="file" (change)="onUploadFile($event, item.mainFlowId, j)"
+                          (click)="onBeforeUpload($event, j)">
+                      </div>
+                      <span class="xn-input-alert">{{alert[j]}}</span>
+                      <div *ngIf="files.length>0 &&!!files[j]?.pdf &&!!files[j]?.pdf.fileName">
+                        <a class="xn-click-a" (click)="onView(files[j]?.pdf)">{{files[j]?.pdf.fileName}}</a>
+                        <button type="button" [disabled]="delButtonStatus" class="specialclose close"
+                        (click)="onRemove(item.mainFlowId, j)">
+                        <span>&times;</span></button>
+                      </div>
+                    </ng-container>
+                    <ng-template #block1>
+                      <ng-container *ngIf="item[head.value]&& item[head.value]!==''">
+                        <ng-container *ngFor="let sub1 of item[head.value] | xnJson; let i=index">
+                          <ng-container *ngIf="!!sub1.fileName">
+                            <div>
+                              <a href="javaScript:void(0)" (click)="viewMFiles(item[head.value])">
+                                {{(item[head.value] | xnJson).length>1 ? sub1.fileName + '，...' : sub1.fileName}}</a>
+                            </div>
+                          </ng-container>
+                        </ng-container>
+                      </ng-container>
+                    </ng-template>
+                  </ng-container>
+                  <ng-container *ngSwitchCase="'date'">
+                    <div [innerHTML]="item[head.value] | xnDate:'date'"></div>
+                  </ng-container>
+                  <ng-container *ngSwitchDefault>
+                    <div [innerHTML]="item[head.value]"></div>
+                  </ng-container>
+                </ng-container>
+              </td>
+            </tr>
+          </ng-container>
+        </tbody>
+      </table>
+    </div>
+
+  </modal-body>
+  <modal-footer>
+    <button type="button" class="btn btn-success" (click)="onOk()">确定</button>
+  </modal-footer>
+</modal>

@@ -1,0 +1,88 @@
+<modal #modal [backdrop]="'static'" [keyboard]="false" [animation]="false">
+  <modal-header [showClose]="false">
+    <h4 class="modal-title">查看商票信息</h4>
+  </modal-header>
+  <modal-body>
+    <div  class="edit-content">
+      <div class="flex-row">
+        <div class="this-title" *ngIf="params?.honourNum">商票号码</div>
+        <div class="this-padding this-flex-1" *ngIf="params?.honourNum">
+          <input class="form-control xn-input-border-radius" value="{{params?.honourNum}}" type="text" readonly>
+        </div>
+        <div class="this-title" *ngIf="params?.honourAmount">商票金额</div>
+        <div class="this-padding this-flex-1" *ngIf="params?.honourAmount">
+          <input class="form-control xn-input-border-radius" value="{{params?.honourAmount | xnMoney}}" type="text" readonly>
+          <div class="this-control">
+            <span class="xn-money-alert">{{moneyAlert}}</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- 开票金额 -->
+      <div class="flex-row">
+        <div class="this-title" *ngIf="params?.honourDate">出票日期</div>
+        <div class="this-padding this-flex-1" *ngIf="params?.honourDate">
+          <input class="form-control xn-input-border-radius" value="{{params?.honourDate}}" type="text" readonly>
+        </div>
+        <div class="this-title" *ngIf="params?.dueDate">到期日期</div>
+        <div class="this-padding this-flex-1" *ngIf="params?.dueDate">
+          <input class="form-control xn-input-border-radius" value="{{params?.dueDate}}" type="text" readonly>
+          <div class="this-control">
+            <span class="xn-holiday-alert">{{dateEndAlert}}</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- 商票承兑人 -->
+      <div class="flex-row">
+        <div class="this-title" *ngIf="params?.acceptorName">商票承兑人</div>
+        <div class="this-padding this-flex-1" *ngIf="params?.acceptorName">
+          <input class="form-control xn-input-border-radius" value="{{params?.acceptorName}}" type="text" readonly>
+        </div>
+        <div class="this-title" *ngIf="params?.honourBankNum">承兑行行号</div>
+        <div class="this-padding this-flex-1" *ngIf="params?.honourBankNum">
+          <input class="form-control xn-input-border-radius" value="{{params?.honourBankNum}}" type="text" readonly>
+        </div>
+      </div>
+
+      <!-- 保理到期日 -->
+      <div class="flex-row">
+        <div class="this-title" *ngIf="params?.factoringDate">保理到期日</div>
+        <div class="this-padding this-flex-1" *ngIf="params?.factoringDate">
+          <input class="form-control xn-input-border-radius" value="{{params?.factoringDate}}" type="text" readonly>
+          <div class="this-control">
+            <span class="xn-holiday-alert">{{holidayAlert}}</span>
+          </div>
+        </div>
+        <div class="this-title" *ngIf="params?.factoringDate"></div>
+        <div class="this-padding this-flex-1" *ngIf="params?.factoringDate">
+        </div>
+      </div>
+
+      <!-- 商票图片 -->
+      <div class="edit-content-flex text-center">
+        <div class="img-container" #imgContainer>
+          <div class="img-wrapper" #outerImg>
+            <img #innerImg class="this-img" src="{{fileImg}}" *ngIf="!!fileImg">
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </modal-body>
+  <modal-footer>
+    <div class="clearfix">
+      <div class="button-group">
+        <button id="left" type="button" class="btn btn-sm btn-default" (click)="rotateImg('left')">左旋
+          <i class="fa  fa-undo"></i></button>
+        <button id="right" type="button" class="btn btn-sm btn-default" (click)="rotateImg('right')">右旋
+          <i class="fa fa-repeat"></i></button>
+        <button id="large" type="button" class="btn btn-sm btn-default" (click)="scaleImg('large')">放大<i
+          class="fa fa-search-plus"></i></button>
+        <button id="small" type="button" class="btn btn-sm btn-default" (click)="scaleImg('small')">缩小<i
+          class="fa fa-search-minus"></i></button>
+        <button type="button" class="btn btn-default" (click)="onOk()">关闭</button>
+      </div>
+    </div>
+  </modal-footer>
+</modal>

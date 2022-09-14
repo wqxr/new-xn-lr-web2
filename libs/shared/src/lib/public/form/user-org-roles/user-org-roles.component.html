@@ -1,0 +1,18 @@
+<ng-container *ngIf="roles.length; else emptyOrLoading" >
+  <div *ngFor="let item of roles" nz-row [nzGutter]="8" class="group-wrap">
+    <div nz-col *ngIf="item.orgName">{{item.orgName}}：</div>
+    <div nz-col>
+      <nz-checkbox-group *ngIf="item.roles.length; else emptyRoles"
+        [(ngModel)]="item.roles" (ngModelChange)="checkChange()"></nz-checkbox-group>
+    </div>
+  </div>
+</ng-container>
+
+<ng-template #emptyOrLoading>
+  <span *ngIf="!isLoading">未获取到机构类型或角色相关信息</span>
+  <nz-spin *ngIf="isLoading" nzSimple></nz-spin>
+</ng-template>
+
+<ng-template #emptyRoles>
+  <span >暂未配置角色</span>
+</ng-template>

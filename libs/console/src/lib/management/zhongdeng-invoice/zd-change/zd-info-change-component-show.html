@@ -1,0 +1,74 @@
+<form [formGroup]="formGroups">
+  <nz-tabset>
+    <nz-tab nzTitle="发票信息">
+      <div>
+        <button  type="button" class="btn btn-success" (click)="downExcel('invoice')">导出</button>
+      </div>
+      <div>
+        <table class="table table-bordered table-striped text-center">
+          <thead>
+            <tr align="center" class="table-head">
+              <th>发票号码</th>
+              <th>发票金额</th>
+              <th>转让金额</th>
+            </tr>
+          </thead>
+          <tbody class='tbody_css'>
+            <tr align="center" *ngFor='let item of invoiceList;let i=index' formControlName="invoiceList"
+              ngDefaultControl>
+              <td><input type='text' class='form-control xn-input-font xn-input-border-radius' readonly
+                  [(ngModel)]='item.invoiceCode'  [ngModelOptions]="{standalone: true}">
+              </td>
+              <td><input type='text' class='form-control xn-input-font xn-input-border-radius' readonly
+                  [(ngModel)]='item.invoiceMoney' [ngModelOptions]="{standalone: true}"></td>
+              <td><input type='text' class='form-control xn-input-font xn-input-border-radius' readonly
+                  [(ngModel)]='item.invoicechangePrice' [ngModelOptions]="{standalone: true}"></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </nz-tab>
+    <nz-tab nzTitle="合同信息">
+      <div>
+        <button  type="button" class="btn btn-success" (click)="downExcel('contract')">导出</button>
+      </div>
+      <table class="table table-bordered table-striped text-center table1">
+        <thead>
+          <tr align="center" class="table-head">
+            <th>合同名称</th>
+            <th>合同编号</th>
+          </tr>
+        </thead>
+        <tbody class='tbody_css1'>
+          <tr align="center" *ngFor='let item of contractList;' formControlName="contractList" ngDefaultControl>
+            <td><input type='text' class='form-control xn-input-font xn-input-border-radius' readonly
+                [(ngModel)]='item.contractName' [ngModelOptions]="{standalone: true}"></td>
+            <td><input type='text' class='form-control xn-input-font xn-input-border-radius' readonly
+                [(ngModel)]='item.contractId' [ngModelOptions]="{standalone: true}"></td>
+          </tr>
+
+        </tbody>
+      </table>
+    </nz-tab>
+    <nz-tab nzTitle="债务人信息">
+      <div>
+        <button  type="button" class="btn btn-success" (click)="downExcel('debtor')">导出</button>
+      </div>
+
+      <table class="table table-bordered table-striped text-center table2">
+        <thead>
+          <tr align="center" class="table-head">
+            <th>债务人企业名称</th>
+          </tr>
+        </thead>
+        <tbody class='tbody_css2'>
+          <tr align="center" *ngFor='let item of debtorList;' formControlName="debtorList" ngDefaultControl>
+            <td><input type='text' class='form-control xn-input-font xn-input-border-radius' readonly
+                [(ngModel)]='item.debtor' [ngModelOptions]="{standalone: true}"></td>
+          </tr>
+
+        </tbody>
+      </table>
+    </nz-tab>
+  </nz-tabset>
+</form>

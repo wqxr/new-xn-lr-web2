@@ -1,0 +1,45 @@
+<section class="content-header">
+    <h1>
+      {{pageTitle}}
+      <small>{{pageDesc}}</small>
+    </h1>
+  </section>
+  
+  <section class="content">
+    <div class="app-flow-process" *ngIf="flowProcess.show">
+      <app-flow-process [steped]="flowProcess.steped" [proxy]="flowProcess.proxy"></app-flow-process>
+    </div>
+  
+    <form class="form-horizontal" *ngIf="svrConfig" (ngSubmit)="onSubmit()" [formGroup]="mainForm">
+      <div class="panel panel-default">
+        <div class="panel-heading">
+          <span class="panel-title">{{svrConfig.flow.flowName}} - {{svrConfig.procedure.procedureName}}</span>
+        </div>
+        <div class="panel-body">
+          <div class="form-group" *ngFor="let row of rows;let i = index">
+            <div class="col-sm-2 xn-control-label"
+            [ngClass]="{'required-label-strong':hwModeService.checkRequiredAndReadonly(row).bold,
+                            'required-star':hwModeService.checkRequiredAndReadonly(row).star}">
+            {{row.title}}
+            </div>
+            <div class="col-sm-8">
+              <app-dynamic-input [row]="row"  [form]="mainForm" [formModule]="formModule"></app-dynamic-input>
+            </div>
+            <div class="col-sm-2 xn-control-desc">
+              {{row.memo}}
+            </div>
+          </div>
+          <!--tips-->
+          <div class="text-right red" *ngIf="hwModeService.checkersTips(rows)">
+            * 为必填项
+          </div>
+        </div>
+        <div class="panel-footer text-right">
+          <button type="button" class="btn btn-default pull-left" (click)="onCancel()">返回</button>
+          <button type="submit" class="btn btn-primary" [disabled]="!mainForm.valid && !loadingback">提交</button>
+        </div>
+      </div>
+    </form>
+  
+  </section>
+  

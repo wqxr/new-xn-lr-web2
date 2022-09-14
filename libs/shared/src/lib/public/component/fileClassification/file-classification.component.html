@@ -1,0 +1,489 @@
+<section class="content-header">
+  <h1>
+    {{ pageTitle }}
+  </h1>
+</section>
+<div class="page-wrap">
+  <!-- 文件来源选择 -->
+  <div class="file-source-wrap">
+    <span>当前文件来源: <a>{{ getVankeFileSource() }}</a></span>
+    <div class="source-btn-wrap">
+      <ng-container *ngFor="let item of fileList; let j = index">
+        <nz-button-group style="margin: 0 4px">
+          <button nz-button (click)="getFileItem(item.multiData)">
+            {{ item.fileSourceName }}
+          </button>
+          <button
+            nz-button
+            nz-dropdown
+            [nzDropdownMenu]="basicContract"
+            nzTrigger="click"
+            nzPlacement="bottomRight"
+          >
+            <i nz-icon nzType="down"></i>
+          </button>
+        </nz-button-group>
+        <nz-dropdown-menu #basicContract="nzDropdownMenu">
+          <ul nz-menu class="set-ul">
+            <li
+              [ngClass]="{ bg: currentKey[1] === key && currentKey[0] === j }"
+              nz-menu-item
+              *ngFor="let subItem of item.multiData; let key = index"
+              (click)="getCurrentFile(subItem, key, j)"
+            >
+              {{ subItem.fileName }}
+            </li>
+          </ul>
+        </nz-dropdown-menu>
+      </ng-container>
+    </div>
+  </div>
+  <!-- 分类查看flex左右水平布局 -->
+  <div class="flex-wrap">
+    <!-- 左侧PDF预览区域 -->
+    <div
+      class="flex-content"
+      style="width: 56%;"
+      (mouseenter)="onMouseEnterFile($event)"
+      (mouseleave)="onMouseLeaveFile($event)"
+    >
+      <ng-container *ngIf="fileType !== fileEnum.PDF; else pdfShow">
+        <ng-container *ngIf="checkSrc(fileSrc); else loadingImgTpl">
+          <div class="img-container">
+            <img
+              ngxViewer
+              class="image-viewer"
+              [viewerOptions]="viewerOptions"
+              (viewerViewed)="onViewerViewed()"
+              [src]="fileSrc"
+            />
+          </div>
+        </ng-container>
+      </ng-container>
+      <ng-template #pdfShow>
+        <div class="load-wrap">
+          <nz-spin nzSimple [nzSpinning]="spinning"></nz-spin>
+        </div>
+        <div
+          class="pdf-container"
+          (mousemove)="onMousemove($event)"
+          (mouseup)="onMouseup($event)"
+          id="thisCanvas1"
+        >
+          <div
+            id="canvas-box"
+            (mousedown)="onMousedown($event)"
+            (mouseup)="onMouseup($event)"
+            (mousewheel)="onWheelScroll($event)"
+          >
+            <canvas class="pdf-canvas" id="thisCanvas"></canvas>
+          </div>
+        </div>
+      </ng-template>
+      <ng-template #loadingImgTpl>
+        <div class="load-wrap">
+          <nz-spin nzSimple nzSpinning></nz-spin>
+        </div>
+      </ng-template>
+      <ng-container *ngIf="showToolIcon">
+        <!-- 上一份文件 -->
+        <div class="fileToolIcon preFileIcon" (click)="toPrev()">
+          <a title="上一份文件">
+            <i nz-icon nzType="arrow-left" nzTheme="outline"></i>
+          </a>
+        </div>
+        <!-- 下一份文件 -->
+        <div class="fileToolIcon nextFileIcon" (click)="toNext()">
+          <a title="下一份文件">
+            <i nz-icon nzType="arrow-right" nzTheme="outline"></i>
+          </a>
+        </div>
+      </ng-container>
+    </div>
+    <!-- 右侧文件分类操作区域 -->
+    <div class="flex-content form-content" style="width: 44%">
+      <div class="content-tabs">
+        <nz-tabset nzType="card">
+          <nz-tab
+            *ngFor="let tab of tabList; let key = index"
+            [nzTitle]="tab.label"
+            (nzSelect)="choseFileType(key)"
+          >
+          </nz-tab>
+        </nz-tabset>
+      </div>
+      <div class="file-data-content">
+        <div class="form-wrap">
+          <form nz-form>
+            <nz-form-item>
+              <nz-form-label class="fileType-label" [nzSpan]="4">{{
+                currentFileType?.file_nature_name
+              }}</nz-form-label>
+              <nz-form-control [nzSpan]="14">
+                <nz-select
+                  nzPlaceHolder="请选择文件分类"
+                  [(ngModel)]="file_nature_child_option_id"
+                  [ngModelOptions]="{ standalone: true }"
+                  [nzOptions]="currentOptions"
+                  (ngModelChange)="
+                    changeFileChildType(file_nature_child_option_id)
+                  "
+                  [nzOptionOverflowSize]="18"
+                  [nzDisabled]="isEdit"
+                >
+                </nz-select>
+              </nz-form-control>
+            </nz-form-item>
+          </form>
+        </div>
+        <div class="btnGroup-wrap" *ngIf="!isEdit">
+          <button
+            nz-button
+            nzType="primary"
+            class="btn-extra"
+            (click)="splitCurFile()"
+          >
+            标记
+          </button>
+          <button
+            nz-button
+            nzType="primary"
+            class="btn-extra"
+            (click)="confirmClearInfos()"
+          >
+            清除所有信息
+          </button>
+          <new-fileClassify-modal
+            [fileClassifyCfg]="fileClassifyCfg"
+            (emitOK)="handleEmitOK($event)"
+          ></new-fileClassify-modal>
+          <button
+            nz-button
+            nzType="primary"
+            class="btn-extra"
+            (click)="confirmDelFileClassify()"
+          >
+            删除分类类别
+          </button>
+        </div>
+        <div class="wrap-top-handlers" *ngIf="fileClassifyCfg.length > 0">
+          <button
+            nz-button
+            nzType="text"
+            nzSize="small"
+            class="btn-text"
+            (click)="toggleAllCollapse(isAllCollapse)"
+            style="margin-bottom: 4px"
+          >
+            {{ isAllCollapse ? "全部收起" : "全部展开" }}
+          </button>
+        </div>
+        <div class="cards-wrap">
+          <ng-container *ngFor="let item of fileClassifyCfg; let key = index">
+            <div class="file-data-wrap">
+              <div class="file-data-item">
+                <label
+                  *ngIf="!isEdit"
+                  nz-checkbox
+                  [(ngModel)]="item.isSelect"
+                  [nzValue]="item.fileClassifyId"
+                  (ngModelChange)="targetClassify(item, key)"
+                >
+                  <span
+                    [class]="{
+                      contractLabel: item.file_classify_name,
+                      labelRequire: item.is_property_necessary === 1
+                    }"
+                    >{{ item.file_classify_name }}</span
+                  >
+                </label>
+                <span
+                  *ngIf="isEdit"
+                  [class]="{
+                    contractLabel: item.file_classify_name,
+                    labelRequire: item.is_property_necessary === 1
+                  }"
+                  >{{ item.file_classify_name }}</span
+                >
+                <div class="item-middle-text">
+                  分类类别数量: {{ item.classifyResultList.length }}
+                </div>
+                <span
+                  class="expand-link"
+                  (click)="collapasePannel(item, key)"
+                  >{{ item.isCollapse ? "收起" : "展开" }}</span
+                >
+              </div>
+              <div
+                [class]="{
+                  expandWrap: item.isCollapse,
+                  collapse: !item.isCollapse
+                }"
+              >
+                <div
+                  class="classify-wrap"
+                  *ngIf="item.indexItemList.length > 0"
+                >
+                  <div class="classify-title">补充指标信息</div>
+                  <div class="classify-content">
+                    <!-- column indexItemList-->
+                    <ng-container
+                      *ngFor="
+                        let indexItem of item.indexItemList;
+                        let subKey = index
+                      "
+                    >
+                      <div class="input-wrap">
+                        <label
+                          [class]="{
+                            inputRequire: item.is_property_necessary === 1,
+                            inputLabel: true
+                          }"
+                          >{{ indexItem?.index_name }}</label
+                        >
+
+                        <ng-container
+                          *ngIf="!isNullValue(indexItem.index_value)"
+                        >
+                          <ng-container
+                            *ngIf="indexItem.data_type === 'number'"
+                          >
+                            <nz-input-number
+                              [(ngModel)]="indexItem.index_value"
+                              [nzPrecision]="2"
+                              [nzPlaceHolder]="indexItem.text_sample"
+                              [nzDisabled]="isEdit"
+                              [ngStyle]="{ width: isEdit ? '50%' : '40%' }"
+                            ></nz-input-number>
+                          </ng-container>
+                          <ng-container *ngIf="indexItem.data_type === 'money'">
+                            <nz-input-number
+                              [(ngModel)]="indexItem.index_value"
+                              [nzPrecision]="2"
+                              [nzPlaceHolder]="indexItem.text_sample"
+                              [nzDisabled]="isEdit"
+                              [ngStyle]="{ width: isEdit ? '50%' : '40%' }"
+                              [nzFormatter]="inputMoneyOptions.formatterPercent"
+                              [nzParser]="inputMoneyOptions.parserPercent"
+                              [nzMin]="inputMoneyOptions.minValue"
+                            ></nz-input-number>
+                          </ng-container>
+                          <ng-container *ngIf="indexItem.data_type === 'date'">
+                            <nz-date-picker
+                              [(ngModel)]="indexItem.index_value"
+                              [ngStyle]="{ width: isEdit ? '50%' : '40%' }"
+                              [nzDisabled]="isEdit"
+                              nz-tooltip
+                              [nzTooltipTitle]="indexItem.index_value"
+                            ></nz-date-picker>
+                          </ng-container>
+                          <ng-container *ngIf="indexItem.data_type === ''">
+                            <input
+                              [disabled]="isEdit"
+                              nz-input
+                              [(ngModel)]="indexItem.index_value"
+                              (blur)="trimValue($event, indexItem)"
+                              [ngStyle]="{ width: isEdit ? '50%' : '40%' }"
+                              nz-tooltip
+                              [nzTooltipTitle]="indexItem.index_value"
+                            />
+                          </ng-container>
+                        </ng-container>
+                        <!-- 设置为空的 -->
+                        <ng-container
+                          *ngIf="isNullValue(indexItem.index_value)"
+                        >
+                          <input
+                            nz-input
+                            placeholder="设置为空"
+                            [disabled]="true"
+                            [ngStyle]="{ width: isEdit ? '50%' : '40%' }"
+                          />
+                        </ng-container>
+                        <span
+                          *ngIf="!isEdit"
+                          class="expand-link"
+                          (click)="
+                            setToNull(key, subKey, indexItem.index_value)
+                          "
+                          >{{
+                            isNullValue(indexItem.index_value)
+                              ? "重新编辑"
+                              : "设置为空"
+                          }}</span
+                        >
+                      </div>
+                    </ng-container>
+                  </div>
+                </div>
+                <div
+                  class="classify-wrap"
+                  *ngIf="item.manualApprovalStandardList.length > 0"
+                >
+                  <div class="classify-title">人工审核标准</div>
+                  <div class="classify-content">
+                    <!-- column manualApprovalStandardList-->
+                    <ng-container
+                      *ngFor="
+                        let manualItem of item.manualApprovalStandardList;
+                        let subKey = index
+                      "
+                    >
+                      <label
+                        nz-checkbox
+                        [(ngModel)]="manualItem.check_status"
+                        (ngModelChange)="
+                          changeThisStatus(key, subKey, manualItem.check_status)
+                        "
+                        [nzDisabled]="isEdit"
+                      >
+                        <span class="subItem-label">{{
+                          manualItem.standard_name
+                        }}</span>
+                      </label>
+                    </ng-container>
+                  </div>
+                </div>
+                <div
+                  class="classify-wrap"
+                  *ngIf="item.classifyResultList.length > 0"
+                >
+                  <div class="classify-title">分类类别信息</div>
+                  <div class="classify-content">
+                    <!-- column classifyResultList-->
+                    <table class="table table-bordered text-center">
+                      <thead>
+                        <tr class="table-head">
+                          <th>序号</th>
+                          <th>文件来源</th>
+                          <th>文件名</th>
+                          <th>页码</th>
+                          <th *ngIf="!isEdit">操作</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        <tr
+                          *ngFor="
+                            let sub of item.classifyResultList;
+                            let i = index
+                          "
+                        >
+                          <td>{{ i + 1 }}</td>
+                          <td>{{ sub.file_source_name }}</td>
+                          <td>{{ sub.file_info?.fileName }}</td>
+                          <td>
+                            <span class="expand-link" (click)="debounce(sub)">{{
+                              sub.page_index
+                            }}</span>
+                          </td>
+                          <td *ngIf="!isEdit">
+                            <span
+                              class="expand-link"
+                              (click)="deleteClassifyInfo(sub, i, key)"
+                              >删除</span
+                            >
+                          </td>
+                        </tr>
+                      </tbody>
+                    </table>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </ng-container>
+        </div>
+      </div>
+    </div>
+  </div>
+  <!-- <div class="fix-btn-wrap"></div> -->
+  <xn-footer-toolbar [extra]="leftButtons">
+    <div class="footer-bar">
+      <button nz-button nzType="default" class="btn" (click)="routerBack()">
+        <i nz-icon nzType="rollback" nzTheme="outline"></i>返回
+      </button>
+      <button
+        nz-button
+        nzType="primary"
+        class="btn"
+        (click)="feedbackDocument()"
+      >
+        汇融文件问题反馈
+      </button>
+      <button
+        nz-button
+        nzType="primary"
+        class="btn"
+        (click)="saveFileSort(false)"
+        *ngIf="!isEdit"
+      >
+        <i nz-icon nzType="save" nzTheme="outline"></i>保存
+      </button>
+      <button
+        nz-button
+        nzType="primary"
+        class="btn"
+        (click)="saveFileSort(true)"
+        *ngIf="!isEdit"
+      >
+        <i nz-icon nzType="check" nzTheme="outline"></i>提交
+      </button>
+    </div>
+  </xn-footer-toolbar>
+  <ng-template #leftButtons>
+    <div class="footer-bar">
+      <button nzSize="small" nz-button (click)="preFile()">上一份</button>
+      <button nzSize="small" nz-button (click)="nextFile()">下一份</button>
+      <ng-container
+        *ngIf="
+          fileType === fileEnum.JPG || fileType === fileEnum.PNG;
+          else pdfHandles
+        "
+      >
+        <!-- <xn-page
+          [total]="total"
+          [size]="pageSize"
+          [showTotal]="true"
+          [currentPage]="imgIndex + 1"
+          (change)="changeImg($event)"
+        ></xn-page> -->
+        <nz-pagination
+          [nzSize]="'small'"
+          [nzPageIndex]="1"
+          [nzPageSize]="1"
+          [nzTotal]="total"
+          [nzPageIndex]="imgIndex"
+          (nzPageIndexChange)="changeImg($event)"
+        ></nz-pagination>
+      </ng-container>
+      <ng-template #pdfHandles>
+        <button id="prev" nzSize="small" nz-button>上一页</button>
+        <button id="next" nzSize="small" nz-button>下一页</button>
+        <span class="pdf-pagination">
+          <!--  -->
+          页码:
+          <span id="page_num" #pageNum>1</span>
+          /
+          <span id="page_count" #pageCount>1</span>
+        </span>
+        <span>
+          跳转到
+          <input id="getpageNum" />
+          页
+        </span>
+        <button id="gotoPage" nzSize="small" nz-button>跳转</button>
+      </ng-template>
+      <button id="left" nzSize="small" nz-button (click)="rotateImg('left')">
+        左旋 <i class="fa fa-undo"></i>
+      </button>
+      <button id="right" nzSize="small" nz-button (click)="rotateImg('right')">
+        右旋 <i class="fa fa-repeat"></i>
+      </button>
+      <button id="large" nzSize="small" nz-button (click)="scaleImg('large')">
+        放大<i class="fa fa-search-plus"></i>
+      </button>
+      <button id="small" nzSize="small" nz-button (click)="scaleImg('small')">
+        缩小<i class="fa fa-search-minus"></i>
+      </button>
+    </div>
+  </ng-template>
+</div>

@@ -1,0 +1,232 @@
+<section class="content-header">
+  <h1>
+    {{pageTitle}}
+    <small>{{pageDesc}}</small>
+  </h1>
+</section>
+
+<section class="content">
+  <div class="box" *ngIf="trade1">
+    <div class="box-header">
+      <h3 class="box-title">{{tableTitle1}}</h3>
+      <a (click)="changeStatus(trade1.mainFlowId, 1)" class="btn btn-primary btn-right">设置线下保理放款到平台</a>
+    </div>
+    <!-- /.box-header -->
+    <div class="box-body">
+      <table class="table table-bordered table-striped">
+        <tbody>
+          <tr>
+            <td class="col-sm-3">主流程ID</td>
+            <td>{{ trade1.mainFlowId }}</td>
+          </tr>
+          <tr>
+            <td>机构平台ID</td>
+            <td>{{ trade1.factoringAppId }}</td>
+          </tr>
+          <tr>
+            <td>保理方机构名称</td>
+            <td>{{ trade1.factoringAppName }}</td>
+          </tr>
+          <tr>
+            <td>机构平台ID</td>
+            <td>{{ trade1.appId }}</td>
+          </tr>
+          <tr>
+            <td>申请方机构名称</td>
+            <td>{{ trade1.appName }}</td>
+          </tr>
+          <tr>
+            <td>交易状态</td>
+            <td>{{ trade1.status | xnTrade1Status }}</td>
+          </tr>
+          <tr>
+            <td>业务失败说明</td>
+            <td>{{ trade1.failDesc }}</td>
+          </tr>
+          <tr>
+            <td>转账金额，元</td>
+            <td>{{ trade1.payAmt }}</td>
+          </tr>
+          <tr>
+            <td>保理转账到平台说明</td>
+            <td>{{ trade1.desc }}</td>
+          </tr>
+          <tr>
+            <td>银联返回结果</td>
+            <td>{{ trade1.ret }}</td>
+          </tr>
+          <tr>
+            <td>银联返回说明</td>
+            <td>{{ trade1.msg }}</td>
+          </tr>
+          <tr>
+            <td>转账结果</td>
+            <td>{{ trade1.rsp }}</td>
+          </tr>
+          <tr>
+            <td>处理次数</td>
+            <td>{{ trade1.handle }}</td>
+          </tr>
+          <tr>
+            <td>创建时间</td>
+            <td>{{ trade1.createTime | xnDate: 'datetime'}}</td>
+          </tr>
+          <tr>
+            <td>最后更新时间</td>
+            <td>{{ trade1.updateTime | xnDate: 'datetime'}}</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    <!-- /.box-body -->
+  </div>
+
+  <div class="box" *ngIf="receive.length > 0">
+    <div class="box-header">
+      <h3 class="box-title">{{tableTitle2}}</h3>
+      <a (click)="changeStatus(receive[0].mainFlowId, 2)" class="btn btn-primary btn-right">设置保理线下收票</a>
+    </div>
+    <!-- /.box-header -->
+    <div class="box-body receive" [ngClass]="borderBottom()" *ngFor="let item of receive">
+      <table class="table table-bordered table-striped">
+        <tbody>
+          <tr>
+            <td class="col-sm-3">记录ID</td>
+            <td>{{item.operationId}}</td>
+          </tr>
+          <tr>
+            <td>主流程ID</td>
+            <td>{{item.mainFlowId}}</td>
+          </tr>
+          <tr>
+            <td>商票号码</td>
+            <td>{{item.billNo}}</td>
+          </tr>
+          <tr>
+            <td>商票出票人名称</td>
+            <td>{{item.billOpenName}}</td>
+          </tr>
+          <tr>
+            <td>商票出票人账号</td>
+            <td>{{item.billOpenAcc}}</td>
+          </tr>
+          <tr>
+            <td>商票金额，元</td>
+            <td>{{item.billAmt}}</td>
+          </tr>
+          <tr>
+            <td>保证人地址</td>
+            <td>{{item.addr}}</td>
+          </tr>
+          <tr>
+            <td>子流程ID</td>
+            <td>{{item.recordId}}</td>
+          </tr>
+          <tr>
+            <td>商票接收状态</td>
+            <td>{{item.status | xnTradeStatus}}</td>
+          </tr>
+          <tr>
+            <td>失败说明</td>
+            <td>{{item.failDesc}}</td>
+          </tr>
+          <tr>
+            <td>商票接收结果</td>
+            <td>{{item.billReceive}}</td>
+          </tr>
+          <tr>
+            <td>商票查询结果</td>
+            <td>{{item.billQuery}}</td>
+          </tr>
+          <tr>
+            <td>创建时间</td>
+            <td>{{item.createTime | xnDate: 'datetime'}}</td>
+          </tr>
+          <tr>
+            <td>最后更新时间</td>
+            <td>{{item.updateTime | xnDate: 'datetime'}}</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- /.box-body -->
+  </div>
+
+  <div class="box" *ngIf="trade2">
+    <div class="box-header">
+      <h3 class="box-title">{{tableTitle3}}</h3>
+      <a (click)="changeStatus(trade1.mainFlowId, 3)" class="btn btn-primary btn-right">设置平台线下放款到企业</a>
+    </div>
+    <!-- /.box-header -->
+    <div class="box-body">
+      <table class="table table-bordered table-striped">
+        <tbody>
+          <tr>
+            <td class="col-sm-3">主流程ID</td>
+            <td>{{ trade2.mainFlowId }}</td>
+          </tr>
+          <tr>
+            <td>交易状态</td>
+            <td>{{ trade2.status | xnTrade2Status }}</td>
+          </tr>
+          <tr>
+            <td>业务失败说明</td>
+            <td>{{ trade2.failDesc }}</td>
+          </tr>
+          <tr>
+            <td>接收方银行卡号</td>
+            <td>{{ trade2.recAccNo }}</td>
+          </tr>
+          <tr>
+            <td>银行卡户名</td>
+            <td>{{ trade2.recAccNameCN }}</td>
+          </tr>
+          <tr>
+            <td>银行号，非工行，会使用</td>
+            <td>{{ trade2.recBankNo }}</td>
+          </tr>
+          <tr>
+            <td>开户行名称，非工行，会使用</td>
+            <td>{{ trade2.recBankName }}</td>
+          </tr>
+          <tr>
+            <td>转账金额，元</td>
+            <td>{{ trade2.payAmt }}</td>
+          </tr>
+          <tr>
+            <td>保理转账到平台说明</td>
+            <td>{{ trade2.desc }}</td>
+          </tr>
+          <tr>
+            <td>银联返回结果</td>
+            <td>{{ trade2.ret }}</td>
+          </tr>
+          <tr>
+            <td>银联返回说明</td>
+            <td>{{ trade2.msg }}</td>
+          </tr>
+          <tr>
+            <td>转账结果</td>
+            <td>{{ trade2.rsp }}</td>
+          </tr>
+          <tr>
+            <td>处理次数</td>
+            <td>{{ trade2.handle }}</td>
+          </tr>
+          <tr>
+            <td>创建时间</td>
+            <td>{{ trade2.createTime | xnDate: 'datetime'}}</td>
+          </tr>
+          <tr>
+            <td>最后更新时间</td>
+            <td>{{ trade2.updateTime | xnDate: 'datetime'}}</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    <!-- /.box-body -->
+  </div>
+
+</section>
+<!-- /.content -->

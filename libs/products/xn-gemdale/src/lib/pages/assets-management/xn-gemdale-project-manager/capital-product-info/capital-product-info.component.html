@@ -1,0 +1,156 @@
+<!-- 正文区域 -->
+<section class="content">
+    <div class="box box-default">
+        <!-- <div class="box-header">
+            <h3 class="box-title">iCheck - Checkbox &amp; Radio Inputs</h3>
+        </div> -->
+        <div class="box-body">
+            <div class="row">
+                <!-- col (left) -->
+                <div class="col-md-12">
+
+                    <div class="row">
+                        <div class="form-group col-md-12">
+                            <!-- 基础资产池概况 -->
+                            <div class="capital-pool">
+                                <div id='nav-1' class="col-sm-1 xn-control-label required-label-strong">基础资产池概况</div>
+                                <div class="col-sm-11">
+                                    <ng-container *ngFor="let row of rows;let i = index">
+                                        <div class="item-box col-sm-6" style="padding-right: 0px;">
+                                            <div class="item-label">
+                                                <label>{{row.title}}</label>
+                                            </div>
+                                            <div class="item-control">
+                                                <app-dynamic-input [row]="row" [form]="mainForm"
+                                                    [formModule]="formModule" [svrConfig]="svrConfig">
+                                                </app-dynamic-input>
+                                            </div>
+                                        </div>
+                                    </ng-container>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <ng-container *ngFor="let tableListConfig of tableConfigAll">
+                        <div class="row">
+                            <div class="form-group col-md-12">
+                                <!-- 列表 -->
+                                <div class="capital-list">
+                                    <div [id]='tableListConfig.id' class="col-sm-1 xn-control-label required-label-strong">
+                                        {{tableListConfig.title}}
+                                    </div>
+                                    <div class="col-sm-11">
+
+                                        <div style="width:100%;">
+                                            <div class="table-head">
+                                                <table class="table">
+                                                    <thead>
+                                                        <tr>
+                                                            <!-- 表头 -->
+                                                            <th *ngIf="tableListConfig?.hasNo" style='width:3%'>序号</th>
+                                                            <th *ngFor="let head of tableListConfig.tableConfig.heads"
+                                                                [ngStyle]="{width: head.width}">
+                                                                {{head.label}}
+                                                            </th>
+                                                            <!-- 操作列 -->
+                                                            <th *ngIf="tableListConfig?.rowBtn && tableListConfig?.rowBtn?.length" style='width:5%'>操作</th>
+                                                        </tr>
+                                                    </thead>
+                                                </table>
+                                            </div>
+                                            <div class="table-body">
+                                                <table class="table">
+                                                    <tbody>
+                                                        <ng-container *ngIf="tableListConfig.data.length;else block">
+                                                            <tr *ngFor="let item of tableListConfig.data;let i=index">
+                                                                <!--序号-->
+                                                                <td *ngIf="tableListConfig?.hasNo" style='width:3%'>{{i + 1}}</td>
+                                                                <!-- 列内容 -->
+                                                                <td *ngFor="let head of tableListConfig.tableConfig.heads"
+                                                                    [ngStyle]="{width: head.width}">
+                                                                    <!-- 根据head type 类型配置显示方式 -->
+                                                                    <ng-container [ngSwitch]="head.type">
+                                                                        <!-- 专项计划相关文件 -->
+                                                                        <ng-container *ngSwitchCase="'file'">
+                                                                            <ng-container *ngIf="item[head.value]">
+                                                                                <a href="javaScript:void(0)" (click)="viewFiles(item)">
+                                                                                    {{(item[head.value] | xnJson).length>1 ? (item[head.value] | xnJson)[0].fileName + '，...' : (item[head.value] | xnJson)[0].fileName}}
+                                                                                </a>
+                                                                            </ng-container>
+                                                                        </ng-container>
+                                                                        <!-- 专项计划相关文件来源 -->
+                                                                        <ng-container *ngSwitchCase="'fileSource'">
+                                                                            <div [innerHTML]="item[head.value] | xnSelectTransform:'fileType'"></div>
+                                                                        </ng-container>
+                                                                        <!-- 默认 -->
+                                                                        <ng-container *ngSwitchDefault>
+                                                                            <div [innerHTML]="item[head.value] | xnGatherType: {head:head,row:item}"></div>
+                                                                        </ng-container>
+                                                                    </ng-container>
+                                                                </td>
+                                                                <!-- 行按钮 -->
+                                                                <td style='width:5%' *ngIf="tableListConfig?.rowBtn && tableListConfig?.rowBtn?.length">
+                                                                    <div class="operate-btn">
+                                                                    <ng-container *ngFor="let btn of tableListConfig.rowBtn">
+                                                                        <ng-container [ngSwitch]="btn.operate">
+                                                                            <!-- 下载文件 -->
+                                                                            <ng-container *ngSwitchCase="'project_file_download'">
+                                                                                <a [ngClass]="judgeDownLoad(item)" href="javaScript:void(0)"  (click)="handleRowClick(item,btn,i)">{{btn.label}}</a>
+                                                                            </ng-container>
+                                                                            <!-- 默认 -->
+                                                                            <ng-container *ngSwitchDefault>
+                                                                                <a href="javaScript:void(0)" (click)="handleRowClick(item,btn,i)">{{btn.label}}</a>
+                                                                            </ng-container>
+                                                                        </ng-container>
+                                                                    </ng-container>
+                                                                    </div>
+                                                                </td>
+                                                            </tr>
+                                                        </ng-container>
+                                                        <ng-template #block>
+                                                            <ng-container *ngIf="!!tableListConfig">
+                                                              <tr>
+                                                                <td [attr.colspan]="calcAttrColspan(tableListConfig)">
+                                                                  <div class="empty-message"></div>
+                                                                </td>
+                                                              </tr>
+                                                            </ng-container>
+                                                          </ng-template>
+                                                    </tbody>
+                                                </table>
+                                            </div>
+                                        </div>
+
+                                        <!-- 分页 -->
+                                        <ng-container *ngIf="tableListConfig.hasPagination">
+                                            <xn-pagination [rows]="pageConfig[tableListConfig.checkerId].pageSize" [first]="pageConfig[tableListConfig.checkerId].first" 
+                                                [totalRecords]="pageConfig[tableListConfig.checkerId].total" [pageSizeOptions]="[5,10,20,30,50,100]" (pageChange)="onPage(tableListConfig.checkerId, $event)">
+                                            </xn-pagination>
+                                        </ng-container>
+                                        <ng-container *ngIf="tableListConfig.checkerId === 'specialProjectFileList'">
+                                            <div class="table-left-btn">
+                                                <div class="form-group text-left">
+                                                    <button type="button" (click)="onDownloadAll($event)" class="btn btn-default" [disabled]="!tableListConfig.data.length">
+                                                    下载所有附件
+                                                    </button>
+                                                </div>
+                                            </div>
+                                        </ng-container>
+                                    </div>
+                                </div>
+
+                                <div class="custom-table">
+
+                                    
+                                </div>
+                            </div>
+                        </div>
+                    </ng-container>
+                </div>
+
+            </div>
+        </div>
+    </div>
+</section>
+<!-- 正文区域 /-->

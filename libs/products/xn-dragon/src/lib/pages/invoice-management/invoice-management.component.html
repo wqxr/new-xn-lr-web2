@@ -1,0 +1,221 @@
+<section class="content-header" *ngIf="!tabConfig.hideTitle">
+  <h1>{{tabConfig.title}}</h1>
+</section>
+<section class="content">
+  <div class="box">
+    <div class="box-body">
+      <ul class="nav nav-tabs" *ngIf="!tabConfig.hideTitle">
+        <ng-container *ngFor="let tab of tabConfig.tabList;let i=index">
+          <li [ngClass]="{'active': tab.value===defaultValue}">
+            <a class="xn-click-a" data-toggle="tab" (click)="initData(tab.value)">{{tab.label}}</a>
+          </li>
+        </ng-container>
+      </ul>
+      <div class="tab-content">
+        <div class="tab-pane active" style="padding: 15px 0">
+          <!-- 搜索项 -->
+          <div *ngIf='!displayShow' style='clear:both'>
+            <div class="item-box col-sm-4" *ngFor="let row of shows">
+              <div class="item-label">
+                <label style='min-width: 180px !important'>{{row.title}}:</label>
+              </div>
+              <div class="item-control">
+                <app-dynamic-input [row]="row" [form]="form" [formModule]="formModule"></app-dynamic-input>
+              </div>
+            </div>
+          </div>
+          <div *ngIf='displayShow' style='clear:both'>
+            <div class="item-box col-sm-4" *ngFor="let row of shows.slice(0, 3)">
+              <div class="item-label">
+                <label style='min-width: 180px !important'>{{row.title}}:</label>
+              </div>
+              <div class="item-control">
+                <app-dynamic-input [row]="row" [form]="form" [formModule]="formModule"></app-dynamic-input>
+              </div>
+            </div>
+          </div>
+          <div>
+            <div class="center-block" style='border-bottom: 1px solid #ccc;float:left'></div>
+            <div class="center-block" style='border-bottom: 1px solid #ccc;float:right'></div>
+          </div>
+          <div class='showClass' (click)='show()'>
+            <a *ngIf='displayShow' class="xn-click-a"><i class="fa fa-angle-double-down" aria-hidden="true"></i>更多
+            </a>
+            <a class="xn-click-a" *ngIf='!displayShow'><i class="fa fa-angle-double-up" aria-hidden="true"></i>收起
+            </a>
+          </div>
+          <div class="col-sm-12 form-group text-right">
+            <!-- 头按钮 -->
+            <ng-container
+              *ngIf="currentSubTab?.edit && currentSubTab?.edit?.headButtons && currentSubTab?.edit?.headButtons.length">
+              <span *ngFor="let btn of currentSubTab.edit.headButtons">
+                <ng-container [ngSwitch]="btn.operate">
+                  <ng-container *ngSwitchDefault>
+                    <button type="button" class="btn btn-primary"
+                      [disabled]="!selectedItems.length && btn.disabled && btn.disabled === true"
+                      (click)="handleHeadClick(btn)">{{btn.label}}</button>
+                  </ng-container>
+
+                </ng-container>
+              </span>
+            </ng-container>
+            <ng-container *ngIf="currentSubTab.canSearch">
+              <button class="btn btn-primary" (click)="searchMsg()">查询</button>
+              <button class="btn btn-danger" (click)="reset()">重置</button>
+            </ng-container>
+          </div>
+          <!--列表交易子标签页切换,当且子标签状态多种时，显示切换标签导航-->
+          <ng-container *ngIf="currentTab.subTabList.length>1">
+            <ul class="nav nav-pills sub-ul">
+              <ng-container *ngFor="let sub of currentTab.subTabList">
+                <li role="presentation" [ngClass]="{'active': sub.value === subDefaultValue}"
+                  (click)="handleSubTabChange(sub.value)">
+                  <a class="xn-click-a">{{sub.label}}</a>
+                </li>
+              </ng-container>
+            </ul>
+          </ng-container>
+
+          <!--子列表-->
+          <table class="table table-bordered table-striped text-center">
+            <thead>
+              <tr class="table-head">
+                <!-- 全选按钮 -->
+                <th *ngIf="currentSubTab.canChecked" class="input-check">全选/取消
+                  <input type="checkbox" name="all" [checked]="isAllChecked()" [disabled]="!listInfo.length"
+                    (change)="checkAll()" />
+                </th>
+                <th>序号</th>
+                <!-- 表头，搜索功能 -->
+                <th *ngFor="let head of heads">
+                  <ng-container *ngIf="head.sort;else normal">
+                    <span [ngClass]="onSortClass(head?.value)" (click)="onSort(head?.value)">{{head.label}}</span>
+                  </ng-container>
+                  <ng-template #normal>{{head.label}}</ng-template>
+                </th>
+                <!-- 行操作 -->
+                <th
+                  *ngIf="currentSubTab?.edit && currentSubTab?.edit?.rowButtons && currentSubTab?.edit?.rowButtons?.length">
+                  操作
+                </th>
+              </tr>
+            </thead>
+            <tbody>
+              <ng-container *ngIf="listInfo.length;else block">
+                <tr *ngFor="let item of listInfo;let i=index">
+                  <!-- 行选则 -->
+                  <td *ngIf="currentSubTab.canChecked">
+                    <input type="checkbox" name="single" [checked]="item['checked']" (change)="singleChecked(item,i)" />
+                  </td>
+                  <!--序号-->
+                  <td>{{i + 1}}</td>
+                  <!-- 列内容 -->
+                  <td *ngFor="let head of currentSubTab.headText" style="max-width: 70px;word-wrap:break-word">
+                    <!-- 根据head type 类型配置显示方式 -->
+                    <ng-container [ngSwitch]="head.type">
+                      <!-- mainFlowId-->
+                      <ng-container *ngSwitchCase="'mainFlowId'">
+                        <a href="javaScript:void(0)"
+                          (click)="hwModeService.DragonviewProcess(item[head.value])">{{item[head.value]}}</a>
+                      </ng-container>
+                      <!--invoiceNum-->
+                      <ng-container *ngSwitchCase="'invoiceNum'">
+                        <ng-container *ngIf="arrayLength(item[head.value]);else block2">
+                          <a class="xn-click-a" href="javaScript:void(0)" (click)="viewMore(item[head.value])"
+                            [innerHtml]="(item[head.value] | xnArrayTruncate:2:'等;')">
+                          </a>
+                        </ng-container>
+                        <ng-template #block2>
+                          <div [innerHtml]="(item[head.value] | xnArrayTruncate:2:'等;')"></div>
+                        </ng-template>
+                      </ng-container>
+                      <!--contract-->
+                      <ng-container *ngSwitchCase="'contract'">
+                        <ng-container *ngIf=" item[head.value]&& item[head.value]!==''">
+                          <ng-container *ngIf="judgeDataType(jsonTransForm(item[head.value])); else block3">
+                            <div *ngFor="let sub of item[head.value] | xnJson; let i=index">
+                              <a href="javaScript:void(0)" (click)="showContract(sub)">{{sub.label}}</a>
+                            </div>
+                          </ng-container>
+                          <ng-template #block3>
+                            <a href="javaScript:void(0)" (click)="showContract(jsonTransForm(item[head.value]))">
+                              {{jsonTransForm(item[head.value])['label']}}</a>
+                          </ng-template>
+                        </ng-container>
+                      </ng-container>
+                      <!--图片文件file-->
+                      <ng-container *ngSwitchCase="'file'">
+                        <ng-container *ngIf="item[head.value]!==''">
+                          <a href="javaScript:void(0)" (click)="downloadFiles(item[head.value],item['mainFlowId'])">文件</a>
+                        </ng-container>
+                      </ng-container>
+                      <ng-container *ngSwitchCase="'date'">
+                        <ng-container *ngIf="item[head.value] && item[head.value]!==''">
+                          <div>
+                            {{item[head.value] | xnDate: 'date'}}
+                          </div>
+                        </ng-container>
+                      </ng-container>
+                      <ng-container *ngSwitchCase="'xnMainFlowStatus'">
+                        <ng-container *ngIf="item[head.value] && item[head.value]!==''">
+                          <div>
+                            {{item[head.value] | xnMainFlowStatus : item['isProxy']}}
+                          </div>
+                        </ng-container>
+                      </ng-container>
+                      <ng-container *ngSwitchCase="'nuonuoStatus'">
+                          <div [innerHTML]="item[head.value] | xnSelectTransform:'nuonuoStatus'"></div>
+                      </ng-container>
+                      <!-- 应收账款金额 -->
+                      <ng-container *ngSwitchCase="'receive'">
+                        <ng-container
+                          *ngIf=" item[head.value] !==undefiend &&item[head.value] !==null && item[head.value]!==0">
+                          <div>{{item[head.value].toFixed(2) | xnMoney}}</div>
+                        </ng-container>
+                      </ng-container>
+                      <ng-container *ngSwitchCase="'qrsMatchMethod'">
+                        <div [innerHTML]="item[head.value] |xnSelectTransform:'qrsMatchMethod'"></div>
+                      </ng-container>
+                      <!--默认-->
+                      <ng-container *ngSwitchDefault>
+                        <div [innerHTML]="item[head.value] | xnGatherType: {head:head,row:item}"></div>
+                      </ng-container>
+                    </ng-container>
+                  </td>
+                  <!-- 行按钮 -->
+                  <td
+                    *ngIf="currentSubTab?.edit &&currentSubTab?.edit?.rowButtons && currentSubTab?.edit?.rowButtons.length">
+                    <div *ngFor="let btn of currentSubTab.edit.rowButtons" class="operate-btn">
+                      <ng-container [ngSwitch]="btn.operate">
+                        <ng-container *ngSwitchDefault>
+                          <a href="javaScript:void(0)" (click)="handleRowClick(item,btn,i)">{{btn.label}}</a>
+                        </ng-container>
+                      </ng-container>
+                    </div>
+                  </td>
+                </tr>
+              </ng-container>
+            </tbody>
+          </table>
+        </div>
+        <!-- <div class="print">
+            <span>应付账款金额汇总：</span>
+            <span style="margin-left:30px">所选交易转让金额汇总：</span>
+            <span style="margin-left:30px">笔数：</span>
+            <span>筛选条件下应收转让金额汇总：</span>
+            <span style="margin-left:30px">筛选条件下所有交易的转让金额汇总：</span>
+          </div> -->
+        <xn-pagination [rows]="pageConfig.pageSize" [first]="pageConfig.first" [totalRecords]="pageConfig.total"
+          [pageSizeOptions]="[5,10,20,30,50,100]" (pageChange)="onPage($event)"></xn-pagination>
+      </div>
+    </div>
+  </div>
+</section>
+
+<ng-template #block>
+  <tr>
+    <td [attr.colspan]="calcAttrColspan()">
+      <div class="empty-message"></div>
+    </td>
+  </tr>
+</ng-template>

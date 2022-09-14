@@ -1,0 +1,191 @@
+<section class="content-header">
+    <h4>自查报告-编号{{appId}}</h4>
+</section>
+<section class="content">
+    <div class="box">
+        <div class="box-body" style='width: 80%;margin: 0 auto;'>
+            <div class="tab-content" style='margin: 0 auto;'>
+              <div class="tab-pane active" style="padding: 15px 0">
+
+            <!-- 供应商名称 -->
+            <div class="form-group " style="padding-top:20px">
+                <span class="control-label title-text required-star title xn-control-label"  style="float:left">供应商名称</span>
+                <div class="col-sm-9" style='margin-left:30px'>
+                    <input type="text"  class="form-control xn-input-font xn-input-border-radius" autocomplete="off" [value]="orgName" style="width: 100%">
+                </div>
+            </div>
+            <!-- 四级分类 -->
+            <div class="form-group " style="padding-top: 20px">
+                <span class=" control-label title-text required-star  title xn-control-label" style="float:left;">四级分类</span>
+                <div class="col-sm-9" style='margin-left:30px'>
+                    <input type="text" class="form-control xn-input-font xn-input-border-radius"  autocomplete="off" [value]="levelClassification | xnSelectTransform:'level_classification'" style="width: 100%">
+                </div>
+            </div>
+            <!-- 自查结论 -->
+            <div class="form-group " style="padding-top: 20px">
+                <span class=" control-label title-text required-star  title xn-control-label"  style="float:left;">自查结论</span>
+                <div class="col-sm-9" style='margin-left:30px'>
+                    <input type="text" class="form-control xn-input-font xn-input-border-radius" [value]="checkConclusion.firstValue | xnSelectTransform:'CheckForm'" style="width: 100%">
+                    <textarea rows="5" class="form-control xn-show-input-textarea xn-input-font xn-input-border-radius" readonly>
+                      {{checkConclusion.secondValue}}
+                    </textarea>
+                </div>
+            </div>
+            <!-- 重大事项 -->
+            <div class="form-group ">
+                <span class="control-label title-text required-star  title xn-control-label"  style="float:left;">重大事项</span>
+                <div class="col-sm-9" style='margin-left:30px'>
+                    <textarea rows="5" class="form-control xn-show-input-textarea xn-input-font xn-input-border-radius" readonly>
+                        {{majorIssues}}
+                    </textarea>
+                </div>
+            </div>
+            <div class="form-group ">
+                <span class="control-label title-text required-star  title xn-control-label" style="float:left;">融资情况</span>
+                <div class="col-sm-9" style='margin-left:30px'>
+                    <textarea rows="5" class="form-control xn-show-input-textarea xn-input-font xn-input-border-radius" readonly>
+                        {{financingSituation}}
+                    </textarea>
+                </div>
+            </div>
+            <div class="form-group ">
+                <span class="control-label title-text required-star  title xn-control-label"  style="float:left;">经营情况</span>
+                <div class="col-sm-9" style='margin-left:30px'>
+                    <textarea rows="5" class="form-control xn-show-input-textarea xn-input-font xn-input-border-radius" readonly>
+                        {{businessSituation}}
+                    </textarea>
+                </div>
+            </div>
+            <div class="form-group " >
+                <span class="control-label title-text required-star  title xn-control-label"  style="float:left;" >交易对手</span>
+                <div class="col-sm-9" style='margin-left:30px'>
+                    <table class="table table-bordered table-striped text-center">
+                        <thead>
+                          <tr class="table-head">
+                            <th>
+                              <span>序号</span>
+                            </th>
+                            <th><span>交易对手名称</span></th>
+                            <th><span>业务模式</span></th>
+                            <th><span>业务余额</span></th>
+                            <th><span>交易场景分析</span></th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                          <ng-container *ngIf="opponent.length ;else block">
+                            <tr *ngFor="let item of opponent;let i=index">
+                              <!-- 行选则 -->
+                              <!-- 列内容 -->
+                              <td>{{i+1}}</td>
+                              <td>{{item.nameofCounterparty}}</td>
+                              <td>{{item.flag}}</td>
+                              <td>{{item.balance}}</td>
+                              <td>{{item.analysis}}</td>
+                            </tr>
+                          </ng-container>
+                        </tbody>
+                      </table>
+                </div>
+            </div>
+            <div class="form-group" >
+                <span class="control-label title-text required-star  title xn-control-label"  style="float:left;">财报数据</span>
+                <div class="col-sm-9" style='margin-left:30px'>
+                    <div>
+                        <table class="table table-bordered table-striped text-center" style='width: 50%;float: left;'>
+                          <caption style='text-align: right'>资产负值</caption>
+                          <thead>
+                            <tr class="table-head">
+                              <th><span>项目</span></th>
+                              <th><span>年初数</span></th>
+                              <th><span>本期数</span></th>
+
+                            </tr>
+                          </thead>
+                          <tbody>
+                            <ng-container *ngIf="earningData.length ;else block">
+                              <tr *ngFor="let item of earningData;let i=index">
+                                <td></td>
+                                <td></td>
+                                <td></td>
+
+                              </tr>
+                            </ng-container>
+                          </tbody>
+                        </table>
+                        <table class="table table-bordered table-striped text-center guaranttable">
+                          <thead>
+                            <tr class="table-head">
+                              <th><span>项目</span></th>
+                              <th><span>年初数</span></th>
+                              <th><span>本期数</span></th>
+                            </tr>
+                          </thead>
+                          <tbody>
+                            <ng-container *ngIf="earningData.length ;else block">
+                              <tr *ngFor="let item of earningData;let i=index">
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                              </tr>
+                            </ng-container>
+                          </tbody>
+                        </table>
+                      </div>
+                      <div>
+                        <table class="table table-bordered table-striped text-center" style='clear:both;width: 50%;float: left;'>
+                          <caption style='text-align:right'>现金流</caption>
+                          <thead>
+                            <tr class="table-head">
+                              <th><span>项目</span></th>
+                              <th><span>年初数</span></th>
+                              <th><span>本年累计</span></th>
+                            </tr>
+                          </thead>
+                          <tbody>
+                            <ng-container *ngIf="earningData.length;else block">
+                              <tr *ngFor="let item of earningData;let i=index">
+                                <td></td>
+                                <td></td>
+                                <td></td>
+
+                              </tr>
+                            </ng-container>
+                          </tbody>
+                        </table>
+                        <table class="table table-bordered table-striped text-center guaranttable">
+                          <thead>
+                            <tr class="table-head">
+                              <th><span>项目</span></th>
+                              <th><span>年初数</span></th>
+                              <th><span>本期数</span></th>
+                            </tr>
+                          </thead>
+                          <tbody>
+                            <ng-container *ngIf="earningData.length;else block">
+                              <tr *ngFor="let item of earningData;let i=index">
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                              </tr>
+                            </ng-container>
+                          </tbody>
+                        </table>
+                      </div>
+                </div>
+            </div>
+        </div>
+        </div>
+        </div>
+        <div class="panel-footer text-right">
+            <button type="button" class="btn btn-default pull-left" (click)="onCancel()">返回</button>
+            <button type="submit" class="btn btn-primary">下载本页报告</button>
+          </div>
+    </div>
+    <ng-template #block>
+            <tr>
+              <td [attr.colspan]="5">
+                <div class="empty-message"></div>
+              </td>
+            </tr>
+</ng-template>
+</section>

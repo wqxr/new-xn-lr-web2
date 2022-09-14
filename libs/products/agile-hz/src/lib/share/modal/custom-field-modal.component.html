@@ -1,0 +1,58 @@
+<modal #modal [backdrop]="'static'" [keyboard]="false" [animation]="false" (onDismiss)="oncancel()">
+  <modal-header [showClose]="true" style='text-align:left'>
+    <h4 class="modal-title">{{params?.title}}</h4>
+  </modal-header>
+  <modal-body>
+    <div>
+      <div #tableHead class="head-height">
+        <table class="table table-bordered table-hover text-center table-display relative" [style.left.px]="headLeft">
+          <thead>
+            <tr>
+              <th style='width:15%'>序号</th>
+              <th *ngIf="params?.type!==3">字段名称</th>
+              <th *ngIf="params?.type===3">用户姓名</th>
+              <th class="input-check" style='width:15%'>全选/取消
+                <input type="checkbox" name="all" [checked]="isAllChecked()" [disabled]="!datalist01.length"
+                  (change)="checkAll()" />全选</th>
+
+            </tr>
+          </thead>
+        </table>
+      </div>
+      <div class="table-height" (scroll)="onScroll($event)">
+        <table #configDate class="table table-bordered table-hover text-center table-display" [sortablejs]='datalist01'>
+          <tbody [sortablejs]='datalist01' [sortablejsOptions]="{store:{get:getData(),set:setData()}}">
+            <tr *ngFor='let item of datalist01;let i=index'>
+              <td style='width:15%'>{{i+1}}</td>
+              <td *ngIf="params?.type!==3">{{item.label || item.title}}</td>
+              <td *ngIf="params?.type===3">{{item.userName}}</td>
+              <td style='width: 15%;'>
+                <input type="checkbox" name="single" [checked]="item['checked']" (change)="singleChecked(item)" />
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+    <div class="slect-count">
+      <div class="col-sm-6 text-left"><i class="fa fa-fw fa-check-square-o"></i>当前已选择{{selectedItems.length}}个字段</div>
+      <div class="col-sm-6 text-right">总共{{datalist01.length}}个字段</div>
+    </div>
+
+  </modal-body>
+  <modal-footer>
+    <div class="col-sm-6 form-group text-left">
+      <ng-container *ngIf="params && params.label==='checkerId'">
+        <button type="button" class="btn btn-primary" (click)="onCopyField()">复制列表字段配置</button>
+      </ng-container>
+    </div>
+    <div class="col-sm-6 form-group text-right">
+      <button type="button" class="btn btn-default" (click)="oncancel()">取消</button>
+      <button type="button" class="btn btn-success" (click)="onOk()">确定</button>
+    </div>
+  </modal-footer>
+</modal>
+<!-- <h2>Drag / drop the item</h2>
+<div [sortablejs]="items">
+  <div *ngFor="let item of items">{{ item }}</div>
+</div> -->

@@ -1,0 +1,24 @@
+<section class="content-header">
+  <h1>
+    {{ pageTitle }}
+    <small>{{ pageDesc }}</small>
+  </h1>
+</section>
+
+<!-- Main content -->
+<section class="content">
+  <div class="app-flow-process" *ngIf="flowId !== '' && isshowProgress === false">
+    <!--主流程记录-->
+    <ng-container>
+      <xn-dragon-flow-process-component [mainFlowId]="mainFlowId" [flowId]="flowId">
+      </xn-dragon-flow-process-component>
+    </ng-container>
+  </div>
+  <ng-container *ngIf='svrConfig && !svrConfig.isStep'>
+    <old-vanke-edit-component [mainForm]="mainForm" [svrConfig]="svrConfig" [flowId]="flowId" [hasActions]='hasActions' [shows]='shows' [baseInfo]='baseInfo'></old-vanke-edit-component>
+  </ng-container>
+  <ng-container *ngIf='svrConfig && svrConfig.isStep'>
+    <vanke-edit-step [mainForm]="mainForm" [svrConfig]="svrConfig"  [flowId]="flowId" [hasActions]='hasActions' [shows]='shows' [baseInfo]='baseInfo'></vanke-edit-step>
+  </ng-container>
+
+</section>

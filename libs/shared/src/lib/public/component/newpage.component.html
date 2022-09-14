@@ -1,0 +1,31 @@
+<nav aria-label="Page navigation" class="{{showTotal ? '' : 'text-center'}}">
+  <div class="pull-left" style="margin: 20px 10px" *ngIf="showTotal">共{{total}}条记录</div>
+  <ul class="pagination {{showTotal ? 'pull-right' : ''}}">
+    <li [ngClass]="onCssClass('head')">
+      <a (click)="onPageHead()" aria-label="Previous" class="xn-click-a">
+        <span aria-hidden="true">&laquo;</span>
+      </a>
+    </li>
+    <ng-container *ngFor="let page of pages;let i=index">
+      <li [ngClass]="onCssClass(page,i)"><a (click)="onPage(page)"
+                                                class="xn-click-a">{{page}}</a></li>
+    </ng-container>
+    <li [ngClass]="onCssClass('tail')">
+      <a (click)="onPageTail()" aria-label="Next" class="xn-click-a">
+        <span aria-hidden="true">&raquo;</span>
+      </a>
+    </li>
+    <li>
+      <a>
+        跳转到第
+        <input type="text" class="page-input" [(ngModel)]="defaultPage">
+        {{enterPage}}
+      </a>
+    </li>
+    <li>
+      <a class="go" (click)="goPage(defaultPage)">
+        跳转
+      </a>
+    </li>
+  </ul>
+</nav>

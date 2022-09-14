@@ -1,0 +1,23 @@
+<modal #modal class="login-modal" [backdrop]="'static'" [keyboard]="false" [animation]="false">
+  <modal-header [showClose]="true">
+    <span class='spanClass' style='padding-left:0px'> 更新CA数字证书管理员</span>
+  </modal-header>
+  <modal-body>
+    <span class='spanClass'>当前CA数字证书管理员</span>
+    <div class="ipt-box-nick mb15-nick" style='margin-top:20px'>
+      <div style='margin-left:40px'>
+        <p><span>姓名:</span><label>{{userName}}</label></p>
+        <p><span>手机号：</span><label>{{mobelPhone}}</label></p>
+      </div>
+      <div class="flex-row">
+        <div class="this-flex-1">
+          <button type="button" class="btn  btn-default" (click)="cancellationCert()">注销</button>
+        </div>
+        <div class="this-flex-2 text-right">
+          <button type="button" class="btn btn-primary" (click)="cancel()">取消</button>
+          <button type="button" class="btn btn-primary" (click)="changeCert()">修改</button>
+        </div>
+      </div>
+    </div>
+  </modal-body>
+</modal>

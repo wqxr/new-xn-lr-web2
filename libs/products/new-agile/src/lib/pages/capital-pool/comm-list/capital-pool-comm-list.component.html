@@ -1,0 +1,586 @@
+<section class="content">
+  <div class="box">
+    <div class="box-header">
+      <h3 class="box-title">{{ title }}列表</h3>
+    </div>
+    <!-- /.box-header -->
+
+    <div class="box-body">
+      <!--搜索项-->
+      <collapse-condition-form
+          colNum="6"
+          [shows]="shows"
+          [form]="mainForm"
+        ></collapse-condition-form>
+
+      <!--按钮组项-->
+      <div
+        class="form-group clearfix"
+        *ngIf="base?.superConfig.list?.headButtons"
+      >
+        <div class="col-sm-12 btn-label btn-cus">
+          <div class="col-sm-6 text-left btn-cus" *ngIf="isShowTradingBtn">
+            <ng-container *ngIf="hasPermission && !isAgencyUser">
+              <button
+                (click)="generate()"
+                [disabled]="!btnStatusBool"
+                class="btn btn-primary"
+              >
+                生成合同
+              </button>
+              <!--todo 暂时关闭在此生成多份合同-->
+              <!--<button (click)="generateMultiple()" *ngIf="headquarters==='雅居乐集团控股有限公司'"-->
+              <!--[disabled]="!btnStatusBool" class="btn btn-primary">生成多份合同-->
+              <!--</button>-->
+              <button
+                (click)="generateAndSign()"
+                [disabled]="!btnStatusBool"
+                class="btn btn-primary"
+              >
+                生成并签署合同
+              </button>
+              <button
+                (click)="doPush()"
+                class="btn btn-primary"
+                [disabled]="selectedItems.length === 0"
+              >
+                推送企业
+              </button>
+              <button
+                (click)="uploadFiles()"
+                [disabled]="!btnStatusBool"
+                class="btn btn-info"
+              >
+                批量上传文件
+              </button>
+            </ng-container>
+            <!--添加、移除按钮-->
+            <ng-container *ngIf="isCapitalPool && hasPermission && !isAgencyUser">
+              <button
+                class="btn btn-primary"
+                [disabled]="!btnStatusBool"
+                (click)="handleCapital()"
+              >
+                {{ enumOperating[formCapitalPool.type] }}
+              </button>
+            </ng-container>
+            <button
+              type="button"
+              *ngIf="isShowPbtn && hasPermission"
+              (click)="downloadCapitalPoolExcel()"
+              class="btn btn-primary"
+            >
+              下载Excel
+            </button>
+          </div>
+          <div class="col-sm-6 text-right btn-cus">
+            <ng-container *ngIf="!isCapitalPool && hasPermission">
+              <!--系在应收账款通知书附件、只在保理商系在-->
+              <ng-container *ngIf="!isShowPbtn && showSign">
+                <button class="btn btn-primary" (click)="downAnnex()">
+                  下载本页附件
+                </button>
+              </ng-container>
+            </ng-container>
+            <ng-container *ngIf="isShowTradingBtn">
+              <button
+                (click)="
+                  handleAdd({
+                    id: formCapitalPool.capitalId,
+                    value: 2,
+                    headquarters: headquarters,
+                    isProxy: formCapitalPool.isProxy
+                  })
+                "
+                class="btn btn-sm btn-primary"
+                *ngIf="formCapitalPool.isLocking !== '1' && hasPermission && !isAgencyUser"
+              >
+                添加交易
+              </button>
+              <button
+                type="button"
+                *ngIf="hasPermission && !isAgencyUser"
+                (click)="removeCapital()"
+                [disabled]="!btnStatusBool"
+                class="btn btn-danger"
+              >
+                移除交易
+              </button>
+              <ng-container *ngIf="hasPermission && !isAgencyUser">
+                <button
+                  type="button"
+                  (click)="exportCapital()"
+                  class="btn btn-primary"
+                >
+                  导出清单
+                </button>
+              </ng-container>
+              <!-- 雅居乐显示 -->
+              <ng-container *ngIf="isHeadquarterYJL && hasPermission">
+                <button
+                  type="button"
+                  (click)="exportPayList()"
+                  [disabled]="!btnStatusBool"
+                  class="btn btn-primary"
+                >
+                  生成支付申请单
+                </button>
+              </ng-container>
+
+              <button
+                type="button"
+                (click)="downloadSelectedAttach()"
+                class="btn btn-primary"
+              >
+                下载附件
+              </button>
+            </ng-container>
+            <ng-container
+              *ngFor="let btn of base?.superConfig.list?.headButtons"
+            >
+              <a
+                *ngIf="btn.type === 'a' && btn.search"
+                (click)="onSearch()"
+                class="{{ btn.class }}"
+                >{{ btn.title }}</a
+              >
+              <a
+                *ngIf="btn.type === 'a' && btn.clearSearch"
+                (click)="clearSearch()"
+                class="{{ btn.class }}"
+                >{{ btn.title }}</a
+              >
+            </ng-container>
+          </div>
+        </div>
+      </div>
+      <!--table内容项-->
+      <table class="table table-bordered table-striped text-center">
+        <thead>
+          <tr class="table-head">
+            <ng-container *ngFor="let head of heads">
+              <th
+                *ngIf="head.sort"
+                [ngClass]="onSortClass(head.checkerId)"
+                (click)="onSort(head.checkerId)"
+              >
+                {{ head.title }}
+              </th>
+              <th *ngIf="!head.sort">{{ head.title }}</th>
+            </ng-container>
+            <!--执行移除或添加-->
+            <th colspan="2">
+              <input
+                type="checkbox"
+                class="ml"
+                [disabled]="rows.length === 0"
+                (change)="handleAllSelect()"
+                [checked]="allChecked"
+              />全选/取消
+            </th>
+          </tr>
+        </thead>
+        <tbody>
+          <ng-container *ngIf="rows && rows.length; else blcok">
+            <tr *ngFor="let row of rows; let i = index">
+              <td
+                *ngFor="let head of heads"
+                [ngClass]="onTextClass(head['type'])"
+                style="max-width: 70px; word-wrap: break-word;"
+              >
+                <ng-container [ngSwitch]="true">
+                  <ng-container *ngSwitchCase="head.checkerId === 'mainFlowId'">
+                    <!-- 交易ID -->
+                    <a
+                      [innerHTML]="row[head.checkerId]"
+                      href="javaScript:void (0)"
+                      (click)="viewProcess(row[head.checkerId])"
+                    ></a>
+                  </ng-container>
+                  <!-- 总部公司 -->
+                  <ng-container *ngSwitchCase="head.type === 'headquarters'">
+                    <div
+                      [innerHTML]="
+                        row[head.checkerId]
+                          | xnSelectTransform: enterpriserSelectItems
+                      "
+                    ></div>
+                  </ng-container>
+                  <!-- 交易状态 -->
+                  <ng-container *ngSwitchCase="head.checkerId === 'status'">
+                    <div>{{ row[head.checkerId] | xnFlowStatus }}</div>
+                  </ng-container>
+                  <!--通知书-->
+                  <ng-container
+                    *ngSwitchCase="
+                      head.checkerId === 'capitalPoolContract01' ||
+                      head.checkerId === 'capitalPoolContract02'
+                    "
+                  >
+                    <a
+                      *ngIf="row[head.checkerId] && row[head.checkerId] !== ''"
+                      href="javaScript:void (0)"
+                      (click)="viewContract(row[head.checkerId])"
+                      >{{ (row[head.checkerId] | xnJson)[0].label }}</a
+                    >
+                  </ng-container>
+                  <!--应收账款转让通知书回执（适用于雅居乐控股向保理商出具）-->
+                  <ng-container
+                    *ngSwitchCase="head.checkerId === 'capitalPoolContract03'"
+                  >
+                    <a
+                      *ngIf="row[head.checkerId] && row[head.checkerId] !== ''"
+                      href="javaScript:void (0)"
+                      class="a-block"
+                      (click)="viewContract(row[head.checkerId])"
+                      >{{ (row[head.checkerId] | xnJson)[0].label }}</a
+                    >
+                    <a
+                      (click)="fileView(row.photoCopy01)"
+                      *ngIf="row?.need_photoCopy01 && row.photoCopy01; else noFile"
+                      class="a-block"
+                      href="javaScript:void (0)"
+                      >企业回传文件</a
+                    >
+                    <a
+                      *ngIf="
+                        row[head.checkerId] != null &&
+                        row?.need_photoCopy01 &&
+                        hasPermission && !isAgencyUser
+                      "
+                      (click)="uploadContract(row, head)"
+                      style="margin-top: 5px;"
+                      class="a-block"
+                      href="javaScript:void (0)"
+                      >上传文件</a
+                    >
+                    <p *ngIf="row[head.checkerId] == null">无</p>
+                  </ng-container>
+                  <!--应收账款转让通知书回执（适用于雅居乐下属公司向保理商出具）-->
+                  <ng-container
+                    *ngSwitchCase="head.checkerId === 'capitalPoolContract04'"
+                  >
+                    <a
+                      *ngIf="row[head.checkerId] && row[head.checkerId] !== ''"
+                      href="javaScript:void (0)"
+                      class="a-block"
+                      (click)="viewContract(row[head.checkerId])"
+                      >{{ (row[head.checkerId] | xnJson)[0].label }}</a
+                    >
+                    <a
+                      (click)="fileView(row.photoCopy02)"
+                      *ngIf="row?.need_photoCopy02 && row.photoCopy02; else noFile"
+                      class="a-block"
+                      href="javaScript:void (0)"
+                      >企业回传文件</a
+                    >
+                    <a
+                      *ngIf="
+                        row[head.checkerId] != null &&
+                        row?.need_photoCopy02 &&
+                        hasPermission && !isAgencyUser
+                      "
+                      (click)="uploadContract(row, head)"
+                      style="margin-top: 5px;"
+                      class="a-block"
+                      href="javaScript:void (0)"
+                      >上传文件</a
+                    >
+                    <p *ngIf="row[head.checkerId] == null">无</p>
+                  </ng-container>
+                  <!--应收账款转让通知书回执（适用于雅居乐控股向供应商出具）-->
+                  <ng-container
+                    *ngSwitchCase="head.checkerId === 'headquartersReceipt'"
+                  >
+                    <a
+                      *ngIf="row[head.checkerId] && row[head.checkerId] !== ''"
+                      href="javaScript:void (0)"
+                      class="a-block"
+                      (click)="viewContract(row[head.checkerId])"
+                      >{{ (row[head.checkerId] | xnJson)[0].label }}</a
+                    >
+                    <a
+                      (click)="fileView(row.photoCopy03)"
+                      *ngIf="row?.need_photoCopy03 && row.photoCopy03; else noFile"
+                      class="a-block"
+                      href="javaScript:void (0)"
+                      >企业回传文件</a
+                    >
+                    <a
+                      *ngIf="
+                        row[head.checkerId] != null &&
+                        row?.need_photoCopy03 &&
+                        hasPermission && !isAgencyUser
+                      "
+                      (click)="uploadContract(row, head)"
+                      style="margin-top: 5px;"
+                      class="a-block"
+                      href="javaScript:void (0)"
+                      >上传文件</a
+                    >
+                    <p *ngIf="row[head.checkerId] == null">无</p>
+                  </ng-container>
+                  <!--应收账款转让通知书回执（适用于雅居乐下属公司向供应商出具）-->
+                  <ng-container
+                    *ngSwitchCase="head.checkerId === 'projectReceipt'"
+                  >
+                    <a
+                      *ngIf="row[head.checkerId] && row[head.checkerId] !== ''"
+                      href="javaScript:void (0)"
+                      class="a-block"
+                      (click)="viewContract(row[head.checkerId])"
+                      >{{ (row[head.checkerId] | xnJson)[0].label }}</a
+                    >
+                    <a
+                      (click)="fileView(row.photoCopy04)"
+                      *ngIf="row?.need_photoCopy04 && row.photoCopy04; else noFile"
+                      class="a-block"
+                      href="javaScript:void (0)"
+                      >企业回传文件</a
+                    >
+                    <a
+                      *ngIf="
+                        row[head.checkerId] != null &&
+                        row?.need_photoCopy04 &&
+                        hasPermission && !isAgencyUser
+                      "
+                      (click)="uploadContract(row, head)"
+                      style="margin-top: 5px;"
+                      class="a-block"
+                      href="javaScript:void (0)"
+                      >上传文件</a
+                    >
+                    <p *ngIf="row[head.checkerId] == null">无</p>
+                  </ng-container>
+                  <!--付款确认书（总部致保理商/供应商）-->
+                  <ng-container
+                    *ngSwitchCase="head.checkerId === 'pdfProjectFiles'"
+                  >
+                    <!--如果总部公司为万科-则显示保理预录入时上传的付款确认书-->
+                    <ng-container
+                      *ngIf="
+                        row.headquarters && row.headquarters === '万科';
+                        else contractFiles
+                      "
+                    >
+                      <!--付款确认书-->
+                      <ng-container
+                        *ngIf="
+                          row[head.checkerId] && row[head.checkerId] !== '';
+                          else noPayment
+                        "
+                      >
+                        <div *ngFor="let sub of row[head.checkerId] | xnJson">
+                          <a
+                            href="javaScript:void(0)"
+                            class="xn-click-a"
+                            (click)="viewFile(sub)"
+                            >{{ sub?.fileName }}</a
+                          >
+                        </div>
+                      </ng-container>
+                      <ng-template #noPayment>
+                        <span>/</span>
+                      </ng-template>
+                    </ng-container>
+                    <ng-template #contractFiles>
+                      <a
+                        *ngIf="
+                          row[head.checkerId] && row[head.checkerId] !== ''
+                        "
+                        href="javaScript:void (0)"
+                        class="a-block"
+                        (click)="viewContract(row[head.checkerId])"
+                        >{{ (row[head.checkerId] | xnJson)[0].label }}</a
+                      >
+                    </ng-template>
+
+                    <a
+                      (click)="fileView(row.photoCopy05)"
+                      *ngIf="row?.need_photoCopy05 && row.photoCopy05; else noFile"
+                      class="a-block"
+                      href="javaScript:void (0)"
+                      >企业回传文件</a
+                    >
+                    <a
+                      *ngIf="
+                        row[head.checkerId] != null &&
+                        row?.need_photoCopy05 &&
+                        hasPermission && !isAgencyUser
+                      "
+                      (click)="uploadContract(row, head)"
+                      style="margin-top: 5px;"
+                      class="a-block"
+                      href="javaScript:void (0)"
+                      >上传文件</a
+                    >
+                    <p *ngIf="row[head.checkerId] == null">无</p>
+                  </ng-container>
+                  <!--付款确认书（项目公司致保理商）-->
+                  <ng-container *ngSwitchCase="head.checkerId === 'projectQrs'">
+                    <a
+                      *ngIf="row[head.checkerId] && row[head.checkerId] !== ''"
+                      href="javaScript:void (0)"
+                      class="a-block"
+                      (click)="viewContract(row[head.checkerId])"
+                      >{{ (row[head.checkerId] | xnJson)[0].label }}</a
+                    >
+                    <a
+                      (click)="fileView(row.photoCopy06)"
+                      *ngIf="row?.need_photoCopy06 && row.photoCopy06; else noFile"
+                      class="a-block"
+                      href="javaScript:void (0)"
+                      >企业回传文件</a
+                    >
+                    <a
+                      *ngIf="
+                        row[head.checkerId] != null &&
+                        row?.need_photoCopy06 &&
+                        hasPermission && !isAgencyUser
+                      "
+                      (click)="uploadContract(row, head)"
+                      style="margin-top: 5px;"
+                      class="a-block"
+                      href="javaScript:void (0)"
+                      >上传文件</a
+                    >
+                    <p *ngIf="row[head.checkerId] == null">无</p>
+                  </ng-container>
+                  <!--付款确认书（雅居乐控股致券商）-->
+                  <ng-container *ngSwitchCase="head.checkerId === 'tradersQrs'">
+                    <a
+                      *ngIf="row[head.checkerId] && row[head.checkerId] !== ''"
+                      href="javaScript:void (0)"
+                      class="a-block"
+                      (click)="viewContract(row[head.checkerId])"
+                      >{{ (row[head.checkerId] | xnJson)[0].label }}</a
+                    >
+                    <a
+                      (click)="fileView(row.photoCopy07)"
+                      *ngIf="row?.need_photoCopy07 && row.photoCopy07; else noFile"
+                      class="a-block"
+                      href="javaScript:void (0)"
+                      >企业回传文件</a
+                    >
+                    <a
+                      *ngIf="
+                        row[head.checkerId] != null &&
+                        row?.need_photoCopy07 &&
+                        hasPermission && !isAgencyUser
+                      "
+                      (click)="uploadContract(row, head)"
+                      style="margin-top: 5px;"
+                      class="a-block"
+                      href="javaScript:void (0)"
+                      >上传文件</a
+                    >
+                    <p *ngIf="row[head.checkerId] == null">无</p>
+                  </ng-container>
+                  <ng-container *ngSwitchCase="head.checkerId === 'wkType'">
+                    <div>{{ row[head.checkerId] | xnTransfer: "wkType" }}</div>
+                  </ng-container>
+                  <!--确认函-->
+                  <ng-container
+                    *ngSwitchCase="head.checkerId === 'confirmFile'"
+                  >
+                    <a
+                      *ngIf="row[head.checkerId] && row[head.checkerId] !== ''"
+                      href="javaScript:void (0)"
+                      class="a-block"
+                      (click)="viewContract(row[head.checkerId])"
+                      >{{ (row[head.checkerId] | xnJson)[0].label }}</a
+                    >
+                    <a
+                      (click)="fileView(row.confirmPic)"
+                      *ngIf="row?.need_confirmPic && row.confirmPic; else noFile"
+                      class="a-block"
+                      href="javaScript:void (0)"
+                      >企业回传文件</a
+                    >
+                    <a
+                      *ngIf="
+                        row[head.checkerId] != null &&
+                        row?.need_confirmPic &&
+                        hasPermission && !isAgencyUser
+                      "
+                      (click)="uploadContract(row, head)"
+                      style="margin-top: 5px;"
+                      class="a-block"
+                      href="javaScript:void (0)"
+                      >上传文件</a
+                    >
+                    <p *ngIf="row[head.checkerId] == null">无</p>
+                  </ng-container>
+                  <!-- 是否推送企业 -->
+                  <ng-container *ngSwitchCase="head.type === 'isSignContract'">
+                    <div>
+                      {{
+                        row[head.checkerId] | xnPushType: row[head.checkerId]
+                      }}
+                    </div>
+                  </ng-container>
+
+                  <ng-container *ngSwitchDefault>
+                    <div
+                      *ngIf="
+                        head.checkerId !== 'mainFlowId' &&
+                        head.checkerId !== 'constractsToDc' &&
+                        head.checkerId !== 'constractsToSo' &&
+                        head.checkerId !== 'constractsToBa'
+                      "
+                      [innerHTML]="
+                        row[head.checkerId]
+                          | xnGatherType: { head: head, row: row }
+                      "
+                    ></div>
+                  </ng-container>
+
+                  <ng-template #noFile>
+                    <p>
+                      未回传文件
+                    </p>
+                  </ng-template>
+                </ng-container>
+              </td>
+              <td>
+                <input
+                  *ngIf="
+                    isCapitalPool ||
+                    (showSign &&
+                      row.capitalPoolContract === '' &&
+                      !isShowPbtn) ||
+                    isShowTradingBtn
+                  "
+                  class="capital-pool-check"
+                  type="checkbox"
+                  [checked]="row.checked"
+                  (change)="inputChange(row, i)"
+                />
+              </td>
+            </tr>
+          </ng-container>
+          <ng-template #blcok>
+            <td colspan="23">
+              <div class="empty-message"></div>
+            </td>
+          </ng-template>
+        </tbody>
+      </table>
+      <xn-pagination
+        [rows]="pageSize"
+        [first]="first"
+        [totalRecords]="total"
+        [pageSizeOptions]="[10, 20, 50, 100]"
+        (pageChange)="onPage($event)"
+      ></xn-pagination>
+    </div>
+    <!-- /.box-body -->
+    <div class="text-right box-footer">
+      <button class="btn btn-default" type="button" (click)="goback()">
+        返回
+      </button>
+    </div>
+  </div>
+  <!-- /.box -->
+</section>
+<!-- /.content -->

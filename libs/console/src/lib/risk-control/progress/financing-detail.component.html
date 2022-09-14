@@ -1,0 +1,28 @@
+<section class="content-header">
+  <h1>
+    {{pageTitle}}
+  </h1>
+</section>
+
+<section class="content" style="width: 80%" *ngIf="params">
+  <div class="box-header clearfix">
+    <ul class="nav navs pull-left">
+      <ng-container *ngFor="let item of financingDetailEnum | xnSelectItem">
+        <li class="item" role="presentation" [class.active]="item.value === setItem"
+            (click)="onItemClick(item.value)" *ngIf="calcBool(item.value)">
+          {{item.label}}
+        </li>
+      </ng-container>
+    </ul>
+  </div>
+  <div class="box">
+    <div class="box-body">
+      <xn-flow-detail-record [params]="params" [mainFlowId]="mainFlowId"
+                             *ngIf="setItem==='flow'"></xn-flow-detail-record>
+      <xn-flow-detail-chart [assets]="formattedAssets" *ngIf="setItem==='tradeMap'"></xn-flow-detail-chart>
+      <xn-flow-detail-logs [assets]="formattedAssets" *ngIf="setItem==='digitalAssets'"></xn-flow-detail-logs>
+      <app-ensure *ngIf="setItem==='security'"></app-ensure>
+      <!-- <app-financing-map *ngIf="setItem==='grade'"></app-financing-map>-->
+    </div>
+  </div>
+</section>

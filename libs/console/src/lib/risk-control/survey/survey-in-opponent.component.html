@@ -1,0 +1,132 @@
+<!--上游5大客户-->
+<div class="title clearfix">
+  <span style="float: left;width: 150px">上游5大客户</span>
+  <div style="overflow: hidden">
+    <app-edit-button-component (change)="streamClick($event,'upStream')"
+                               [items]="{label:'upStream',value:info.upStream}"></app-edit-button-component>
+  </div>
+</div>
+
+<table class="table table-bordered table-striped table-max text-center">
+  <thead>
+  <tr class="label-text">
+    <th>企业名称</th>
+    <th>注册资本</th>
+    <th>经营状态</th>
+    <th>交易比重</th>
+    <th>成立日期</th>
+    <th>公司类型</th>
+    <th>所属行业</th>
+    <th>所属地区</th>
+    <th>主要产品</th>
+  </tr>
+  </thead>
+  <tbody>
+  <ng-container *ngIf="info.upStream.length;else blockUp">
+    <tr *ngFor="let item of info.upStream;let i=index" (click)="handleSelect(i,'upStream')"
+        [class.selected]="item['selected']">
+      <td>{{item.companyName}}</td>
+      <td>{{item.registerMoney | number:'1.2-3'}}</td>
+      <td>{{item.managementForms}}</td>
+      <td>{{item.tradeProportion}}</td>
+      <td>{{item.establishmentDate}}</td>
+      <td>{{item.compayType}}</td>
+      <td>{{(item.industryInvolved | xnJson)?.first + (item.industryInvolved | xnJson)?.second}}</td>
+      <td>{{(item.areaInvolved | xnJson)?.first + (item.areaInvolved | xnJson)?.second}}</td>
+      <td>{{item.mainProduct}}</td>
+    </tr>
+  </ng-container>
+  </tbody>
+</table>
+<ng-template #blockUp>
+  <tr>
+    <td colspan="9">
+      <div class="empty-message"></div>
+    </td>
+  </tr>
+</ng-template>
+<!--关联交易统计-->
+<div class="title clearfix">
+  <span style="float: left;width: 150px">下游5大客户</span>
+  <div style="overflow: hidden">
+    <app-edit-button-component (change)="streamClick($event,'downStream')"
+                               [items]="{value:info.downStream,label:'downStream'}"></app-edit-button-component>
+  </div>
+</div>
+<table class="table table-bordered table-striped table-max text-center">
+  <thead>
+  <tr class="label-text">
+    <th>企业名称</th>
+    <th>注册资本</th>
+    <th>经营状态</th>
+    <th>交易比重</th>
+    <th>成立日期</th>
+    <th>公司类型</th>
+    <th>所属行业</th>
+    <th>所属地区</th>
+    <th>主要产品</th>
+  </tr>
+  </thead>
+  <tbody>
+  <ng-container *ngIf="info.downStream.length;else blockDown">
+    <tr *ngFor="let item of info.downStream; let i=index" (click)="handleSelect(i,'downStream')"
+        [class.selected]="item['selected']">
+      <td>{{item.companyName}}</td>
+      <td>{{item.registerMoney | number:'1.2-3'}}</td>
+      <td>{{item.managementForms}}</td>
+      <td>{{item.tradeProportion}}</td>
+      <td>{{item.establishmentDate}}</td>
+      <td>{{item.compayType}}</td>
+      <td>{{(item.industryInvolved | xnJson)?.first + (item.industryInvolved | xnJson)?.second}}</td>
+      <td>{{(item.areaInvolved | xnJson)?.first + (item.areaInvolved | xnJson)?.second}}</td>
+      <td>{{item.mainProduct}}</td>
+    </tr>
+  </ng-container>
+  </tbody>
+</table>
+<ng-template #blockDown>
+  <tr>
+    <td colspan="9">
+      <div class="empty-message"></div>
+    </td>
+  </tr>
+</ng-template>
+<!--关联交易统计-->
+<div class="title clearfix">
+  <span style="float: left;width: 150px">关联交易统计</span>
+  <div style="overflow: hidden">
+    <app-edit-button-component (change)="streamClick($event,'link')"
+                               [items]="{label:'link',value:info.link}"></app-edit-button-component>
+  </div>
+</div>
+<table class="table table-bordered table-striped table-max text-center">
+  <thead>
+  <tr class="label-text">
+    <th>企业名称</th>
+    <th>交易笔数</th>
+    <th>交易金额</th>
+    <th>一年内交易比重</th>
+  </tr>
+  </thead>
+  <tbody>
+  <ng-container *ngIf="info.link.length;else blockLink">
+    <tr *ngFor="let item of info.link;let i=index" (click)="handleSelect(i,'link')" [class.selected]="item['selected']">
+      <td>{{item.companyName}}</td>
+      <td>{{item.dealCounts}}</td>
+      <td>{{item.dealMoney | number :'1.2-3'}}</td>
+      <td>{{item.tradeProportion}}</td>
+    </tr>
+  </ng-container>
+  </tbody>
+</table>
+<ng-template #blockLink>
+  <tr>
+    <td colspan="9">
+      <div class="empty-message"></div>
+    </td>
+  </tr>
+</ng-template>
+
+
+<!--test-->
+<!--<app-xn-edit-table-component [params]="inputValue"></app-xn-edit-table-component>-->

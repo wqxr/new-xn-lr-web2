@@ -1,0 +1,34 @@
+<modal #modal class="login-modal" [backdrop]="'static'" [keyboard]="false" [animation]="false">
+  <modal-header [showClose]="true">
+    <span class='spanClass'>{{headTitle}}</span>
+  </modal-header>
+  <modal-body>
+    <span class='spanClass'>请输入您尾号{{phoneNumber}}收到的验证码</span>
+    <div class="ipt-box-nick mb15-nick" style='margin-top:20px'>
+      <div class="ipts-box-nick">
+        <div class="ipt-fake-box">
+          <input type="tel" class="my_input"  (keydown)="deleteValue($event,0)" id="firstInput0" maxlength="1" [(ngModel)]='codeText[0]'
+            (keyup)='listenKeyUp($event,0)' >
+          <input type="tel" class="my_input" (keydown)="deleteValue($event,1)" maxlength="1" id="firstInput1" [(ngModel)]='codeText[1]'
+          (keyup)='listenKeyUp($event,1)'>
+          <input type="tel" class="my_input" (keydown)="deleteValue($event,2)" maxlength="1" id="firstInput2" [(ngModel)]='codeText[2]'
+          (keyup)='listenKeyUp($event,2)'>
+          <input type="tel" class="my_input" (keydown)="deleteValue($event,3)" maxlength="1" id="firstInput3" [(ngModel)]='codeText[3]'
+          (keyup)='listenKeyUp($event,3)'>
+          <input type="tel" class="my_input" (keydown)="deleteValue($event,4)" maxlength="1" id="firstInput4" [(ngModel)]='codeText[4]'
+          (keyup)='listenKeyUp($event,4)'>
+          <input type="tel" class="my_input" (keydown)="deleteValue($event,5)" maxlength="1" id="firstInput5" [(ngModel)]='codeText[5]'
+          (keyup)='listenKeyUp($event,5)'>
+        </div>
+      </div>
+
+    </div>
+  </modal-body>
+
+    <div class="col-sm-12 form-group text-center" style="margin-top: 30px;">
+      <!-- 头按钮 -->
+      <button class="btn btn-primary" [disabled]="!invalid()" (click)="submit()">下一步</button>
+      <button class="btn btn-danger" (click)="onCancel()">取消</button>
+
+    </div>
+</modal>

@@ -1,0 +1,10 @@
+<div [formGroup]="form" class="form-control">
+  <ng-container *ngIf="items.length > 0">
+    <div *ngFor="let info of items">
+      <a class="xn-click-a" style="margin-right: 10px;" (click)="showContract(info?.id, info?.secret,info?.label)">
+        《{{info?.label}}》
+      </a>
+    </div>
+  </ng-container>
+</div>
+<span class="xn-input-alert">{{alert}}</span>

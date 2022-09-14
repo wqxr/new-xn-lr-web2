@@ -1,0 +1,127 @@
+<section class="content-header">
+  <h1>{{tabConfig.title}}</h1>
+</section>
+<section class="content">
+  <div class="box">
+    <div class="box-body">
+      <div class="tab-content">
+        <div class="tab-pane active" style="padding: 15px 0">
+          <div style='clear:both'>
+            <div class="item-box col-sm-4" *ngFor="let row of shows">
+              <div class="item-label">
+                <label>{{row.title}}
+                  <span *ngIf="row.required !== false" class="required-label">*</span>
+                </label>
+              </div>
+              <div class="item-control">
+                <app-dynamic-input [row]="row" [form]="form" [formModule]="formModule"></app-dynamic-input>
+              </div>
+            </div>
+          </div>
+          <div class="col-sm-6 form-group text-left" style='clear:both'>
+            <!-- 左头按钮 -->
+            <ng-container
+              *ngIf="currentSubTab.edit && currentSubTab.edit.leftheadButtons && currentSubTab.edit.leftheadButtons.length">
+              <span *ngFor="let btn of currentSubTab.edit.leftheadButtons">
+                <button type="button" class="btn btn-primary" [disabled]="btn.disabled&&btn.disabled===true"
+                  (click)="handleHeadClick(btn)">{{btn.label}}</button>
+              </span>
+            </ng-container>
+          </div>
+          <div class="col-sm-6 form-group text-right">
+            <!-- 头按钮 -->
+            <ng-container
+              *ngIf="currentSubTab?.edit && currentSubTab?.edit?.headButtons && currentSubTab?.edit?.headButtons.length">
+              <span *ngFor="let btn of currentSubTab.edit.headButtons">
+                <ng-container>
+                  <button type="button" class="btn btn-primary" [disabled]="!selectedItems.length && btn.disabled && btn.disabled === true"
+                    (click)="handleHeadClick(btn)">{{btn.label}}</button>
+                </ng-container>
+              </span>
+            </ng-container>
+            <ng-container *ngIf="currentSubTab.canSearch">
+              <button class="btn btn-primary" (click)="searchMsg()">查询</button>
+              <button class="btn btn-danger" (click)="reset()">重置</button>
+            </ng-container>
+          </div>
+
+          <!--子列表-->
+          <table class="table table-bordered table-striped text-center">
+            <thead>
+              <tr class="table-head">
+                <th *ngIf="currentSubTab.canChecked" class="input-check">全选/取消
+                  <input type="checkbox" name="all" [checked]="isAllChecked()" [disabled]="!listInfo.length"
+                    (change)="checkAll()" />
+                </th>
+                <th>序号</th>
+                <!-- 表头，搜索功能 -->
+                <th *ngFor="let head of heads">
+                  <ng-container *ngIf="head.sort;else normal">
+                    <span [ngClass]="onSortClass(head?.value)" (click)="onSort(head?.value)">{{head.label}}</span>
+                  </ng-container>
+                  <ng-template #normal>{{head.label}}</ng-template>
+                </th>
+                <!-- 行操作 -->
+                <th
+                  *ngIf="currentSubTab?.edit &&currentSubTab?.edit?.rowButtons && currentSubTab?.edit?.rowButtons.length">
+                  操作
+                </th>
+              </tr>
+            </thead>
+            <tbody>
+              <ng-container *ngIf="listInfo.length;else block">
+                <tr *ngFor="let item of listInfo;let i=index">
+                  <td *ngIf="currentSubTab.canChecked">
+                    <input type="checkbox" name="single" [checked]="item['checked']" (change)="singleChecked(item,i)" />
+                  </td>
+                  <td>{{i + 1}}</td>
+                  <!-- 列内容 -->
+                  <td *ngFor="let head of currentSubTab.headText" style="max-width: 70px;word-wrap:break-word">
+                    <!-- 根据head type 类型配置显示方式 -->
+                    <ng-container [ngSwitch]="head.type">
+                      <ng-container *ngSwitchCase="'signType'">
+                        <div>{{item[head.value]|xnSelectTransform:'casignType'}}</div>
+                      </ng-container>
+                      <ng-container *ngSwitchCase="'status'">
+                        <div>{{item[head.value]|xnSelectTransform:'cfcasignStatus'}}</div>
+                      </ng-container>
+                      <ng-container *ngSwitchCase="'expressNum'">
+                        <a href="javaScript:void(0)" (click)="viewExpressNum(item.expressNum)">
+                          {{item[head.value]}}</a>
+                      </ng-container>
+                      <ng-container *ngSwitchDefault>
+                        <div [innerHTML]="item[head.value] | xnGatherType: {head:head,row:item}"></div>
+                      </ng-container>
+                    </ng-container>
+                  </td>
+
+                  <!-- 行按钮 -->
+                  <td
+                    *ngIf="currentSubTab?.edit &&currentSubTab?.edit?.rowButtons && currentSubTab?.edit?.rowButtons.length">
+                    <div *ngFor="let btn of currentSubTab.edit.rowButtons" class="operate-btn">
+                      <ng-container [ngSwitch]="btn.operate">
+                        <ng-container *ngSwitchDefault>
+                          <a href="javaScript:void(0)" (click)="handleRowClick(item,btn,i)">{{btn.label}}</a>
+                        </ng-container>
+                      </ng-container>
+                    </div>
+                  </td>
+                </tr>
+              </ng-container>
+            </tbody>
+          </table>
+        </div>
+        <xn-pagination [rows]="pageConfig.pageSize" [first]="pageConfig.first" [totalRecords]="pageConfig.total"
+          [pageSizeOptions]="[5,10,20,30,50,100]" (pageChange)="onPage($event)"></xn-pagination>
+      </div>
+    </div>
+  </div>
+</section>
+
+<ng-template #block>
+  <tr>
+    <td [attr.colspan]="calcAttrColspan()">
+      <div class="empty-message"></div>
+    </td>
+  </tr>
+</ng-template>

@@ -1,0 +1,64 @@
+<div style="padding-top: 7px;">
+  <!-- 视频录制说明 -->
+  <div *ngIf="!readonly" style="color: #f59a23;">
+    <h5 style="color: #f59a23; font-weight: bold;">视频录制要点：</h5>
+    <p> 1、确保录制环境光线充足、安静，录制视频人像完整，声音清晰</p>
+    <p>2、使用普通话完整朗读下面文字：</p>
+    <p>【本人为我司法定代表人，现声明：我司已充分知晓上行普惠平台相关规定、愿意遵守相关协议，开立和使用上海银行普惠记账簿为符合我司章程的法人行为。】</p>
+    <p>3、视频大小限制为 30M以内</p>
+  </div>
+  <!-- 选择上传方式 -->
+  <div *ngIf="!readonly" style="margin-bottom: 15px;">
+    <span>上传方式：</span>
+    <nz-radio-group [(ngModel)]="radioValue" (ngModelChange)="onModelChange($event)">
+      <label nz-radio nzValue="1">本地上传</label>
+      <label nz-radio nzValue="2">扫码上传</label>
+    </nz-radio-group>
+  </div>
+  <!-- 方法一：本地上传 -->
+  <div *ngIf="!readonly && showUploadType(localUpload)" style="display: flex;">
+    <div>方法一:&nbsp;&nbsp;&nbsp;&nbsp;</div>
+    <div class="input-group-btn">
+      <div class="btn btn-default btn-file"
+        style='float: left;width: 120px;border-radius: 3px;color:#3c8dbc;padding: 2px 5px !important;'>
+        <span class="hidden-xs xn-input-font">本地上传</span>
+        <input type="hidden">
+        <input type="file" (change)="onSelect($event)" [disabled]="delButtonStatus" (click)="onBeforeSelect($event)">
+      </div>
+      <p class='detailP' *ngIf="showP && !delButtonStatus">{{fileType}}</p>
+    </div>
+  </div>
+  <!-- 本地上传进度 -->
+  <nz-progress *ngIf="loading" [nzPercent]="loadingPercent" nzStatus="active"></nz-progress>
+
+  <!-- 方法二：手机扫码上传 -->
+  <div *ngIf="!readonly && showUploadType(scancodeUpload)">
+    <p>
+      <span>方法二:&nbsp;&nbsp;&nbsp;&nbsp;使用手机扫描二维码拍摄视频并上传</span>
+      <button *ngIf="!codeQr" style="margin-left: 10px;" nz-button nzType="primary" (click)="showQr()">
+        获取二维码
+      </button>
+    </p>
+    <!-- 二维码生成器 -->
+    <div *ngIf="codeQr">
+      <qrcode [qrdata]="qrdata" [width]="200" [errorCorrectionLevel]="'M'">
+      </qrcode>
+    </div>
+  </div>
+
+  <!-- 上传文件展示 -->
+  <table style="margin-bottom: 20px" class="table table-hover file-row-table" *ngIf="files?.length">
+    <tbody>
+      <tr *ngFor="let file of files">
+        <td>
+          <a class="xn-click-a" (click)="onView(file)">{{file.fileName}}</a>
+        </td>
+        <td>
+          <button type="button" *ngIf="!delButtonStatus" class="specialclose close" (click)="onRemove(file.fileId)">
+            <span>&times;</span></button>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+
+</div>

@@ -1,0 +1,187 @@
+<div [ngClass]="[store.isPhone ? 'h5-product-note' : 'product-note']">
+  <div class="banner">
+    <div class="caption">
+      <div class="title">票据通</div>
+      <div class='banner-title'>
+        <div class="title-desc">
+          <span>打造票据融资新时代</span>
+        </div>
+      </div>
+      <span class='redStyle'></span>
+    </div>
+  </div>
+  <div class="bill">
+    <div class="section">
+      <p>票据试算</p>
+      <span></span>
+    </div>
+    <div class="tip">/ 试算结果仅供参考，以传票询价结果为准 /</div>
+    <div class="interactive">
+      <nz-upload
+        #uploadComp
+        class="upload"
+        nzType="drag"
+        [ngClass]="fileStatus === UploadStatus.Recognized ? 'upload-recognized' : ''"
+        [nzMultiple]="false"
+        [nzShowUploadList]="false"
+        [nzAction]="uploadReq.nzAction"
+        [nzName]="uploadReq.nzName"
+        [nzData]="uploadReq.nzData"
+        [nzAccept]="'.pdf,.jpg,.jpeg,.png'"
+        [nzFileType]="'application/pdf,image/jpeg,image/jpg,image/png'"
+        [nzDisabled]="FileUploadIdentify"
+        (nzChange)="handleChange($event)"
+      >
+        <!-- 上传、初始展示的图标 -->
+        <ng-container *ngIf="fileStatus === UploadStatus.Uploading || !fileStatus">
+          <img src="../../assets/images/note/icon-upload.svg" alt="上传票据">
+        </ng-container>
+
+        <!-- 识别中展示的图标 -->
+        <p class="identifying-wrap" *ngIf="fileStatus === UploadStatus.Identifying">
+          <img class="identifying" src="../../assets/images/note/identifying.png" alt="识别中">
+        </p>
+
+        <!-- 识别失败、上传失败展示图标 -->
+        <p *ngIf="FileStatusFail">
+          <i class="icon" nz-icon [ngClass]="'upload-fail'" [nzIconfont]="'iconfail'"></i>
+        </p>
+
+        <!-- 初始提示 -->
+        <ng-container *ngIf="!fileStatus">
+          <p class="tip-1">请上传票据</p>
+          <p class="tip-2">（自动识别信息，如有错误可手动修改）</p>
+        </ng-container>
+
+        <!-- 上传中 -->
+        <ng-container *ngIf="fileStatus === UploadStatus.Uploading">
+          <p class="ant-upload-text">上传中……</p>
+        </ng-container>
+
+        <!-- 识别中 -->
+        <ng-container *ngIf="fileStatus === UploadStatus.Identifying">
+          <p class="ant-upload-text">识别中，请稍等……</p>
+        </ng-container>
+
+        <!-- 识别成功，文件展示 -->
+        <xn-file-viewer
+          class="file-view"
+          *ngIf="fileStatus === UploadStatus.Recognized"
+          [showTools]="false"
+          [files]="viewFiles"
+          [viewerHeight]="238"
+          (click)="handleFileView($event)"
+        ></xn-file-viewer>
+
+        <!-- 识别成功hover展示 -->
+        <button
+          (click)="handleReUpload($event)"
+          class="re-upload" nz-button nzType="primary" nzSize="small"
+        >重新上传
+        </button>
+
+        <!-- 上传失败 -->
+        <ng-container *ngIf="fileStatus === UploadStatus.Error">
+          <p class="ant-upload-text">上传失败</p>
+          <p class="ant-upload-hint" style="margin: 10px 0;">{{errorTip}}</p>
+          <button nz-button nzType="primary">重新上传</button>
+        </ng-container>
+
+        <!-- 识别失败 -->
+        <ng-container *ngIf="fileStatus === UploadStatus.Fail">
+          <p class="ant-upload-text">识别失败</p>
+          <p class="ant-upload-hint" style="margin: 10px 0;">{{errorTip}}</p>
+          <button nz-button nzType="primary">重新上传</button>
+        </ng-container>
+
+      </nz-upload>
+
+      <form nz-form [formGroup]="form" nzNoColon (ngSubmit)="submitForm()">
+        <div nz-row>
+          <div nz-col [nzSpan]="12">
+            <nz-form-item>
+              <nz-form-label [nzSpan]="8" nzRequired nzFor="code">票据号码</nz-form-label>
+              <nz-form-control [nzSpan]="16" nzErrorTip="请输入票据号码">
+                <input nz-input formControlName="code" id="code"/>
+              </nz-form-control>
+            </nz-form-item>
+          </div>
+          <div nz-col [nzSpan]="12">
+            <nz-form-item>
+              <nz-form-label [nzSpan]="8" nzRequired nzFor="money">票面金额(元)</nz-form-label>
+              <nz-form-control [nzSpan]="16" nzErrorTip="请输入票据金额">
+                <nz-input-number
+                  class="form-item-width"
+                  [nzFormatter]="format"
+                  [nzParser]="parser"
+                  formControlName="money"
+                  id="money"
+                >
+                </nz-input-number>
+              </nz-form-control>
+            </nz-form-item>
+          </div>
+        </div>
+
+        <div nz-row>
+          <div nz-col [nzSpan]="12">
+            <nz-form-item>
+              <nz-form-label [nzSpan]="8" nzRequired nzFor="acceptorName">承兑人全称</nz-form-label>
+              <nz-form-control [nzSpan]="16" nzErrorTip="请输入承兑人全称">
+                <input nz-input formControlName="acceptorName" id="acceptorName"/>
+              </nz-form-control>
+            </nz-form-item>
+          </div>
+          <div nz-col [nzSpan]="12">
+            <nz-form-item>
+              <nz-form-label [nzSpan]="8" nzRequired nzFor="dulDate">汇票到期日</nz-form-label>
+              <nz-form-control [nzSpan]="16" nzErrorTip="请输入汇票到期日">
+                <nz-date-picker
+                  class="form-item-width"
+                  formControlName="dulDate"
+                  id="dulDate"
+                ></nz-date-picker>
+              </nz-form-control>
+            </nz-form-item>
+          </div>
+        </div>
+
+        <div nz-row>
+          <div nz-col [nzSpan]="12">
+            <nz-form-item>
+              <nz-form-label [nzSpan]="8" nzRequired nzFor="date">出票日期</nz-form-label>
+              <nz-form-control [nzSpan]="16" nzErrorTip="请输入出票日期">
+                <nz-date-picker
+                  class="form-item-width"
+                  formControlName="date"
+                  id="date"
+                ></nz-date-picker>
+              </nz-form-control>
+            </nz-form-item>
+          </div>
+          <div nz-col [nzSpan]="12">
+            <nz-form-item>
+              <nz-form-label [nzSpan]="8" nzRequired nzFor="endorseTimes">背书次数</nz-form-label>
+              <nz-form-control [nzSpan]="16" nzErrorTip="请输入背书次数">
+                <input nz-input formControlName="endorseTimes" id="endorseTimes"/>
+              </nz-form-control>
+            </nz-form-item>
+          </div>
+        </div>
+
+        <nz-form-item class="btn-row">
+          <nz-form-control>
+            <button nz-button nzType="primary">询价</button>
+          </nz-form-control>
+        </nz-form-item>
+      </form>
+    </div>
+  </div>
+  <div class="guide">
+    <div class="section">
+      <p>操作指南</p>
+      <span></span>
+    </div>
+    <div class="ope"></div>
+  </div>
+</div>

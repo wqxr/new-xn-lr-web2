@@ -1,0 +1,229 @@
+<section class="content-header">
+  <h1>付款管理-金地</h1>
+</section>
+
+<section class="content" #contentSection>
+  <div class="box">
+    <div class="box-body">
+      <ul class="nav nav-tabs">
+        <li class="active">
+          <a class="xn-click-a" data-toggle="tab" (click)="initData('pay_no_do')">未打印付款指令</a>
+        </li>
+        <li>
+          <a class="xn-click-a" data-toggle="tab" (click)="initData('pay_do')">已打印待放款</a>
+        </li>
+        <li>
+          <a class="xn-click-a" data-toggle="tab" (click)="initData('pay')">已放款</a>
+        </li>
+      </ul>
+      <div class="tab-content">
+        <div class="tab-pane active" style="padding: 5px 0">
+          <div class="form-group col-sm-6 flex" *ngFor="let row of configObj[absType][type]">
+            <div class="title xn-control-label">
+              {{row.title}}
+              <span *ngIf="row.required !== false" class="required-label">*</span>
+            </div>
+            <div class="label">
+              <xn-input [row]="row" [form]="form[type]"></xn-input>
+            </div>
+          </div>
+          <div class="col-sm-12 text-right form-group">
+            <button *ngIf="showPayment && xn.user.roles.includes('admin')" [disabled]='completeMoneystyle'
+              class="btn btn-primary" (click)="backPreStep()">退回上一步</button>
+            <button *ngIf="type=== 'pay_do'" class="btn btn-primary" [disabled]='completeMoneystyle'
+              (click)="completeMoney()">完成放款</button>
+            <a class="btn btn-primary" (click)="downLoad()">下载所选交易信息表</a>
+            <a *ngIf="showPayment" class="btn btn-primary" (click)="financeDown()">出纳下载表格</a>
+            <a *ngIf="showPayment" class="btn btn-primary" (click)="accountingDown()">会计下载表格</a>
+            <a *ngIf="absType === 'gemdale' && showPayment" class="btn btn-primary" (click)="upload()">过桥资金-上传付款清单</a>
+            <a class="btn btn-primary" (click)="searchMsg()">查询</a>
+            <a class="btn btn-danger" (click)="reset()">重置</a>
+          </div>
+          <div>
+            <table class="table table-bordered table-striped text-center">
+              <thead>
+                <tr>
+                  <th>全选
+                    <input type="checkbox" name="all" [checked]="isAllChecked()" (change)="checkAll($event)" />
+                  </th>
+                  <th>交易 ID</th>
+                  <th>申请付款单位</th>
+                  <th>收款单位</th>
+                  <th>总部公司</th>
+                  <th *ngIf="absType==='vanke'">资产池</th>
+                  <th>合同编号</th>
+                  <th>发票号</th>
+                  <th>发票金额</th>
+                  <th>应收账款金额</th>
+                  <th *ngIf="showPayment">转让价格</th>
+                  <th>《付款确认书（总部致保理商/供应商）》编号</th>
+                  <th>《付款确认书（总部致保理商/供应商）》</th>
+                  <th>《付款确认书（总部致券商）》</th>
+                  <th *ngIf="absType === 'gemdale' || showPayment">起息时间</th>
+                  <th *ngIf="absType === 'gemdale'">资金渠道</th>
+                  <th *ngIf="showPayment">出纳下载次数</th>
+                  <th *ngIf="showPayment">会计下载次数</th>
+                  <th *ngIf="showPayment">保理到期日</th>
+                  <th *ngIf="absType==='vanke'">万科类型</th>
+                  <th>放款申请书</th>
+                  <th>实际放款日</th>
+                  <th>上传汇款凭证</th>
+                  <th *ngIf="showStop">操作</th>
+                  <th *ngIf="absType === 'vanke'">是否需要更正</th>
+                  <th *ngIf="absType === 'vanke' && uploadConfirm">实际付款确认书</th>
+                </tr>
+              </thead>
+              <tbody *ngIf="data.length > 0">
+                <tr *ngFor="let item of data">
+                  <td>
+                    <input type="checkbox" name="dataChk[]" (change)="onItemCheckChanged(item)"
+                      [(ngModel)]="item.checked" />
+                  </td>
+                  <td>
+                    <a href="javaScript:void (0)" (click)="viewProcess(item)">{{item.mainFlowId}}</a>
+                  </td>
+                  <td>{{item.projectCompany}}</td>
+                  <td>{{item.debtUnit}}</td>
+                  <td>{{item.headquarters | xnSelectTransform : enterpriserSelectItems}}</td>
+                  <td *ngIf="absType==='vanke'">{{item.capitalPoolName}}</td>
+                  <td>{{item.contractId}}</td>
+                  <!-- 万科abs发票 -->
+                  <td style="word-wrap:break-word;word-break: break-all;">
+                    <span *ngIf="item.invoiceLength <= 2">{{item.invoiceNumLocal}}</span>
+                    <a *ngIf="item.invoiceLength > 2" class="xn-click-a"
+                      (click)="viewAllInvoice(item)">{{item.invoiceNumLocal}}</a>
+                  </td>
+                  <td>{{item.realInvoiceAmount | number:'1.2-3'}}</td>
+                  <td>{{item.receivable | number:'1.2-3'}}</td>
+                  <td *ngIf="showPayment">{{item.changePay | number:'1.2-3'}}</td>
+                  <!-- 万科付款确认书 -->
+                  <ng-container *ngIf="absType==='vanke'">
+                    <td>
+                      <span *ngIf="item.payConfirmId && item.payConfirmId !== ''">{{item.payConfirmId}}</span>
+                      <span *ngIf="!(item.payConfirmId && item.payConfirmId !== '')">/</span>
+                    </td>
+                    <td>
+                      <a class="xn-click-a" (click)="newFlow(item)" *ngIf="showPay">点击上传</a>
+                      <ng-container *ngIf="!!item.pdfProjectFiles && !!!item.pdfProjectFiles[0].label">
+                        <a class='xn-click-a' *ngIf='item' (click)='ViewContract(item.pdfProjectFiles)'>文件</a>
+                      </ng-container>
+                      <p *ngFor="let item of item.pdfProjectFiles">
+                        <a class="xn-click-a" (click)="showContract(item.id, item.secret,item.label)"
+                          *ngIf="item.label">{{item.label}}</a>
+                      </p>
+                      <!-- <p *ngFor="let item of item.pdfProjectFiles | xnJson">
+                        <a class="xn-click-a" (click)="onView(item)" *ngIf="item.fileName">{{item.fileName}}</a>
+                        <a class="xn-click-a" (click)="showContract(item.id, item.secret,item.label)"
+                          *ngIf="item.label">{{item.label}}</a>
+                      </p> -->
+                    </td>
+                  </ng-container>
+                  <!-- 金地付款确认书 -->
+                  <ng-container *ngIf="absType==='gemdale'">
+                    <td>{{item.payConfirmId}}</td>
+                    <td>
+                      <div *ngFor="let sub of item.payFile | xnJson; let i=index">
+                        <a href="javaScript:void(0)"
+                          (click)="showContract(sub.id,sub.secret,sub.label)">{{sub.label}}</a>
+                      </div>
+                    </td>
+                  </ng-container>
+                  <td>{{item.photoCopy07}}</td>
+                  <!--起息时间-->
+                  <td *ngIf="absType === 'gemdale' || showPayment">
+                    {{item?.payDate | xnDate: 'date'}}
+                  </td>
+                  <!--资金渠道-->
+                  <td *ngIf="absType === 'gemdale'">
+                    {{item?.moneyChannel | xnSelectTransform: moneyChannelOptions}}
+                  </td>
+                  <!--财务下载次数-->
+                  <td *ngIf="showPayment" [ngClass]="{'hightLine': item?.loadTimes > 0}">
+                    {{item?.loadTimes}}
+                  </td>
+                  <!--会计下载次数-->
+                  <td *ngIf="showPayment" [ngClass]="{'hightLine': item?.accountingTimes > 0}">
+                    {{item?.accountingTimes}}
+                  </td>
+                  <!-- 金地-保理到期日-->
+                  <td *ngIf="absType === 'gemdale' && showPayment">
+                    <span
+                      *ngIf="item.factoringEndDate == null || item.factoringEndDate === 0 || item.factoringEndDate === ''">/</span>
+                    <span
+                      *ngIf="!!item.factoringEndDate && item.factoringEndDate !== 0 && item.factoringEndDate !== ''">{{item?.factoringEndDate}}</span>
+                  </td>
+                  <!--万科-->
+                  <td *ngIf="absType === 'vanke' && showPayment">
+                    <span
+                      *ngIf="item.confirmationExpiryTime == null || item.confirmationExpiryTime === 0 || item.confirmationExpiryTime === ''">/</span>
+                    <span
+                      *ngIf="!!item.confirmationExpiryTime && item.confirmationExpiryTime !== 0 && item.confirmationExpiryTime !== ''">
+                      {{item?.confirmationExpiryTime | xnDate: 'date'}}</span>
+                  </td>
+                  <td *ngIf="absType === 'vanke' && showPayment">{{item?.wkType | xnTransfer:'wkType'}}</td>
+
+                  <!-- 实际放款申请书 -->
+                  <td>
+                    <a class="xn-click-a"
+                      (click)="showContract(item?.payPdf?.id, item?.payPdf?.secret,item?.payPdf?.label)"
+                      *ngIf="item.payPdf !== ''">{{item.payPdf.label}}</a>
+                    <span *ngIf="item.payPdf === ''">/</span>
+                  </td>
+                  <td>
+                    <span *ngIf="item.payTime === 0">/</span>
+                    <span *ngIf="item.payTime !== 0">{{item.payTime | xnDate: 'date'}}</span>
+                  </td>
+                  <!-- 上传付款凭证 -->
+                  <td>
+                    <a class="xn-click-a" (click)="paymentFlow(item)" *ngIf="showPayment">点击上传</a>
+                    <div *ngIf="!showPayment">
+                      <div *ngIf="item.payPz === ''">
+                        /
+                      </div>
+                      <div *ngIf="item.payPz !== ''">
+                        <p *ngFor="let item of item.payPz | xnJson">
+                          <a class="xn-click-a" (click)="onView(item)">{{item.fileName}}</a>
+                        </p>
+                      </div>
+                    </div>
+                  </td>
+                  <td *ngIf="showStop">
+                    <a class="xn-click-a" (click)="cancleFlow(item)">中止操作</a>
+                    <a *ngIf="absType === 'gemdale'" class="xn-click-a" (click)="backFlow(item)">退回</a>
+                  </td>
+                  <td *ngIf="absType === 'vanke'" [ngClass]="{'red': item.opFlag === 1}">{{ item.opFlag === 1 ? '需要更正' :
+                  '不需要更正' }}
+                  </td>
+                  <!-- 实际付款确认书 -->
+                  <td *ngIf="absType === 'vanke' && uploadConfirm">
+                    <ng-container *ngIf=" item.opFlag === 1">
+                      <ng-template #block>
+                        <a href="javaScript:void (0)" (click)="modifyQrsFlow(item)">点击上传</a>
+                      </ng-template>
+                      <ng-container *ngIf="item?.payQrs&&item?.payQrs.length>0;else block">
+                        <p *ngFor="let item2 of item?.payQrs  | xnJson">
+                          <a class="xn-click-a" (click)="onView(item2)">{{item2.fileName}}</a>
+                        </p>
+                      </ng-container>
+                    </ng-container>
+                    <span *ngIf="item.opFlag!==1">/</span>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+          <div class="print">
+            <span>应付账款金额汇总：{{ totalAmount() | xnMoney }}</span>
+            <span style="margin-left:30px">转让价格汇总：{{transferAmount()|xnMoney}}</span>
+            <span style="margin-left:30px">笔数：{{getcount()}}</span>
+            <div class="pull-right" *ngIf="showPrint">
+              <button class="xn-click-a btn btn-primary" [disabled]="invoild()" (click)="somePrint()">批量打印</button>
+            </div>
+          </div>
+          <xn-pagination [rows]="pageSize" [first]="first" [totalRecords]="total" [pageSizeOptions]="[10,20,30,50,100]"
+            (pageChange)="onPage($event)"></xn-pagination>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>

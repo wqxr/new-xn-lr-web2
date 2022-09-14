@@ -1,0 +1,53 @@
+<section class="content-header">
+  <h1>
+    对账结果
+  </h1>
+</section>
+
+<section class="content">
+  <div class="box">
+    <!-- /.box-header -->
+    <div class="box-body">
+      <div class="tab-content">
+        <div class="tab-pane active" style="padding: 15px 0">
+          <div class="item-box  form-group col-sm-4" *ngFor="let row of checker1">
+            <div class="item-label col-sm-2" style='padding-top:5px'>
+              <label style='min-width: 180px !important'>{{row.title}}:</label>
+            </div>
+            <div class="item-control col-sm-8">
+              <xn-input [row]="row" [form]="form1"></xn-input>
+            </div>
+          </div>
+          <div class="col-sm-12 form-group clearfix text-right">
+            <button class="btn btn-primary" (click)="searchMsg()">查询</button>
+            <button class="btn btn-danger" (click)="reset()">重置</button>
+          </div>
+          <table class="table table-bordered table-striped">
+            <thead>
+              <tr>
+                <th>日期</th>
+                <th>对账结果</th>
+                <th>操作</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let item of items">
+                <td>{{item.checkDate}}</td>
+                <td>{{item.status | xnSelectTransform:'reconciliationResult'}}</td>
+                <td>
+                  <a class="xn-click-a" (click)="getReconciliationList(item)">对账详情</a>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+
+          <xn-pagination [rows]="pageConfig.pageSize" [first]="pageConfig.first" [totalRecords]="pageConfig.total"
+            [pageSizeOptions]="[10,50,100]" (pageChange)="onPage($event)"></xn-pagination>
+        </div>
+      </div>
+    </div>
+    <!-- /.box-body -->
+  </div>
+
+</section>
+<!-- /.content -->

@@ -1,0 +1,267 @@
+<!-- 内容头部 -->
+<section class="content-header">
+  <h1>工商状态</h1>
+  <ol class="breadcrumb">
+      <li class="active">本页数据均为企查查提供，非平台企业资料，更新时间：{{changeDate | xnDate: 'longdatetime'}}</li>
+  </ol>
+</section>
+<!-- 内容头部 /-->
+
+<!-- 正文区域 -->
+<section class="content">
+  <div class="box box-success">
+      <!-- <div class="box-header">
+                  <h3 class="box-title">iCheck - Checkbox &amp; Radio Inputs</h3>
+              </div> -->
+      <div class="box-body">
+          <div class="row">
+              <!-- col (left) -->
+              <div class="col-md-11">
+                  <div class="row">
+                      <div class="form-group col-md-12">
+                          <!-- 基本信息 -->
+                          <div class="capital-pool">
+                              <div id='nav-1' class="col-sm-1 xn-control-label required-label-strong">基本信息</div>
+                              <div class="col-sm-11">
+                                  <ng-container *ngFor="let row of rows;let i = index">
+                                      <div class="item-box col-sm-6" style="padding-right: 0px;">
+                                          <div class="item-label">
+                                              <label>{{row.title}}</label>
+                                          </div>
+                                          <div class="item-control" [tooltip]="row.value" placement="top">
+                                              <app-dynamic-input [row]="row" [form]="mainForm"
+                                                  [formModule]="formModule" [svrConfig]="svrConfig">
+                                              </app-dynamic-input>
+                                          </div>
+                                      </div>
+                                  </ng-container>
+                              </div>
+                          </div>
+                      </div>
+                  </div>
+
+                  <ng-container *ngFor="let tableListConfig of tableConfigAll">
+                      <div class="row">
+                          <div class="form-group col-md-12">
+                              <!-- 列表 -->
+                              <div class="capital-list">
+                                  <div [id]='tableListConfig.id'
+                                      class="col-sm-1 xn-control-label required-label-strong">
+                                      {{tableListConfig.title}}</div>
+                                  <div class="col-sm-11">
+                                      <div class="table-responsive no-padding">
+                                          <table class="table text-center table-hover table-bordered">
+                                              <thead>
+                                                  <tr>
+                                                      <!-- 表头 -->
+                                                      <th style='width: 5%'>序号</th>
+                                                      <th *ngFor="let head of tableListConfig.tableConfig.heads"
+                                                          [ngStyle]="{width: head.width}">
+                                                          {{head.label}}
+                                                      </th>
+                                                  </tr>
+                                              </thead>
+                                              <tbody>
+                                                  <ng-container *ngIf="tableListConfig.data.length;else block">
+                                                      <tr *ngFor="let item of tableListConfig.data;let i=index">
+                                                        <!--序号-->
+                                                          <td style='width: 5%'>{{i + 1}}</td>
+                                                          <!-- 列内容 -->
+                                                          <td *ngFor="let head of tableListConfig.tableConfig.heads"
+                                                              [ngStyle]="{width: head.width}">
+                                                              <!-- 根据head type 类型配置显示方式 -->
+                                                              <ng-container [ngSwitch]="head.type">
+                                                                  <!-- 合同类型 -->
+                                                                  <ng-container *ngSwitchCase="'contractType'">
+                                                                      <div [innerHTML]="item[head.value] | xnSelectTransform:'vankeContracttype'"></div>
+                                                                  </ng-container>
+                                                                  <!-- 金额类型 -->
+                                                                  <ng-container *ngSwitchCase="'receiveType'">
+                                                                      <div [innerHTML]="item[head.value] | xnSelectTransform:'receiveType'"></div>
+                                                                  </ng-container>
+                                                                  <!-- 时间 -->
+                                                                  <ng-container *ngSwitchCase="'date'">
+                                                                    <ng-container *ngIf="item[head.value]">
+                                                                      <div>{{item[head.value] | xnDate: 'date'}}</div>
+                                                                    </ng-container>
+                                                                  </ng-container>
+                                                                  <ng-container *ngSwitchCase="'longdatetime'">
+                                                                    <ng-container *ngIf="item[head.value]">
+                                                                      <div>{{item[head.value] | xnDate: 'longdatetime'}}</div>
+                                                                    </ng-container>
+                                                                  </ng-container>
+                                                                  <!-- rate -->
+                                                                  <ng-container *ngSwitchCase="'rate'">
+                                                                    <ng-container *ngIf="item[head.value] || item[head.value] === 0">
+                                                                      <div>{{item[head.value] | number: '1.2-2'}}%</div>
+                                                                    </ng-container>
+                                                                  </ng-container>
+                                                                  <!-- stringList -->
+                                                                  <ng-container *ngSwitchCase="'stringList'">
+                                                                    <ng-container *ngIf="item[head.value] && item[head.value].length">
+                                                                      <div class="over-list" [innerHTML]="item[head.value].join('<br/>')"></div>
+                                                                    </ng-container>
+                                                                  </ng-container>
+                                                                  <!-- 金额 -->
+                                                                  <ng-container *ngSwitchCase="'money'">
+                                                                      <ng-container *ngIf="!!item[head.value] || item[head.value]===0">
+                                                                        <div class="over-list">{{item[head.value] | number: '1.2-2' | xnMoney}}</div>
+                                                                      </ng-container>
+                                                                  </ng-container>
+                                                                  <!-- 默认 -->
+                                                                  <ng-container *ngSwitchDefault>
+                                                                      <div  class="over-list" [innerHTML]="item[head.value]"></div>
+                                                                  </ng-container>
+                                                              </ng-container>
+                                                          </td>
+                                                      </tr>
+                                                  </ng-container>
+                                              </tbody>
+                                              <tfoot *ngIf="tableListConfig.census && tableListConfig.census.length">
+                                                  <tr>
+                                                      <ng-container *ngFor="let foothead of tableListConfig.census">
+                                                          <th [ngStyle]="{width: foothead.width}">
+                                                              <!-- 根据head type 类型配置显示方式 -->
+                                                              <ng-container [ngSwitch]="foothead.type">
+                                                                  <!-- 金额类型 -->
+                                                                  <ng-container *ngSwitchCase="'money'">
+                                                                      <ng-container *ngIf="!!foothead.value || foothead.value===0">
+                                                                          <div>{{foothead.value | xnMoney}}</div>
+                                                                      </ng-container>
+                                                                  </ng-container>
+                                                                  <!-- 默认 -->
+                                                                  <ng-container *ngSwitchDefault>
+                                                                      <div [innerHTML]="foothead.value"></div>
+                                                                  </ng-container>
+                                                              </ng-container>
+                                                          </th>
+                                                      </ng-container>
+                                                  </tr>
+                                              </tfoot>
+                                          </table>
+                                      </div>
+                                      <ng-template #block>
+                                          <tr>
+                                            <td [attr.colspan]="tableListConfig.tableConfig.heads.length + 1">
+                                              <div class="empty-message"></div>
+                                            </td>
+                                          </tr>
+                                        </ng-template>
+
+                                      <ng-container *ngIf="tableListConfig.hasPagination">
+                                          <div class="box-tools">
+                                              <ul class="pagination pagination-sm no-margin pull-right">
+                                                  <li>
+                                                      <a href="javascript:void(0)">共{{pageConfig[tableListConfig.checkerId].total}}条记录</a>
+                                                  </li>
+                                                  <li [ngClass]="{'disabled': isPageDisabled(tableListConfig.checkerId, 'first')}" class="paginate_button previous" 
+                                                    >
+                                                      <a href="javascript:void(0)" title="首页" (click)="firstPage(tableListConfig.checkerId)">
+                                                          <span class="fa fa-step-backward"></span>
+                                                      </a>
+                                                  </li>
+                                                  <li [ngClass]="{'disabled': isPageDisabled(tableListConfig.checkerId, 'prev')}" class="paginate_button previous"
+                                                      >
+                                                      <a href="javascript:void(0)" title="上一页" (click)="previousPage(tableListConfig.checkerId)">
+                                                          <span class="fa fa-backward"></span>
+                                                      </a>
+                                                  </li>
+                                                  <ng-container *ngIf="!!pageConfig[tableListConfig.checkerId].pageArr.length;else emptyLi">
+                                                    <li *ngFor="let pages of pageConfig[tableListConfig.checkerId].pageArr" [ngClass]="{'active': isPageActive(tableListConfig.checkerId, pages)}">
+                                                        <a href="javascript:void(0)" (click)="selectPage(tableListConfig.checkerId, pages)">{{pages}}</a>
+                                                    </li>
+                                                  </ng-container>
+                                                  <ng-template #emptyLi>
+                                                    <li class="active">
+                                                        <a href="javascript:void(0)" (click)="selectPage(tableListConfig.checkerId, 1)">1</a>
+                                                    </li>
+                                                  </ng-template>
+                                                  <li [ngClass]="{'disabled': isPageDisabled(tableListConfig.checkerId, 'next')}" class="paginate_button next"
+                                                      >
+                                                      <a href="javascript:void(0)" title="下一页" (click)="nextPage(tableListConfig.checkerId)">
+                                                          <span class="fa fa-forward"></span>
+                                                      </a>
+                                                  </li>
+                                                  <li [ngClass]="{'disabled': isPageDisabled(tableListConfig.checkerId, 'last')}" class="paginate_button next"
+                                                      >
+                                                      <a href="javascript:void(0)" title="尾页" (click)="lastPage(tableListConfig.checkerId)">
+                                                          <span class="fa fa-step-forward"></span>
+                                                      </a>
+                                                  </li>
+                                              </ul>                                            
+                                          </div>
+                                      </ng-container>
+
+                                  </div>
+                              </div>
+                          </div>
+                      </div>
+                  </ng-container>
+              </div>
+
+              <!-- col (right) 进度导航条-->
+              <div class="col-md-1">
+                  <div id="article-nav" class="ax_default" style="z-index: 1001;">
+                      <div class="panel-state" data-label="State1">
+                          <div id="pane-content" class="panel_state_content">
+                              <!-- (矩形) -->
+                              <ng-container *ngFor="let nav of processBarConfig;let i=index">
+                                  <div class="ax_default label rectangle" [attr.data-label]="i"
+                                      [ngStyle]="{top: (17+i*35)+'px'}" (click)="onNavClick(nav,$event, i)">
+                                      <div class="nav-div" [ngStyle]="{'background-color': nav.divCss ? '#13c2c247':''}" tabindex="0">
+                                      </div>
+                                      <!-- Unnamed () -->
+                                      <div class="nav-text text">
+                                          <p>
+                                              <a [href]="nav.id" [ngClass]="{'nav-text-a': !nav.aCss}">{{nav.value}}</a>
+                                          </p>
+                                      </div>
+                                  </div>
+                              </ng-container>
+
+                              <!-- Unnamed (垂直线) -->
+                              <div id="nav-line" class="ax_default line">
+                                  <img class="nav-line-img img " src="/assets/admin-lte/img/u4698.png">
+                                  <!-- Unnamed () -->
+                                  <div class="nav-line-text text">
+                                      <p><span></span></p>
+                                  </div>
+                              </div>
+
+                              <!-- Unnamed (椭圆形) -->
+                              <div id="nav-top-point" class="ax_default ellipse">
+                                  <img class="nav-point-img img" src="/assets/admin-lte/img/u4700.png">
+                                  <!-- Unnamed () -->
+                                  <div class="nav-line-text text">
+                                      <p><span></span></p>
+                                  </div>
+                              </div>
+
+                              <!-- Unnamed (椭圆形) -->
+                              <div id="nav-bottom-point" class="ax_default ellipse">
+                                  <img class="nav-point-img img" src="/assets/admin-lte/img/u4700.png">
+                                  <!-- Unnamed () -->
+                                  <div class="nav-line-text text">
+                                      <p><span></span></p>
+                                  </div>
+                              </div>
+
+                              <!-- Unnamed (矩形) -->
+                              <!-- <div id="nav-download" class="ax_default box_1" style="cursor: pointer;"
+                              (click)="onGoBack($event)">
+                                  <div class="nav-btn-div" tabindex="0"></div>
+                                  <div class="nav-download-text text">
+                                      <p><span>返回上一页</span></p>
+                                  </div>
+                              </div> -->
+
+                          </div>
+                      </div>
+                  </div>
+              </div>
+
+          </div>
+      </div>
+  </div>
+</section>
+<!-- 正文区域 /-->

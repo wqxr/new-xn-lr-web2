@@ -1,0 +1,79 @@
+<xn-page-header-wrapper>
+  <div class="box-content">
+    <!-- 搜索项 -->
+    <div style="padding-top: 15px">
+      <xn-search-form
+        [fields]="showFields"
+        [model]="formModel"
+        (search)="onSearch($event)"
+        (reset)="onReset()"
+      >
+      </xn-search-form>
+    </div>
+    <nz-divider></nz-divider>
+    <div class="right-button">
+      <button nz-button nzType="primary" (click)="uploadAccountList()">
+        上传开户名单
+      </button>
+    </div>
+    <div class="table-content">
+      <xn-table
+        [data]="listInfo"
+        [columns]="columns"
+        [size]="'middle'"
+        [loading]="loading"
+        [scroll]="{ y: '400px' }"
+        [page]="{
+          front: false,
+          total: '共' + pageConfig.total + '条记录',
+          showQuickJumper: true,
+          showSize: true,
+          pageSizes: [5, 10, 20, 30, 50, 100]
+        }"
+        [widthMode]="{
+          type: 'strict',
+          strictBehavior: 'truncate'
+        }"
+        [total]="pageConfig.total"
+        [pageIndex]="pageConfig.pageIndex"
+        [pageSize]="pageConfig.pageSize"
+        (change)="handleTableChange($event)"
+      >
+        <!-- 账户状态 -->
+        <ng-template
+          xn-table-row="accountStatusTpl"
+          let-item
+          let-index="index"
+          let-column="column"
+        >
+          {{ item[column.index] | xnOption: accountStatusOptions }}
+        </ng-template>
+        <!-- 金额 -->
+        <ng-template
+          xn-table-row="balanceTpl"
+          let-item
+          let-index="index"
+          let-column="column"
+        >
+          <ng-container *ngIf="openAccountStatus(item)">
+            <ng-container *ngIf="showMoney(item); else hideMoney">
+              {{ item[column.index] }} 元
+            </ng-container>
+          </ng-container>
+          <ng-template #hideMoney>
+            <a (click)="viewBalance(item)">
+              <i
+                style="font-size: 20px"
+                nz-icon
+                nzType="eye"
+                nzTheme="outline"
+              ></i>
+            </a>
+          </ng-template>
+        </ng-template>
+      </xn-table>
+      <!-- 平台审核配置 -->
+      <xn-account-flow-list></xn-account-flow-list>
+    </div>
+  </div>
+</xn-page-header-wrapper>

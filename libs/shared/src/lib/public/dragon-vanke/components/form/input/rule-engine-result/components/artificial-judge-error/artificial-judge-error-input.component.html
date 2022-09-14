@@ -1,0 +1,104 @@
+<section>
+  <div *ngFor="let standard of standardErrorList; let standIndex=index">
+    <div nz-row>
+      <div nz-col nzSpan="12" class="rule-index">
+        <span>{{ standard.fileTypeName }}</span>
+      </div>
+      <div *ngIf="!readonly" nz-col nzSpan="12" style="text-align: right;margin-bottom: 5px;">
+        <button style="margin-right: 15px;" nz-button [nzSize]="size" nzType="primary"
+          [disabled]="!selectedItems?.length" (click)="batchUploadFile($event)">补充文件</button>
+        <button nz-button [nzSize]="size" nzType="primary" [disabled]="!selectedItems?.length"
+          (click)="batchAddMark($event)">添加备注</button>
+      </div>
+    </div>
+    <xn-table
+      [data]="standard.standardList"
+      [columns]="headsColumns"
+      [size]="'middle'"
+      [scroll]="{ y: '400px' }"
+      [size]="'middle'"
+      [page]="{ show: false }"
+      [widthMode]="{ type: 'strict', strictBehavior: 'truncate' }"
+      [rowClassName]="rowClassName"
+      (change)="handleTableChange($event,standard.fileTypeId)"
+    >
+      <!-- 人工审核标准 -->
+      <ng-template
+        xn-table-row="StandardTpl"
+        let-item
+        let-index="index"
+        let-column="column"
+      >
+        <ng-container *ngFor="let tip of item[column.index]">
+          <tr>
+            <span>
+              <i
+                style="color: #FB9E17;"
+                nz-icon
+                nzType="exclamation-circle"
+                nzTheme="outline"
+              ></i>
+              <span style="margin-left: 5px">{{ tip.standardName }}</span>
+            </span>
+          </tr>
+        </ng-container>
+      </ng-template>
+      <!-- 操作 -->
+      <ng-template
+        xn-table-row="ActionTpl"
+        let-item
+        let-index="index"
+        let-column="column"
+      >
+      <!-- 根据审核标准展示操作按钮 -->
+        <ng-container *ngFor="let standard of item['standardNameList']; let i = index">
+          <tr>
+            <p *ngIf="!standard.file && !readonly">
+              <a
+                href="javaScript:void(0)"
+                (click)="uploadApprovalForm(item, standard,standIndex, index, i)"
+                >补充说明</a
+              >
+            </p>
+            <ng-container *ngIf="standard.file">
+              <p>
+                <a href="javaScript:void(0)" (click)="onView(standard.file)"
+                >查看文件</a
+              >
+              </p>
+             <p>
+              <a
+              *ngIf="!readonly"
+              href="javaScript:void(0)"
+              (click)="uploadApprovalForm(item, standard, standIndex, index, i)"
+              >修改文件</a
+            >
+             </p>
+            </ng-container>
+            <ng-container *ngIf="standard.userRemark">
+              <p>
+                <a
+                nz-tooltip
+                [nzTooltipTitle]="standard.userRemark"
+                >查看备注</a
+              >
+              </p>
+             <p>
+              <a *ngIf="!readonly" (click)="editMark(item, standard, standIndex, index, i)"
+              >修改备注</a
+            >
+             </p>
+
+
+            </ng-container>
+            <p *ngIf="!readonly && !standard.userRemark">
+              <a href="javaScript:void(0)" (click)="addMark(item, standard, standIndex, index, i)"
+                >添加备注</a
+              >
+            </p>
+          </tr>
+        </ng-container>
+      </ng-template>
+    </xn-table>
+  </div>
+</section>

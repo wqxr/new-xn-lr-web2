@@ -1,0 +1,168 @@
+<!--发票查验列表-->
+<section class="content-header">
+  <h1>发票查验</h1>
+</section>
+<section class="content">
+  <div class="box">
+    <div class="box-body">
+      <div class="tab-content">
+        <div class="tab-pane active" style="padding: 15px 0">
+          <div style='clear:both'>
+            <div class="item-box col-sm-6" *ngFor="let row of shows.slice(0, 4)">
+              <div class="item-label">
+                <label>{{row.title}}
+                  <span *ngIf="row.required !== false" class="required-label">*</span>
+                </label>
+              </div>
+              <div class="item-control">
+                <app-dynamic-input [row]="row" [form]="form" [formModule]="formModule"></app-dynamic-input>
+              </div>
+            </div>
+          </div>
+          <div [hidden]='!displayShow' style='clear:both'>
+            <div class="item-box col-sm-6" *ngFor="let row of shows.slice(4, shows.length)">
+              <div class="item-label">
+                <label>{{row.title}}
+                  <span *ngIf="row.required !== false" class="required-label">*</span>
+                </label>
+              </div>
+              <div class="item-control">
+                <app-dynamic-input [row]="row" [form]="form" [formModule]="formModule"></app-dynamic-input>
+              </div>
+            </div>
+          </div>
+          <div>
+            <div class="center-block" style='border-bottom: 1px solid #ccc;float:left'></div>
+            <div class="center-block" style='border-bottom: 1px solid #ccc;float:right'></div>
+          </div>
+          <div class='showClass' (click)='displayShow = !displayShow'>
+            <a *ngIf='!displayShow' class="xn-click-a"><i class="fa fa-angle-double-down" aria-hidden="true"></i>更多
+            </a>
+            <a class="xn-click-a" *ngIf='displayShow'><i class="fa fa-angle-double-up" aria-hidden="true"></i>收起
+            </a>
+          </div>
+          <div class="col-sm-12 form-group text-right">
+            <div class="btn-group">
+              <ng-container *ngIf="currentSubTab?.edit?.headButtons?.length">
+                <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown"
+                        aria-expanded="false">批量操作
+                  <span class="caret"></span>
+                </button>
+                <ul class="dropdown-menu" role="menu">
+                  <ng-container *ngFor="let btn of currentSubTab?.edit?.headButtons">
+                    <ng-container [ngSwitch]="btn.operate">
+                      <ng-container *ngSwitchDefault>
+                        <li *ngIf="(btn.operate === 'check' && (isAdmin||xn.user.roles.includes('loaned'))) || btn.operate === 'export'">
+                          <a (click)="handleHeadClick(btn)"
+                             [ngClass]="{'disabled': btn.disabled === true}">{{btn.label}}</a>
+                        </li>
+                      </ng-container>
+                    </ng-container>
+                  </ng-container>
+<!--                  <li>-->
+<!--                    <a (click)="getCustomlist()">自定义列表</a>-->
+<!--                  </li>-->
+                </ul>
+              </ng-container>
+            </div>
+            <ng-container>
+              <button class="btn btn-primary" (click)="onViewCheckList()">发票查验记录</button>
+              <button class="btn btn-primary" (click)="onSearch()">查询</button>
+              <button class="btn btn-danger" (click)="reset()">重置</button>
+            </ng-container>
+          </div>
+          <!--子列表-->
+          <table class="table table-bordered text-center">
+            <thead>
+              <tr class="table-head">
+                <th style='width: 50px;padding: 8px 0;'>
+                  <input type="checkbox" style="cursor: pointer;" [disabled]="!list.length" (change)="handleAllSelect()"
+                         [checked]="isAllSelected" />全选/取消
+                </th>
+                <th>序号</th>
+                <th *ngFor="let head of heads">
+                  <ng-container *ngIf="head.sort;else normal">
+                    <span [ngClass]="onSortClass(head?.value)" (click)="onSort(head?.value)">{{head.label}}</span>
+                  </ng-container>
+                  <ng-template #normal>{{head.label}}</ng-template>
+                </th>
+              </tr>
+            </thead>
+            <tbody>
+              <ng-container *ngIf="listInfo.length;else block">
+                <ng-container *ngFor="let item of listInfo;let itemIndex = index;">
+                  <tr *ngFor="let row of item.arr;let index = index;">
+                    <td style='width:50px'>
+                      <input type="checkbox" style="cursor: pointer;" [checked]="row.checked"
+                             (change)="onSelected(row)" />
+                    </td>
+                    <td [ngClass]="[listInfo.length > 1 && itemIndex % 2 === 0 ? 'gray-row' : '']">{{row.serial}}</td>
+                    <ng-container *ngFor="let head of currentSubTab.headText">
+                      <td *ngIf="head.merge && index === 0" [rowSpan]="item.arr.length" [ngClass]="[listInfo.length > 1 && itemIndex % 2 === 0 ? 'gray-row' : '']" [ngStyle]="{fontWeight: head.value === 'xx1' ? 'bolder' : 'normal'}">
+                        <ng-container [ngSwitch]="head.type">
+                          <div [ngStyle]="{display: 'flex', flexWrap: 'wrap', maxWidth: '70px', alignItems: 'center', minHeight: (40*item.arr.length) + 'px', wordBreak: 'break-all'}">
+                            <ng-container *ngSwitchCase="'money'">
+                              {{row[head.value] | xnMoney}}
+                            </ng-container>
+                            <ng-container *ngSwitchDefault>
+                              {{row[head.value]}}
+                            </ng-container>
+                          </div>
+                        </ng-container>
+                      </td>
+                      <td *ngIf="!head.merge" [ngClass]="[listInfo.length > 1 && itemIndex % 2 === 0 ? 'gray-row' : '']">
+                        <ng-container [ngSwitch]="head.type">
+                          <ng-container *ngSwitchCase="'productType'">
+                            {{ { 'type':row['type'],'selectBank':row['selectBank'] } | xnSelectDeepTransform:'productType_dw' }}
+                          </ng-container>
+                          <ng-container *ngSwitchCase="'date'">
+                            {{row[head.value] | xnDate: 'date'}}
+                          </ng-container>
+                          <ng-container *ngSwitchCase="'dateTime'">
+                            {{row[head.value] | xnDate: 'longdatetime'}}
+                          </ng-container>
+                          <ng-container *ngSwitchCase="'money'">
+                            {{row[head.value] | xnMoney}}
+                          </ng-container>
+                          <ng-container *ngSwitchCase="'checkStatus'">
+                            <!--1表示发票状态验证成功，状态正常。异常状态的发票显示红色-->
+                            <span [ngStyle]="{color: row[head.value] !== 1 ? '#e15f63' : ''}">{{ row[head.value] | xnSelectTransform: 'invoiceCheckStatus' }}</span>
+                          </ng-container>
+                          <ng-container *ngSwitchCase="'invoiceType'">
+                            {{ row[head.value] | xnSelectTransform: 'invoiceType' }}
+                          </ng-container>
+                          <ng-container *ngSwitchDefault>
+                            <div [innerHTML]="row[head.value]"></div>
+                          </ng-container>
+                        </ng-container>
+                      </td>
+                    </ng-container>
+                  </tr>
+                </ng-container>
+              </ng-container>
+            </tbody>
+          </table>
+        </div>
+        <xn-pagination [rows]="pageConfig.pageSize" [first]="pageConfig.first" [totalRecords]="pageConfig.total"
+                       [pageSizeOptions]="[5,10,20,30,50,100,1000]" (pageChange)="onPage($event)"></xn-pagination>
+      </div>
+    </div>
+  </div>
+</section>
+
+<ng-template #block>
+  <tr>
+    <td [attr.colspan]="calcAttrColspan()">
+      <div class="empty-message"></div>
+    </td>
+  </tr>
+</ng-template>
+
+<ng-template #tplContent let-params>
+  <div style="font-weight: bold;">导出发票查验数据：</div>
+  <ng-container *ngFor="let item of params.radios">
+    <div style="display: inline-block;height: 38px;line-height: 38px;">
+      <label [ngStyle]="{fontWeight: 'normal', marginRight: '6px', cursor: item.value === 1 && !selectedItems.length ? 'default' : 'pointer', color: item.value === 1 && !selectedItems.length ? '#ccc' : 'unset'}" [for]="item.label">{{item.label}}</label> <input [disabled]="item.value === 1 && !selectedItems.length" [ngStyle]="{marginRight: '30px', cursor: item.value === 1 && !selectedItems.length ? 'not-allowed' : 'pointer'}" [id]="item.label" [value]="item.value" type="radio" name="export" [(ngModel)]="exportType">
+    </div>
+  </ng-container>
+</ng-template>

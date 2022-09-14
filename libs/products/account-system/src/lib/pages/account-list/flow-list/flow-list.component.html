@@ -1,0 +1,58 @@
+<div class="table-content">
+  <p>平台审核配置：</p>
+  <xn-table
+    [data]="listInfo"
+    [columns]="columns"
+    [size]="'middle'"
+    [scroll]="{ y: '400px' }"
+    [widthMode]="{
+      type: 'strict',
+      strictBehavior: 'truncate'
+    }"
+  >
+    <!-- 流程类型 -->
+    <ng-template
+      xn-table-row="flowTypeTpl"
+      let-item
+      let-index="index"
+      let-column="column"
+    >
+      {{ item[column.index] | xnOption: flowTypeOptions }}
+    </ng-template>
+    <!-- 流程类型 -->
+    <ng-template
+      xn-table-row="yesTpl"
+      let-item
+      let-index="index"
+      let-column="column"
+    >
+      {{ item[column.index] ? "是" : "否" }}
+    </ng-template>
+  </xn-table>
+</div>
+
+<xn-account-form-modal
+  [form]="modelForm"
+  title="审核配置"
+  [width]="600"
+  [isVisible]="isVisible"
+  [fields]="formFields"
+  [options]="modalOptions"
+  [model]="formModel"
+  [modalFooter]="cFooter"
+  [maskClosable]="false"
+  (cancel)="closeModal()"
+>
+  <ng-template #cFooter>
+    <button nz-button nzType="default" (click)="closeModal()">取消</button>
+    <button
+      nz-button
+      nzType="primary"
+      [nzLoading]="isLoading"
+      [disabled]="!modelForm?.valid"
+      (click)="modalOK()"
+    >
+      提交
+    </button>
+  </ng-template>
+</xn-account-form-modal>

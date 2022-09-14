@@ -1,0 +1,55 @@
+:host .treeview-header .row-filter {
+  margin-bottom: 0.5rem;
+  margin: auto 0;
+}
+
+:host .treeview-header .row-all .bi {
+	cursor: pointer;
+}
+
+:host .treeview-container .row-item {
+  margin-bottom: 0.3rem;
+  display: flex;
+	flex-wrap: nowrap;
+}
+
+:host .treeview-container .row-item .bi {
+	cursor: pointer;
+	margin-right: 0.3rem;
+}
+
+.treeview-container {
+	overflow-y: auto;
+	padding-right: 0.3rem;
+}
+
+.treeview-text {
+	padding: 0.3rem 0;
+	white-space: nowrap;
+}
+
+.form-check-inline {
+  display: inline-flex;
+  align-items: center;
+  padding-left: 0;
+  margin-right: .75rem;
+}
+
+.row-all {
+  margin-top: 1rem;
+}
+
+.row-all .form-check {
+  padding-left: 0.8rem;
+}
+
+.form-check {
+  position: relative;
+  padding-left: 1.25rem;
+}
+
+.form-check label.form-check-label {
+  margin: 0;
+  padding-left: 1rem;
+  margin-bottom: -5px;
+}

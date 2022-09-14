@@ -1,0 +1,280 @@
+<div class="box no-top box-zichan">
+  <div class="number-money-record" *ngIf="!showRecord">
+    <div class="record-box">
+      <div class="arrow arrow-left" [ngClass]="onArrowCss('left')" (click)="prevPage()"></div>
+      <div class="record-ul">
+        <div class="record-li" *ngFor="let asset of pageAssets; let i = index">
+          <div class="asset-wrap" [ngClass]="onCss(i)" (click)="onClick(i)">
+          <div class="asset-name">{{asset.assetName}}</div>
+          <div class="asset-code-wrap">
+            <div class="asset-code-tit-wrap clear">
+              <h1 class="asset-code-tit">资产ID</h1>
+              <div class="asset-code-time">{{asset.createTime | xnDate:'datetime'}}</div>
+            </div>
+            <div class="asset-code">
+              {{asset.bcAssetId}}
+            </div>
+          </div>
+          <div class="asset-info-wrap">
+            <div class="asset-info-group">
+              <h2 class="asset-info-tit">发行量
+                <span class="assetUnit">({{asset.assetUnit}})</span>
+              </h2>
+              <div class="asset-info-content">{{asset.assetCount}}</div>
+            </div>
+            <div class="asset-info-group asset-info-group-trade">
+              <h2 class="asset-info-tit">变更次数</h2>
+              <div class="asset-info-content asset-info-trade">
+                {{asset.logs.length}}
+              </div>
+            </div>
+          </div>
+        </div>
+        </div>
+      </div>
+      <div class="arrow arrow-right" [ngClass]="onArrowCss('right')" (click)="nextPage()"></div>
+    </div>
+
+    <div class="record-line" *ngFor="let log of nowAsset.logs">
+      <div class="record-title">
+        <span class="number">{{log.bcAssetLogId}}</span>
+        <span class="text">变更数量: {{log.amount}}({{nowAsset.assetUnit}})</span>
+      </div>
+      <div class="record-message">
+        <p class="change-text">{{log.transactionType | xnZichan}}</p>
+        <span class="change-number">{{log.sourceAddress}}</span>
+        <span class="change-icon" (click)="toDetail(log.assetLogId)">>></span>
+        <span class="change-number">{{log.destAddress}}</span>
+        <span class="change-last">{{log.amount}}</span>
+        <p class="change-time">变更时间: {{log.transactionTime | xnDate: 'longdatetime'}}</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- 单条记录详情 -->
+  <div class="number-detail-record" *ngIf="showRecord">
+    <div class="change-base">
+      <div class="base-title">变更基本信息
+        <a class="btn btn-danger btn-return pull-right" (click)="showRecord=false;">返回上一级</a>
+      </div>
+      <div class="base-line">
+        <div class="base-describe">变更记录ID：</div>
+        <div class="base-message">{{changeBase.bcAssetLogId}}</div>
+      </div>
+      <div class="base-line">
+        <div class="base-describe">变更发起方：</div>
+        <div class="base-message">{{changeBase.sourceAddress}} ({{changeBase.sourceAppName}})</div>
+      </div>
+      <div class="base-line">
+        <div class="base-describe">变更接收方：</div>
+        <div class="base-message">{{changeBase.destAddress}} ({{changeBase.destAppName}})</div>
+      </div>
+      <div class="base-line">
+        <div class="base-describe">资产名称：</div>
+        <div class="base-message">{{nowAsset.assetName}}</div>
+      </div>
+      <div class="base-line">
+        <div class="base-describe">变更数量：</div>
+        <div class="base-message">{{changeBase.amount}}({{nowAsset.assetUnit}})</div>
+      </div>
+      <div class="base-line">
+        <div class="base-describe">变更时间：</div>
+        <div class="base-message">{{changeBase.transactionTime | xnDate: 'longdatetime'}}</div>
+      </div>
+      <div class="base-line">
+        <div class="base-describe">变更类型：</div>
+        <div class="base-message">{{changeBase.transactionType | xnZichan}}</div>
+      </div>
+    </div>
+
+    <div class="change-base" *ngIf="transactionData !== ''">
+      <div class="base-title">变更详细信息</div>
+      <div class="base-line" *ngIf="commodities">
+        <div class="base-describe">商品信息：</div>
+        <div class="base-message">
+          <table class="table table-bordered table-striped">
+            <tr>
+              <th>名称</th>
+              <th>规格型号</th>
+              <th>数量</th>
+              <th>单位</th>
+              <th>价格</th>
+            </tr>
+            <tr *ngFor="let comi of commodities">
+              <td>{{comi.name}}</td>
+              <td>{{comi.specification}}</td>
+              <td>{{comi.quantity}}</td>
+              <td>{{comi.unit}}</td>
+              <td>{{comi.sum}}</td>
+            </tr>
+          </table>
+        </div>
+      </div>
+      <div class="base-line" *ngIf="transactionData.contractName">
+        <div class="base-describe">合同名称：</div>
+        <div class="base-message">{{transactionData.contractName}}</div>
+      </div>
+      <div class="base-line" *ngIf="transactionData.contractNumber">
+        <div class="base-describe">交易合同号：</div>
+        <div class="base-message">{{transactionData.contractNumber}}</div>
+      </div>
+      <div class="base-line" *ngIf="transactionData.purchaserName">
+        <div class="base-describe">下游采购商名称：</div>
+        <div class="base-message">{{transactionData.purchaserName}}</div>
+      </div>
+      <div class="base-line" *ngIf="transactionData.purchaserID">
+        <div class="base-describe">下游采购商在核心企业系统内的ID：</div>
+        <div class="base-message">{{transactionData.purchaserID}}</div>
+      </div>
+      <div class="base-line" *ngIf="transactionData.purchaseOrderID">
+        <div class="base-describe">下游向核心企业下订单的ID：</div>
+        <div class="base-message">{{transactionData.purchaseOrderID}}</div>
+      </div>
+      <div class="base-line" *ngIf="transactionData.purchaseOrderTime">
+        <div class="base-describe">下订单时间：</div>
+        <div class="base-message">{{transactionData.purchaseOrderTime | xnDate: 'stringtodate'}}</div>
+      </div>
+      <div class="base-line" *ngIf="transactionData.depositRate">
+        <div class="base-describe">保证金比例：</div>
+        <div class="base-message">{{transactionData.depositRate}}</div>
+      </div>
+      <div class="base-line" *ngIf="transactionData.supplierName">
+        <div class="base-describe">上游供应商名称：</div>
+        <div class="base-message">{{transactionData.supplierName}}</div>
+      </div>
+      <div class="base-line" *ngIf="transactionData.supplierID">
+        <div class="base-describe">上游供应商在核心企业系统内的ID：</div>
+        <div class="base-message">{{transactionData.supplierID}}</div>
+      </div>
+      <div class="base-line" *ngIf="transactionData.supplyOrderID">
+        <div class="base-describe">向上游供应商下订单的订单ID：</div>
+        <div class="base-message">{{transactionData.supplyOrderID}}</div>
+      </div>
+      <div class="base-line" *ngIf="transactionData.supplyOrderTime">
+        <div class="base-describe">下订单时间：</div>
+        <div class="base-message">{{transactionData.supplyOrderTime | xnDate: 'stringtodate'}}</div>
+      </div>
+
+      <!-- 向上游付款账务 -->
+      <div class="base-line" *ngIf="transactionData.receivablesCompany">
+        <div class="base-describe">付款方名字:</div>
+        <div class="base-message">{{transactionData.receivablesCompany}}</div>
+      </div>
+      <div class="base-line" *ngIf="transactionData.receivablesAmount">
+        <div class="base-describe">付款金额:</div>
+        <div class="base-message">{{transactionData.receivablesAmount | xnMoney}}{{transactionData.currencyCode === 'CNY' ? '元': ''}}</div>
+      </div>
+      <div class="base-line" *ngIf="transactionData.currencyCode && transactionData.receivablesCompany">
+        <div class="base-describe">付款货币:</div>
+        <div class="base-message">{{transactionData.currencyCode === 'CNY' ? '人民币': transactionData.currencyCode }}</div>
+      </div>
+      <div class="base-line" *ngIf="transactionData.receivablesType">
+        <div class="base-describe">付款方式:</div>
+        <div class="base-message">{{transactionData.receivablesType | xnPayType}}</div>
+      </div>
+      <div class="base-line" *ngIf="transactionData.receivablesTime">
+        <div class="base-describe">付款时间:</div>
+        <div class="base-message">{{transactionData.receivablesTime | xnDate: 'stringtodate'}}</div>
+      </div>
+
+      <!-- 下游付款账务接口 -->
+      <div class="base-line" *ngIf="transactionData.paymentCompany">
+        <div class="base-describe">付款方名字:</div>
+        <div class="base-message">{{transactionData.paymentCompany}}</div>
+      </div>
+      <div class="base-line" *ngIf="transactionData.paymentAmount">
+        <div class="base-describe">付款金额:</div>
+        <div class="base-message">{{transactionData.paymentAmount | xnMoney}}{{transactionData.currencyCode === 'CNY' ? '元': ''}}</div>
+      </div>
+      <div class="base-line" *ngIf="transactionData.currencyCode && transactionData.paymentCompany">
+        <div class="base-describe">付款货币:</div>
+        <div class="base-message">{{transactionData.currencyCode === 'CNY' ? '人民币': transactionData.currencyCode }}</div>
+      </div>
+      <div class="base-line" *ngIf="transactionData.paymentType">
+        <div class="base-describe">付款方式:</div>
+        <div class="base-message">{{transactionData.paymentType | xnPayType}}</div>
+      </div>
+      <div class="base-line" *ngIf="transactionData.paymentTime">
+        <div class="base-describe">付款时间:</div>
+        <div class="base-message">{{transactionData.paymentTime | xnDate: 'stringtodate'}}</div>
+      </div>
+
+      <div class="base-line" *ngIf="transactionData.storageName">
+        <div class="base-describe">仓库名：</div>
+        <div class="base-message">{{transactionData.storageName}}</div>
+      </div>
+      <div class="base-line" *ngIf="transactionData.storageType">
+        <div class="base-describe">仓库类型：</div>
+        <div class="base-message">{{transactionData.storageType}}</div>
+      </div>
+      <div class="base-line" *ngIf="transactionData.storageAddress">
+        <div class="base-describe">仓库地点：</div>
+        <div class="base-message">{{transactionData.storageAddress}}</div>
+      </div>
+      <div class="base-line" *ngIf="transactionData.storageOwner">
+        <div class="base-describe">仓库所属企业：</div>
+        <div class="base-message">{{transactionData.storageOwner}}</div>
+      </div>
+      <div class="base-line" *ngIf="transactionData.stackInfo">
+        <div class="base-describe">堆放信息/位置：</div>
+        <div class="base-message">{{transactionData.stackInfo}}</div>
+      </div>
+      <div class="base-line" *ngIf="transactionData.stockInID">
+        <div class="base-describe">入库单ID：</div>
+        <div class="base-message">{{transactionData.stockInID}}</div>
+      </div>
+      <div class="base-line" *ngIf="transactionData.stockInTime">
+        <div class="base-describe">入库时间：</div>
+        <div class="base-message">{{transactionData.stockInTime | xnDate: 'stringtodate'}}</div>
+      </div>
+      <div class="base-line" *ngIf="transactionData.stockInUser">
+        <div class="base-describe">入库人名称：</div>
+        <div class="base-message">{{transactionData.stockInUser}}</div>
+      </div>
+      <div class="base-line" *ngIf="transactionData.stockInUserContact">
+        <div class="base-describe">入库人联系方式：</div>
+        <div class="base-message">{{transactionData.stockInUserContact}}</div>
+      </div>
+      <div class="base-line" *ngIf="transactionData.stockInTrackingNo">
+        <div class="base-describe">入库物流单号：</div>
+        <div class="base-message">{{transactionData.stockInTrackingNo}}</div>
+      </div>
+      <div class="base-line" *ngIf="transactionData.stockInExpressCompany">
+        <div class="base-describe">入库物流公司：</div>
+        <div class="base-message">{{transactionData.stockInExpressCompany}}</div>
+      </div>
+      <div class="base-line" *ngIf="transactionData.stockOutID">
+        <div class="base-describe">出库单ID：</div>
+        <div class="base-message">{{transactionData.stockOutID}}</div>
+      </div>
+      <div class="base-line" *ngIf="transactionData.stockOutTime">
+        <div class="base-describe">出库时间：</div>
+        <div class="base-message">{{transactionData.stockOutTime | xnDate: 'stringtodate'}}</div>
+      </div>
+      <div class="base-line" *ngIf="transactionData.stockOutUser">
+        <div class="base-describe">出库人名称：</div>
+        <div class="base-message">{{transactionData.stockOutUser}}</div>
+      </div>
+      <div class="base-line" *ngIf="transactionData.stockOutUserContact">
+        <div class="base-describe">出库人联系方式：</div>
+        <div class="base-message">{{transactionData.stockOutUserContact}}</div>
+      </div>
+      <div class="base-line" *ngIf="transactionData.stockOutTrackingNo">
+        <div class="base-describe">出库物流单号：</div>
+        <div class="base-message">{{transactionData.stockOutTrackingNo}}</div>
+      </div>
+      <div class="base-line" *ngIf="transactionData.stockOutExpressCompany">
+        <div class="base-describe">出库物流公司：</div>
+        <div class="base-message">{{transactionData.stockOutExpressCompany}}</div>
+      </div>
+      <div class="base-line" *ngIf="transactionData.enclosures && transactionData.enclosures.length > 0">
+        <div class="base-describe">附件：</div>
+        <div class="base-message">
+          <div class="base-files" *ngFor="let item of transactionData.enclosures" (click)="getPhoto(item.id, item.ext)">
+            <a>{{item.name}}</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,265 @@
+<!doctype html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html>
+
+<head>
+  <meta charset="utf-8">
+  <title>恒泽保理-产融联盟专业服务商</title>
+  <base href="/">
+  <meta name="description" content="恒泽保理是专业从事商业信用生态建设的创新型企业，依托业内顶尖的金融、科技、供应链管理、运行和风控团队以及专业学术顾问，运用大数据、云计算、区块链以及人工智能等最新的互联网技术，创新推出“链融科技供应链服务平台（https://www.lrscft.com)（以下简称“平台”）。平台汇聚了商品交易商（行业龙头生产企业、供应链企业及其上下游企业）、金融服务商（银行、保险、基金）等各参与方，致力于提供合规、安全、便利、共赢的供应链金融服务，为商品交易商寻资金、为金融服务商找资产、为链上企业控风险、为上下游客户降成本。">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=0">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+<!--  <meta http-equiv="Content-Security-Policy" content="upgrade-insecure-requests">-->
+  <link rel="icon" type="image/x-icon" href="favicon.ico">
+
+  <link rel="stylesheet" href="./assets/plugins/dataTables.bootstrap.css" />
+  <link rel="stylesheet" href="./assets/plugins/editor.xiangna.css" />
+  <link rel="stylesheet" href="./assets/plugins/xiangna.css" />
+  <link rel="stylesheet" href="./assets/plugins/bootstrap-3.3.7/css/bootstrap.min.css" />
+  <link rel="stylesheet" href="./assets/plugins/admin-lte-all-skins.min.css" />
+  <link rel="stylesheet" href="./assets/plugins/admin-lte.css" />
+  <link rel="stylesheet" href="./assets/plugins/buttons.bootstrap.min.css" />
+  <link rel="stylesheet" href="./assets/plugins/select.bootstrap.min.css" />
+  <link rel="stylesheet" href="./assets/plugins/daterangepicker.min.css" />
+  <link rel="stylesheet" href="./assets/plugins/datepicker3.css" />
+  <link rel="stylesheet" href="./assets/plugins/swiper-3.4.2.min.css" />
+  <link rel="stylesheet" href="./assets/plugins/font-awesome-4.7.0/css/font-awesome.min.css" />
+  <link rel="stylesheet" href="./assets/plugins/bootstrap-multiselect/dist/css/bootstrap-multiselect.css" />
+  <link rel="stylesheet" href="./assets/plugins/bootstrap-multiselect/dist/less/bootstrap-multiselect.less" />
+
+  <style type="text/css">
+    body,
+    html {
+      height: 100%;
+    }
+
+    .app-loading {
+      position: relative;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      height: 100%;
+    }
+
+    .app-loading .spinner {
+      height: 200px;
+      width: 200px;
+      animation: rotate 2s linear infinite;
+      transform-origin: center center;
+      position: absolute;
+      top: 0;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      margin: auto;
+    }
+
+    .app-loading .spinner .path {
+      stroke-dasharray: 1, 200;
+      stroke-dashoffset: 0;
+      animation: dash 1.5s ease-in-out infinite;
+      stroke-linecap: round;
+      stroke: #ddd;
+    }
+
+    @keyframes rotate {
+      100% {
+        transform: rotate(360deg);
+      }
+    }
+
+    @keyframes dash {
+      0% {
+        stroke-dasharray: 1, 200;
+        stroke-dashoffset: 0;
+      }
+      50% {
+        stroke-dasharray: 89, 200;
+        stroke-dashoffset: -35px;
+      }
+      100% {
+        stroke-dasharray: 89, 200;
+        stroke-dashoffset: -124px;
+      }
+    }
+    /*banner大图片预加载*/
+    body:after {
+      content: '';
+      display: block;
+      position: absolute;
+      background-image:
+        url(assets/images/banner/banner-homepage.png),
+        url(assets/images/banner/banner-product.png),
+        url(assets/images/banner/banner-technology.png),
+        url(assets/images/banner/banner-news.png),
+        url(assets/images/banner/banner-about.png),
+        url(assets/images/banner/banner-help.png),
+        url(assets/images/banner/banner-registry.png),
+        url(assets/images/bg/bg-login-bg.png),
+        url(assets/images/bg/bg-managepractices.png),
+        url(assets/images/pic/solution.png),
+        url(assets/images/pic/company-pic.png),
+        url(assets/images/pic/culture-pic.png),
+        url(assets/images/pic/product-puhuitong.png),
+        url(assets/images/pic/product-baoliyun.png),
+        url(assets/images/pic/product-zhengquantong.png),
+        url(assets/images/company/com-hexinqiye.png),
+        url(assets/images/company/com-bank.png),
+        url(assets/images/company/com-shangquan.png),
+        url(assets/images/company/com-xintuo.png),
+        url(assets/images/company/com-zhongjie.png),
+        url(assets/images/banner/banner-homepage-h5.png),
+        url(assets/images/banner/banner-product-h5.png),
+        url(assets/images/banner/banner-technology-h5.png),
+        url(assets/images/banner/banner-news-h5.png),
+        url(assets/images/banner/banner-about-h5.png),
+        url(assets/images/bg/bg-managepractices-h5.png),
+        url(assets/images/company/com-hexinqiye-h5.png),
+        url(assets/images/company/com-bank-h5.png),
+        url(assets/images/company/com-shangquan-h5.png),
+        url(assets/images/company/com-xintuo-h5.png),
+        url(assets/images/company/com-zhongjie-h5.png);
+      background-position: -10000px -10000px;
+      background-repeat: no-repeat;
+      width: 0;
+      height: 0;
+    }
+  </style>
+  <script>
+    function detectIE() {
+      var ua = window.navigator.userAgent;
+      var msie = ua.indexOf('MSIE ');
+
+      if (msie > 0) {
+        // IE 10 or older => return version number
+        return parseInt(ua.substring(msie + 5, ua.indexOf('.', msie)), 10);
+      }
+
+      var trident = ua.indexOf('Trident/');
+      if (trident > 0) {
+        // IE 11 => return version number
+        var rv = ua.indexOf('rv:');
+        return parseInt(ua.substring(rv + 3, ua.indexOf('.', rv)), 10);
+      }
+
+      var edge = ua.indexOf('Edge/');
+      if (edge > 0) {
+        // Edge (IE 12+) => return version number
+        return parseInt(ua.substring(edge + 5, ua.indexOf('.', edge)), 10);
+      }
+
+      // other browser
+      return false;
+    }
+
+    var version = detectIE();
+
+    if (version && version < 10) {
+      window.location.href = '/assets/unsupported-browser.html';
+    }
+
+
+    const userAgent = navigator.userAgent.toLowerCase();
+    const re = /(ipad|iphone os|midp|rv:1.2.3.4|ucweb|android|windows ce|windows mobile)/i;
+    const isPhone = re.test(userAgent);
+    window.sessionStorage.setItem('isPhone', JSON.stringify(isPhone));
+    if (isPhone) {
+      var dpr, rem, scale;
+      var doc = document.documentElement;
+      var font = document.createElement('style');
+      var meta = document.querySelector('meta[name="viewport"]');
+      dpr = window.devicePixelRatio || 1;
+      if (dpr && dpr > 1) {
+        dpr = 2
+      } else {
+        dpr = 1
+      }
+      rem = doc.clientWidth * dpr / 10;
+      scale = 1 / dpr;
+
+
+      // 设置viewport，进行缩放，达到高清效果
+      // meta.setAttribute('content', 'width=' + dpr * doc.clientWidth + ',initial-scale=' + scale + ',maximum-scale=' + scale + ', minimum-scale=' + scale + ',user-scalable=no');
+
+      // 设置data-dpr属性，留作的css hack之用
+      doc.setAttribute('data-dpr', dpr);
+
+      // 动态写入样式
+      // docEl.firstElementChild.appendChild(fontEl);
+      // fontEl.innerHTML = 'html{font-size:' + rem + 'px!important;}';
+      doc.style.fontSize = `${rem}px`
+      // 给js调用的，某一dpr下rem和px之间的转换函数
+      window.rem2px = function(v) {
+        v = parseFloat(v);
+        return v * rem;
+      };
+      window.px2rem = function(v) {
+        v = parseFloat(v);
+        return v / rem;
+      };
+
+      window.dpr = dpr;
+      window.rem = rem;
+    }
+
+    const protocolStr = document.location.protocol
+    switch (protocolStr) {
+      case 'https:':
+        window.HOST_TYPE = '2'
+        break
+      default:
+        break
+    }
+    // const doc = document.documentElement;
+    // function resize() {
+    //   const clientWidth = window.innerWidth;
+    //   if (clientWidth < 320) {
+    //     doc.style.fontSize = `100px`
+    //   } else {
+    //
+    //   }
+    // }
+    // window.onresize = function () {
+    //   resize()
+    // }
+    // resize()
+
+
+  </script>
+
+</head>
+
+<body class="hold-transition skin-blue sidebar-mini">
+  <app-root>
+    <div class="app-loading">
+      加载中……
+      <!-- <div class="logo"></div>
+      <svg class="spinner" viewBox="25 25 50 50">
+        <circle class="path" cx="50" cy="50" r="20" fill="none" stroke-width="2" stroke-miterlimit="10" />
+      </svg> -->
+    </div>
+  </app-root>
+</body>
+
+  <script src="./assets/plugins/jquery.min.js"></script>
+  <!-- <script src="./assets/plugins/swiper-3.4.2.min.js"></script> -->
+  <script src="./assets/plugins/bootstrap.min.js"></script>
+  <script src="./assets/plugins/bootstrap-datepicker.min.js"></script>
+  <script src="./assets/plugins/admin-lte-app.min.js"></script>
+  <script src="./assets/plugins/jquery.dataTables.min.js" defer></script>
+  <script src="./assets/plugins/dataTables.bootstrap.min.js" defer></script>
+  <script src="./assets/plugins/dataTables.buttons.min.js" defer></script>
+  <script src="./assets/plugins/dataTables.editor.min.js" defer></script>
+  <script src="./assets/plugins/editor.xiangna.js" defer></script>
+  <script src="./assets/plugins/dataTables.select.min.js" defer></script>
+  <script src="./assets/plugins/crypto-js-core.min.js" defer></script>
+  <script src="./assets/plugins/crypto-js-sha256.min.js" defer></script>
+  <script src="./assets/plugins/buttons.bootstrap.min.js" defer></script>
+  <script src="./assets/plugins/bootstrap-daterangepicker-moment.min.js" defer></script>
+  <script src="./assets/plugins/daterangepicker.min.js" defer></script>
+  <script src="./assets/plugins/bootstrap-datepicker.zh-CN.min.js" defer></script>
+  <script src="./assets/plugins/echarts.min.js" defer></script>
+  <script src="./assets/plugins/bootstrap-multiselect/dist/js/bootstrap-multiselect.js" defer></script>
+  <script type="text/javascript" src="https://api.map.baidu.com/getscript?v=2.0&ak=a9IE79lqDz2fBWPyi0OcflNwd1fcDNhV&s=1" defer></script>
+  <script src="./assets/plugins/watermark.js" defer></script>
+</html>

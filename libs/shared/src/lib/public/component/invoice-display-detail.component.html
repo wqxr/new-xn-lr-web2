@@ -1,0 +1,52 @@
+<section class="content">
+  <div class="box">
+    <div class="box-header">
+      <h3 class="box-title">{{tableTitle}}</h3>
+    </div>
+    <div class="box-body">
+      <ng-container *ngIf="!!jindieDetail">
+        <div style="padding: 2rem;">
+          <ul class="list-group">
+            <li class="list-group-item" *ngFor="let item of jindieDetail.list">
+              <label style="margin-right: 1rem">{{item.label}}:</label>{{item.value}}
+            </li>
+          </ul>
+
+          <table class="table table-hover table-bordered" *ngIf="!!jindieDetail">
+            <thead>
+            <tr>
+              <th>货物名称</th>
+              <th>商品编号</th>
+              <th>规格型号</th>
+              <th>数量</th>
+              <th>单价不税</th>
+              <th>单位</th>
+              <th>税额</th>
+              <th>税率</th>
+              <th>金额不含税</th>
+            </tr>
+            </thead>
+            <tbody>
+            <ng-container *ngFor="let row of jindieDetail.items">
+              <tr>
+                <td>{{row.goodsName}}</td>
+                <td>{{row.goodsCode}}</td>
+                <td>{{row.specModel}}</td>
+                <td>{{row.num}}</td>
+                <td>{{row.unitPrice}}</td>
+                <td>{{row.unit}}</td>
+                <td>{{row.taxAmount}}</td>
+                <td>{{row.taxRate}}</td>
+                <td>{{row.detailAmount}}</td>
+              </tr>
+            </ng-container>
+            </tbody>
+          </table>
+        </div>
+      </ng-container>
+    </div>
+    <div class="box-footer text-right">
+      <button class="btn btn-default" (click)="goback()" type="button">返回</button>
+    </div>
+  </div>
+</section>

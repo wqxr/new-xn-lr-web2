@@ -1,0 +1,24 @@
+<div class="input-group" [formGroup]="form">
+  <span class="form-control xn-input-font xn-input-first-border-radius" [ngClass]="myClass">{{label}}</span>
+  <div class="input-group-btn">
+    <div class="btn btn-default btn-file" [ngClass]="myClass">
+      <span class="hidden-xs xn-input-font">选择...</span>
+      <input type="hidden" [formControlName]="row.name">
+      <input type="file" (change)="onUploadExcel($event)" multiple>
+    </div>
+  </div>
+</div>
+<span class="xn-input-alert">{{alert}}</span>
+<table class="table table-hover file-row-table" *ngIf="files.length > 0">
+  <tbody>
+  <tr *ngFor="let file of files">
+    <td>
+      <!--<a class="xn-input-font" href="/api/attachment/view?key={{file.fileId}}" >{{file.fileName}}</a>-->
+      <a class="xn-click-a" (click)="onView(file)">{{file.fileName}}</a>
+    </td>
+    <td>
+      <button type="button" class="close" (click)="onRemove(file.fileId)"><span>&times;</span></button>
+    </td>
+  </tr>
+  </tbody>
+</table>

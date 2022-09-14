@@ -1,0 +1,146 @@
+.xn-input-border-radius {
+  border-style: dashed;
+}
+
+.xn-show-input-textarea {
+  background-color: #ffffff;
+  border-style: dashed;
+  resize: none
+}
+
+.file-row-table {
+  margin-bottom: 0;
+}
+
+.file-row-table th {
+  border-style: dashed;
+  font-weight: normal;
+  border-color: #d2d6de;
+  border-bottom-width: 1px;
+  line-height: 100%;
+  font-size: 13px;
+}
+
+.file-row-table td {
+  border-style: dashed;
+  padding: 6px;
+  border-color: #d2d6de;
+  font-size: 13px;
+}
+
+.table-bordered {
+  border-style: dashed;
+  border-color: #d2d6de;
+}
+
+.check-value {
+  display: inline-block;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  overflow: hidden;
+  max-width: 300px;
+  margin-right: 10px;
+  vertical-align: top;
+}
+
+.xn-holiday-alert {
+  color: #8d4bbb;
+  font-size: 12px;
+}
+
+.border {
+  border: 1px dashed #ccc
+}
+
+.table-display tr td, .table-display tr th {
+  width: 250px;
+  vertical-align: middle;
+}
+
+.height {
+  overflow-x: hidden;
+}
+
+.table-data-content {
+  table-layout: fixed;
+  width: 3000px;
+}
+
+.table-height {
+  max-height: 600px;
+  overflow: auto;
+}
+
+.table-width {
+  width: 1000px;
+  overflow: auto;
+}
+
+.head-height {
+  position: relative;
+  overflow: hidden;
+}
+.height .head-height table tr td{
+  border:1px solid #f4f4f4;
+}
+.table-display {
+  margin: 0;
+}
+
+.relative {
+  position: relative
+}
+
+.red {
+  color: #f20000
+}
+
+.title {
+  display: block;
+  padding: 5px;
+  font-weight: bold;
+}
+
+.load-btn {
+  margin-left: 50px;
+}
+
+.pre-table {
+  table-layout: fixed;
+  margin: 0;
+}
+
+.pre-table tr td:first-child, .pre-table tr th:first-child {
+  width: 300px;
+}
+
+.scroll-height {
+  max-height: 300px;
+  overflow-y: auto;
+}
+
+.scroll-height > table {
+  border-bottom: none;
+  border-top: none;
+}
+
+.scroll-height > table tr:first-child td {
+  border-top: 0;
+}
+
+.scroll-height > table tr:last-child td {
+  border-bottom: 0;
+}
+.tag-color{
+  color: #f20000;;
+}
+.guaranttable {
+  width: 50% !important;
+  float: left;
+  margin-top: 35px;
+}
+.filetable{
+    line-height: 34px;
+    border: 1px solid #ccc;
+    height: 34px;
+}

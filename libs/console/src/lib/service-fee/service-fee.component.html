@@ -1,0 +1,34 @@
+<section class="content">
+  <div class="box">
+    <div class="box-header">
+      <h3 class="box-title">
+        保理保证业务平台服务费管理
+      </h3>
+    </div>
+
+    <div class="box-body">
+      <div class="btn-label">
+        <span class="pull-right">
+          <button class="btn btn-default" (click)="downloadTemplate()">下载模板</button>
+          <button class="btn btn-default" (click)="importData()">批量导入</button>
+          <button class="btn btn-default" (click)="downloadData()">下载当前数据</button>
+        </span>
+      </div>
+
+      <div class="service-fee">
+        <xn-fee #fee></xn-fee>
+      </div>
+
+      <div>
+        <dl *ngIf="fee.auditInfo.checkDate" class="dl-horizontal">
+          <dt>修改日期：</dt>
+          <dd>{{fee.auditInfo.checkDate | xnDate:'datetime'}}</dd>
+          <dt>修改人：</dt>
+          <dd>{{fee.auditInfo.checker}}</dd>
+          <dt>复核人：</dt>
+          <dd>{{fee.auditInfo.reChecker}}</dd>
+        </dl>
+      </div>
+    </div>
+  </div>
+</section>

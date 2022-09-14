@@ -1,0 +1,18 @@
+<div class="inMemo" *ngIf="inMemo !== ''">{{inMemo}}</div>
+<div class="input-group" [formGroup]="form">
+  <span class="form-control xn-input-font xn-input-first-border-radius" [ngClass]="labelClass">
+    <span *ngIf="!ctrlChange" class="xn-picker-label">{{label}}</span>
+    <input *ngIf="ctrlChange && isCard" #input (blur)="onBlur()" (input)="onInput()" class="input-class" type="text">
+    <input *ngIf="ctrlChange && !isCard" class="input-class" type="text" [formControlName]="row.name">
+    <button *ngIf="showClearBtn" type="button" class="close" [disabled]="ctrl.disabled" (click)="onClear()"><span>&times;</span></button>
+  </span>
+  <span class="input-group-btn">
+    <input type="hidden" [formControlName]="row.name">
+    <button type="button" class="btn btn-default btn-flat xn-input-font"
+            [disabled]="ctrl.disabled"
+            [ngClass]="myClass"
+            (click)="onPicker()"
+    >选择...</button>
+  </span>
+</div>
+<span class="xn-input-alert">{{alert}}</span>

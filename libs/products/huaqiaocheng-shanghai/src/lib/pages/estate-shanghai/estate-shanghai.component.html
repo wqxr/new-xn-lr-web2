@@ -1,0 +1,18 @@
+<ul class="nav nav-tabs" style="margin-top: 20px">
+  <ng-container>
+    <li class="active">
+      <a class="xn-click-a" data-toggle="tab" (click)="initData('A')">
+        <span class="pull-right-container" *ngIf="!!countSO">
+          <span class="label label-primary pull-right">{{ countSO }}</span>
+        </span>
+        待办列表-普惠通-华侨城-上海银行</a
+      >
+    </li>
+  </ng-container>
+</ul>
+<!--万科业务列表-->
+<ng-container>
+  <lib-oct-sh-home-comm-list-component
+    [supers]="{ label: shanghaiTodo, value: 'shanghaiTodo' }"
+  ></lib-oct-sh-home-comm-list-component>
+</ng-container>

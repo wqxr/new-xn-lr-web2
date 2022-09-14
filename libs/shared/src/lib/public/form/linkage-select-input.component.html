@@ -1,0 +1,18 @@
+<div class="row">
+  <div class="col-md-6 xn-dselect-first">
+    <select class="form-control xn-input-font" [(ngModel)]="proxyValue" [ngClass]="proxyClass" (blur)="proxyBlur($event)"
+      [disabled]="row.options.readonly" (change)="proxyChange($event)">
+      <option value="">{{row?.options?.firstPlaceholder || '-请选择-'}}</option>
+      <option *ngFor="let option of row.selectOptions" value="{{option.value}}">{{option.label}}</option>
+    </select>
+  </div>
+
+  <div class="col-md-6 xn-dselect-second">
+    <select class="form-control xn-input-font" *ngIf="secondOptions.length>0 || row?.options?.showSecond" [(ngModel)]="statusValue" [ngClass]="statusClass"
+      [disabled]="row.options.readonly" (blur)="statusBlur($event)" (change)="statusChange($event)">
+      <option value="">{{row?.options?.secondPlaceholder || '-请选择-'}}</option>
+      <option *ngFor="let option of secondOptions" value="{{option.value}}">{{option.label}}</option>
+    </select>
+  </div>
+</div>
+<span class="xn-input-alert">{{alert}}</span>

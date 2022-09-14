@@ -1,0 +1,83 @@
+<xn-account-form-modal
+  #formModal
+  [title]="params.title"
+  [width]="params.width"
+  [nzWrapClassName]="params.nzWrapClassName"
+  [isVisible]="isVisible"
+  [maskClosable]="params.maskClosable"
+  [showTipIcon]="params.showTipIcon"
+  [tipIconType]="params.tipIconType"
+  [tipIconNzType]="params.tipIconNzType"
+  [layout]="params.layout"
+  [fields]="params.formModalFields"
+  [modalFooter]="modalFooter"
+  (cancel)="handleCancel()"
+>
+  <ng-template #modalFooter let-model let-form="form">
+    <div nz-row class="table-head-btn">
+      <ng-container *ngFor="let key of tableHeadBtnConfig">
+        <div
+          nz-col
+          nzSm="12"
+          nzMd="12"
+          nzSpan="12"
+          [ngClass]="{'text-right': key === 'right'}"
+        >
+          <ng-container *ngFor="let btn of params.buttons[key]">
+            <nz-space nzDirection="horizontal">
+              <nz-space-item>
+                <ng-container [ngSwitch]="btn.type">
+                  <ng-container *ngSwitchCase="'dropdown'">
+                    <button
+                      nz-button
+                      nzType="primary"
+                      nz-dropdown
+                      [nzDropdownMenu]="menu"
+                    >
+                      {{btn.label}}<i nz-icon nzType="down"></i>
+                    </button>
+                    <nz-dropdown-menu #menu="nzDropdownMenu">
+                      <ul nz-menu *ngIf="btn.children && btn.children.length">
+                        <ng-container *ngFor="let childBtn of btn.children">
+                          <li nz-menu-item style="text-align: left">
+                            <a
+                              href="javaScript:void(0)"
+                              (click)="handleBtnClick(childBtn, model)"
+                            >
+                              {{childBtn.label}}
+                            </a>
+                          </li>
+                        </ng-container>
+                      </ul>
+                    </nz-dropdown-menu>
+                  </ng-container>
+                  <ng-container *ngSwitchCase="'normal'">
+                    <ng-container *ngIf="btn.btnKey === '';else normalBtnTpl">
+                    </ng-container>
+                    <ng-template #normalBtnTpl>
+                      <button
+                        nz-button
+                        nzType="primary"
+                        type="button"
+                        [disabled]="btn.btnKey === 'ok' && !form?.valid"
+                        (click)="handleBtnClick(btn, model)"
+                      >
+                        <i
+                          *ngIf="!!btn.icon"
+                          nz-icon
+                          [nzType]="btn.icon"
+                          nzTheme="outline"
+                        ></i
+                        >{{btn.label}}
+                      </button>
+                    </ng-template>
+                  </ng-container>
+                </ng-container>
+              </nz-space-item>
+            </nz-space>
+          </ng-container>
+        </div>
+      </ng-container>
+    </div>
+  </ng-template>
+</xn-account-form-modal>

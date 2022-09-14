@@ -1,0 +1,46 @@
+<section class="content-header">
+  <h1>
+    {{pageTitle}}
+    <small>{{pageDesc}}</small>
+  </h1>
+</section>
+
+<section class="content">
+  <div class="box">
+    <div class="box-header">
+      <h3 class="box-title">{{tableTitle}}</h3>
+      <button  class=" btn btn-primary" (click)="onViewAdd(items)" style="float: right;">增加银行账号</button>
+    </div>
+    <!-- /.box-header -->
+    <div class="box-body">
+
+      <table class="table table-bordered table-striped">
+        <thead>
+        <tr>
+          <th>银行账号</th>
+          <th>开户银行</th>
+          <th>户名</th>
+          <th>开户行行号</th>
+          <th>操作</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr *ngFor="let item of items">
+          <td>{{item.cardCode}}</td>
+          <td>{{item.bankName}}</td>
+          <td>{{item.accountHolder}}</td>
+          <td>{{item.bankCode}}</td>
+          <td>
+            <a class="xn-click-a" (click)="onViewDelete(item)">删除</a>
+          </td>
+        </tr>
+        </tbody>
+      </table>
+
+      <xn-page [total]="total" [size]="pageSize" (change)="onPage($event)"></xn-page>
+    </div>
+    <!-- /.box-body -->
+  </div>
+
+</section>
+<!-- /.content -->

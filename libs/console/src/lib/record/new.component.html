@@ -1,0 +1,72 @@
+<section class="content-header">
+  <h1>
+    {{pageTitle}}
+    <small>{{pageDesc}}</small>
+  </h1>
+</section>
+
+<section class="content">
+  <div class="app-flow-process" *ngIf="flowProcess.show">
+    <app-flow-process [steped]="flowProcess.steped" [proxy]="flowProcess.proxy"></app-flow-process>
+  </div>
+
+  <form class="form-horizontal" *ngIf="svrConfig" (ngSubmit)="onSubmit()" [formGroup]="mainForm">
+    <div class="panel panel-default">
+      <div class="panel-heading">
+        <span class="panel-title">{{svrConfig.flow.flowName}} - {{svrConfig.procedure.procedureName}}</span>
+      </div>
+      <div class="panel-body">
+        <div class="form-group" *ngFor="let row of rows">
+          <div class="col-sm-2 xn-control-label"
+               [ngClass]="{'required-label-strong':hwModeService.checkRequiredAndReadonly(row).bold,
+                             'required-star':hwModeService.checkRequiredAndReadonly(row).star}">
+            {{row.title}}
+          </div>
+          <div class="col-sm-8">
+            <xn-input [row]="row" [form]="mainForm"></xn-input>
+          </div>
+          <div class="col-sm-2 xn-control-desc">
+            {{row.memo}}
+            <a href="/assets/lr/doc/委托代理协议.docx"
+               *ngIf="row.checkerId==='letterOfAttorneyFile'">委托书模板</a>
+            <a href="/assets/szca/发票审核模板.xlsx" class="xn-click-a xn-block"
+               *ngIf="row.name === 'invoiceFile' && row.flowId !== 'pay_qrs6' && row.flowId!=='financing10'
+                && row.flowId!=='financing_invoice_replace13'">下载批量发票模板</a>
+            <a href="/assets/szca/审核模板.xlsx" class="xn-click-a xn-block"
+               *ngIf="row.name === 'orderInfo' && row.type === 'order'
+               && row.flowId !== 'financing_pre5'">下载审核模板</a>
+            <a href="/assets/szca/付款计划表.xlsx" class="xn-click-a xn-block"
+               *ngIf="row.name === 'orderInfo' && row.flowId === 'financing_pre5'">下载付款计划表</a>
+            <a href="/assets/lr/doc/历史交易明细模板.xlsx" class="xn-click-a xn-block"
+               *ngIf="row.checkerId === 'receiveAccount' && row.flowId === 'financing11'">下载历史交易明细模版</a>
+            <a (click)="authorizationFile()" class="xn-click-a xn-block"
+               *ngIf="row.checkerId === 'authorizationFile' && row.flowId === 'upload_base'">下载授权文件</a>
+          </div>
+        </div>
+        <!--todo 定向收款-保理商确认回款经办显示合同-->
+        <ng-container *ngIf="svrConfig.flow.flowId==='financing_confirm_loan13'">
+          <xn-contract5 [contracts]="contracts"></xn-contract5>
+        </ng-container>
+        <!--todo 定向收款-保理商确认回款经办显示合同-->
+        <ng-container *ngIf="svrConfig.flow.flowId==='factoring_repayment'">
+          <xn-contract5 [contracts]="contracts"></xn-contract5>
+        </ng-container>
+
+        <!--tips-->
+        <div class="text-right red" *ngIf="hwModeService.checkersTips(rows)">
+          * 为必填项
+        </div>
+      </div>
+      <div class="panel-footer text-right">
+        <button type="button" class="btn btn-default pull-left" (click)="onCancel()">返回</button>
+        <button type="button"
+                *ngIf="svrConfig.flow.flowId==='entry_registration_code6'"
+                (click)="onRegistration()"
+                class="btn btn-primary disabled">中登登记
+        </button>
+        <button type="submit" class="btn btn-primary" [disabled]="!mainForm.valid && !loadingback">提交</button>
+      </div>
+    </div>
+  </form>
+
+</section>

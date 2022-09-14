@@ -1,0 +1,113 @@
+    <div class="input-group" [formGroup]="form">
+      <span class="form-control xn-input-font xn-input-first-border-radius">{{label}}</span>
+      <div class="input-group-btn">
+        <div class="btn btn-default btn-file">
+          <span class="hidden-xs xn-input-font" (click)="openChoseCompany()">选择...</span>
+        </div>
+      </div>
+    </div>
+    <span class="xn-input-alert"></span>
+    <div class="col-sm-12 form-group text-right" style="margin-top:20px">
+      <ng-container *ngIf="currentTab.edit && currentTab.edit.headButtons && currentTab.edit.headButtons.length">
+        <span *ngFor="let btn of currentTab.edit.headButtons">
+          <button type="button" class="btn btn-primary"
+            [disabled]="!selectedItems.length && btn.disabled&&btn.disabled===true"
+            (click)="handleHeadClick(btn)">{{btn.label}}</button>
+        </span>
+      </ng-container>
+    </div>
+    <div>
+      <table class="table table-bordered table-striped text-center">
+        <thead>
+          <tr class="table-head">
+            <!-- 全选按钮 -->
+            <th class="input-check">全选/取消
+              <input type="checkbox" name="all" [checked]="isAllChecked()" [disabled]="!datalist.length"
+                (change)="checkAll($event)" />
+            </th>
+            <!-- title -->
+            <th *ngFor="let head of currentTab.headText">
+              <ng-container *ngIf="head.sort;else normal">
+                <span [ngClass]="onSortClass(head?.value)" (click)="onSort(head?.value)">{{head.label}}</span>
+              </ng-container>
+              <ng-template #normal>{{head.label}}</ng-template>
+            </th>
+            <th>操作</th>
+          </tr>
+        </thead>
+        <tbody>
+          <ng-container *ngIf="datalist.length && typechose[1];">
+            <tr *ngFor="let item of datalist;let i=index">
+              <!-- 行选则 -->
+              <td>
+                <input type="checkbox" name="single" [checked]="item['checked']"
+                  (change)="singelChecked($event,item,i)" />
+              </td>
+              <!-- 列内容 -->
+              <td>{{item.appId}}</td>
+              <td>{{item.orgName}}</td>
+              <td>{{item.whiteStatus | xnSelectTransform:'whiteNameStatus'}}</td>
+              <td *ngIf='item.firstFactoringType===0||item.secondFactoringType===0'></td>
+              <td *ngIf='item.firstFactoringType!==0||item.secondFactoringType!==0'>{{item.firstFactoringType| xnSelectTransform:'FactoringOneType'}} 、{{item.secondFactoringType |xnSelectTransform:'FactoringTwoType'}}</td>
+              <td>{{item.certification | xnSelectTransform:'evidence'}}</td>
+              <td>{{item.pastStatus | xnSelectTransform:'goMeetingQuestion'}}</td>
+              <td>{{item.supplierType | xnSelectTransform:'companyType'}}</td>
+              <td>{{item.sysfactoringUseFLV}}</td>
+              <td>{{item.sysfactoringServiceFLV}}</td>
+              <td>{{item.sysplatformServiceFLV}}</td>
+              <td>{{item.sysnowlimit}}</td>
+              <td>{{item.sysmaxAmount}}</td>
+              <td>{{item.subFactoringUseFLV}}</td>
+              <td>{{item.subFactoringServiceFLV}}</td>
+              <td>{{item.subPlatformServiceFLV}}</td>
+              <td>{{item.subNowlimit}}</td>
+              <td>{{item.subMaxAmount}}</td>
+              <!-- 增加保理类型、保证金比例、还款方 -->
+              <!-- <td>{{item.factoringType}}</td> -->
+              <td>{{item.depositRate}}</td>
+              <!-- <td>{{item.customerManager}}</td> -->
+              <td>{{item.pastMemo}}</td>
+              <td><a href="javaScript:void(0)" (click)='cleardata(i)'>删除</a></td>
+            </tr>
+
+          </ng-container>
+          <tr *ngIf='datalist.length===0 && typechose[1]'>
+            <td colspan="21">
+              <div class="empty-message"></div>
+            </td>
+          </tr>
+          <ng-container *ngIf="datalist.length && typechose[0];">
+            <tr *ngFor="let item of datalist;let i=index">
+              <!-- 行选则 -->
+              <td>
+                <input type="checkbox" name="single" [checked]="item['checked']"
+                  (change)="singelChecked($event,item,i)" />
+              </td>
+              <!-- 列内容 -->
+              <td>{{item.appId}}</td>
+              <td>{{item.orgName}}</td>
+              <td>{{item.whiteStatus | xnSelectTransform:'whiteNameStatus'}}</td>
+              <td>{{item.certification | xnSelectTransform:'evidence'}}</td>
+              <td>{{item.pastStatus | xnSelectTransform:'goMeetingQuestion'}}</td>
+              <td>{{item.supplierType | xnSelectTransform:'companyType'}}</td>
+              <td>{{item.depositRate}}</td>
+              <td>{{item.customerManager}}</td>
+
+            </tr>
+
+          </ng-container>
+          <tr *ngIf='datalist.length===0 && typechose[0]'>
+            <td colspan="10">
+              <div class="empty-message"></div>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+      <span class="xn-input-alert">{{alert}}</span>
+      <!-- <ng-template #block>
+          <td colspan="11">
+            <div class="empty-message"></div>
+          </td>
+        </ng-template> -->
+
+    </div>

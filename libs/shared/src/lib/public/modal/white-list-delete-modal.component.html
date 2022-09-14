@@ -1,0 +1,23 @@
+<modal #modal [backdrop]="'static'" [keyboard]="false" [animation]="false" (onDismiss)="onOk()">
+  <modal-header [showClose]="true">
+    <h4 class="modal-title">删除白名单</h4>
+  </modal-header>
+  <modal-body>
+
+
+      <div class="panel panel-default">
+        <div class="panel panel-primary xn-panel-sm">
+          <div class="panel-body">
+            确定删除该白名单企业：
+          </div>
+          <!-- /.panel-body -->
+        </div>
+        <!-- /.panel -->
+      </div>
+
+
+  </modal-body>
+  <modal-footer>
+    <button type="button" class="btn btn-danger" (click)="onSubmit()">确定删除</button>
+  </modal-footer>
+</modal>

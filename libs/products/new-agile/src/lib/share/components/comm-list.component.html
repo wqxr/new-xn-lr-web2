@@ -1,0 +1,113 @@
+<section class="content">
+  <div [ngClass]="!!base.superConfig.hideTitle ? '' : 'box'">
+    <div class="box-header" *ngIf="!base.superConfig.hideTitle">
+      <h3 class="box-title">{{base.superConfig.showName}}列表</h3>
+    </div>
+    <div class="box-body">
+      <!-- 表头搜索项 -->
+      <div>
+        <div class="item-box col-md-6" *ngFor="let row of shows">
+          <div class="item-label">
+            <label>{{row.title}}:</label>
+          </div>
+          <div class="item-control">
+            <ng-container>
+              <xn-input [row]="row" [form]="mainForm"></xn-input>
+            </ng-container>
+          </div>
+        </div>
+      </div>
+      <div class="" *ngIf="base.superConfig.list?.headButtons">
+        <div class="col-sm-12 btn-label">
+          <!-- 表头按钮组 -->
+          <span class="fr">
+            <ng-container *ngFor="let btn of base.superConfig.list?.headButtons">
+              <a *ngIf="btn.type === 'a' && btn.search" (click)="onSearch()" class="{{btn.class}}">{{btn.title}}</a>
+              <a *ngIf="btn.type === 'a' && btn.clearSearch" (click)="clearSearch()"
+                class="{{btn.class}}">{{btn.title}}</a>
+              <a *ngIf="btn.type === 'a' && btn.customClick" (click)="btn.click(xn, base)"
+                class="{{btn.class}}">{{btn.title}}</a>
+              <a *ngIf="btn.type === 'a' && btn.link" routerLink="{{btn.href}}" class="btn btn-danger">
+                <span>{{btn.title}}</span>
+              </a>
+            </ng-container>
+          </span>
+        </div>
+      </div>
+
+      <table class="table table-bordered table-striped"
+        [ngClass]="!!base.superConfig.tableText? base.superConfig.tableText : 'text-center'">
+        <thead>
+          <tr class="table-head">
+            <ng-container *ngFor="let head of heads">
+              <th *ngIf="head.sort && head.title!=='交易对手'" [ngClass]="onSortClass(head.checkerId)"
+                (click)="onSort(head.checkerId)">
+                {{head.title}}
+              </th>
+              <th *ngIf="head.title==='交易对手'" [ngClass]="onSortClass(head.checkerId)" (click)="onSort(head.checkerId)">
+                供应商</th>
+              <th *ngIf="!head.sort">{{head.title}}</th>
+            </ng-container>
+            <th style="min-width: 80px" *ngIf="base.superConfig?.canDo">操作</th>
+          </tr>
+        </thead>
+        <tbody>
+          <!-- 内容项 -->
+          <ng-container *ngIf="rows && rows.length;else block">
+            <tr *ngFor="let row of rows">
+              <!-- 每行内容 -->
+              <td *ngFor="let head of heads" [ngClass]="onTextClass(head['type'])" style="word-wrap:break-word">
+                <!-- 每列内容 ,long-title 可点击标签-->
+                <div *ngIf="head.checkerId!=='mainFlowId' && head.checkerId!=='title' && head.checkerId!=='wkType'"
+                  [innerHTML]="row[head.checkerId] | xnGatherType: {head:head,row:row}"></div>
+                <div *ngIf="head.checkerId === 'wkType'">
+                  <div>{{row[head.checkerId] | xnTransfer:'wkType'}}</div>
+                </div>
+                <a *ngIf="head.checkerId==='mainFlowId'" href="javaScript:void (0)"
+                  (click)="viewProcess(row[head.checkerId])">{{row[head.checkerId]}}</a>
+                <a *ngIf="head.checkerId==='title'" href="javaScript:void (0)"
+                  (click)="doProcess(row)">{{row[head.checkerId]}}</a>
+              </td>
+              <!-- 操作项 -->
+              <td *ngIf="base.canDetail(row) || base.canEdit(row) || base.superConfig.list?.rowButtons.length">
+                <a *ngIf="base.canDetail(row)" (click)="base.onNavigateDetail(row)" class="xn-click-a small-font">查看</a>
+                <a *ngIf="base.canEdit(row)" (click)="base.onNavigateEdit(row)" class="xn-click-a small-font">编辑</a>
+
+                <ng-container *ngIf="base.superConfig.list?.rowButtons.length">
+                  <ng-container *ngFor="let btn of base.superConfig.list?.rowButtons">
+                    <a *ngIf="btn.type === 'a' && btn.can && onBtnShow(btn, row)" (click)="onBtnClick(btn, row)"
+                      class="xn-click-a small-font">{{btn.title}}</a>
+                    <a *ngIf="btn.type === 'edit' && btn.can && onBtnEdit(btn, row)" (click)="onBtnClick(btn, row)"
+                      class="xn-click-a small-font">{{btn.title}}</a>
+                    <!--&lt;!&ndash;查看发票详情,保理可查&ndash;&gt;-->
+                    <a *ngIf="btn.type === 'invoice_detail' && btn.can && xn.user.orgType===3"
+                      (click)="handleClick(row)" class="xn-click-a small-font">{{btn.title}}</a>
+                    <label *ngIf="btn.type === 'checkbox'" class="plege" [ngClass]="onCssClass(row.status)">
+                      <input type="checkbox" [checked]="row.status"
+                        (click)="onBtnClickEvent(btn, row, $event)">{{btn.title}}</label>
+                  </ng-container>
+                </ng-container>
+              </td>
+            </tr>
+          </ng-container>
+        </tbody>
+      </table>
+      <xn-pagination *ngIf="base.superConfig?.showPage" [rows]="pageSize" [first]="first" [totalRecords]="total"
+        [pageSizeOptions]="[10,20,30,50,100]" (pageChange)="onPage($event)"></xn-pagination>
+      <div class="btn-more" *ngIf="base.superConfig?.showMore && showBtn">
+        <a class="btn-more-a btn btn-primary" (click)="base.onMore(start, beginTime, endTime)">点击加载更多</a>
+      </div>
+    </div>
+  </div>
+</section>
+<!-- 列表为空时 -->
+<ng-template #block>
+  <tr>
+    <td [attr.colspan]="base.superConfig?.canDo?heads.length+1:heads.length" *ngIf="base.superConfig.showName !== '银行账号'">
+      <div class="empty-message"></div>
+    </td>
+    <td [attr.colspan]="base.superConfig?.canDo?heads.length+2:heads.length+1" *ngIf="base.superConfig.showName === '银行账号'">
+      <div class="empty-message"></div>
+    </td>
+  </tr>
+</ng-template>

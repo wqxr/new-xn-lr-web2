@@ -1,0 +1,55 @@
+<modal #modal [backdrop]="'static'" [keyboard]="false" [animation]="false">
+  <form class="form-horizontal" (ngSubmit)="onSubmit()">
+    <modal-header [showClose]="false">
+      <h4 class="modal-title">批量上传</h4>
+    </modal-header>
+    <modal-body>
+      <div class="form-group" *ngFor="let row of shows1">
+        <div class="col-sm-2 xn-control-label">
+          {{ row.title }}
+          <span
+            *ngIf="row.required !== false && row.required !== 0"
+            class="required-label"
+            >*</span
+          >
+        </div>
+        <div class="col-sm-8">
+          <app-dynamic-input
+            [row]="row"
+            [form]="form1"
+            [formModule]="formModule"
+          ></app-dynamic-input>
+        </div>
+      </div>
+      <div class="form-group" *ngFor="let row of shows2">
+        <div class="col-sm-2 xn-control-label">
+          {{ row.title }}
+          <span
+            *ngIf="row.required !== false && row.required !== 0"
+            class="required-label"
+            >*</span
+          >
+        </div>
+        <div class="col-sm-8">
+          <app-dynamic-input
+            [row]="row"
+            [form]="form2"
+            [formModule]="formModule"
+          ></app-dynamic-input>
+        </div>
+      </div>
+    </modal-body>
+    <modal-footer>
+      <button type="button" class="btn btn-default" (click)="onCancel()">
+        取消
+      </button>
+      <button
+        type="submit"
+        class="btn btn-success"
+        [disabled]="form1?.invalid || form2?.invalid"
+      >
+        上传
+      </button>
+    </modal-footer>
+  </form>
+</modal>

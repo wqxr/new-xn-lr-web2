@@ -1,0 +1,38 @@
+<modal #modal class="login-modal" [backdrop]="'static'" [keyboard]="false" [animation]="false">
+  <modal-header [showClose]="true">
+    <h4 class="modal-title">登录</h4>
+  </modal-header>
+  <modal-body>
+    <div class="login-box-body">
+      <div class="form-group has-feedback">
+        <!--todo 本地使用  appInputMask-->
+        <input #account type="text" class="form-control" placeholder="手机号码" autofocus>
+        <span class="glyphicon glyphicon-user form-control-feedback"></span>
+      </div>
+      <div class="form-group has-feedback input-group">
+        <input #password type="text" (keyup.enter)="onLogin(account.value, password.value)" class="form-control"
+          placeholder="验证码">
+        <span class="input-group-btn">
+          <button type="button" [disabled]="!btnEnabled" class="btn btn-default btn-flat login-sms-btn"
+            (click)="onSend(account.value)">{{btnText}}</button>
+        </span>
+      </div>
+      <div class="form-group has-feedback" *ngIf='isNeedcode'>
+        <!--todo 本地使用  appInputMask-->
+        <input [(ngModel)]="code" type="password" class="form-control" placeholder="密码" autofocus>
+        <!-- <span class="glyphicon glyphicon-user form-control-feedback"></span> -->
+      </div>
+      <div *ngIf="alertMsg?.length > 0" class="login-alert" role="alert">
+        {{alertMsg}}
+      </div>
+      <div class="form-group" *ngIf='!isNeedcode'>
+        <button [disabled]="!processing && (account.value==='' || password.value==='')"
+          (click)="onLogin(account.value, password.value)" class="btn btn-success btn-lg btn-block">登录</button>
+      </div>
+      <div class="form-group" *ngIf='isNeedcode'>
+        <button [disabled]="!processing && (account.value==='' || password.value===''||code==='')"
+          (click)="onLogin(account.value, password.value,code)" class="btn btn-success btn-lg btn-block">登录</button>
+      </div>
+    </div>
+  </modal-body>
+</modal>

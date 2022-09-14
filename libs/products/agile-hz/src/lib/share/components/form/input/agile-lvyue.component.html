@@ -1,0 +1,85 @@
+<div class="input-group" style="width: 100%" [formGroup]="form">
+  <div style="max-height: 400px;overflow-y: scroll;">
+    <table class="table table-bordered table-hover file-row-table text-center" width="100%">
+      <thead>
+        <tr>
+          <th>序号</th>
+          <th>
+            <span class="span-line">文件</span>
+          </th>
+          <th>
+            <span class="span-line">文件类型</span>
+          </th>
+          <th>
+            <span class="span-line">履约证明更新时间</span>
+          </th>
+          <ng-container>
+            <th>
+              <span class="span-line">本次产值金额</span>
+              <i [ngClass]="{'required-label-strong': true,'required-star': true,'fa': true}"></i>
+            </th>
+            <th>
+              <span class="span-line">本次付款性质</span>
+              <i [ngClass]="{'required-label-strong': true,'required-star': true,'fa': true}"></i>
+            </th>
+          </ng-container>
+          <th>
+            <span class="span-line">累计确认产值</span>
+          </th>
+          <th>
+            <span class="span-line" style="width: 80px;">操作</span>
+          </th>
+        </tr>
+      </thead>
+      <tbody>
+        <ng-container *ngIf="items?.length">
+          <tr *ngFor="let sub of (items[0]['performanceFile'] | xnJson);let i=index">
+            <ng-container>
+              <td>{{i+1}}</td>
+              <td style="vertical-align: middle">
+                <a class="xn-click-a" (click)="onView(sub,i)">
+                  {{sub.fileName}}
+                </a>
+              </td>
+              <td style="vertical-align: middle">
+                <span>{{ { 'type':sub['firstPerformanceType'],
+                  'selectBank':sub['secondPerformanceType'] } | xnSelectDeepTransform:'lvYueFileOptions' }}</span>
+              </td>
+
+              <ng-container *ngIf="i===0">
+                <td style="vertical-align: middle" [attr.rowspan]="(items[0]['performanceFile'] | xnJson).length">
+                  <span [innerHTML]="items[0]['performanceUpdateTime'] | xnDate:'datetime'"></span>
+                </td>
+                <td style="vertical-align: middle" [attr.rowspan]="(items[0]['performanceFile'] | xnJson).length">
+                  <ng-container *ngIf="!!items[0].percentOutputValue">
+                    {{items[0].percentOutputValue.toFixed(2) | xnMoney}}
+                  </ng-container>
+                </td>
+                <td style="vertical-align: middle" [attr.rowspan]="(items[0]['performanceFile'] | xnJson).length">
+                  <ng-container *ngIf="items[0].payType!==''">
+                    {{items[0].payType | xnSelectTransform:'vankePayType'}}
+                  </ng-container>
+                </td>
+                <td style="vertical-align: middle" [attr.rowspan]="(items[0]['performanceFile'] | xnJson).length">
+                  <ng-container *ngIf="!!items[0].totalReceive">
+                    {{items[0].totalReceive.toFixed(2) | xnMoney}}
+                  </ng-container>
+                </td>
+              </ng-container>
+
+              <td style="width: 80px;vertical-align: middle" *ngIf="svrConfig.flow.flowId!=='yjl_supplier_sign'">
+                <a *ngIf="!row?.options?.readonly" class="xn-click-a" (click)="onEdit(items[0],2,i)">补充</a>
+                <br>
+                <a class="xn-click-a" (click)="downloadFile(sub)">下载文件</a>
+              </td>
+              <td style="vertical-align: middle" *ngIf="svrConfig.flow.flowId==='yjl_supplier_sign'">
+                <a class="xn-click-a" (click)="onEdit(items[0],1,i)">查看</a>
+              </td>
+            </ng-container>
+          </tr>
+        </ng-container>
+      </tbody>
+    </table>
+  </div>
+</div>
+<span class="xn-input-alert">{{alert}}</span>

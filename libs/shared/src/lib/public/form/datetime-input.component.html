@@ -1,0 +1,5 @@
+<div [formGroup]="form">
+  <input class="form-control xn-input-font xn-input-border-radius" [ngClass]="myClass" type="text"
+         [formControlName]="row.name" [placeholder]="row.placeholder" (blur)="onBlur()">
+</div>
+<span class="xn-input-alert">{{alert}}</span>

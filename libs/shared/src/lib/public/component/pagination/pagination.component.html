@@ -1,0 +1,45 @@
+<ul [class]="styleClass" [ngStyle]="style" [ngClass]="'pagination pagination-sm no-margin pull-right'" *ngIf="alwaysShow ? true : (pageLinks && pageLinks.length > 1)">
+  <li class="pull-left total-info">
+    共 {{ totalRecords }} 条记录
+  </li>
+  <li class="paginate_button previous" [ngClass]="{'disabled':isFirstPage()}">
+    <a href="#" title="首页" (click)="changePageToFirst($event)" [tabindex]="isFirstPage() ? -1 : null">
+      <span class="fa fa-step-backward"></span>
+    </a>
+  </li>
+  <li class="paginate_button previous" [ngClass]="{'disabled': isFirstPage()}">
+    <a href="#" title="上一页" (click)="changePageToPrev($event)" [tabindex]="isFirstPage() ? -1 : null">
+      <span class="fa fa-backward"></span>
+    </a>
+  </li>
+  <li class="paginate_button" [ngClass]='onClassCss(pageLink)'  *ngFor="let pageLink of pageLinks; trackBy: trackByIndex;">
+    <a href="#" [attr.title]="pageLink" (click)="onPageLinkClick($event, pageLink - 1)">{{ pageLink }}</a>
+  </li>
+  <li class="paginate_button next" [ngClass]="{'disabled':isLastPage()}">
+    <a href="#" title="下一页" (click)="changePageToNext($event)" [tabindex]="isLastPage() ? -1 : null">
+      <span class="fa fa-forward"></span>
+    </a>
+  </li>
+  <li class="paginate_button next" [ngClass]="{'disabled':isLastPage()}">
+    <a href="#" title="尾页" (click)="changePageToLast($event)" [tabindex]="isLastPage() ? -1 : null">
+      <span class="fa fa-step-forward"></span>
+    </a>
+  </li>
+  <li class="jumper pull-right">
+    跳至
+    <input type="text" #quickJumperInput (keydown.enter)="handleKeyDown($event, quickJumperInput)"> 页
+  </li>
+  <li class="pull-right">
+    <div class="dropup">
+      <a type="button" class="paginate_button dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
+        <span class="page-size">{{ rows }} 行/页</span>
+        <span class="caret"></span>
+      </a>
+      <ul class="dropdown-menu" role="menu">
+        <li [class.active]="rows === item" *ngFor="let item of pageSizeOptions; trackBy: trackByIndex;">
+          <a href="javascript:void(0)" (click)="onRppChange(item)">{{ item }} 行/页</a>
+        </li>
+      </ul>
+    </div>
+  </li>
+</ul>

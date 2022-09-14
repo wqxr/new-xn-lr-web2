@@ -1,0 +1,82 @@
+<modal #modal [backdrop]="'static'" [keyboard]="false" [animation]="false">
+  <modal-header [showClose]="false">
+    <h4 class="modal-title">查看文件</h4>
+  </modal-header>
+  <modal-body>
+    <div class="display-content">
+      <ng-container *ngIf="fileType === 'img'">
+        <div class="img-container" #imgContainer>
+          <div class="img-wrapper" #outerImg>
+            <img
+              #innerImg
+              class="this-img"
+              src="{{ fileSrc }}"
+              *ngIf="!!fileSrc"
+            />
+          </div>
+        </div>
+      </ng-container>
+      <ng-container *ngIf="fileType === 'pdf'">
+        <div class="pdf-container" id="thisCanvas1">
+          <canvas class="this-pdf" id="thisCanvas"></canvas>
+        </div>
+      </ng-container>
+    </div>
+  </modal-body>
+  <modal-footer>
+    <div class="button-group">
+      <button
+        id="left"
+        type="button"
+        class="btn btn-sm btn-default"
+        (click)="rotateImg('left')"
+      >
+        左旋 <i class="fa fa-undo"></i>
+      </button>
+      <button
+        id="right"
+        type="button"
+        class="btn btn-sm btn-default"
+        (click)="rotateImg('right')"
+      >
+        右旋 <i class="fa fa-repeat"></i>
+      </button>
+      <button
+        id="large"
+        type="button"
+        class="btn btn-sm btn-default"
+        (click)="scaleImg('large')"
+      >
+        放大 <i class="fa fa-search-plus"></i>
+      </button>
+      <button
+        id="small"
+        type="button"
+        class="btn btn-sm btn-default"
+        (click)="scaleImg('small')"
+      >
+        缩小 <i class="fa fa-search-minus"></i>
+      </button>
+      <!--文件为pdf时显示-->
+      <ng-container *ngIf="fileType === 'pdf'">
+        <button id="prev" type="button" class="btn btn-sm btn-primary">
+          上一页
+        </button>
+        <button id="next" type="button" class="btn btn-sm btn-primary">
+          下一页
+        </button>
+        <span class="pdf-pagination"
+          >页码: <span id="page_num">加载中</span> /
+          <span id="page_count">加载中</span></span
+        >
+      </ng-container>
+      <button
+          type="button"
+          class="btn btn-sm btn-danger"
+          (click)="handleClose()"
+        >
+          关闭
+      </button>
+    </div>
+  </modal-footer>
+</modal>

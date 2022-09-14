@@ -1,0 +1,199 @@
+<section class="content-header">
+  <h1>替换发票记录</h1>
+</section>
+
+<section class="content">
+  <div class="box box-body">
+    <form class="form-horizontal">
+      <div class="form-group">
+        <div class="col-sm-3 xn-control-label">
+          交易ID：
+          <span class="required-label"></span>
+        </div>
+        <div class="col-sm-6">
+          <span class="form-control xn-input-font xn-input-border-radius">
+            <a class="xn-click-a" (click)="viewProcess(data?.mainFlowId)">{{ data?.mainFlowId }}</a>
+          </span>
+        </div>
+        <div class="col-sm-3 xn-control-desc">
+        </div>
+      </div>
+
+      <div class="form-group">
+        <div class="col-sm-3 xn-control-label">
+          核心企业：
+        </div>
+        <div class="col-sm-6">
+          <span class="form-control xn-input-font xn-input-border-radius">
+            <a>{{ data?.enterpriseOrgName }}</a>
+          </span>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <div class="col-sm-3 xn-control-label">
+          供应商：
+        </div>
+        <div class="col-sm-6">
+          <span class="form-control xn-input-font xn-input-border-radius">
+            {{ data?.supplierOrgName }}
+          </span>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <div class="col-sm-3 xn-control-label">
+          应收账款转让金额：
+        </div>
+        <div class="col-sm-6">
+          <span class="form-control xn-input-font xn-input-border-radius">
+            {{ data?.receivableT }}
+          </span>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <div class="col-sm-3 xn-control-label">
+          现有发票汇总：
+        </div>
+        <div class="col-sm-6">
+          <xn-thead-fixed [theadText]="nowInvoiceListTheadText"
+                          [tableTemplate]="table"
+                          [footerTemplate]="footer">
+            <ng-template #table>
+              <table class="table table-bordered table-hover text-center table-display">
+                <tbody>
+                <tr *ngFor="let item of data?.nowInvoiceList;let i = index">
+                  <td>{{ i + 1 }}</td>
+                  <td>{{ item.backDate }}</td>
+                  <td>{{ item.dueMoney | xnMoney }}</td>
+                  <td>{{ item.waitMoney | xnMoney }}</td>
+                  <td>{{ item.replaceMoney | xnMoney }}</td>
+                  <td><a class="xn-click-a" (click)="onViewInvoice(item)">查看发票</a></td>
+                </tr>
+                <tr *ngIf="data?.nowInvoiceList.length === 0">
+                  <td colspan="6">
+                    <div class="empty-message"></div>
+                  </td>
+                </tr>
+                </tbody>
+              </table>
+            </ng-template>
+            <ng-template #footer>
+              <td>
+                <span>总计</span>
+              </td>
+              <td>
+                <span>/</span>
+              </td>
+              <td>
+                <span>{{curInvoice?.dueMoney | xnMoney}}</span>
+              </td>
+              <td>
+                <span>{{curInvoice?.deputeMoney | xnMoney}}</span>
+              </td>
+              <td>
+                <span>{{curInvoice?.replaceMoney | xnMoney}}</span>
+              </td>
+              <td>
+                <span>/</span>
+              </td>
+            </ng-template>
+          </xn-thead-fixed>
+        </div>
+      </div>
+      <div class="form-group">
+        <div class="col-sm-3 xn-control-label">
+          替换发票记录：
+        </div>
+        <div class="col-sm-6">
+          <xn-thead-fixed [theadText]="invoiceReplaceInfo"
+                          [tableTemplate]="table1"
+                          [footerTemplate]="footer1">
+            <ng-template #table1>
+              <table class="table table-bordered table-hover text-center table-display">
+                <tbody>
+                <tr *ngFor="let item of data?.invoiceReplaceInfo;let i = index">
+                  <td>{{ i + 1 }}</td>
+                  <td>{{ item.replaceDate }}</td>
+                  <td>{{ item.replaceMoney | xnMoney }}</td>
+                  <td>{{ item.statusTitle }}</td>
+                  <td><a class="xn-click-a" (click)="onViewInvoice(item)">查看发票</a></td>
+                </tr>
+                <tr *ngIf="data?.invoiceReplaceInfo.length === 0">
+                  <td colspan="6">
+                    <div class="empty-message"></div>
+                  </td>
+                </tr>
+                </tbody>
+              </table>
+            </ng-template>
+            <ng-template #footer1>
+              <td>
+                <span>总计</span>
+              </td>
+              <td>
+                <span>/</span>
+              </td>
+              <td>
+                <span>{{replaceInvoice?.replaceMoney | xnMoney}}</span>
+              </td>
+              <td>
+                <span>/</span>
+              </td>
+              <td>
+                <span>/</span>
+              </td>
+            </ng-template>
+          </xn-thead-fixed>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <div class="col-sm-3 xn-control-label">
+          下一发票回款日：
+        </div>
+        <div class="col-sm-6">
+          <span class="form-control xn-input-font xn-input-border-radius">
+            {{ data?.nextDate }}
+          </span>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <div class="col-sm-3 xn-control-label">
+          当前待替换发票金额：
+        </div>
+        <div class="col-sm-6">
+          <span class="form-control xn-input-font xn-input-border-radius">
+            {{ data?.nowReplaceMoneyT }}
+          </span>
+        </div>
+      </div>
+      <div class="text-right">
+        <button type="button"
+                class="btn btn-default"
+                (click)="onCancel()">返回
+        </button>
+        <!--供应商可见-->
+        <button type="button"
+                *ngIf="orgType === 1 && isShow === 1"
+                class="btn btn-primary"
+                (click)="onReplace()">替换发票
+        </button>
+        <!--保理商可见-->
+        <button type="button"
+                *ngIf="orgType === 3"
+                class="btn btn-primary"
+                (click)="entrustedPayment()">委托付款
+        </button>
+        <button type="button"
+                *ngIf="orgType === 3"
+                class="btn btn-primary"
+                (click)="BalanceTransfer()">余额转款
+        </button>
+      </div>
+
+    </form>
+  </div>
+</section>

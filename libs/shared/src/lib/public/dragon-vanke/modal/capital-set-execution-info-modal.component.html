@@ -1,0 +1,120 @@
+<modal #modal [backdrop]="'static'" [keyboard]="false" [animation]="false" (onDismiss)="onOk()">
+  <modal-header [showClose]="true" style='text-align:left'>
+    <h4 class="modal-title">
+      设置执行信息
+    </h4>
+  </modal-header>
+  <modal-body>
+    <div style='height:400px;overflow-y: scroll;overflow-x: hidden;'>
+      <div style="padding: 5px 60px" class="row form-group">
+        <div class="col-sm-1 xn-control-label" style="padding: 0;position: relative;font-size: 12px;">
+          执行信息
+          <a href="javaScript:void(0)" style="position: absolute;top: 25px;right: 0;" [ngClass]="{'disabled':readOnly}"
+            (click)="downloadExecuteInfo()">下载</a>
+        </div>
+        <div class="col-sm-11">
+          <div>
+            <button type="button" style="padding: 2px 5px;width: 120px;color:#3c8dbc;" class="btn btn-default"
+              [disabled]="readOnly" (click)="addCeil()">添加执行信息</button>
+          </div>
+          <table class="table table-bordered text-center">
+            <thead>
+              <tr>
+                <th style="min-width: 102px;">项目参与机构</th>
+                <th style="min-width: 90px;">执行时间</th>
+                <th>执行内容</th>
+                <th style="min-width: 85px;">操作</th>
+              </tr>
+            </thead>
+            <tbody>
+              <ng-container *ngIf="datalist01.length;else block">
+                <tr *ngFor='let item of datalist01;let i=index'>
+                  <td style="vertical-align: middle;">{{item.orgName}}</td>
+                  <td style="vertical-align: middle;">
+                    {{item.executeTime | xnDate:'date'}}
+                  </td>
+                  <td style="vertical-align: middle;">
+                    {{item.executeDesc}}
+                  </td>
+                  <td style="vertical-align: middle;">
+                    <a href="javaScript:void(0)" [ngClass]="{'disabled': readOnly}"
+                      (click)='changeExecution(item,i)'>修改</a>&nbsp;&nbsp;<a href="javaScript:void(0)"
+                      [ngClass]="{'disabled': readOnly}" (click)='delete(item.execute_id)'>删除</a>
+                  </td>
+                </tr>
+              </ng-container>
+            </tbody>
+          </table>
+        </div>
+        <xn-pagination [rows]="pageConfig.pageSize" [first]="pageConfig.first" [totalRecords]="pageConfig.total"
+          [pageSizeOptions]="[5,10,20,30,50,100]" (pageChange)="onPage($event)"></xn-pagination>
+      </div>
+      <div style="padding: 5px 60px" class="row form-group">
+        <div class="col-sm-1 xn-control-label" style="padding: 0;position: relative;font-size: 12px;">
+          执行日程表
+          <a href="javaScript:void(0)" style="position: absolute;top: 25px;right: 0;" [ngClass]="{'disabled': readOnly}"
+            (click)="downloadExecuteTime()">下载</a>
+        </div>
+        <div class="col-sm-11" style="overflow-x: scroll;">
+          <table class="table table-bordered text-center" style="table-layout: fixed;">
+            <thead>
+              <tr>
+                <th *ngFor="let head of dateExecuteHeads" style="width: 150px;">
+                  {{head.label}}
+                </th>
+              </tr>
+            </thead>
+            <tbody>
+              <ng-container *ngIf="dateExecuteList.length;else block2">
+                <tr *ngFor='let item of dateExecuteList;let i=index'>
+                  <td *ngFor="let head of dateExecuteHeads"
+                    style="text-align: left;width: 150px;vertical-align: middle">
+                    <ng-container [ngSwitch]="head.type">
+                      <ng-container *ngSwitchCase="'executeDesc'">
+                        <!-- 执行内容特殊处理 -->
+                        <ng-container *ngIf="item[head.value].length>0;else empoty">
+                          <div style="margin-top: 5px;" *ngFor="let t of item[head.value];let d=index"><a *ngIf="item[head.value].length>1"
+                              href="javaScript:void(0)">{{d+1}}.</a>{{t}}
+                          </div>
+                        </ng-container>
+                        <ng-template #empoty>
+                          <p></p>
+                        </ng-template>
+                      </ng-container>
+                      <ng-container *ngSwitchDefault>
+                        <div [innerHTML]="item[head.value] | xnGatherType: {head:head,row:item}"></div>
+                      </ng-container>
+                    </ng-container>
+                  </td>
+                </tr>
+              </ng-container>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </modal-body>
+  <modal-footer>
+    <div class="col-sm-6 text-left">
+      <button type="button" class="btn btn-default" [disabled]="readOnly" (click)="useExecutionInfo()">引用执行信息</button>
+    </div>
+    <div class="col-sm-6 text-right">
+      <button type="button" class="btn btn-default" (click)="oncancel()">取消</button>
+      <button type="button" class="btn btn-success" [disabled]="readOnly" (click)="onOk()">确定</button>
+    </div>
+  </modal-footer>
+</modal>
+<ng-template #block>
+  <tr>
+    <td [attr.colspan]="4">
+      <div class="empty-message"></div>
+    </td>
+  </tr>
+</ng-template>
+<ng-template #block2>
+  <tr>
+    <td [attr.colspan]="1">
+      <div class="empty-message"></div>
+    </td>
+  </tr>
+</ng-template>

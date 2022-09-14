@@ -1,0 +1,28 @@
+<div class="block-chain-detail">
+  <block-info-card [data]="block"></block-info-card>
+  <div class="block-chain-detail-row">
+    <div class="left">
+      <finance-info-card [data]="block"></finance-info-card>
+    </div>
+    <div class="right">
+      <contract-info-card [data]="block"></contract-info-card>
+    </div>
+  </div>
+  <div class="block-chain-detail-row">
+    <div class="left">
+      <receive-payment-card [data]="block"></receive-payment-card>
+    </div>
+    <div class="right">
+      <register-info-card [data]="block"></register-info-card>
+    </div>
+  </div>
+  <invoice-info-card [data]="block"></invoice-info-card>
+  <div class="block-chain-detail-row">
+    <div class="left">
+      <factoring-info-card [data]="block"></factoring-info-card>
+    </div>
+    <div class="right">
+      <other-info-card [data]="block"></other-info-card>
+    </div>
+  </div>
+</div>

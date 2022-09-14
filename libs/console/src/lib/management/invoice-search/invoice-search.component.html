@@ -1,0 +1,154 @@
+<section class="content-header">
+  <h1>{{pageTitle}}</h1>
+</section>
+<section class="content">
+  <div class="box">
+    <div class="box-body">
+      <div class="form-inline clearfix">
+        <form class=" search-zd" style="text-align: center">
+          <div class="form-group" style="width: 500px;display:inline-block">
+            <label for="searchZDInvoice">实时查询中登网发票</label>
+            <input type="text" id="searchZDInvoice" class="form-control search-input" name="searchZDInvoice"
+              placeholder="请输入公司名称" #searchZDInvoice>
+          </div>
+          <div class="form-group clearfix">
+            <button type="button" class="btn btn-primary btn-sm" (click)="updateInvoice(searchZDInvoice.value)">查询中登网
+            </button>
+            <button type="button" class="btn btn-primary btn-sm" (click)="batchsearch(searchZDInvoice.value)">批量查询
+            </button>
+          </div>
+          <div class="form-group clearfix" style="margin-left:20px">
+            <div class="text-left">
+              <div>{{lastSearchDate}}</div>
+              <div><a href="javascript:void(0);" (click)="downList(searchZDInvoice.value)">批量查询记录</a></div>
+              <div>
+                 <a class="xn-click-a" (click)='downTemplate()'>模板下载</a>
+
+              </div>
+            </div>
+          </div>
+        </form>
+      </div>
+      <!-- <div class="form-group clearfix"> -->
+      <div class="col-sm-6">
+        <div class="form-group">
+          <label class="col-sm-3">基础合同编号</label>
+          <div class="col-sm-9">
+            <input type="text" class="form-control" placeholder="请输入合同编号" #contractId>
+          </div>
+        </div>
+      </div>
+      <div class="col-sm-6">
+        <div class="form-group clearfix">
+          <label class="col-sm-3">发票时间</label>
+          <div class="col-sm-9">
+            <app-public-date-input-component [dataValue]="defaultData" (dateOutput)="dateInput($event)">
+            </app-public-date-input-component>
+          </div>
+        </div>
+      </div>
+      <!-- </div> -->
+      <!-- <div class="form-group clearfix"> -->
+      <div class="col-sm-6">
+        <div class="form-group">
+          <label class="col-sm-3">合同名称</label>
+          <div class="col-sm-9">
+            <input type="text" class="form-control" placeholder="请输入合同名称" #name>
+          </div>
+        </div>
+      </div>
+      <div class="col-sm-6">
+        <div class="form-group clearfix">
+          <label class="required-star col-sm-3">出让人</label>
+          <div class="col-sm-9">
+            <input type="text" class="form-control" placeholder="请输入出让人" #man>
+          </div>
+        </div>
+      </div>
+      <!-- </div> -->
+      <!-- <div class="form-group clearfix"> -->
+      <div class="col-sm-6">
+        <div class="form-group">
+          <label class="col-sm-3">发票号码</label>
+          <div class="col-sm-9">
+            <input type="text" class="form-control" placeholder="请输入8位发票号" #invoice>
+          </div>
+        </div>
+      </div>
+      <!-- </div> -->
+      <div class="form-group text-right">
+        <button type="button" class="btn btn-primary" style="margin-right: 15px"
+          (click)="searchResult(contractId.value,invoice.value, man.value,name.value,dateValue,1)">查询
+        </button>
+        <button type="button" class="btn btn-danger" style="margin-right: 15px" (click)='resetdata()'>重置</button>
+      </div>
+      <!--列表-->
+      <!-- 表头固定 -->
+      <table class="table table-bordered table-striped text-center" style="clear:both;table-layout:fixed;width:100%;">
+        <thead style="display:block">
+          <tr>
+            <th style="width: 2%">序号</th>
+            <th style="width: 6%">登记证明编号</th>
+            <th style="width: 6%">登记期限</th>
+            <th style="width: 6%">登记到期日</th>
+            <th style="width: 6%">基础合同编号</th>
+            <th style="width: 40%">发票信息</th>
+            <th style="width: 5%">出让人</th>
+            <th style="width: 5%">受让人</th>
+            <th style="width: 6%">登记时间</th>
+            <th style="width: 6%">中登附件</th>
+            <th style="width: 6%">备注信息</th>
+            <th style="width: 6%">操作</th>
+          </tr>
+        </thead>
+        <tbody style="display:block">
+          <ng-container *ngIf="recordList.length > 0;else block">
+            <tr *ngFor="let item of recordList;let i=index"
+              style="height:300px !important;line-height: 300px !important">
+              <td style="width: 2%">{{i + 1}}</td>
+              <td style="width: 6%">{{item.register_num}}</td>
+              <td style="width: 6%">{{item.register_limit}}</td>
+              <td style="width: 6%">{{item.register_due}}</td>
+              <td style="width: 6%">
+                <div [innerHTML]="item.contract_id | xnFilterText: allArr" style="word-break: break-all"></div>
+              </td>
+              <td style="width: 40%">
+                <div [innerHTML]="item.invoice_info | xnFilterText: allArr"></div>
+              </td>
+              <td style="width: 5%">
+                <div [innerHTML]="item.crr_info | xnFilterText: manArr"></div>
+              </td>
+              <td style="width: 5%">
+                <div [innerHTML]="item.srr_info"></div>
+              </td>
+              <td style="width: 6%">{{item.register_time}}</td>
+              <ng-container>
+                <td *ngIf='item.exist_annex'>
+                  <div class="btn btn-default" type="button" (click)="downloadTp(item.subject_id)">
+                    <span style="color: #3c8dbc;font-size: 12px">发票附件</span>
+                  </div>
+                </td>
+                <td *ngIf='!item.exist_annex'>/</td>
+              </ng-container>
+              <td style="width: 6%">{{item.remark}}</td>
+              <td style="width: 6%"><a href="javascript:void(0);" (click)="editDesc(item)">修改备注信息</a></td>
+            </tr>
+          </ng-container>
+
+          <ng-template #block>
+            <tr>
+              <td [attr.colspan]="12">
+                <div style="padding: 3rem;text-align: center;color: #c5c5c5;background-color: #fdfdfd">暂无数据！</div>
+              </td>
+            </tr>
+          </ng-template>
+        </tbody>
+
+      </table>
+
+      <div class="btn-more" *ngIf="showbtn">
+        <a class="btn-more-a btn btn-primary" (click)="onMore(page)">点击加载{{this.page}}位</a>
+      </div>
+    </div>
+  </div>
+</section>

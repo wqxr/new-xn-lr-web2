@@ -1,0 +1,68 @@
+<div class="input-group" *ngIf="isNew" [formGroup]="form">
+  <button type="button" class="btn btn-default" [ngClass]="{'disabled overlay': uploading}" (click)="upload.value='';upload.click()">
+    <i class="fa fa-refresh fa-spin" *ngIf="uploading"></i>上传文件</button>
+  <span class="text-danger">{{alert}}</span>
+  <input #upload type="file" (change)="onUploadExcel($event)">
+</div>
+<div>
+  <xn-thead-fixed [theadText]="theadText" [tableTemplate]="table">
+    <ng-template #table>
+      <table class="table table-bordered table-hover text-center table-display">
+        <tbody>
+          <tr *ngFor="let item of data;">
+            <td>{{item.appId}}</td>
+            <td>
+              <span *ngIf="!item.newOrgName">{{item.orgName}}</span>
+              <span *ngIf="item.newOrgName">
+                <del>{{item.orgName}}</del>
+                <span class="text-warning">{{item.newOrgName}}</span>
+              </span>
+            </td>
+            <td>
+              <span *ngIf="!item.newOrgType">{{item.orgType}}</span>
+              <span *ngIf="item.newOrgType">
+                <del>{{item.orgType}}</del>
+                <span class="text-warning">{{item.newOrgType}}</span>
+              </span>
+            </td>
+            <td>
+              <span *ngIf="!item.newIsFinancing">{{item.isFinancing}}</span>
+              <span *ngIf="item.newIsFinancing">
+                <del>{{item.isFinancing}}</del>
+                <span class="text-warning">{{item.newIsFinancing}}</span>
+              </span>
+            </td>
+            <td>
+              <span *ngIf="!item.newAmount">{{item.amount}}</span>
+              <span *ngIf="item.newAmount">
+                <del>{{item.amount}}</del>
+                <span class="text-warning">{{item.newAmount}}</span>
+              </span>
+            </td>
+            <td>
+              <span *ngIf="!item.newPromiseRate">{{item.promiseRate}}</span>
+              <span *ngIf="item.newPromiseRate">
+                <del>{{item.promiseRate}}</del>
+                <span class="text-warning">{{item.newPromiseRate}}</span>
+              </span>
+            </td>
+            <td>
+              <span *ngIf="!item.newDiscountDays">{{item.discountDays}}</span>
+              <span *ngIf="item.newDiscountDays">
+                <del>{{item.discountDays}}</del>
+                <span class="text-warning">{{item.newDiscountDays}}</span>
+              </span>
+            </td>
+            <td>
+              <span *ngIf="!item.newInterestRate">{{item.interestRate}}</span>
+              <span *ngIf="item.newInterestRate">
+                <del>{{item.interestRate}}</del>
+                <span class="text-warning">{{item.newInterestRate}}</span>
+              </span>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </ng-template>
+  </xn-thead-fixed>
+</div>

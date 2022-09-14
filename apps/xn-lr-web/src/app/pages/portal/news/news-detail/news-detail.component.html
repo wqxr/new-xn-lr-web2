@@ -1,0 +1,8 @@
+<div [ngClass]="[store.isPhone ? 'h5-news-detail' : 'news-detail']">
+  <div [ngClass]="[store.isPhone ? 'h5-portal-panel' : 'portal-panel']">
+    <div class="detail-box">
+      <div class="news-detail-title">{{news.title}}</div>
+      <div class="news-detail-content" [innerHTML]="news.content | html"></div>
+    </div>
+  </div>
+</div>

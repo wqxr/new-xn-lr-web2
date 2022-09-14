@@ -1,0 +1,36 @@
+<modal #modal [backdrop]="'static'" [keyboard]="false" [animation]="false">
+    <form class="form-horizontal">
+        <modal-header [showClose]="false">
+            <h4 class="modal-title">{{pageTitle}}</h4>
+        </modal-header>
+        <modal-body>
+            <div class="edit-content">
+                <table class="table text-center" style="margin-bottom:0">
+                    <tbody  *ngFor="let row of params">
+                        <!-- 内容项 -->
+                        <tr>
+                            <!-- 每行内容 -->
+                            <td class="bold-text">{{row?.itemId.leftIndex.key}}</td>
+                            <td><span>参考标准：{{row?.referenceStandard}}</span></td>
+                            <td class="bold-text">{{row?.itemId.rightIndex.key}}</td>
+                        </tr>
+                        <tr>
+                            <!-- 每行内容 -->
+                            <td>{{row?.itemId.leftIndex.value}}</td>
+                            <td><span  [class]="row.standardCss"  >{{row?.relation}}</span></td>
+                            <td>{{row?.itemId.rightIndex.value}}</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </modal-body>
+
+        <div class="modal-footer">
+            <div class="clearfix">
+                <div class="button-group">
+                    <button type="button" class="btn btn-default" (click)="handleCancel()">关闭</button>
+                </div>
+            </div>
+        </div>
+    </form>
+</modal>

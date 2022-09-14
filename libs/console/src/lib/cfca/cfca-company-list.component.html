@@ -1,0 +1,93 @@
+<section class="content-header">
+  <h1>{{tabConfig.title}}</h1>
+</section>
+<section class="content">
+  <div class="box">
+    <div class="box-body">
+      <div class="tab-content">
+        <div class="tab-pane active" style="padding: 15px 0">
+          <!-- 搜索项 -->
+          <div style='clear:both'>
+            <div class="form-group col-sm-4 flex" *ngFor="let row of shows">
+                <div class="title xn-control-label">
+                  {{row.title}}
+                  <span *ngIf="row.required !== false" class="required-label">*</span>
+                </div>
+                <div class="label">
+                  <app-dynamic-input [row]="row" [form]="form" [formModule]="formModule"></app-dynamic-input>
+                  <!-- <xn-input [row]="row" [form]="form"></xn-input> -->
+                </div>
+              </div>
+          </div>
+
+          <div class="col-sm-12 form-group text-right" style="margin-top: 15px;">
+            <!-- 头按钮 -->
+            <button class="btn btn-primary" (click)="downLoad()">下载</button>
+            <button class="btn btn-primary" (click)="searchMsg()">查询</button>
+            <button class="btn btn-danger" (click)="reset()">重置</button>
+
+          </div>
+
+          <!--子列表-->
+          <table class="table table-bordered table-striped text-center">
+            <thead>
+              <tr class="table-head">
+                <th>序号</th>
+                <!-- 表头 -->
+                <th *ngFor="let head of heads">
+                  <ng-container>{{head.label}}</ng-container>
+                </th>
+                <!-- 行操作 -->
+                <th>
+                  操作
+                </th>
+              </tr>
+            </thead>
+            <tbody>
+              <ng-container *ngIf="listInfo.length;else block">
+                <tr *ngFor="let item of listInfo;let i=index">
+                  <!--序号-->
+                  <td>{{i + 1}}</td>
+                  <!-- 列内容 -->
+                  <td *ngFor="let head of heads" style="max-width: 70px;word-wrap:break-word">
+                    <!-- 根据head type 类型配置显示方式 -->
+                    <ng-container [ngSwitch]="head.type">
+                      <ng-container *ngSwitchCase="'cfcaStatus'">
+                        <div [innerHTML]="item[head.value]| xnSelectTransform:'caTypeStatus'">
+                        </div>
+                      </ng-container>
+                      <!--默认-->
+                      <ng-container *ngSwitchDefault>
+                        <div [innerHTML]="item[head.value] | xnGatherType: {head:head,row:item}"></div>
+                      </ng-container>
+                    </ng-container>
+                  </td>
+
+                  <!-- 行按钮 -->
+                  <td>
+                    <div class="operate-btn">
+                          <a href="javaScript:void(0)" (click)="view(item.id)">查看</a>
+                          &nbsp;&nbsp;&nbsp;
+                          <!-- <span *ngIf='item.status!==7 && item.status!==8'>操作</span> -->
+                          <a  *ngIf='item.status===7 || item.status===8' href="javaScript:void(0)" (click)="operate(item)">查验</a>
+                    </div>
+                  </td>
+                </tr>
+              </ng-container>
+            </tbody>
+          </table>
+        </div>
+        <xn-pagination [rows]="pageConfig.pageSize" [first]="pageConfig.first" [totalRecords]="pageConfig.total"
+          [pageSizeOptions]="[5,10,20,30,50,100]" (pageChange)="onPage($event)"></xn-pagination>
+      </div>
+    </div>
+  </div>
+</section>
+
+<ng-template #block>
+  <tr>
+    <td [attr.colspan]="calcAttrColspan(currentTab)">
+      <div class="empty-message"></div>
+    </td>
+  </tr>
+</ng-template>

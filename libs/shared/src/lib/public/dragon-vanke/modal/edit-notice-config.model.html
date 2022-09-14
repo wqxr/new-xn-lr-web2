@@ -1,0 +1,40 @@
+<modal #modal [backdrop]="'static'" [keyboard]="false" [animation]="false">
+  <modal-header [showClose]="false">
+    <h4 class="modal-title">{{params?.title}}</h4>
+  </modal-header>
+  <modal-body>
+    <div style="max-height: 480px;overflow-y: auto;">
+      <div class="form-group col-sm-12" *ngFor="let row of shows">
+        <div class="col-sm-2 xn-control-label">
+          {{ row.title }}
+          <span *ngIf="row.required !== false && row.required !== 0" class="required-label">*</span>
+          <i *ngIf="row.name === 'paramConfig' && paramDesc" style='font-size: 16px;' class='fa fa-question-circle'
+            z-index='2000' [tooltip]='helpParamConfig' content-type="template">
+          </i>
+        </div>
+        <div class="col-sm-8">
+          <app-dynamic-input [row]="row" [form]="form" [formModule]="formModule"></app-dynamic-input>
+        </div>
+      </div>
+    </div>
+  </modal-body>
+  <div class="modal-footer" style="text-align: right;">
+    <button type="button" class="btn btn-default" (click)="oncancel()"
+      style="clear: both;margin-left: 30px; margin-right: 10px;">取消</button>
+    <button type="submit" class="btn btn-success" (click)="onsubmit();$event.stopPropagation();"
+      *ngIf="params?.type==='edit'" [disabled]="!this.form.valid">提交</button>
+    <button type="submit" class="btn btn-success" (click)="onOk();$event.stopPropagation();"
+      *ngIf="params?.type==='view'">确定</button>
+  </div>
+
+</modal>
+<!-- 参数项描述 -->
+<ng-template #helpParamConfig>
+  <div>
+    <div>
+      <span>帮助提示：</span>
+      <p>{{paramDesc}}</p>
+    </div>
+
+  </div>
+</ng-template>

@@ -1,0 +1,25 @@
+<modal #modal [backdrop]="'static'" [keyboard]="false" [animation]="false">
+  <modal-header [showClose]="false">
+    <h4 class="modal-title">扫描二维码</h4>
+  </modal-header>
+  <modal-body>
+    <div class="qr">
+      <div class="inqr">
+        <div class="box">
+          <img class="qrcode-img" src="{{fileSrc}}" *ngIf="!!fileSrc">
+        </div>
+        <!-- <div class="box">
+          <div class="box-atten">
+            <p>1、请扫描二维码；</p>
+            <p>2、用手机上传图片；</p>
+            <p>3、手机保存图片后，点击右下角确定按钮将图片拉取到PC端。</p>
+          </div>
+        </div> -->
+      </div>
+    </div>
+  </modal-body>
+  <div class="modal-footer">
+    <button type="button" class="btn btn-default" (click)="onCancel()">取消</button>
+    <button type="button" class="btn btn-danger" (click)="onOk()">确定</button>
+  </div>
+</modal>

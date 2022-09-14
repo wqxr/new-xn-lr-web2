@@ -1,0 +1,84 @@
+<section class="content-header">
+  <h1 style="display: inline-block">
+    注册公司
+    <small>新版注册公司页面，可同步数据到权限系统</small>
+  </h1>
+  <button style="float: right" (click)="navToOld()" nz-button nzType="primary">返回到旧版</button>
+</section>
+<section class="content">
+  <div class="box">
+    <div class="box-body">
+      <div class="tab-content">
+        <div class="tab-pane active" style="padding: 15px 0">
+          <!-- 搜索项 -->
+          <xn-search-form
+            #searchForm
+            [fields]="showFields"
+            [model]="searchModel"
+            [options]="options"
+            (search)="onSearch($event)"
+            (reset)="onReset(searchForm)"
+          ></xn-search-form>
+          <div>
+            <nz-divider nzDashed></nz-divider>
+          </div>
+          <div style="display: flex; justify-content: space-between;margin-bottom: 10px;">
+            <div>
+              <button nz-button nzType="primary" (click)="createAuth()">手动开户</button>
+            </div>
+          </div>
+
+          <xn-table
+            #reviewTable
+            [data]="listInfo"
+            [columns]="columns"
+            [size]="'middle'"
+            [loading]="loading"
+            [scroll]="{ y: '400px' }"
+            [page]="{
+            front: false,
+            total: '共'+pageConfig.total+'条记录',
+            showQuickJumper: true,
+            showSize: true,
+            pageSizes: [5, 10, 20, 30, 50, 100]
+          }"
+            [widthMode]="{
+            type: 'strict',
+            strictBehavior: 'truncate'
+          }"
+            [total]="pageConfig.total"
+            [pageIndex]="pageConfig.pageIndex"
+            [pageSize]="pageConfig.pageSize"
+            (change)="handleTableChange($event, searchForm)">
+            <!-- 注册状态 -->
+            <ng-template xn-table-row="statusTpl" let-item let-column="column">
+              {{ item[column.index] | xnSelectTransform: registerStateOptions}}
+            </ng-template>
+            <!-- 权限系统信息状态 -->
+            <ng-template xn-table-row="rightStatusTpl" let-item>
+              {{ item.rightStatus | xnSelectTransform: rightStatusOptions}}
+            </ng-template>
+            <!-- 企业角色 -->
+            <ng-template xn-table-row="orgTypesTpl" let-item let-column="column">
+              {{ orgTypeTit(item[column.index])}}
+            </ng-template>
+            <!-- 日期 -->
+            <ng-template xn-table-row="dateTpl" let-item let-column="column">
+              <ng-container *ngIf="item[column.index]">
+                {{ item[column.index] | xnDate:'date'}}
+              </ng-container>
+            </ng-template>
+            <!-- 时间具体到秒 -->
+            <ng-template xn-table-row="dateTimeTpl" let-item let-column="column">
+              <ng-container *ngIf="item[column.index]">
+                {{ item[column.index] | xnDate:'datetime'}}
+              </ng-container>
+            </ng-template>
+          </xn-table>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+

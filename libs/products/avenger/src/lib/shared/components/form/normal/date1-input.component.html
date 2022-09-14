@@ -1,0 +1,10 @@
+<div [formGroup]="form" class="input-group date" data-provide="datepicker">
+  <input class="form-control xn-input-font xn-input-border-radius" [ngClass]="myClass" type="text"
+         [formControlName]="row.name" [placeholder]="row.placeholder" (blur)="onBlur()" readonly>
+  <div [ngClass]="myClass2">
+    <span class="glyphicon glyphicon-th"></span>
+  </div>
+</div>
+<span class="xn-input-alert" *ngIf="alert">{{alert}}</span>
+<span class="xn-input-alert">{{factoringEndAlert}}</span>
+<span class="xn-input-alert">{{holidayAlert}}</span>

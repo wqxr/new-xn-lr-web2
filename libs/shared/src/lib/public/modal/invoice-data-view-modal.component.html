@@ -1,0 +1,15 @@
+<modal #modal [backdrop]="'static'" [keyboard]="false" [animation]="false" (onDismiss)="onOk()">
+  <modal-header [showClose]="true">
+    <h4 class="modal-title">所有{{paramName}}</h4>
+  </modal-header>
+  <modal-body>
+    <div style="max-height:600px;overflow: auto;">
+      <span class="invoice" *ngFor="let item of numDataShow">
+        {{item}}
+      </span>
+    </div>
+  </modal-body>
+  <modal-footer>
+    <button type="button" class="btn btn-danger" (click)="onOk()">确定</button>
+  </modal-footer>
+</modal>

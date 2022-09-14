@@ -1,0 +1,28 @@
+<div *ngIf="row?.selectOptions.length>0;else empty">
+
+    <div class="form-group col-sm-12" style="padding-right: 0;" *ngFor="let param of row?.selectOptions; let i=index">
+  
+      <div class="col-sm-1 xn-control-label">{{param.name}}</div>
+  
+      <!-- 数值类型 -->
+      <div *ngIf="row?.options.helpMsg === 1" class="col-sm-11" style="padding-right: 0;">
+        <input minlength="1" maxlength="2" placeholder="请输入1~30之间的数字"
+          class="form-control xn-input-font xn-input-border-radius" type="number" [disabled]="readonly" type="text"
+          [(ngModel)]="param.value" (input)="inputChange(param.value,i)">
+        <span *ngIf="param?.alert" class="xn-input-alert">{{param?.alert}}</span>
+      </div>
+  
+      <!-- 日期类型 -->
+      <div *ngIf="row?.options.helpMsg === 2" class="col-sm-11">
+        <xn-date-picker [placeholder]="'请选择时间'" [disabled]="readonly" [value]="param.value" [options]="options"
+          (changeDate)="selectedDate($event, i)">
+        </xn-date-picker>
+        <span *ngIf="param?.alert" class="xn-input-alert">{{param?.alert}}</span>
+      </div>
+    </div>
+  
+  </div>
+  <ng-template #empty>
+    <div style="margin-top: 5px;">无</div>
+  </ng-template>
+  

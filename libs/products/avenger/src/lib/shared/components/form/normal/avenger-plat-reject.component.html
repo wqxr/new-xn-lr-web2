@@ -1,0 +1,28 @@
+<ng-container *ngIf="row.type==='ModifiedContent'">
+  <div>
+      <ul>
+        <li *ngFor='let sub of row.value;let i=index' style="float:left;" [ngStyle]="{'margin-left':i===1?'200px':'0px'}">
+          <input type="checkbox" name="single" (change)="chosecompany($event,sub,i)" /><span>{{sub.label}}</span>
+        </li>
+      </ul>
+    </div>
+<table class="table-hover table table-bordered file-row-table">
+
+  <tr>
+    <td class="input-check">
+      <ul>
+        <li *ngFor='let sub of supplierlist.checkers; let i=index'> <input [disabled]='!row.value[0].checked' type="checkbox" name="single"
+            (change)="singelChecked($event,sub,supplierlist.name)" /><span>{{sub.label}}</span></li>
+      </ul>
+
+    </td>
+    <td class="input-check">
+      <ul>
+        <li *ngFor='let sub of upstreamlist.checkers;let i=index'> <input type="checkbox" [disabled]='!row.value[1].checked' name="single"
+            (change)="singelChecked($event,sub,upstreamlist.name)" /><span>{{sub.label}}</span></li>
+      </ul>
+    </td>
+  </tr>
+</table>
+
+</ng-container>

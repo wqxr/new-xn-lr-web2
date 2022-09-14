@@ -1,0 +1,17 @@
+<ul class="nav nav-tabs" style='margin-top: 20px;'>
+  <ng-container>
+    <li class="active">
+      <a class="xn-click-a" data-toggle="tab">
+        <span class="pull-right-container" *ngIf="!!count_new_yjl_xs">
+          <span class="label label-primary pull-right">{{count_new_yjl_xs}}</span>
+        </span>
+        待办列表-保理通-雅居乐-星顺
+      </a>
+    </li>
+  </ng-container>
+</ul>
+
+<ng-container>
+  <agile-xingshun-home-comm-list-component [supers]="{label:AgileXingshunTodo,value:'AgileXingshunTodo'}">
+  </agile-xingshun-home-comm-list-component>
+</ng-container>

@@ -1,0 +1,112 @@
+<div class="input-group" style="width: 100%" [formGroup]="form">
+  <table class="table table-bordered table-hover file-row-table text-center"
+         width="100%">
+    <thead>
+    <tr>
+      <th>
+        <span class="text-line"> 序号</span>
+      </th>
+      <th>
+        <span class="text-line">发票代码</span>
+      </th>
+      <th>
+        <span class="text-line">发票号码</span>
+      </th>
+      <th [ngClass]="sortClass().invoiceDate"
+          (click)="onSort('invoiceDate')">
+        <span class="text-line">开票日期</span>
+      </th>
+      <th [ngClass]="sortClass().invoiceAmount"
+          (click)="onSort('invoiceAmount')">
+        <span class="text-line">含税金额</span>
+      </th>
+      <th>
+        <span class="text-line">发票回款日</span>
+      </th>
+      <th>
+        <span class="text-line">状态</span>
+      </th>
+      <!--是否可编辑-->
+      <th>
+        <ng-container *ngIf="orgType!==3">
+          <div class="btn btn-default btn-file xn-table-upload block button-padding"
+               (click)="deleteAll(btnStatus)"
+               [class.disabled]="!btnStatus">
+            <span class="hidden-xs xn-input-font">删除</span>
+          </div>
+          <div class="btn btn-default btn-file xn-table-upload block block button-padding"
+               (click)="handleVerification()"
+               [class.disabled]="!btnStatus">
+            <span class="hidden-xs xn-input-font">查验</span>
+          </div>
+          <div class="btn btn-default btn-file xn-table-upload block block button-padding">
+            <a href="/assets/lr/doc/发票要素表模板-定向支付流程.xlsx"
+               class="hidden-xs xn-input-font">下载发票要素表模板</a>
+          </div>
+          <div class="btn btn-default btn-file xn-table-upload block block button-padding">
+            <a href="javaScript:void (0)"
+               class="hidden-xs xn-input-font">上传发票要素表</a>
+            <input type="file" (change)="uploadInvoiceExcel($event)">
+          </div>
+        </ng-container>
+      </th>
+      <ng-container *ngIf="orgType!==3">
+        <th>
+          <span style="line-height:20px"></span>
+          <input type="checkbox" (change)="handleAllSelect()"
+                 [disabled]="!SelectedBtnStatus"
+                 [checked]="checkedAllStatus">全选/取消&nbsp;&nbsp;
+        </th>
+      </ng-container>
+    </tr>
+    </thead>
+    <tbody>
+    <ng-container *ngFor="let item of items; let i = index;">
+      <tr>
+        <td>
+          <span>{{i+1}}</span>
+        </td>
+        <td>{{ item.invoiceCode || ''}}</td>
+        <td>{{ item.invoiceNum || ''}}</td>
+        <td>{{ item.invoiceDate }}</td>
+        <td class="money-color">
+          {{ item.invoiceAmount || '' | xnMoney}}
+        </td>
+        <td>{{ item.invoiceRepaymentDate }}</td>
+        <td>
+          <span [class.money-color]="item.status!==1">{{item.status | xnInvoiceStatus}}</span>
+        </td>
+        <!--可编辑状态-->
+        <td>
+          <ng-container *ngIf="orgType!==3">
+            <a class="xn-click-a a-btn" (click)="postInit(item)">查验</a>
+            <a class="xn-click-a a-btn" (click)="onRemove(item,i)">删除</a>
+          </ng-container>
+          <a class="xn-click-a a-btn" (click)="viewInvoicesDetail(item,i)">查看</a>
+        </td>
+        <ng-container *ngIf="orgType!==3">
+          <td>
+            <input type="checkbox" (change)="handleSelect(i)"
+                   [checked]="item && item.clicked">
+          </td>
+        </ng-container>
+      </tr>
+    </ng-container>
+
+    <tr *ngIf="amountAll > 0 || preAmountAll>0">
+      <td>合计</td>
+      <td>/</td>
+      <td>/</td>
+      <td>/</td>
+      <td class="money-color">{{amountAll | xnMoney}}</td>
+      <td>/</td>
+      <td>/</td>
+      <ng-container *ngIf="orgType!==3">
+        <td>/</td>
+        <td>/</td>
+      </ng-container>
+    </tr>
+    </tbody>
+  </table>
+</div>
+<span class="xn-input-alert">{{alert}}</span>

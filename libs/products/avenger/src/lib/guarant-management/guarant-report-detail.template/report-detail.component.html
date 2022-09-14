@@ -1,0 +1,292 @@
+<section class="content-header">
+  <h4>保后监测报告</h4>
+</section>
+<section class="content">
+  <div class="box">
+    <div class="box-body">
+      <!-- 供应商名称 -->
+      <div class="tab-content" style="padding: 10px 0 0 50px">
+        <div class="col-sm-2">
+          <h4>供应商名称</h4>
+        </div>
+        <div class="col-sm-10" style="border: 1px grey">
+          <a href='javascript:void(0)' (click)="turnToOrg()"
+            style="color:lightseagreen; font-size:150% ">{{orgName}}</a>
+        </div>
+      </div>
+      <!-- 预警信息 -->
+      <div class="tab-content" style="padding: 50px 0 0 50px">
+        <div class="tab-pane active" style="padding: 15px 0">
+          <div class="col-sm-2">
+            <h4>预警信息</h4>
+          </div>
+          <div class="col-sm-10">
+            <table class="table table-bordered table-striped text-center">
+              <tbody>
+                <ng-container>
+                  <tr>
+                    <td>序号</td>
+                    <td>预警类型</td>
+                    <td>预警内容</td>
+                    <td>预警时间</td>
+                  </tr>
+                  <tr *ngFor="let item of warnInfoData;let i=index">
+                    <td *ngIf="item.warnLevel;">{{i+1}}</td>
+                    <td *ngIf="item.warnLevel;">{{item.warnType}}</td>
+                    <td *ngIf="item.warnLevel;">{{item.expression}}</td>
+                    <td *ngIf="item.warnLevel;">{{item.date}}</td>
+                  </tr>
+                </ng-container>
+                <tr *ngIf='warnInfoData.length===0'>
+                  <td [attr.colspan]="4">
+                    <div class="empty-message"></div>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+            <xn-pagination [rows]="onepageConfig.pageSize" [first]="onepageConfig.first"
+              [totalRecords]="onepageConfig.total" [pageSizeOptions]="[5,10,20,30,50,100]" (pageChange)="onepage($event)">
+            </xn-pagination>
+          </div>
+        </div>
+      </div>
+      <!-- 提示信息 -->
+      <div class="tab-content" style="padding: 150px 0 0 50px">
+        <div class="tab-pane active" style="padding: 15px 0">
+          <div class="col-sm-2">
+            <h4>提示信息</h4>
+          </div>
+          <div class="col-sm-10">
+            <table class="table table-bordered table-striped text-center">
+              <tbody>
+                <ng-container>
+                  <tr>
+                    <td>序号</td>
+                    <td>提示类型</td>
+                    <td>提示内容</td>
+                    <td>提示时间</td>
+                  </tr>
+                  <tr *ngFor="let item of alertInfoData;let i=index">
+                    <td *ngIf="item.warnLevel">{{i+1}}</td>
+                    <td *ngIf="item.warnLevel;">{{item.warnType}}</td>
+                    <td *ngIf="item.warnLevel;">{{item.expression}}</td>
+                    <td *ngIf="item.warnLevel;">{{item.date}}</td>
+                  </tr>
+                </ng-container>
+                <tr *ngIf='alertInfoData.length===0'>
+                  <td [attr.colspan]="4">
+                    <div class="empty-message"></div>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+            <xn-pagination [rows]="pageConfig.pageSize" [first]="pageConfig.first" [totalRecords]="pageConfig.total"
+              [pageSizeOptions]="[5,10,20,30,50,100]" (pageChange)="onPage($event)">
+            </xn-pagination>
+          </div>
+        </div>
+      </div>
+
+      <!-- 业务三要素变动趋势 -->
+      <div class="tab-content" style="padding: 150px 0 0 50px">
+        <div class="tab-pane active" style="padding: 15px 0">
+          <div class="col-sm-2">
+            <h4>三要素-额度和期限变动趋势</h4>
+          </div>
+          <div class="col-sm-10">
+            <div #chart1 class="chart-height-400"></div>
+          </div>
+        </div>
+      </div>
+      <div class="tab-content" style="padding: 150px 0 0 50px">
+        <div class="tab-pane active" style="padding: 15px 0">
+          <div class="col-sm-2">
+            <h4>三要素-定价变动趋势</h4>
+          </div>
+          <div class="col-sm-10">
+            <div #chart2 class="chart-height-400"></div>
+          </div>
+        </div>
+      </div>
+      <!-- 还款意愿及还款能力趋势 -->
+      <div class="tab-content" style="padding: 150px 0 0 50px">
+        <div class="tab-pane active" style="padding: 15px 0">
+          <div class="col-sm-2">
+            <h4>还款意愿及还款能力趋势</h4>
+          </div>
+          <div class="col-sm-10">
+            <div #chart3 class="chart-height-400"></div>
+          </div>
+        </div>
+      </div>
+      <!-- 财务报表关键科目关系检查 -->
+
+      <div class="tab-content" style="padding: 50px 0 0 50px">
+        <div class="tab-pane active" style="padding: 15px 0">
+          <div class="col-sm-2">
+            <h4>财报关键科目关系检查</h4>
+          </div>
+          <div class="col-sm-10">
+            <table class="table table-bordered table-striped text-center">
+              <tbody>
+
+                <tr>
+                  <td>序号</td>
+                  <td>项目</td>
+                  <td>检查结果</td>
+                  <td>财报周期</td>
+                </tr>
+                <ng-container *ngIf='financingtable.length>0'>
+                  <tr *ngFor="let item of financingtable;let i=index">
+                    <td>{{i+1}}</td>
+                    <td>{{item.itemDesc}}</td>
+                    <td>{{item.outcomeDesc}}</td>
+                    <td>{{item.dateKey}}</td>
+                  </tr>
+                </ng-container>
+                <tr *ngIf='financingtable.length===0'>
+                  <td [attr.colspan]="4">
+                    <div class="empty-message"></div>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+            <xn-pagination [rows]="twopageConfig.pageSize" [first]="twopageConfig.first"
+              [totalRecords]="twopageConfig.total" [pageSizeOptions]="[5,10,20,30,50,100]" (pageChange)="onepageFinanecing($event)">
+            </xn-pagination>
+          </div>
+        </div>
+      </div>
+      <!-- 财务报表关键科目关系检查 -->
+      <!--TODO-->
+       <!-- <div class="tab-content" style="padding: 50px 0 0 50px">
+        <div class="tab-pane active" style="padding: 15px 0">
+          <div class="col-sm-2">
+            <h4>关键财务指标</h4>
+          </div>
+          <div class="col-sm-10">
+            <table class="table table-bordered table-striped text-center">
+              <tbody>
+                <ng-container>
+                  <tr>
+                    <td>项目</td>
+                    <td>最新一份财报的时间范围</td>
+                    <td>倒数第二份财报的时间范围</td>
+                  </tr>
+                  <tr *ngIf='keydetail.length>0'>
+                    <td>经营活动现金净流量/总债务</td>
+                    <td><i class="fa" [style.color]='keydetail[0].CASH_FLOW_DIVI_TOTAL_DEBT.healthAssessment'
+                        [ngClass]="{'fa-arrow-down':keydetail[0].CASH_FLOW_DIVI_TOTAL_DEBT.healthAssessment==='#FF0000','fa-arrow-up':keydetail[0].CASH_FLOW_DIVI_TOTAL_DEBT.healthAssessment==='#008000','fa-arrow-right':keydetail[0].CASH_FLOW_DIVI_TOTAL_DEBT.healthAssessment==='#FFFF00'}"></i>{{keydetail[0].CASH_FLOW_DIVI_TOTAL_DEBT.value}}
+                    </td>
+                    <td><i class="fa" [style.color]='keydetail[1].CASH_FLOW_DIVI_TOTAL_DEBT.healthAssessment'
+                        [ngClass]="{'fa-arrow-down':keydetail[1].CASH_FLOW_DIVI_TOTAL_DEBT.healthAssessment==='#FF0000','fa-arrow-up':keydetail[1].CASH_FLOW_DIVI_TOTAL_DEBT.healthAssessment==='#008000','fa-arrow-right':keydetail[1].CASH_FLOW_DIVI_TOTAL_DEBT.healthAssessment==='#FFFF00'}"></i>{{keydetail[1].CASH_FLOW_DIVI_TOTAL_DEBT.value}}
+                    </td>
+                  </tr>
+                  <tr *ngIf='keydetail.length>0'>
+                    <td>净资产收益率(%)</td>
+                    <td><i class="fa" [style.color]='keydetail[0].EQUITY_YIELD.healthAssessment'
+                        [ngClass]="{'fa-arrow-down':keydetail[0].EQUITY_YIELD.healthAssessment==='#FF0000','fa-arrow-up':keydetail[0].EQUITY_YIELD.healthAssessment==='#008000','fa-arrow-right':keydetail[0].EQUITY_YIELD.healthAssessment==='#FFFF00'}"></i>{{keydetail[0].EQUITY_YIELD.value}}
+                    </td>
+                    <td><i class="fa" [style.color]='keydetail[1].EQUITY_YIELD.healthAssessment'
+                        [ngClass]="{'fa-arrow-down':keydetail[1].EQUITY_YIELD.healthAssessment==='#FF0000','fa-arrow-up':keydetail[1].EQUITY_YIELD.healthAssessment==='#008000','fa-arrow-right':keydetail[1].EQUITY_YIELD.healthAssessment==='#FFFF00'}"></i>{{keydetail[1].EQUITY_YIELD.value}}
+                    </td>
+                  </tr>
+                  <tr *ngIf='keydetail.length>0'>
+                    <td>销售（营业）利润率</td>
+                    <td><i class="fa" [style.color]='keydetail[0].SALE_BENE_RATE.healthAssessment'
+                        [ngClass]="{'fa-arrow-down':keydetail[0].SALE_BENE_RATE.healthAssessment==='#FF0000','fa-arrow-up':keydetail[0].SALE_BENE_RATE.healthAssessment==='#008000','fa-arrow-right':keydetail[0].SALE_BENE_RATE.healthAssessment==='#FFFF00'}"></i>{{keydetail[0].SALE_BENE_RATE.value}}
+                    </td>
+                    <td><i class="fa" [style.color]='keydetail[1].SALE_BENE_RATE.healthAssessment'
+                        [ngClass]="{'fa-arrow-down':keydetail[1].SALE_BENE_RATE.healthAssessment==='#FF0000','fa-arrow-up':keydetail[1].SALE_BENE_RATE.healthAssessment==='#008000','fa-arrow-right':keydetail[1].SALE_BENE_RATE.healthAssessment==='#FFFF00'}"></i>{{keydetail[1].SALE_BENE_RATE.value}}
+                    </td>
+                  </tr>
+                  <tr *ngIf='keydetail.length>0'>
+                    <td>流动资产周转率（次）</td>
+                    <td><i class="fa" [style.color]='keydetail[0].LIQUIDITY_CYCLE.healthAssessment'
+                        [ngClass]="{'fa-arrow-down':keydetail[0].LIQUIDITY_CYCLE.healthAssessment==='#FF0000','fa-arrow-up':keydetail[0].LIQUIDITY_CYCLE.healthAssessment==='#008000','fa-arrow-right':keydetail[0].LIQUIDITY_CYCLE.healthAssessment==='#FFFF00'}"></i>{{keydetail[0].LIQUIDITY_CYCLE.value}}
+                    </td>
+                    <td><i class="fa" [style.color]='keydetail[1].LIQUIDITY_CYCLE.healthAssessment'
+                        [ngClass]="{'fa-arrow-down':keydetail[1].LIQUIDITY_CYCLE.healthAssessment==='#FF0000','fa-arrow-up':keydetail[1].LIQUIDITY_CYCLE.healthAssessment==='#008000','fa-arrow-right':keydetail[1].LIQUIDITY_CYCLE.healthAssessment==='#FFFF00'}"></i>{{keydetail[1].LIQUIDITY_CYCLE.value}}
+                    </td>
+                  </tr>
+                  <tr *ngIf='keydetail.length>0'>
+                    <td>销售（营业）增长率</td>
+                    <td><i class="fa" [style.color]='keydetail[0].SALE_INCREASE_RATE.healthAssessment'
+                        [ngClass]="{'fa-arrow-down':keydetail[0].SALE_INCREASE_RATE.healthAssessment==='#FF0000','fa-arrow-up':keydetail[0].SALE_INCREASE_RATE.healthAssessment==='#008000','fa-arrow-right':keydetail[0].SALE_INCREASE_RATE.healthAssessment==='#FFFF00'}"></i>{{keydetail[0].SALE_INCREASE_RATE.value}}
+                    </td>
+                    <td><i class="fa" [style.color]='keydetail[1].SALE_INCREASE_RATE.healthAssessment'
+                        [ngClass]="{'fa-arrow-down':keydetail[1].SALE_INCREASE_RATE.healthAssessment==='#FF0000','fa-arrow-up':keydetail[1].SALE_INCREASE_RATE.healthAssessment==='#008000','fa-arrow-right':keydetail[1].SALE_INCREASE_RATE.healthAssessment==='#FFFF00'}"></i>{{keydetail[1].SALE_INCREASE_RATE.value}}
+                    </td>
+                  </tr>
+                  <tr *ngIf='keydetail.length>0'>
+                    <td>总债务/ebitda</td>
+                    <td><i class="fa" [style.color]='keydetail[0].TOTAL_DEBT.healthAssessment'
+                        [ngClass]="{'fa-arrow-down':keydetail[0].TOTAL_DEBT.healthAssessment==='#FF0000','fa-arrow-up':keydetail[0].TOTAL_DEBT.healthAssessment==='#008000','fa-arrow-right':keydetail[0].TOTAL_DEBT.healthAssessment==='#FFFF00'}"></i>{{keydetail[0].TOTAL_DEBT.value}}
+                    </td>
+                    <td><i class="fa" [style.color]='keydetail[1].TOTAL_DEBT.healthAssessment'
+                        [ngClass]="{'fa-arrow-down':keydetail[1].TOTAL_DEBT.healthAssessment==='#FF0000','fa-arrow-up':keydetail[1].TOTAL_DEBT.healthAssessment==='#008000','fa-arrow-right':keydetail[1].TOTAL_DEBT.healthAssessment==='#FFFF00'}"></i>{{keydetail[1].TOTAL_DEBT.value}}
+                    </td>
+                  </tr>
+                </ng-container>
+                <tr *ngIf='keydetail.length===0'>
+                  <td [attr.colspan]="3">
+                    <div class="empty-message"></div>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>  -->
+      <!-- 历史保后检测报告 -->
+
+      <div class="tab-content" style="padding: 50px 0 0 50px">
+        <div class="tab-pane active" style="padding: 15px 0">
+          <div class="col-sm-2">
+            <h4>历史保后检测报告</h4>
+          </div>
+          <div class="col-sm-10">
+            <table class="table table-bordered table-striped text-center">
+              <tbody>
+
+                <tr>
+                  <td>编号</td>
+                  <td>报告时间</td>
+                  <td>是否出现过预警信息</td>
+                </tr>
+                <ng-container *ngIf='historyreport.length>0'>
+                  <tr *ngFor="let item of historyreport;let i=index">
+                    <td>{{i+1}}</td>
+                    <td>{{item.dt}}</td>
+                    <td>{{item.isWarn  | xnSelectTransform:'defaultRadio'}}</td>
+                  </tr>
+                </ng-container>
+                <tr *ngIf='historyreport.length===0'>
+                  <td [attr.colspan]="3">
+                    <div class="empty-message"></div>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+            <xn-pagination [rows]="threepageConfig.pageSize" [first]="threepageConfig.first"
+              [totalRecords]="threepageConfig.total" [pageSizeOptions]="[5,10,20,30,50,100]"
+              (pageChange)="onepage($event)">
+            </xn-pagination>
+          </div>
+        </div>
+      </div>
+      <!-- 历史保后监测报告 -->
+    </div>
+    <div class="panel-footer text-right" style="height:50px">
+      <button type="button" class="btn btn-default pull-left" (click)="onCancel()">返回</button>
+    </div>
+  </div>
+
+</section>
+<ng-template #block>
+  <tr>
+    <td [attr.colspan]="4">
+      <div class="empty-message"></div>
+    </td>
+  </tr>
+</ng-template>

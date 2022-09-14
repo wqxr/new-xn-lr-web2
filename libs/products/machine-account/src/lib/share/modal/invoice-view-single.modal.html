@@ -1,0 +1,128 @@
+<modal #modal [backdrop]="'static'" [keyboard]="false" [animation]="false">
+        <modal-header [showClose]="false">
+          <h4 class="modal-title">{{pageTitle}}</h4>
+        </modal-header>
+        <modal-body>
+          <div class="edit-content">
+            <!-- 发票代码 发票号码 开票日期-->
+            <div class="flex-row" *ngIf="fpdm || fphm || kprq">
+              <div class="this-title" *ngIf="fpdm">发票代码</div>
+              <div class="this-padding this-flex-1" *ngIf="fpdm">
+                <input class="form-control xn-input-border-radius" value="{{fpdm}}" type="text" readonly>
+              </div>
+              <div class="this-title" *ngIf="fphm">发票号码</div>
+              <div class="this-padding this-flex-1" *ngIf="fphm">
+                <input class="form-control xn-input-border-radius" value="{{fphm}}" type="text" readonly>
+              </div>
+              <div class="this-title" *ngIf="kprq">开票日期</div>
+              <div class="this-padding this-flex-1" *ngIf="kprq">
+                <input class="form-control xn-input-border-radius" value="{{kprq}}" type="text" readonly>
+              </div>
+            </div>
+            <!-- 开票金额 -->
+            <div class="flex-row" *ngIf="kpje">
+              <div class="this-title" *ngIf="kpje">开票金额</div>
+              <div class="this-padding this-flex-1" *ngIf="kpje">
+                <input class="form-control xn-input-border-radius" value="{{kpje | xnMoney}}" type="text" readonly>
+                <div class="this-control">
+                  <span class="xn-money-alert">{{moneyAlert}}</span>
+                </div>
+              </div>
+              <!-- 为了对齐 -->
+              <div class="this-title">&nbsp;</div>
+              <div class="this-padding this-flex-1">&nbsp;</div>
+              <div class="this-title">&nbsp;</div>
+              <div class="this-padding this-flex-1">
+              </div>
+            </div>
+
+            <!--内容容器-->
+            <div class="edit-content-flex">
+              <div class="clear-bg">
+                <div class="form-group text-right this-padding">
+                  <a href="javaScript:void(0)" (click)="diaplayRecord()">{{titleclick}}</a>
+                </div>
+                <ng-container *ngIf="isdiaplayPic">
+                  <ul class="list-group" *ngIf="!!jindieDetail">
+                    <li class="list-group-item" *ngFor="let item of jindieDetail.list">
+                      <label style="margin-right: 1rem">{{item.label}}:</label>{{item.value}}
+                    </li>
+                  </ul>
+                  <table class="table table-hover table-bordered clear-bg" *ngIf="!!jindieDetail">
+                    <thead>
+                    <tr>
+                      <th>货物名称</th>
+                      <th>商品编号</th>
+                      <th>规格型号</th>
+                      <th>数量</th>
+                      <th>单价不税</th>
+                      <th>单位</th>
+                      <th>税额</th>
+                      <th>税率</th>
+                      <th>金额不含税</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <ng-container *ngFor="let row of jindieDetail.items">
+                      <tr>
+                        <td>{{row.goodsName}}</td>
+                        <td>{{row.goodsCode}}</td>
+                        <td>{{row.specModel}}</td>
+                        <td>{{row.num}}</td>
+                        <td>{{row.unitPrice}}</td>
+                        <td>{{row.unit}}</td>
+                        <td>{{row.taxAmount}}</td>
+                        <td>{{row.taxRate}}</td>
+                        <td>{{row.detailAmount}}</td>
+                      </tr>
+                    </ng-container>
+                    </tbody>
+                  </table>
+                </ng-container>
+                <!--// 发票图片-->
+                <div class="flex-row" *ngIf="!isdiaplayPic">
+                  <div class="this-title">购方：</div>
+                  <div class="this-padding this-flex-1">
+                    <input class="form-control xn-input-border-radius" value="{{sail}}" type="text" readonly>
+                  </div>
+                  <div class="this-title">销方：</div>
+                  <div class="this-padding this-flex-1">
+                    <input class="form-control xn-input-border-radius" value="{{forsail}}" type="text" readonly>
+                  </div>
+                </div>
+                <div class="flex-row"  *ngIf="!isdiaplayPic">
+                  <div class="this-title">备注：</div>
+                  <div class="this-padding this-flex-1">
+                    <textarea class="form-control xn-input-border-radius" value="{{detailinfo}}" type="text" readonly></textarea>
+                  </div>
+                </div>
+                <div class="form-group text-center" *ngIf="!isdiaplayPic && !!fileImg">
+                  <div class="img-container" #imgContainer>
+                    <div class="img-wrapper" #outerImg>
+                      <img #innerImg class="this-img" src="{{fileImg}}" *ngIf="!!fileImg">
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+            </div>
+          </div>
+        </modal-body>
+        <modal-footer>
+          <div class="clearfix">
+            <div class="button-group">
+              <ng-container *ngIf="!!fileImg">
+                <button id="left" type="button" class="btn btn-sm btn-default" (click)="rotateImg('left')">左旋
+                  <i class="fa  fa-undo"></i></button>
+                <button id="right" type="button" class="btn btn-sm btn-default" (click)="rotateImg('right')">右旋
+                  <i class="fa fa-repeat"></i></button>
+                <button id="large" type="button" class="btn btn-sm btn-default" (click)="scaleImg('large')">放大<i
+                    class="fa fa-search-plus"></i></button>
+                <button id="small" type="button" class="btn btn-sm btn-default" (click)="scaleImg('small')">缩小<i
+                    class="fa fa-search-minus"></i></button>
+              </ng-container>
+              <button type="button" class="btn  btn-default" (click)="onOk()">关闭</button>
+            </div>
+          </div>
+        </modal-footer>
+      </modal>

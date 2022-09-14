@@ -1,0 +1,148 @@
+<!-- 头按钮 -->
+<div class="table-head-tip col-sm-8 text-left no-padding">
+  <ng-container *ngIf="tableListConfig?.list && tableListConfig.list?.edit && tableListConfig?.list?.edit?.leftheadButtons.length">
+    <span *ngFor="let btn of tableListConfig.list.edit.leftheadButtons">
+      <ng-container [ngSwitch]="btn.operate">
+        <ng-container *ngSwitchCase="'isUpdate'">
+          <span style="margin-right: 5px;">{{headTip.isUpdate}}</span>
+        </ng-container>
+        <ng-container *ngSwitchCase="'updateTime'">
+          <span style="margin-right: 5px;">更新时间: {{headTip.updateTime | xnDate: 'longdatetime' || '无'}}</span>
+        </ng-container>
+        <ng-container *ngSwitchDefault>
+          <button type="button" class="btn btn-primary" [disabled]="btn.disabled"
+            (click)="handleHeadClick(btn)">{{btn.label}}</button>
+        </ng-container>
+      </ng-container>
+    </span>
+  </ng-container>
+</div>
+<div class="table-head-btn col-sm-4 text-right no-padding">
+  <ng-container *ngIf="tableListConfig?.list && tableListConfig.list?.edit && tableListConfig?.list?.edit?.rightheadButtons.length">
+    <span *ngFor="let btn of tableListConfig.list.edit.rightheadButtons">
+      <ng-container [ngSwitch]="btn.operate">
+        <ng-container *ngSwitchCase="'download_all'">
+          <a *ngIf="!!lists.length" href="javascript:void(0)" (click)="handleHeadClick(btn)">{{btn.label}}</a>
+        </ng-container>
+        <ng-container *ngSwitchDefault>
+          <button type="button" class="btn btn-primary" [disabled]="btn.disabled"
+            (click)="handleHeadClick(btn)">{{btn.label}}</button>
+        </ng-container>
+      </ng-container>
+    </span>
+  </ng-container>
+</div>
+<div style="width:100%;">
+  <div #tableHead class="table-head">
+    <table class="table table-bordered table-hover text-center table-display relative">
+      <thead>
+          <tr>
+            <!-- 表头 -->
+            <th style='width:6%'>序号</th>
+            <th *ngFor="let head of tableListConfig.list.headText" [ngStyle]="{width: head.width}">
+              {{head.label}}
+            </th>
+            <!-- 操作列 -->
+            <th *ngIf="tableListConfig.list?.edit?.rowButtons && tableListConfig.list?.edit?.rowButtons.length" style='width: 15%'>操作</th>
+          </tr>
+      </thead>
+    </table>
+  </div>
+  <div class="table-body">
+    <table class="table table-bordered table-hover text-center table-display">
+      <ng-container *ngIf="lists.length;else block">
+        <tr *ngFor="let item of lists;let i=index">
+          <!--序号-->
+          <td style='width:6%'>{{i + 1}}</td>
+          <!-- 列内容 -->
+          <td *ngFor="let head of tableListConfig.list.headText" [ngStyle]="{width: head.width}">
+            <!-- 根据head type 类型配置显示方式 -->
+            <ng-container [ngSwitch]="head.type">
+              <!-- mainFlowId-->
+              <ng-container *ngSwitchCase="'mainFlowId'">
+                <a href="javaScript:void(0)"
+                  (click)="hwModeService.viewProcess(item[head.value])">{{item[head.value]}}</a>
+              </ng-container>
+              <!-- 合同类型 -->
+              <ng-container *ngSwitchCase="'contractType'">
+                  <div [innerHTML]="item[head.value] | xnSelectTransform:'vankeContracttype'"></div>
+              </ng-container>
+              <!-- 金额类型 -->
+              <ng-container *ngSwitchCase="'receiveType'">
+                  <div [innerHTML]="item[head.value] | xnSelectTransform:'receiveType'"></div>
+              </ng-container>
+              <ng-container *ngSwitchCase="'files'">
+                <ng-container *ngIf="!!item[head.value]">
+                    <div *ngFor="let sub of item[head.value] | xnJson">
+                      <a href="javaScript:void(0)" (click)="viewFiles([sub])">{{sub.fileName}}</a>
+                    </div>
+                    <!-- <a href="javaScript:void(0)" (click)="viewFiles(item['files'])">{{item[head.value]}}</a> -->
+                </ng-container>
+              </ng-container>
+              <ng-container *ngSwitchCase="'file'">
+                <ng-container *ngIf="!!item[head.value]">
+                    <span>{{!!item['fileType'] ? getFielsName(item['fileType']) : '文件'}}</span>
+                </ng-container>
+              </ng-container>
+              <ng-container *ngSwitchCase="'date'">
+                <ng-container *ngIf="!!item[head.value]">
+                  <div>{{item[head.value] | xnDate: 'date'}}</div>
+                </ng-container>
+              </ng-container>
+              <ng-container *ngSwitchCase="'longdatetime'">
+                <ng-container *ngIf="!!item[head.value]">
+                  <div>{{item[head.value] | xnDate: 'longdatetime'}}</div>
+                </ng-container>
+              </ng-container>
+              <!-- 金额 -->
+              <ng-container *ngSwitchCase="'money'">
+                <ng-container *ngIf="!!item[head.value] || item[head.value]===0">
+                  <div>{{item[head.value] | number:'1.2-2' | xnMoney: 'true'}}</div>
+                </ng-container>
+            </ng-container>
+            <!-- 费率 -->
+            <ng-container *ngSwitchCase="'rate'">
+                <ng-container *ngIf="!!item[head.value] || item[head.value]===0">
+                  <div>{{item[head.value] | number:'1.2-2' | xnPercentage:'0.00%'}}</div>
+                </ng-container>
+            </ng-container>
+            <!-- 资产转让折扣率 -->
+            <ng-container *ngSwitchCase="head.type==='addPercent'">
+              <ng-container *ngIf="!!item[head.value]">
+                <div>{{item[head.value] | number: '1.2-2'}}%</div>
+              </ng-container>
+            </ng-container>
+            <!-- 渠道 -->
+            <ng-container *ngSwitchCase="head.type==='financingType'">
+              <div>
+                {{{ 'type':item['productType'],'selectBank':item['bankType'] } | xnSelectDeepTransform:'productType_sh'}}
+              </div>
+            </ng-container>
+              <!-- 默认 -->
+              <ng-container *ngSwitchDefault>
+                  <div [innerHTML]="item[head.value]"></div>
+              </ng-container>
+            </ng-container>
+          </td>
+          <!-- 行按钮 -->
+          <td style='width: 15%' *ngIf="tableListConfig.list?.edit?.rowButtons && tableListConfig.list?.edit?.rowButtons.length">
+            <div class="operate-btn">
+              <ng-container *ngFor="let btn of tableListConfig.list.edit.rowButtons">
+                <a href="javaScript:void(0)" (click)="handleRowClick(item,btn,i)" style="margin-right: 5px;">{{btn.label}}</a>
+                <!-- <br /> -->
+              </ng-container>
+            </div>
+          </td>
+        </tr>
+      </ng-container>
+    </table>
+  </div>
+</div>
+<ng-template #block>
+  <tr>
+    <td [attr.colspan]="tableListConfig.list.headText.length">
+      <div class="empty-message"></div>
+    </td>
+  </tr>
+</ng-template>
+<span class="xn-input-alert" *ngIf="alert">{{alert}}</span>

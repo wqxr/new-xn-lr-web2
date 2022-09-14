@@ -1,0 +1,34 @@
+.box {
+  border: none;
+}
+.btn {
+  margin-right: 2px;
+}
+
+.operating {
+  min-width: 215px;
+}
+
+.table-herder-bg {
+  background-color: #f6f6f6;
+}
+
+.button-group-position {
+  padding: 0 0 1rem 0;
+}
+
+.button-group-position button {
+  min-width: 8rem;
+}
+
+.font-weight-bold {
+  font-weight: 700;
+}
+
+.disabled-bg {
+  background-color: #999999;
+}
+
+li {
+  cursor: pointer;
+}

@@ -1,0 +1,28 @@
+<modal #modal [backdrop]="'static'" [keyboard]="false" [animation]="false">
+  <modal-header [showClose]="false">
+    <h4 class="modal-title">PDF文件数字签章</h4>
+  </modal-header>
+  <modal-body>
+    <div class="flex-row">
+      <div #szca class="pdf-container">
+      </div>
+    </div>
+  </modal-body>
+
+  <modal-footer>
+    <span class="pull-left">
+        <a href="https://www.lrscft.com/exe/lrscft-setup-1.0.2.exe">下载链融科技供应链服务平台桌面应用程序</a>
+    </span>
+    <ng-container *ngIf="!isReadonly">
+      <button type="button" class="btn btn-default" (click)="onCancel()">取消</button>
+    </ng-container>
+    <button type="button" class="btn btn-primary" (click)="onSave()">下载</button>
+    <ng-container *ngIf="!isReadonly">
+      <button type="button" class="btn btn-success" (click)="onOk()" *ngIf="!isProduction">同意签署（测试模式）</button>
+      <button type="button" class="btn btn-success" (click)="onSign()">同意签署</button>
+    </ng-container>
+    <ng-container *ngIf="!!isReadonly">
+      <button type="button" class="btn btn-success" (click)="onCancel()">关闭</button>
+    </ng-container>
+  </modal-footer>
+</modal>

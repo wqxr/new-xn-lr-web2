@@ -1,0 +1,19 @@
+<div [formGroup]="form">
+  <div [ngClass]="{'input-group': row.options?.unit}">
+    <input #numberInput class="form-control xn-input-font xn-input-border-radius" [ngClass]="myClass" 
+      type="text" (change)="inputChange($event)" [formControlName]="row.name" [placeholder]="row.placeholder" 
+      (blur)="onBlur($event)" autocomplete="off" [readonly]="row.options.readonly" [attr.aria-describedby]="row.name">
+    <span class="input-group-addon" *ngIf="row.options?.unit" [attr.id]="row.name">{{row.options?.unit}}</span>
+  </div>
+</div>
+<!-- when has err -->
+<ng-container *ngIf="alert;else validTemp">
+  <span class="xn-input-alert">{{ alert }}</span>
+</ng-container>
+<ng-template #validTemp>
+  <ng-container *ngIf="row.options.currency">
+    <div class="currency-info" *ngIf="![''].includes(filterVal)">
+      <span class="currency-alert">{{ filterVal | xnCurrencyChinese }}</span>
+    </div>
+  </ng-container>
+</ng-template>

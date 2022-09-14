@@ -1,0 +1,86 @@
+<div>
+  <div class="height" style="width:100%">
+    <div class="head-height">
+      <table class="table table-bordered table-hover text-center table-display relative" [style.left.px]="headLeft">
+        <thead>
+          <tr>
+            <th style='width:50px'>序号</th>
+            <!-- 表头，搜索功能 -->
+            <ng-container *ngFor="let head of heads">
+              <th style='width:120px;word-break: break-all;'>
+                {{head.label}}
+              </th>
+            </ng-container>
+            <!-- 行操作 -->
+            <th style='width:150px' *ngIf="TabConfig.rowButtons.length">
+              操作
+            </th>
+          </tr>
+        </thead>
+      </table>
+    </div>
+  </div>
+  <div class="table-height" (scroll)="onScroll($event)">
+    <table class="table table-bordered table-hover text-center table-display">
+      <tbody>
+        <ng-container *ngIf="datavalue.length;">
+          <tr *ngFor="let item of datavalue;let i=index">
+            <!--序号-->
+            <td style='width:50px'>{{i + 1}}</td>
+            <!-- 列内容 -->
+            <td *ngFor="let head of heads" style="width:120px; word-break: break-all;">
+              <!-- 根据head type 类型配置显示方式 -->
+              <ng-container [ngSwitch]="true">
+                <!-- mainFlowId-->
+                <ng-container *ngSwitchCase="head.type==='mainFlowId'">
+                  <p (click)='hwModeService.AgileHzViewProcess(item[head.value])'>
+                    <a class="xn-click-a">{{item[head.value]}}</a>
+                  </p>
+                </ng-container>
+                <ng-container *ngSwitchCase="head.type==='date'">
+                  <ng-container *ngIf="item[head.value] && item[head.value]!==''">
+                    <p>
+                      {{item[head.value] | xnDate: 'date'}}
+                    </p>
+                  </ng-container>
+                </ng-container>
+                <!-- 应收账款金额 -->
+                <ng-container *ngSwitchCase="head.type==='receive'">
+                  <ng-container
+                    *ngIf=" item[head.value] !==undefiend &&item[head.value] !==null && item[head.value]!==0">
+                    <p>{{item[head.value].toFixed(2) | xnMoney}}</p>
+                  </ng-container>
+                </ng-container>
+                <!-- 金额类型 -->
+                <ng-container *ngSwitchCase="head.type==='money'">
+                  <ng-container
+                    *ngIf=" item[head.value] !==undefiend &&item[head.value] !==null && item[head.value]!==0">
+                    <p>{{item[head.value].toFixed(2) | xnMoney}}</p>
+                  </ng-container>
+                </ng-container>
+                <!-- 渠道 -->
+                <ng-container *ngSwitchCase="head.type==='productType'">
+                  <p>
+                    {{ { 'type':item['type'],'selectBank':item['selectBank'] } | xnSelectDeepTransform:'productType_new_jd' }}
+                  </p>
+                </ng-container>
+                <ng-container *ngSwitchDefault>
+                  <p [innerHTML]="item[head.value] | xnGatherType: {head:head,row:item}"></p>
+                </ng-container>
+              </ng-container>
+            </td>
+            <!-- 行按钮 -->
+            <td style='width:150px' *ngIf="TabConfig.rowButtons.length">
+              <p class="operate-btn">
+                <ng-container *ngFor="let btn of TabConfig.rowButtons">
+                  <a href="javaScript:void(0)" (click)="handleRowClick(btn)">{{btn.label}}</a>
+                </ng-container>
+              </p>
+            </td>
+          </tr>
+        </ng-container>
+      </tbody>
+    </table>
+  </div>
+  <p style='margin-top:10px'>共<span style='color:red'>{{datavalue.length}}</span>笔交易</p>
+</div>

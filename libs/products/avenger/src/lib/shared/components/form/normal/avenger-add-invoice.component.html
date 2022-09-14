@@ -1,0 +1,101 @@
+<div [formGroup]="form">
+  <ng-container *ngIf="currentTab.label==='invoice'">
+    <div style="padding: 2px 5px" class="btn btn-default btn-file xn-table-upload block">
+      <span class="hidden-xs xn-input-font">批量上传图片</span>
+      <input type="file" (change)="onUpload($event)" multiple>
+    </div>
+    <div style="padding: 2px 5px" class="btn btn-default btn-file xn-table-upload block" [class.disabled]="!btnStatus"
+      (click)="handleVerification(btnStatus)">
+      <span class="hidden-xs xn-input-font">批量查验</span>
+    </div>
+    <div style="padding: 2px 5px" class="btn btn-default btn-file xn-table-upload block" (click)="deleteAll(btnStatus)"
+      [class.disabled]="!btnStatus">
+      <span class="hidden-xs xn-input-font">批量删除</span>
+    </div>
+  </ng-container>
+  <ng-container *ngIf="currentTab.label!=='invoice'">
+    <P>
+      <button *ngFor="let sub of currentTab.edit.headButtons" type="button" class="btn btn-default button-reset-style"
+        (click)="handleAdd(sub.value)">{{sub.label}}</button>
+    </P>
+  </ng-container>
+
+  <table class="table table-bordered text-center">
+    <thead>
+      <tr class="table-head">
+        <!-- 全选按钮 -->
+        <!-- title -->
+
+        <th *ngFor="let head of currentTab.headText">
+          {{head.label}}
+        </th>
+        <!-- 行操作 -->
+        <th>操作</th>
+        <th *ngIf="currentTab.label!=='lvyue'">
+          <span style="line-height:20px"></span>
+          <input type="checkbox" (change)="handleAllSelect()" [disabled]="!SelectedBtnStatus"
+            [checked]="checkedAllStatus">全选/取消&nbsp;&nbsp;
+        </th>
+      </tr>
+    </thead>
+    <tbody>
+      <ng-container *ngIf="items.length;else block">
+        <tr   *ngFor="let item of items; let i = index;">
+          <td>
+            <span>{{i+1}}</span>
+          </td>
+          <td>{{ item.invoiceNum || ''}}</td>
+          <td>{{ item.invoiceCode || ''}}</td>
+          <td>{{ item.invoiceDate | xnGatherType}}</td>
+          <td class="money-color">{{ item.invoiceAmount || '' | xnMoney}}</td>
+          <!-- <td class="money-color">{{item.transferMoney  | xnMoney}}</td> -->
+
+          <td>
+              <ng-container
+                *ngIf="(item?.tag&&item?.tag==='artificial') || (item?.away && item?.away==='edit');else block1">
+                <span class="tag-color">人工验证</span>
+              </ng-container>
+              <ng-template #block1>
+                <span>{{item.status | xnInvoiceStatus}}</span>
+              </ng-template>
+            </td>
+          <td> <a class="xn-click-a" (click)="onOpenImage(item)">{{item.fileName}}</a></td>
+          <!-- <td><a href="javaScript:void (0)" (click)='changeTransferMoney(item)' >修改转让金额</a></td> -->
+          <td><a class="xn-click-a tag-color a-btn" [hidden]="item?.tag&&item?.tag==='artificial'"
+              (click)="onEdit(item, i,item.tag&&item?.tag==='artificial')" *ngIf="item.status===2">手工查验</a><a
+              class="xn-click-a a-btn" (click)="inspection(item)"
+              [hidden]="item.status===1||item.status===2|| item.status===3 || item.status===4">查验</a>
+            <a class="xn-click-a a-btn" (click)="onRemove(item)" *ngIf="item.fileId">删除</a>
+          </td>
+          <td>
+            <input type="checkbox" (change)="handleSelect(i)" [checked]="item && item.clicked">
+          </td>
+        </tr>
+      </ng-container>
+      <tr *ngIf="amountAll > 0">
+        <td>合计</td>
+        <td>/</td>
+        <td>/</td>
+        <td>/</td>
+        <td class="money-color">{{amountAll | xnMoney}}</td>
+        <!-- <td class="money-color">{{transferAmount | xnMoney}}</td> -->
+        <td>/</td>
+        <td>/</td>
+        <td *ngIf="orgType===3">/</td>
+        <ng-container *ngIf="orgType!==3">
+          <td>/</td>
+          <td>/</td>
+        </ng-container>
+      </tr>
+    </tbody>
+  </table>
+</div>
+<span class="xn-input-alert">{{alert}}</span>
+
+<ng-template #block>
+  <tr>
+    <td [attr.colspan]="10">
+      <div class="empty-message"></div>
+    </td>
+  </tr>
+</ng-template>

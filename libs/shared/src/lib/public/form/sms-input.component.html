@@ -1,0 +1,7 @@
+<div class="input-group" [formGroup]="form">
+  <input type="text" class="form-control xn-input-font xn-input-first-border-radius" [formControlName]="row.name" [ngClass]="myClass" (blur)="onBlur()" (keydown)="getSms($event)"  autocomplete="off">
+  <span class="input-group-btn">
+    <button type="button" [disabled]="!btnEnabled" class="btn btn-default btn-flat xn-input-font" [ngClass]="myClass" (click)="onSend()">{{btnText}}</button>
+  </span>
+</div>
+<span class="xn-input-alert">{{alert}}</span>

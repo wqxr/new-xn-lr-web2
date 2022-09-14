@@ -1,0 +1,218 @@
+<section class="content-header">
+  <h1>
+    {{ pageTitle }}
+    <small>{{ pageDesc }}</small>
+  </h1>
+</section>
+
+<!-- Main content -->
+<section class="content">
+
+  <form class="form-horizontal" *ngIf="svrConfig" (ngSubmit)="onSubmit()" [formGroup]="mainForm">
+    <div class="panel panel-default">
+      <div class="panel-heading">
+        <span class="panel-title">{{ svrConfig.flow.flowName }}: {{ svrConfig.record.title }}
+        </span>
+      </div>
+      <!-- /.box-header -->
+      <div class="panel-body">
+        <div class="panel panel-info xn-panel-sm">
+          <div class="panel-heading">
+            <span class="panel-title">
+              流程基本信息
+            </span>
+          </div>
+          <div class="panel-body">
+            <div class="form-group" *ngFor="let info of baseInfo">
+              <div class="col-sm-3 xn-control-label">
+                {{ info.title }}
+              </div>
+              <div class="col-sm-6">
+                <app-dynamic-show [row]="info" [form]="mainForm" [svrConfig]="svrConfig"
+                  [formModule]="formModule"></app-dynamic-show>
+              </div>
+              <div class="col-sm-3 xn-control-desc"></div>
+            </div>
+          </div>
+          <!-- /.panel-body -->
+        </div>
+        <!-- 流程基本信息 -->
+
+        <ng-container *ngIf="hasActions">
+          <ng-container *ngFor="let action of newSvrConfig.actions">
+            <div class="{{ panelCssClass(action) }}">
+              <ng-container *ngIf="action.operator !== 0">
+                <div class="panel-heading" style="cursor:pointer" (click)="collapse(action)">
+                  <div class="panel-title  clearfix">
+                    <!--面板折叠提示-->
+                    <div class="col-sm-6 clear-padding">
+                      <span *ngIf="
+                          action['collapse'] && action['collapse'] === true;
+                          else block
+                        " class="fa fa-minus-square"></span>
+                      <ng-template #block><span class="fa fa-plus-square"></span></ng-template>
+                      <span>第{{ action.recordSeq }}步:
+                        {{ action.procedureName }} ({{
+                          action.operator | xnOperator: action.procedureId
+                        }})</span>
+                    </div>
+                    <div class="col-sm-2 clear-padding ">
+                      <small><span class="red">{{
+                          action['collapse'] && action['collapse'] === true
+                            ? '点击隐藏'
+                            : '点击显示'
+                        }}</span>
+                      </small>
+                    </div>
+                    <div class="col-sm-4 clear-padding  text-right">
+                      <small>
+                        <{{ action.operatorName }}>在{{
+                          action.operatorTime | xnDate
+                        }}处理
+                      </small>
+                    </div>
+                  </div>
+                </div>
+                <div class="panel-body" *ngIf="action['collapse'] && action['collapse'] === true">
+                  <ng-container *ngIf="action.operator === 1">
+                    <ng-container *ngFor="let checker of action.checkers">
+                      <div class="form-group" *ngIf="checker.type !== 'sms'">
+                        <div class="col-sm-3 xn-control-label" [ngClass]="{
+                            'required-label-strong': hwModeService.checkRequiredAndReadonly(
+                              checker
+                            ).bold,
+                            'required-star': hwModeService.checkRequiredAndReadonly(
+                              checker
+                            ).star
+                          }">
+                          {{ checker.title }}
+                        </div>
+                        <div class="col-sm-6">
+                          <app-dynamic-show [row]="checker" [form]="mainForm" [svrConfig]="svrConfig"
+                            [formModule]="formModule"></app-dynamic-show>
+                        </div>
+                      </div>
+                    </ng-container>
+                    <xn-bank-memo-component [memo]="action.memo" *ngIf="flowId !== 'platform_sign_510'">
+                    </xn-bank-memo-component>
+                    <xn-bank-contract
+                      [contracts]="
+                        action.contracts
+                          | xnContractFilter: newSvrConfig.flow.flowId
+                      "
+                    >
+                    </xn-bank-contract>
+                  </ng-container>
+                  <!-- /通过的步骤 -->
+
+                  <xn-bank-memo-component [memo]="action.memo"
+                    *ngIf="action.operator === 2 || action.operator === 3">
+                  </xn-bank-memo-component>
+                  <!-- /驳回 -->
+                  <div class="text-right">
+                    <a class="a-handle" href="javaScript:void (0)" (click)="collapse(action)">
+                      <span class="fa fa-angle-double-up"></span>
+                    </a>
+                  </div>
+                </div>
+              </ng-container>
+              <!-- /.panel-body -->
+            </div>
+          </ng-container>
+          <!-- /.panel -->
+        </ng-container>
+        <!--当前需要处理的项-->
+        <div class="panel panel-primary xn-panel-sm">
+          <div class="panel-heading">
+            <span class="panel-title">当前: {{ svrConfig.procedure.procedureName }}
+              <small class="pull-right">需要您处理</small>
+            </span>
+          </div>
+          <div class="panel-body">
+            <div class="form-group" *ngFor="let row of shows">
+              <div class="col-sm-3 xn-control-label" [ngClass]="{
+                  'required-label-strong': hwModeService.checkRequiredAndReadonly(
+                    row
+                  ).bold,
+                  'required-star': hwModeService.checkRequiredAndReadonly(row)
+                    .star
+                }">
+                {{ row.title }}
+                <a href="javaScript:void(0)" class='fa fa-question-circle' *ngIf='hwModeService.checkHelp(row)
+                .help'></a>
+              </div>
+
+              <div class="col-sm-6">
+                <app-dynamic-input [row]="row" [form]="mainForm" [svrConfig]="svrConfig"
+                  [formModule]="formModule1"></app-dynamic-input>
+              </div>
+              <div class="col-sm-3 xn-control-desc">
+                {{ row.memo }}
+              </div>
+            </div>
+            <!--tips-->
+            <div class="text-right red" *ngIf="hwModeService.checkersTips(shows)">
+              * 为必填项
+            </div>
+          </div>
+          <!-- /.panel-body -->
+        </div>
+        <!-- /.panel -->
+      </div>
+      <!-- /.panel-body -->
+
+      <div class="panel-footer text-right">
+        <button type="button" class="btn btn-default pull-left" (click)="onCancel()">
+          返回
+        </button>
+        <button type="button" class="btn btn-default" (click)="cancelModal.open()" *ngIf="svrConfig.rejectType === 0">
+          中止流程
+        </button>
+        <button type="button" class="btn btn-default" (click)="cancelModal.open()" *ngIf="svrConfig.rejectType !== 0">
+          拒绝
+        </button>
+        <button type="button" class="btn btn-primary disabled" (click)="onRegistration()"
+          *ngIf="svrConfig.flow.flowId === 'financing_supplier6'">
+          中登登记
+        </button>
+        <button type="submit" class="btn btn-primary" [disabled]="!mainForm.valid || loadingback"
+          *ngIf="svrConfig.rejectType === 0">
+          提交
+        </button>
+        <button type="submit" class="btn btn-primary" [disabled]="!mainForm.valid || loadingback"
+          *ngIf="svrConfig.rejectType !== 0">
+          同意
+        </button>
+      </div>
+      <!-- /.panel-footer -->
+
+      <modal #cancelModal [backdrop]="'static'">
+        <modal-header [showClose]="true">
+          <h4 class="modal-title">流程审核不通过</h4>
+        </modal-header>
+        <modal-body>
+          <div class="form-horizontal form-group row">
+            <div class="col-sm-2 xn-control-label">
+              备注
+            </div>
+            <div class="col-sm-8">
+              <app-dynamic-input [row]="cancelChecker" [form]="mainForm" [svrConfig]="svrConfig"
+                [formModule]="formModule1"></app-dynamic-input>
+            </div>
+          </div>
+        </modal-body>
+        <modal-footer>
+          <button type="button" class="btn btn-default pull-left" (click)="cancelModal.dismiss()">
+            取消
+          </button>
+          <button type="button" class="btn btn-danger" (click)="onTerminate()" *ngIf="svrConfig.rejectType !== 2">
+            中止流程
+          </button>
+          <button type="button" class="btn btn-danger" (click)="onReject()" *ngIf="svrConfig.rejectType !== 0">
+            退回到上一步
+          </button>
+        </modal-footer>
+      </modal>
+    </div>
+  </form>
+</section>

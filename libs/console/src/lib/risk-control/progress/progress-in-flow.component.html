@@ -1,0 +1,46 @@
+<div class="deal">
+  <div class="title">流动性资产变动</div>
+  <table class="table table-bordered table-striped table-max">
+    <thead>
+      <tr>
+        <th></th>
+        <th>货币资金</th>
+        <th>短期投资</th>
+        <th>应收票据</th>
+        <th>预付账款</th>
+        <th>应收账款</th>
+        <th>其他应收款</th>
+        <th>存货</th>
+        <th>合计</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let lists of property">
+        <td *ngFor="let item of lists">{{item}}</td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+
+<div class="deal">
+  <div class="title">流动性负债变动</div>
+  <table class="table table-bordered table-striped table-max">
+    <thead>
+      <tr>
+        <th></th>
+        <th>应收税金</th>
+        <th>短期借款</th>
+        <th>应付票据</th>
+        <th>预收账款</th>
+        <th>应付账款</th>
+        <th>其他应付款</th>
+        <th>合计</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let lists of liabilities">
+        <td *ngFor="let item of lists">{{item}}</td>
+      </tr>
+    </tbody>
+  </table>
+</div>

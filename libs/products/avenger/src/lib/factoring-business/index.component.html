@@ -1,0 +1,137 @@
+<section class="content">
+  <div class="box">
+    <div class="box-header clearfix">
+      <h3 class="box-title pull-left">普惠通</h3>
+      <div class="pull-right">
+        <ng-container *ngFor="let btn of buttonGroupList">
+          <ng-container [ngSwitch]='btn.label'>
+            <ng-container *ngSwitchCase="'View'">
+              <!--TODO-->
+              <!-- <button type="button" (click)="handleClick(btn.label)" class="btn btn-primary">{{btn.value}}</button> -->
+              <button type="button" *ngIf='isViewLetter' (click)="handleClick(btn.label)"
+                class="btn btn-primary">{{btn.value}}</button>
+            </ng-container>
+            <ng-container *ngSwitchCase="'Business'">
+              <!-- <button type="button" (click)="handleClick(btn.label)" class="btn btn-primary">{{btn.value}}</button> -->
+              <button *ngIf='isApply' type="button" (click)="handleClick(btn.label)"
+                class="btn btn-primary">{{btn.value}}</button>
+            </ng-container>
+            <ng-container *ngSwitchDefault>
+              <button type="button" (click)="handleClick(btn.label)" class="btn btn-primary">{{btn.value}}</button>
+            </ng-container>
+          </ng-container>
+        </ng-container>
+      </div>
+    </div>
+    <!--box-header-->
+    <div class="box-body">
+      <!--上部简要信息-->
+      <div class="form-group info-title">
+        <div class="form-group flex">
+          <div class="title">
+            <strong>保理业务期限 </strong>
+          </div>
+          <div class="flex-1">
+            <strong><span class="num-hlight">{{fac.nowlimit}}</span> 天</strong>
+          </div>
+        </div>
+        <div class="form-group flex">
+          <div class="title">
+            <strong>保理费用</strong>
+          </div>
+          <div class="flex-1">
+            <strong>
+              <span class="num-hlight">{{fac.totalFLV  }}%</span>
+              （年化） （含保理使用费率 <span class="num-hlight">{{fac.factoringUseFLV  }}%</span>，保理服务费
+              <span class="num-hlight">{{fac.factoringServiceFLV }}%</span>)
+
+            </strong>
+          </div>
+        </div>
+        <div class="form-group flex">
+            <div class="title">
+              <strong>平台服务费</strong>
+            </div>
+            <div class="flex-1">
+              <strong>
+                <span class="num-hlight">{{fac.platformServiceFLV  }}%</span>
+                （年化）
+              </strong>
+            </div>
+          </div>
+      </div>
+      <!--下部比例图-->
+      <div class="form-group info-title">
+        <!--保理业务额度信息-->
+        <div class="form-group">
+          <div class="flex">
+            <div class="title title-lh"><strong>保理业务额度信息</strong></div>
+            <div class="main">
+              <div class="sub-main" [ngStyle]="sortStyle(1)"></div>
+            </div>
+            <div class="flex-1 title-lh"><strong>最大额度：{{fac.maxAmount | xnMoney}}
+                元</strong>
+            </div>
+          </div>
+          <div class="flex title-lh">
+            <div class="title"></div>
+            <div class="flex main-base">
+              <div><strong>已用额度：{{fac.useAmount | xnMoney }}元</strong></div>
+              <div>
+                <strong>剩余额度：{{fac.leftAmount | xnMoney }}
+                  元</strong>
+              </div>
+            </div>
+          </div>
+        </div>
+        <!--保理业务统计-->
+        <div class="form-group">
+          <div class="flex">
+            <div class="title title-lh"><strong>保理业务统计</strong></div>
+            <div class="main">
+              <div class="sub-main" [ngStyle]="sortStyle(2)"></div>
+            </div>
+            <div class="flex-1 title-lh">
+              <strong>累计发生金额：{{fac.allAmount | xnMoney }}
+                元</strong>
+            </div>
+          </div>
+          <div class="flex title-lh">
+            <div class="title"></div>
+            <div class="flex main-base">
+              <div><strong>已还款额：{{fac.backAmount | xnMoney }}元</strong></div>
+              <div>
+                <strong>业务余额：{{fac.allLeftAoumnt  | xnMoney }}
+                  元</strong>
+              </div>
+            </div>
+          </div>
+        </div>
+        <!--平台ABS业务统计-->
+        <div class="form-group">
+          <div class="flex">
+            <div class="title title-lh"><strong>平台ABS业务统计</strong></div>
+            <div class="main">
+              <div class="sub-main" [ngStyle]="sortStyle(3)"></div>
+            </div>
+            <div class="flex-1 title-lh">
+              <strong>累计发生金额：{{fac.oldReceive | xnMoney }}
+                元</strong>
+            </div>
+          </div>
+          <div class="flex title-lh">
+            <div class="title"></div>
+            <div class="flex main-base">
+              <!-- <div><strong>已还款额：{{fac.platformReturnedAmount | xnMoney }}元</strong></div>
+              <div>
+                <strong>业务余额：{{(fac.platformAccumulativeAmount - fac.platformReturnedAmount) | xnMoney }}
+                  元</strong>
+              </div> -->
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!--box-body-->
+  </div>
+</section>

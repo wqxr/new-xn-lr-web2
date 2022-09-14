@@ -1,0 +1,11 @@
+
+<table class="table-hover table table-bordered file-row-table">
+    <tr>
+      <td style="width: 130px">保理使用费支付方</td>
+      <td class='readonlystyle'>{{valuelist.factoringUser | xnSelectTransform:'payCompany'}}</td>
+      <td style="width: 130px">保理服务费支付方</td>
+      <td class='readonlystyle'>{{valuelist.factoringServicer | xnSelectTransform:'payCompany'}}</td>
+      <td style="width: 130px">平台服务费支付方</td>
+      <td class='readonlystyle'>{{valuelist.platformServicer | xnSelectTransform:'payCompany'}}</td>
+    </tr>
+  </table>

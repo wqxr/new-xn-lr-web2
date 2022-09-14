@@ -1,0 +1,41 @@
+<div class="problem-help portal-panel">
+  <div class="input-box">
+    <nz-input-group [nzSuffix]="suffixIconSearch" style="position: relative;width: 610px;height: 40px;">
+      <input class="problem-input" type="text" nz-input placeholder="请输入关键字搜索" (keyup.enter)="onSearch()" [(ngModel)]="keyword"/>
+      <span *ngIf="keyword.length" class="close-icon" (click)="keyword = '';onSearch();" title="清空">x</span>
+    </nz-input-group>
+    <ng-template #suffixIconSearch>
+      <i (click)="onSearch()" title="点击搜索" nz-icon nzType="search" style="font-size: 17px;cursor: pointer;"></i>
+    </ng-template>
+  </div>
+  <div class="help-box">
+    <div class="step-box">
+      <div class="wrap" #stepBoxWrap>
+        <div class="slider" #slider></div>
+        <div class="step" *ngFor="let problem of problemByGroupList;let index = index;">
+          <a (click)="onChangeType(problem)" [ngClass]="{'current': currentProblemType.type === problem.type}">{{problemType[problem.type]}}</a>
+        </div>
+      </div>
+    </div>
+    <div class="problem-box">
+      <ng-container *ngIf="currentProblemType?.arr?.length;else none">
+        <div class="item" *ngFor="let problem of currentProblemType.arr;let index = index;">
+          <div class="question" (click)="currentProblem = problem" [ngStyle]="{marginBottom: currentProblem.Q === problem.Q ? '0' : '25px', fontWeight: currentProblem.Q === problem.Q ? 'bold' : 'normal'}">{{index + 1}}、<span [innerHTML]="problem.Q | html"></span></div>
+          <div class="answer" *ngIf="currentProblem.Q === problem.Q">
+            <div class="answer-icon"><span>答</span></div>
+            <div class="answer-content" [innerHTML]="problem.A | html"></div>
+          </div>
+        </div>
+      </ng-container>
+      <ng-template style="margin-bottom: 30px;" #none>
+        <div style="padding: 30px;color: #666;text-align: center;">暂无相关内容.</div>
+        <hr>
+      </ng-template>
+
+      <div class="problem-tip">
+        <div class="problem-tip-icon">?</div>
+        <div class="problem-tip-desc">如需帮助，请联系链融平台客服，或拨打联系电话：0755-29966132</div>
+      </div>
+    </div>
+  </div>
+</div>

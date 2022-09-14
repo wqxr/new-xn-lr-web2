@@ -1,0 +1,17 @@
+
+<div class="input-group" [formGroup]="form">
+  <div class="input-group-btn">
+    <div  class="btn btn-default btn-file" [ngClass]="myClass"
+      style='float: left;width: 120px;border-radius: 3px;color:#3c8dbc;padding: 2px 5px !important;'>
+      <span class="hidden-xs xn-input-font">批量上传影印件</span>
+      <input type="hidden" [formControlName]="row.name">
+      <input type="file" (change)="onSelect($event)" [disabled]="delButtonStatus" (click)="onBeforeSelect($event)">
+      <!-- multiple -->
+    </div>
+    <p class='detailP' *ngIf="showP">{{imgType}}</p>
+  </div>
+</div>
+<span class="xn-input-alert">{{alert}}</span>
+<ng-container *ngIf="true">
+    <dragon-person-list-input [row]='row' [form]='form' [svrConfig]="svrConfig" [allFiles]="allFiles"></dragon-person-list-input>
+</ng-container>

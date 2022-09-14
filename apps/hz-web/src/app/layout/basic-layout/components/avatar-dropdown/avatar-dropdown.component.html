@@ -1,0 +1,107 @@
+<ng-container *ngIf="type==='user'">
+  <span
+    class="action account"
+    nz-popover
+    nzPopoverPlacement="bottomRight"
+    [nzPopoverContent]="contentTpl"
+  >
+    <ng-container *ngIf="isPlatform || isFactoring; else customer">
+      <nz-avatar
+        nzText="{{ isPlatform ? '台' : '保' }}"
+        nzSize="small"
+        [ngClass]="['avatar']"
+        [ngStyle]="{ 'background-color': '#1D67C7', color: '#fff' }"
+      ></nz-avatar>
+    </ng-container>
+    <ng-template #customer>
+      <span class="avatar">
+        <i nz-icon nzIconfont="iconuser"></i>
+      </span>
+    </ng-template>
+    <span class="name">{{ xn.user?.userName }}</span>
+  </span>
+  <ng-template #contentTpl>
+    <div class="user-info">
+      <h3>{{ xn.user?.orgName }}</h3>
+      <p>{{ roles.join(" | ") }}</p>
+      <div nz-row [nzJustify]="'space-between'">
+        <button nz-button nzType="default"  (click)="profile()">我的资料</button>
+        <button nz-button nzType="default" (click)="logout()">退出登录</button>
+      </div>
+    </div>
+  </ng-template>
+</ng-container>
+<!-- <ng-container *ngIf="type==='data'">
+  <span
+    class="action account"
+    nz-popover
+    nzPopoverPlacement="bottom"
+    [nzPopoverContent]="contentTpl1"
+  >
+
+      <span>
+        <i nz-icon nzIconfont="iconguide"></i>
+        <i nz-icon class='iconspecial' nzType='down'></i>
+      </span>
+  </span>
+  <ng-template #contentTpl1>
+    <div class="data-info">
+      <ul class="nav-bar">
+        <li>
+          <a routerLink="/portal/column/21">平台守则</a>
+        </li>
+        <li>
+          <a routerLink="/portal/column/221">法律规定</a>
+        </li>
+        <li>
+          <a routerLink="/portal/column/222">深圳地方规定</a>
+        </li>
+      </ul>
+    </div>
+  </ng-template>
+</ng-container> -->
+<ng-container *ngIf="type==='help'">
+  <span
+    class="action account"
+    nz-popover
+    nzPopoverPlacement="bottom"
+    [nzPopoverContent]="contentTpl2"
+  >
+  <span>
+    <i nz-icon nzIconfont="iconhelp"></i>
+    <i nz-icon class='iconspecial' nzType='down'></i>
+  </span>
+  </span>
+  <ng-template #contentTpl2>
+    <div class="data-info">
+      <ul class="nav-bar">
+        <li>
+          <a routerLink="/portal/help" [queryParams]="{tab: 1}">注册指引</a>
+        </li>
+        <li>
+          <a routerLink="/portal/help" [queryParams]="{tab: 2}">常见问题</a>
+        </li>
+        <!-- <li>
+          <a routerLink="/portal/column/231">出票登记</a>
+        </li> -->
+        <!-- <li>
+          <a routerLink="/portal/column/233">保理申请</a>
+        </li> -->
+        <!-- <li>
+          <a routerLink="/portal/column/234">电票指南</a>
+        </li>
+        <li>
+          <a routerLink="/portal/column/235">问题汇总</a>
+        </li>
+        <li>
+          <a routerLink="/portal/column/236">数字证书续期</a>
+        </li> -->
+      </ul>
+    </div>
+  </ng-template>
+</ng-container>
+<!-- <ng-container *ngIf="!userInfo">
+  <div class="action">
+    <nz-spin nzSimple nzSize="small"></nz-spin>
+  </div>
+</ng-container> -->

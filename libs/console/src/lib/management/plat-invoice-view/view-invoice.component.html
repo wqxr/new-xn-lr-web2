@@ -1,0 +1,48 @@
+<div class="col-sm-12 text-right" style="margin-top: 15px;">
+    <div class="btn-group">
+      <!-- 头按钮 -->
+      <ng-container>
+        <button nz-button nzType="primary" [disabled]='!listData.length' (click)="exportData()">导出清单</button>
+      </ng-container>
+    </div>
+  </div>
+  <xn-table
+  #reviewTable
+  [data]="listData"
+  [columns]="columns"
+  [size]="'middle'"
+  [loading]="loading"
+  [scroll]="{ y: '400px' }"
+  [page]="{
+    front: false,
+    total: '共'+pageConfig.total+'条记录',
+    showQuickJumper: true,
+    showSize: true,
+    pageSizes: [5, 10, 20, 30, 50, 100]
+  }"
+  [size]="'middle'"
+  [widthMode]="{
+    type: 'strict',
+    strictBehavior: 'truncate'
+  }"
+  [total]="pageConfig.total"
+  [pageIndex]="pageConfig.pageIndex"
+  [pageSize]="pageConfig.pageSize"
+  (change)="handleTableChange($event)">
+    <!-- 日期 -->
+    <ng-template xn-table-row="dateTpl" let-item let-index="index" let-column="column">
+      {{ item[column.index] | xnDate:'date'}}
+    </ng-template>
+    <!-- 时间具体到秒 -->
+    <ng-template xn-table-row="dateTimeTpl" let-item let-index="index" let-column="column">
+      {{ item[column.index] | xnDate:'datetime'}}
+    </ng-template>
+    <!-- 开户状态 -->
+    <ng-template xn-table-row="statusTpl" let-item let-index="index" let-column="column">
+      {{ item[column.index] | xnSelectTransform:'openAccountStatus'}}
+    </ng-template>
+    <!-- 对公账户激活状态 -->
+    <ng-template xn-table-row="eAccountStatusTpl" let-item let-index="index" let-column="column">
+      {{ item[column.index] | xnSelectTransform:'accountActiveStatus'}}
+    </ng-template>
+  </xn-table>

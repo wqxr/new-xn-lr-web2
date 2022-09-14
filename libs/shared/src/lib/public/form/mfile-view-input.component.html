@@ -1,0 +1,15 @@
+<div class="input-group form-control">
+  <table class="" *ngIf="files.length > 0">
+    <tbody>
+    <tr *ngFor="let file of files">
+      <td>
+        <!--<a class="xn-input-font" href="/api/attachment/view?key={{file.fileId}}" >{{file.fileName}}</a>-->
+        <a class="xn-click-a" (click)="onView(file)">{{file.fileName}}</a>
+      </td>
+      <!-- <td>
+        <button type="button" class="close" (click)="onRemove(file.fileId)"><span>&times;</span></button>
+      </td> -->
+    </tr>
+    </tbody>
+  </table>
+</div>

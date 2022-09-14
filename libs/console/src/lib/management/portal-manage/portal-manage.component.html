@@ -1,0 +1,42 @@
+<section class="content-header">
+  <h1>
+    {{pageTitle}}
+    <small>{{pageDesc}}</small>
+  </h1>
+</section>
+
+<section class="content">
+
+  <div class="panel panel-default"  *ngFor="let item of newItems">
+    <table class="table table-bordered table-striped">
+      <thead>
+      <tr class="info">
+        <th *ngIf="!!item.children" class="col-sm-12" colspan="3">{{item.title}}</th>
+        <th *ngIf="!item.children" class="col-sm-8">{{item.title}}</th>
+        <th *ngIf="!item.children" class="col-sm-2">
+          <a class="xn-click-a" routerLink="/console/manage/portal-manage/{{item.id}}" role="button">编辑</a>
+        </th>
+        <th *ngIf="!item.children" class="col-sm-2"></th>
+      </tr>
+      </thead>
+      <tbody *ngIf="!!item.children">
+      <tr *ngFor="let child of item.children">
+        <td class="col-sm-8">{{child.title}}</td>
+        <td class="col-sm-2">
+          <!--<a class="xn-click-a" (click)="onViewEdit(item)">编辑</a>-->
+          <a class="xn-click-a" routerLink="/console/manage/portal-manage/{{child.id}}" role="button">编辑</a>
+        </td>
+        <td class="col-sm-2">
+          <div>
+            <label style="color: #3c8dbc"><input type="checkbox" [checked]="child.status" (click)="checkLogin($event, child.id)">仅登录可见</label>
+          </div>
+         </td>
+      </tr>
+
+      </tbody>
+    </table>
+  </div>
+
+
+</section>
+<!-- /.content -->

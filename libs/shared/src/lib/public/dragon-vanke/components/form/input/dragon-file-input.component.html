@@ -1,0 +1,51 @@
+<div class="input-group" [formGroup]="form">
+  <div class="input-group-btn">
+    <div class="btn btn-default btn-file" [ngClass]="myClass" style='float: left;width: 120px;border-radius: 3px;float:left;color:#3c8dbc;padding: 2px 5px !important;'>
+      <span class="hidden-xs xn-input-font">上传文件</span>
+      <input type="hidden" [formControlName]="row.name">
+      <input type="file" (change)="onSelect($event)" [disabled]="delButtonStatus" (click)="onBeforeSelect($event)">
+    </div>
+    <p class='detailP'  *ngIf="showP">{{imgType}}</p>
+  </div>
+</div>
+<span class="xn-input-alert">{{alert}}</span>
+<table class="table table-hover file-row-table"
+  *ngIf="allFiles['factoringPayConfirmYyj'].length || allFiles['brokerPayConfirmYyj'].length
+        || allFiles['pdfProjectFiles'].length">
+  <ng-container [ngSwitch]="select">
+    <tbody *ngSwitchCase="'1'">
+
+      <tr *ngFor="let file of allFiles['factoringPayConfirmYyj']">
+        <td>
+          <a class="xn-click-a" (click)="onView(file)">{{file.fileName}}</a>
+        </td>
+        <td>
+          <button type="button" [disabled]="delButtonStatus" class="specialclose close" (click)="onRemove(file.fileId)">
+            <span>&times;</span></button>
+        </td>
+      </tr>
+    </tbody>
+    <tbody *ngSwitchCase="'2'">
+      <tr *ngFor="let file of allFiles['brokerPayConfirmYyj']">
+        <td>
+          <a class="xn-click-a" (click)="onView(file)">{{file.fileName}}</a>
+        </td>
+        <td>
+          <button type="button" [disabled]="delButtonStatus" class="specialclose close" (click)="onRemove(file.fileId)">
+            <span>&times;</span></button>
+        </td>
+      </tr>
+    </tbody>
+    <tbody *ngSwitchCase="'3'">
+      <tr *ngFor="let file of allFiles['pdfProjectFiles']">
+        <td>
+          <a class="xn-click-a" (click)="onView(file)">{{file.fileName}}</a>
+        </td>
+        <td>
+          <button type="button" [disabled]="delButtonStatus" class="specialclose close" (click)="onRemove(file.fileId)">
+            <span>&times;</span></button>
+        </td>
+      </tr>
+    </tbody>
+  </ng-container>
+</table>

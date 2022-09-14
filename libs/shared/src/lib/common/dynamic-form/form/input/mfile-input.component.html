@@ -1,0 +1,59 @@
+<div class="input-group" [formGroup]="form" style='display:flex'>
+  <div class="input-group-btn" style='flex:1'>
+    <div class="btn btn-default btn-file" [ngClass]="{'disabled': delButtonStatus}"
+      (click)="onBeforeUpload(row)">
+      <span class="hidden-xs xn-input-font">上传文件</span>
+      <input type="hidden" [formControlName]="row.name">
+    </div>
+    <!-- 选择文件input隐藏在这里 -->
+    <input
+      style="width: 0px;"
+      [attr.id]="row.checkerId"
+      type="file"
+      (change)="onSelect($event)"
+      [disabled]="delButtonStatus"
+      (click)="onBeforeSelect($event)" multiple>
+    <p class='detailP' *ngIf="showP && !delButtonStatus">{{imgType}}</p>
+    <p class='helpMsg' *ngIf="row.options?.helpMsg">{{row.options?.helpMsg}}</p>
+  </div>
+  <!--分步提交显示查看示例-->
+  <ng-container *ngIf="row.options?.help && !!row.stepId">
+    <a class='teach' content-type="template" href='javascript:void(0)' placement='left'
+      [tooltip]="Examples"   max-width='450px'>查看示例</a>
+  </ng-container>
+
+</div>
+
+<span class="xn-input-alert">{{alert}}</span>
+<ng-container *ngIf="files.length > 0 && this.row.checkerId !== 'contractUpload'">
+  <div class="table-box">
+    <table class="table table-hover file-row-table">
+      <tbody>
+        <tr *ngFor="let file of files; let i=index">
+          <ng-container *ngIf="!!file.fileName">
+            <td *ngIf="row.checkerId!=='contractUploads'" style="width:95%">
+              <a class="xn-click-a" (click)="onView(file,i)">{{file?.fileName}}</a>
+            </td>
+            <td *ngIf="row.checkerId==='contractUploads'" style="width:95%">
+              <a class="xn-click-a" (click)="onViewCfca(file,i)">{{file?.fileName}}</a>
+            </td>
+            <td>
+              <button type="button" *ngIf="!delButtonStatus" class="specialclose close" (click)="onRemove(file)">
+                <span>&times;</span></button>
+            </td>
+          </ng-container>
+          <ng-container *ngIf="!!file.label">
+            <td>
+              <a class="xn-click-a" (click)="showContract(file.id, file.secret,file.label)">{{file.label}}</a>
+            </td>
+          </ng-container>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</ng-container>
+
+<ng-template #Examples>
+  <flow-other-template [row]='row'>
+  </flow-other-template>
+</ng-template>

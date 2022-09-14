@@ -1,0 +1,14 @@
+<div class="row">
+  <div class="col-md-4 xn-mselect-right">
+    <select class="form-control xn-input-font" [(ngModel)]="selectModel.first" [ngClass]="myClass"
+      (blur)="onBlur($event)" [disabled]="row.options.readonly" (change)="onChange($event, 'first')">
+      <option value="">-请选择-</option>
+      <option *ngFor="let firstOption of row.selectOptions" value="{{firstOption.value}}">{{firstOption.label}}</option>
+    </select>
+  </div>
+  <div class="col-md-8 xn-mselect-right xn-mselect-left">
+    <nz-select [(ngModel)]="selectModel.second" nzSize="default" nzMode="multiple" nzPlaceHolder="请选择" (ngModelChange)="onChange($event, 'second')">
+      <nz-option *ngFor="let option of secondOptions" [nzLabel]="option.label" [nzValue]="option.value"></nz-option>
+    </nz-select>
+  </div>
+</div>

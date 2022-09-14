@@ -1,0 +1,10 @@
+.table-head-btn {
+  margin-bottom: 5px;
+  width: 100%;
+}
+::ng-deep .ng2-pdf-viewer-container {
+  overflow-x: unset !important;
+}
+.th-padding {
+  padding: 12px 8px;
+}

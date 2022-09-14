@@ -1,0 +1,55 @@
+<section class="content-header">
+  <h1>推广列表</h1>
+</section>
+<section class="content">
+  <div class="box">
+    <div class="box-body">
+
+      <div class="tab-content">
+        <div class="tab-pane active" style="padding: 15px 0">
+          <div>
+            <table class="table table-bordered table-striped text-center">
+              <thead>
+                <tr class="table-head">
+                  <th>
+                    序号
+                  </th>
+                  <th>
+                    类型
+                  </th>
+                  <th>
+                    标题
+                  </th>
+                  <!-- 行操作 -->
+                  <th>备注</th><!--流程状态-->
+                  <th>状态</th> <!--已读状态-->
+                </tr>
+              </thead>
+              <tbody>
+                <ng-container *ngIf="data.length;else block">
+                  <tr *ngFor="let item of data;let i=index">
+                    <td>{{i+1}}</td>
+                    <td>{{item.typeName}}</td>
+                    <td><a class="xn-click-a" (click)="openWhite(item)">{{item.title}}</a></td>
+                    <td>{{item.status | xnSelectTransform:'processStatus' }}</td>
+                    <td *ngIf="item.isRead===0">未读</td>
+                    <td *ngIf="item.isRead===1">已读</td>
+                  </tr>
+                </ng-container>
+              </tbody>
+            </table>
+          </div>
+          <xn-pagination [rows]="pageConfig.pageSize" [first]="pageConfig.first" [totalRecords]="pageConfig.total"
+            [pageSizeOptions]="[5,10,20,30,50,100]" (pageChange)="onPage($event)"></xn-pagination>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+<ng-template #block>
+    <tr>
+      <td colspan="5">
+        <div class="empty-message"></div>
+      </td>
+    </tr>
+  </ng-template>

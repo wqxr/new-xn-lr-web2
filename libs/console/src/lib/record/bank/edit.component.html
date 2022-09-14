@@ -1,0 +1,200 @@
+<!-- Content Header (Page header) -->
+<section class="content-header">
+    <h1>
+      {{pageTitle}}
+      <small>{{pageDesc}}</small>
+    </h1>
+  </section>
+
+  <!-- Main content -->
+  <section class="content">
+    <div class="app-flow-process" *ngIf="flowProcess.show">
+      <app-flow-process [steped]="flowProcess.steped" [proxy]="flowProcess.proxy"></app-flow-process>
+    </div>
+
+    <form class="form-horizontal" *ngIf="svrConfig" (ngSubmit)="onSubmit()" [formGroup]="mainForm">
+      <div class="panel panel-default">
+        <div class="panel-heading">
+            <span class="panel-title">{{svrConfig.flow.flowName}}: {{svrConfig.record.title}}
+            </span>
+        </div>
+        <!-- /.box-header -->
+
+        <div class="panel-body">
+          <div class="panel panel-info xn-panel-sm">
+            <div class="panel-heading">
+                <span class="panel-title">
+                  流程基本信息
+                </span>
+            </div>
+            <div class="panel-body">
+              <div class="form-group" *ngFor="let info of baseInfo">
+                <div class="col-sm-3 xn-control-label">
+                  {{info.title}}
+                </div>
+                <div class="col-sm-6">
+                  <xn-show-input [row]="info"></xn-show-input>
+                </div>
+                <div class="col-sm-3 xn-control-desc"></div>
+              </div>
+            </div>
+            <!-- /.panel-body -->
+          </div>
+          <!-- 流程基本信息 -->
+
+          <ng-container *ngIf="hasActions">
+            <ng-container *ngFor="let action of svrConfig.actions">
+              <div class="{{panelCssClass(action)}}">
+                <ng-container *ngIf="action.operator !== 0">
+                  <div class="panel-heading">
+                      <span class="panel-title">
+                        第{{action.recordSeq}}步: {{action.procedureName}} ({{action.operator | xnOperator: action.procedureId}})
+                        <small class="pull-right"><{{action.operatorName}}>在{{action.operatorTime | xnDate}}处理</small>
+                      </span>
+                  </div>
+                  <div class="panel-body">
+                    <ng-container *ngIf="action.operator===1">
+                      <ng-container *ngFor="let checker of action.checkers">
+                        <div class="form-group" *ngIf="checker.type !== 'sms'">
+                          <div class="col-sm-3 xn-control-label" [ngClass]="{'required-label-strong':hwModeService.checkRequiredAndReadonly(checker).bold,
+                             'required-star':hwModeService.checkRequiredAndReadonly(checker).star}">
+                            {{checker.title}}
+                          </div>
+                          <div class="col-sm-6">
+                            <xn-show-input [row]="checker"></xn-show-input>
+                          </div>
+                          <div class="col-sm-3 xn-control-desc">
+                            {{checker.memo}}
+                          </div>
+                        </div>
+                      </ng-container>
+                      <xn-memo [memo]="action.memo"></xn-memo>
+                      <xn-contract [contracts]="action.contracts | xnContractFilter:svrConfig.flow.flowId"></xn-contract>
+                      <ng-container
+                        *ngIf="svrConfig.flow && svrConfig.flow.flowId === 'financing_supplier4' && svrConfig.procedure.nextProcedureId === '@end'">
+                        <ng-container *ngFor="let action of svrConfig.actions">
+                          <xn-contract4 [contracts]="action.contracts | xnContractFilter:'wanke'"
+                                        [flow]="svrConfig.flow && svrConfig.flow.flowId"></xn-contract4>
+                        </ng-container>
+                      </ng-container>
+                    </ng-container>
+                    <!-- /通过的步骤 -->
+
+                    <xn-memo [memo]="action.memo" *ngIf="action.operator===2 || action.operator===3"></xn-memo>
+                    <!-- /驳回 -->
+                  </div>
+                </ng-container>
+                <!-- /.panel-body -->
+              </div>
+            </ng-container>
+            <!-- /.panel -->
+          </ng-container>
+
+          <div class="panel panel-primary xn-panel-sm">
+            <div class="panel-heading">
+                <span class="panel-title">当前: {{svrConfig.procedure.procedureName}}
+                  <small class="pull-right">需要您处理</small></span>
+            </div>
+            <div class="panel-body">
+              <ng-container
+                *ngIf="svrConfig.flow && svrConfig.flow.flowId === 'financing_supplier3' && svrConfig.procedure.nextProcedureId === '@end'">
+                <ng-container *ngFor="let action of svrConfig.actions">
+                  <xn-contract3 [contracts]="action.contracts | xnContractFilter:'wanke'"
+                                [flow]="svrConfig.flow && svrConfig.flow.flowId"></xn-contract3>
+                </ng-container>
+                <xn-contract3-message></xn-contract3-message>
+              </ng-container>
+
+              <div class="form-group" *ngFor="let row of shows">
+                <div class="col-sm-3 xn-control-label">
+                  {{row.title}} <span *ngIf="row.required !== false && row.required !== 0" class="required-label">*</span>
+                </div>
+                <div class="col-sm-6">
+                  <ng-container
+                    *ngIf="!((row.flowId === 'financing_platform3' || row.flowId === 'financing_platform4') && row.type === 'wselect' && row.procedureId === 'operate')">
+                    <xn-input [row]="row" [form]="mainForm"></xn-input>
+                  </ng-container>
+                  <!-- 兼容处理一下，需要在经办拿到begin的数据 -->
+                  <ng-container
+                    *ngIf="(row.flowId === 'financing_platform3' || row.flowId === 'financing_platform4') && row.type === 'wselect' && row.procedureId === 'operate'">
+                    <ng-container *ngFor="let action of svrConfig.actions">
+                      <ng-container *ngIf="action.procedureId === '@begin'">
+                        <ng-container *ngFor="let checker of action.checkers">
+                          <ng-container *ngIf="checker.checkerId === 'factoring'">
+                            <xn-input1 [row]="row" [form]="mainForm" [factory]="checker.data"></xn-input1>
+                          </ng-container>
+                        </ng-container>
+                      </ng-container>
+                    </ng-container>
+                  </ng-container>
+                </div>
+                <div class="col-sm-3 xn-control-desc">
+                  {{row.memo}}
+                  <a href="/assets/lr/doc/委托代理协议.docx"  *ngIf="row.checkerId==='letterOfAttorneyFile'">委托书模板</a>
+                </div>
+              </div>
+
+              <!--tips-->
+              <div class="text-right red" *ngIf="hwModeService.checkersTips(shows)">
+                * 为必填项
+              </div>
+            </div>
+            <!-- /.panel-body -->
+          </div>
+          <!-- /.panel -->
+
+        </div>
+        <!-- /.panel-body -->
+
+        <div class="panel-footer text-right">
+          <button type="button" class="btn btn-default pull-left" (click)="onCancel()">返回</button>
+          <button type="button" class="btn btn-default" (click)="cancelModal.open()" *ngIf="svrConfig.rejectType === 0">
+            中止流程
+          </button>
+          <button type="button" class="btn btn-default" (click)="cancelModal.open()" *ngIf="svrConfig.rejectType !== 0">
+            拒绝
+          </button>
+          <!--<button type="button" class="btn btn-default" (click)="onSave()">保存</button>-->
+          <button type="submit" class="btn btn-primary" [disabled]="!mainForm.valid || loadingback"
+                  *ngIf="svrConfig.rejectType === 0">
+            提交
+          </button>
+          <button type="submit" class="btn btn-primary" [disabled]="!mainForm.valid || loadingback"
+                  *ngIf="svrConfig.rejectType !== 0">
+            同意
+          </button>
+        </div>
+        <!-- /.panel-footer -->
+
+        <modal #cancelModal [backdrop]="'static'">
+          <modal-header [showClose]="true">
+            <h4 class="modal-title">流程审核不通过</h4>
+          </modal-header>
+          <modal-body>
+            <div class="form-horizontal form-group row">
+              <div class="col-sm-2 xn-control-label">
+                备注
+              </div>
+              <div class="col-sm-8">
+                <xn-input [row]="cancelChecker" [form]="mainForm"></xn-input>
+              </div>
+            </div>
+          </modal-body>
+          <modal-footer>
+            <button type="button" class="btn btn-default pull-left" (click)="cancelModal.dismiss()">取消</button>
+            <button type="button" class="btn btn-danger" (click)="onTerminate()" [disabled]="processing" *ngIf="svrConfig.rejectType !== 2 && svrConfig.procedure.flowId !== 'financing_bank7'">中止流程
+            </button>
+            <button type="button" class="btn btn-danger" (click)="onReject()" [disabled]="processing" *ngIf="svrConfig.rejectType !== 0">退回到上一步
+            </button>
+            <button type="button" class="btn btn-danger" (click)="onRejectBack()" [disabled]="processing" *ngIf="svrConfig.rejectType !== 0 && svrConfig.procedure.flowId === 'financing_bank7' && svrConfig.procedure.procedureId === 'review'">
+                拒绝（保理方向供应商退款）
+            </button>
+          </modal-footer>
+        </modal>
+
+      </div>
+      <!-- /.panel -->
+    </form>
+
+  </section>
+  <!-- /.content -->

@@ -1,0 +1,122 @@
+
+import { XnUtils } from 'libs/shared/src/lib/common/xn-utils';
+import DragonCommBase from 'libs/shared/src/lib/public/component/comm-dragon-base';
+import { XnService } from 'libs/shared/src/lib/services/xn.service';
+import { TabConfigModel } from 'libs/shared/src/lib/config/list-config-model';
+
+/**
+ *  首页代办
+ */
+export default class TodoCertify {
+  static readonly flowId = '';
+  static readonly showName = '';
+  static readonly showPage = true;
+  // static readonly apiUrlBase = '/user/todo_cfca';
+  static readonly apiUrlBase = '/list/todo_record/list';
+  static readonly webUrlBase = ``;
+  static readonly canDo = true;
+  static readonly tableText = 'text-left';
+  static isProxy = 52;
+  static certifySearch = {  // 通用签章配置项
+    heads: [
+      { label: '记录ID', value: 'flowName', type: 'text' },  // templateName
+      {
+        label: '标题', value: 'title', type: 'title',
+        click: (xn: XnService, item: any) => {
+          if ((item.status !== 1 && item.status !== 0)
+            || !XnUtils.getRoleExist(item.nowRoleId, xn.user.roles, item.proxyType)) {
+            xn.router.navigate([`/logan/record/todo/view/${item.recordId}`]);
+          } else {
+            xn.router.navigate([`/logan/record/todo/edit/${item.recordId}`]);
+
+          }
+        }
+      },  // templateName
+      { label: '当前步骤', value: 'nowProcedureId', type: 'nowProcedureId' },
+      {
+        label: '创建时间', value: 'createTime', type: 'longDateTime', _inList: {
+          sort: true,
+          search: true
+        }
+      },
+      {
+        label: '最后更新时间', value: 'updateTime', type: 'longDateTime', _inList: {
+          sort: true,
+          search: true
+        }
+      },
+    ],
+    searches: [
+      {
+        title: '文件类型',
+        checkerId: 'flowId',
+        type: 'select',
+        required: false,
+        selectOptions: [
+          { label: '企业补充上传资质文件', value: 'sub_debtUnit_certify' },
+          { label: '平台录入资质文件', value: 'sub_platform_certify' },],
+      },
+      {
+        title: '当前步骤',
+        checkerId: 'nowProcedureId',
+        type: 'select',
+        required: false,
+        selectOptions: [
+          { label: '经办', value: '@begin' },
+          { label: '初审', value: 'operate' },
+          { label: '复核', value: 'review' },],
+      },
+    ],
+  };
+  // 多标签页，A,B,C,D,E,F......
+  static readonly config = {
+  certifyEstatesearch: {
+      title: '资质文件上传列表',
+      value: 'estate-certify-list',
+      tabList: [
+        {
+          label: '',
+          value: 'A',
+          subTabList: [
+            {
+              label: '未上传',
+              value: 'DOING',
+              canSearch: true,
+              canChecked: true,
+              edit: {
+                leftheadButtons: [
+                ],
+                headButtons: [
+                ],
+                rowButtons: [
+                  {
+                    label: '查看处理',
+                    operate: 'view',
+                    post_url: '',
+                    click: (xn: XnService, item: any) => {
+                      if ((item.status !== 1 && item.status !== 0)
+                        || !XnUtils.getRoleExist(item.nowRoleId, xn.user.roles, item.proxyType)) {
+                        xn.router.navigate([`/logan/record/todo/view/${item.recordId}`]);
+                      } else {
+                        xn.router.navigate([`/logan/record/todo/edit/${item.recordId}`]);
+
+                      }
+                    }
+                  },
+                ]
+              },
+              searches: TodoCertify.certifySearch.searches,
+              headText: TodoCertify.certifySearch.heads,
+            }
+          ],
+          post_url: '/list/todo_record/list',
+          params: 1
+        },
+      ]
+    } as TabConfigModel
+  };
+  static getConfig(name) {
+    return this.config[name];
+  }
+
+}

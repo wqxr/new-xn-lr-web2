@@ -1,0 +1,62 @@
+<div id="portal-inner-box">
+  <div [ngClass]="[store.isPhone ? 'h5-portal' : 'portal']" [ngStyle]="style" *ngIf="!showBreadcrumb">
+    <portal-nav (navigation)="handleNavigation($event)"></portal-nav>
+    <div [ngClass]="[store.isPhone ? 'h5-portal-panel' : 'portal-panel', 'caption-box']">
+      <div class="caption" *ngIf="isHomePage;else notHomePageCaption">
+        <div class="title">{{currentNav.desc}}</div>
+        <div>产融联盟专业服务商</div>
+        <span></span>
+      </div>
+      <ng-template #notHomePageCaption>
+        <div class="theme">{{currentNav.desc || currentNav.title}}</div>
+      </ng-template>
+    </div>
+  </div>
+  <div [ngClass]="[store.isPhone ? 'h5-breadcrumb' : 'breadcrumb']" *ngIf="showBreadcrumb">
+    <portal-nav (navigation)="handleNavigation($event)"></portal-nav>
+    <div class="portal-panel" *ngIf="!store.isPhone">
+      <nz-breadcrumb [nzSeparator]="nzSeparator" [nzAutoGenerate]="true"></nz-breadcrumb>
+      <ng-template #nzSeparator>
+        <i>></i>
+      </ng-template>
+    </div>
+  </div>
+  <div [ngStyle]="contentStyle" [ngClass]="[store.isPhone ? 'h5-portal-content' : 'portal-content']">
+    <router-outlet></router-outlet>
+  </div>
+  <div [ngClass]="[store.isPhone ? 'h5-bottom-bar' : 'bottom-bar']">
+    <div [ngClass]="[store.isPhone ? 'h5-portal-panel' : 'portal-panel']">
+      <div class="bottom-bar-content">
+        <div class="message">
+          <div class="title">
+            <span *ngIf="!store.isPhone">关于链融科技</span>
+            <span>联系我们</span>
+          </div>
+          <div class="item">
+            <span *ngIf="!store.isPhone"><a [routerLink]="['/portal/about']">关于我们</a></span>
+            <span *ngIf="!store.isPhone"><a [routerLink]="['/portal/product/system']">产品体系</a></span>
+            <span>0755-29966132 （工作日8:30 - 18:00）</span>
+          </div>
+          <div class="item">
+            <span *ngIf="!store.isPhone"><a [routerLink]="['/portal/news']">新闻中心</a></span>
+            <span *ngIf="!store.isPhone"><a [routerLink]="['/portal/product/solution']">解决方案</a></span>
+            <span>深圳市福田区莲花街道海田路民生金融大厦14F</span>
+          </div>
+          <div class="item" *ngIf="!store.isPhone">
+            <span><a [routerLink]="['/portal/help']">帮助中心</a></span>
+            <span><a [routerLink]="['/portal/technology']">技术体系</a></span>
+            <span><a href="https://www.lrscft.com/exe/lrscft-setup-1.0.2.exe">下载链融科技供应链服务平台桌面应用程序</a></span>
+          </div>
+        </div>
+        <div class="code">
+          <img [src]="[store.isPhone ? 'assets/images/pic/footer-QRcode-h5.png' : 'assets/images/pic/footer-QRcode.png']" alt="链融科技公众号" />
+          <div>链融科技公众号</div>
+        </div>
+      </div>
+    </div>
+    <portal-bar [type]="store.isPhone ? 'h5' : 'black'"></portal-bar>
+  </div>
+  <div class="bottom-bar-btn" *ngIf="store.isPhone" (click)="toTop()">回到顶部</div>
+</div>
+
+

@@ -1,0 +1,57 @@
+<xn-page-header-wrapper>
+  <nz-card nzTitle="银行账户列表" *ngIf="loading; else loadingTemplate">
+    <div nz-row [nzGutter]="[16,16]">
+      <ng-container *ngFor="let bank of accountList">
+        <div nz-col nzSpan="8">
+          <div class="bank-card">
+            <div class="card-head">
+              <!-- <div>
+                <img style="width: 28px;height: 28px;display: block;" src="" alt="">
+              </div> -->
+              <div class="bank-name">{{ bank.bankName }}</div>
+              <div class="card-type" *ngIf="bank.isMain">主绑卡</div>
+              <div class="triangle" [ngClass]="{'active-border': bank.isActivate }">
+              </div>
+              <div class="active-status">{{ bank.isActivate | xnOption: infoActiveOptions }}</div>
+            </div>
+            <p class="account-number">银行账号</p>
+            <div nz-row style="padding: 0 10px;">
+              <div nz-col nzSpan="16">{{ bank.accountNo }}</div>
+              <div *ngIf="showActiveBtn(bank.isActivate)" nz-col nzSpan="8" style="text-align: right;">
+                <a (click)="toActiveAccount(bank)">去激活</a>
+              </div>
+            </div>
+            <nz-divider class="btn-divider"></nz-divider>
+            <div nz-row>
+              <div nz-col nzSpan="12" class="del-account">
+                <a style="margin-top: 10px;" nz-button nzType="link" (click)="delBindAccount(bank.bankId)">删除</a>
+              </div>
+              <div nz-col nzSpan="12" class="edit-account">
+                <a style="margin-top: 10px;" nz-button nzType="link" [disabled]="showActiveBtn(bank.isActivate)"
+                  (click)="modifyBindAccount(bank)">修改</a>
+              </div>
+            </div>
+          </div>
+        </div>
+      </ng-container>
+      <ng-container>
+        <div nz-col nzSpan="8">
+          <div class="operator-box">
+            <div class="add-account" (click)="addBindAccount()">
+              <i nz-icon nzType="plus" nzTheme="outline" style="font-size: 25px;margin-top: 20px;"></i>
+            </div>
+            <p>添加绑定银行账户</p>
+          </div>
+        </div>
+      </ng-container>
+
+    </div>
+  </nz-card>
+  <xn-footer-toolbar style="align-items: center;">
+    <button nz-button nzType="default" (click)="goBack()">返回</button>
+  </xn-footer-toolbar>
+</xn-page-header-wrapper>
+
+<ng-template #loadingTemplate>
+  <nz-skeleton [nzActive]="true"></nz-skeleton>
+</ng-template>

@@ -1,0 +1,14 @@
+<div class="xn-radio-row" [formGroup]="form" [ngClass]="myClass">
+  <label class="xn-input-font" *ngFor="let option of row.selectOptions; let i = index">
+    <input #checkbox
+           type="checkbox"
+           class="flat-red"
+           [checked]="isChecked(option.value)"
+           [attr.disabled]="option.disable || row.options?.readonly"
+           (click)="updateSelection($event,option.value,i);">&nbsp;&nbsp;{{option.label}}
+           <!-- 增加memo属性 用于展示提示类文字 -->
+           <span *ngIf="option?.memo" style="color:#e15f63" class="col-sm-12">{{option?.memo}}</span>
+  </label>
+  <button *ngIf="showClearBtn" type="button" class="close" (click)="onClear()"><span>&times;</span></button>
+</div>
+<span class="xn-input-alert">{{alert}}</span>

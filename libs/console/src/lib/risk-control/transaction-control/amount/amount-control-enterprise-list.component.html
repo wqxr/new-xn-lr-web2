@@ -1,0 +1,80 @@
+<div class="box">
+  <div class="box-header">
+    {{orgNameTypeEnum[enterprise.pageTitle]}}
+  </div>
+  <div class="box-body">
+    <div class="tab-content">
+      <div class="tab-pane active">
+        <div class="form-group col-sm-6 flex" *ngFor="let row of shows">
+          <div class="search-title xn-control-label">
+            {{row.title}}：
+          </div>
+          <div class="label flex-g">
+            <xn-input [row]="row" [form]="mainForm"></xn-input>
+          </div>
+        </div>
+        <div class="text-right content-p col-sm-12">
+          <a class="btn btn-primary" (click)="searchMsg()">查询</a>
+          <a class="btn btn-danger" (click)="reset()">重置</a>
+          <a class="btn btn-success" (click)="changeAmount(enterprise.pageTitle)">{{orgNameTypeEnum[enterprise.pageTitle]}}额度变更申请</a>
+        </div>
+        <div class="content-p">
+          <table class="table table-bordered table-striped text-center table-hover">
+            <thead>
+            <tr class="label-text">
+              <ng-container *ngIf="enterprise.pageTitle==='core'">
+                <th>核心企业</th>
+                <th>母公司</th>
+              </ng-container>
+              <ng-container *ngIf="enterprise.pageTitle==='supplier'">
+                <th>供应商</th>
+                <th>对应核心企业</th>
+              </ng-container>
+              <th>授信额度（元）</th>
+              <th>已用额度（元）</th>
+              <th>可用额度（元）</th>
+              <th>有效期</th>
+              <ng-container *ngIf="enterprise.pageTitle==='supplier'">
+                <th>交易周期（天）</th>
+                <th>历史交易周期（天）</th>
+                <th>历史交易平均金额（元）</th>
+              </ng-container>
+            </tr>
+            </thead>
+            <tbody>
+            <ng-container *ngIf="data.length;else block">
+              <tr *ngFor="let item of data">
+                <ng-container *ngIf="enterprise.pageTitle==='core'">
+                  <td>{{item.enterpriseName | xnText }}</td>
+                  <td>{{item.momName | xnText}}</td>
+                </ng-container>
+                <ng-container *ngIf="enterprise.pageTitle==='supplier'">
+                  <td>{{item.supplierName | xnText }}</td>
+                  <td>{{item.enterpriseName | xnText}}</td>
+                </ng-container>
+                <td>{{item.amount | number :'1.2-3'}}</td>
+                <td>{{item.usedAmount | number :'1.2-3'}}</td>
+                <td>{{item.leftAmount | number :'1.2-3'}}</td>
+                <td>{{item?.validityDate | xnText :'date'}}</td>
+                <ng-container *ngIf="enterprise.pageTitle==='supplier'">
+                  <td>{{item?.transactionCycles}}</td>
+                  <td>{{item?.averageDay}}</td>
+                  <td>{{item?.averageAmount | number:'1.2-3'}}</td>
+                </ng-container>
+              </tr>
+            </ng-container>
+            </tbody>
+          </table>
+        </div>
+        <ng-template #block>
+          <td [attr.colspan]="enterprise.pageTitle==='core'?6:9">
+            <div class="empty-message"></div>
+          </td>
+        </ng-template>
+        <xn-page [total]="enterprise.total" [size]="enterprise.pageSize" (change)="onPage($event)"></xn-page>
+      </div>
+
+    </div>
+  </div>
+</div>
+

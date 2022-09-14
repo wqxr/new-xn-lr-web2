@@ -1,0 +1,11 @@
+<div [formGroup]="form">
+  <div class="select-editable">
+    <select class="form-control xn-input-font" (change)="onChange($event)" (blur)="calcAlertClass()" [ngClass]="myClass">
+      <option value="">请选择</option>
+      <option *ngFor="let option of bankCardItem" value="{{option.value}}">{{option.label}}</option>
+    </select>
+    <input placeholder="请选择" type="text" (keyup)="handleInput1($event)" (blur)="calcAlertClass()" class="form-control xn-input-font xn-input-border-radius"
+      name="inputValue" [value]="handleInputValue">
+  </div>
+</div>
+<span class="xn-input-alert">{{alert}}</span>

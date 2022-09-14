@@ -1,0 +1,29 @@
+<div class="dropdown" treeDropdown>
+  <button
+    class="btn"
+    [ngClass]="buttonClass"
+    [disabled]="disabled"
+    type="button"
+    role="button"
+    treeDropdownToggle
+  >
+    {{ buttonLabel || '无' }}
+  </button>
+  <div
+    treeDropdownMenu
+    aria-labelledby="dropdownMenu"
+    (click)="$event.stopPropagation()"
+  >
+    <div class="dropdown-container">
+      <treeview
+        [config]="config"
+        [headerTemplate]="headerTemplate"
+        [items]="items"
+        [itemTemplate]="itemTemplate"
+        (selectedChange)="onSelectedChange($event)"
+        (filterChange)="onFilterChange($event)"
+      >
+      </treeview>
+    </div>
+  </div>
+</div>

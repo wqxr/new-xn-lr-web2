@@ -1,0 +1,89 @@
+<div class="houseHold">
+  <div class="title">客户经理</div>
+  <div class="manager">
+    <table class="table table-bordered table-striped table-max">
+      <tbody>
+      <tr>
+        <td style="width: 150px;background-color: #ccc">所属客户经理：</td>
+        <td>
+          <form class="form-inline fix-form-align">
+            <div class="form-group">
+              <input class="form-control" type="text" name="manage" [(ngModel)]="manageValue" #manage="ngModel"
+                     [disabled]="!canEditManage" required>
+            </div>
+            <button [disabled]="manage.invalid" (click)="changeManageValue($event)" type="button" class="btn"
+                    id="manage">
+              {{canEditManage ? editBtnTitle[0] : editBtnTitle[1]}}
+            </button>
+          </form>
+        </td>
+        <td style="width: 150px;background-color: #ccc">受派保理专员：</td>
+        <td >
+          <form class="form-inline  fix-form-align">
+            <div class="form-group">
+              <input class="form-control" name="staff" [(ngModel)]="staffValue" type="text" #staff="ngModel"
+                     [disabled]="!canEditStaff" required>
+            </div>
+            <button [disabled]="manage.invalid" (click)="changeManageValue($event)" type="button" id="staff"
+                    class="btn">
+              {{canEditStaff ? editBtnTitle[0] : editBtnTitle[1]}}
+            </button>
+          </form>
+        </td>
+      </tr>
+      </tbody>
+    </table>
+  </div>
+  <div class="title">客户访谈列表</div>
+  <form style="overflow: hidden;">
+    <div class="form-group col-sm-5 flex" *ngFor="let row of rows">
+      <div class="xn-control-label search-title">
+        {{row.title}}：
+      </div>
+      <div class="label flex-g">
+        <xn-input [row]="row" [form]="mainForm"></xn-input>
+      </div>
+    </div>
+  </form>
+  <div style="margin-bottom:15px;">
+    <button class="btn btn-primary" type="button" (click)="searchEvent()">查询</button>
+    <button class="btn btn-primary" type="button" (click)="choose('add')">新增</button>
+    <button class="btn btn-primary" type="button" (click)="exportEvent()">导出</button>
+  </div>
+  <table class="table table-bordered table-striped table-max">
+    <thead>
+    <tr>
+      <th>客户名称</th>
+      <th>客户类型</th>
+      <th>访谈日期</th>
+      <th>记录人</th>
+      <th>记录时间</th>
+      <th>操作</th>
+    </tr>
+    </thead>
+    <tbody>
+    <ng-container *ngIf="list && list.length ;else block">
+      <tr *ngFor="let item of list">
+        <td>{{item.appName}}</td>
+        <td>{{item.appType | xnOrg}}</td>
+        <td>{{item.visitTime | date:'yyyy-MM-dd'}}</td>
+        <td>{{item.recorder}}</td>
+        <td>{{item.createTime | date:'yyyy-MM-dd' }}</td>
+        <td>
+          <a class="xn-click-a" (click)="choose('add',item)">编辑</a>
+          <a class="xn-click-a" (click)="choose('view',item)">查看</a>
+        </td>
+      </tr>
+    </ng-container>
+    </tbody>
+  </table>
+  <ng-template #block>
+    <tr>
+      <td colspan="6">
+        <div class="empty-message"></div>
+      </td>
+    </tr>
+  </ng-template>
+  <app-simple-page-component [size]="size" [total]="totle" (change)="pageChange($event)">
+  </app-simple-page-component>
+</div>

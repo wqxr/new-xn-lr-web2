@@ -1,0 +1,38 @@
+<!--流动性监测-->
+<p class="chart-title">流动性监测</p>
+<div class="select-pos " *ngFor="let row of shows">
+  <div style="width: 25%" class="clearfix">
+    <span class="xn-control-label" style="float: left;margin-right: 10px"
+          [class.required-label]="row.required !== false">
+      {{row.title}}
+    </span>
+    <div style="overflow: hidden">
+      <xn-input [row]="row" [form]="mainForm"></xn-input>
+    </div>
+  </div>
+</div>
+<div class="form-group clearfix">
+  <div #chart3 class="col-sm-12 chart-height-900 chart-border"></div>
+</div>
+<!--交易占比监测-->
+<p class="chart-title">交易占比监测</p>
+<div class="select-pos " *ngFor="let row of showsTime">
+  <div style="width: 25%" class="clearfix">
+    <span class="xn-control-label" style="float: left;margin-right:10px"
+          [class.required-label]="row.required !== false">
+      {{row.title}}
+    </span>
+    <div style="overflow: hidden">
+      <xn-input [row]="row" [form]="mainFormTime"></xn-input>
+    </div>
+  </div>
+</div>
+<div class="form-group clearfix">
+  <div #chart1 class="col-sm-8 chart-height-600 chart-border"></div>
+</div>
+<!--规模占比监测-->
+<p class="chart-title">规模占比监测 <span *ngIf="!earlyWarn" class="glyphicon glyphicon-warning-sign"
+                                    style="color: #d00000"></span></p>
+<div class="form-group clearfix">
+  <div #chart2 class="col-sm-8 chart-height-400 chart-border"></div>
+</div>

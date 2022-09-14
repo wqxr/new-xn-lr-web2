@@ -1,0 +1,91 @@
+<modal #modal [backdrop]="'static'" [keyboard]="false" [animation]="false">
+  <modal-header [showClose]="false" style='text-align:left'>
+    <h4 class="modal-title">{{params?.title}}</h4>
+  </modal-header>
+  <modal-body>
+    <!-- 查验数据/推送数据结果 -->
+    <div class="height" *ngIf="params?.type!==1 && datalist.length>0">
+      <div class="head-height table-head">
+        <table class="table table-bordered table-hover text-center table-display relative" style='width:98%'
+          [style.left.px]="headLeft">
+          <thead>
+            <tr>
+              <!-- 表头 -->
+              <th style="width: 60px;">序号</th>
+              <th>交易id</th>
+              <th>付确编号</th>
+              <th *ngIf="params?.type===3">推送结果</th>
+              <th>描述信息</th>
+              <th>可放款批次号</th>
+              <th>实际放款批次号</th>
+              <th>渠道价格</th>
+              <th>资产转让折扣率</th>
+            </tr>
+          </thead>
+        </table>
+      </div>
+      <div class="table-height" (scroll)="onScroll($event)">
+        <table class="table table-bordered table-hover text-center table-display" style='width:100%'>
+          <tbody style='width:100%'>
+            <tr *ngFor='let item of datalist;let i=index'>
+              <td style="width: 60px;">{{i+1}}</td>
+              <td>{{item.mainFlowId}}</td>
+              <td>{{item.payConfirmId}}</td>
+              <td *ngIf="params?.type===3" [ngStyle]="{'color': item.result===1?'red':'black'}">
+                {{item.result | xnSelectTransform:'interFaceStatus'}}</td>
+              <td style="color: red;" *ngIf="params?.type===2">{{item.msg}}</td>
+              <td [ngStyle]="{'color': item.result===1?'red':'black'}" *ngIf="params?.type===3">{{item.message}}</td>
+              <td>{{item.payBatch}}</td>
+              <td>{{item.realyPayBatch}}</td>
+              <td>
+                <ng-container *ngIf=" item.channelPrice !==undefiend &&item.channelPrice !==null">
+                  <div>{{item.channelPrice.toFixed(2)}}</div>
+                </ng-container>
+              </td>
+              <td>
+                <ng-container *ngIf=" item.discountRate !==undefiend &&item.discountRate !==null">
+                  <div>{{item.discountRate.toFixed(2)}}</div>
+                </ng-container>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+    <!-- 推送数据确认弹窗 -->
+    <div style="margin: 15px 0 10px 0;" *ngIf="params?.type===1">
+      <p style="text-align: center;">将推送 <span style="color: #cc0000;">{{params.selectedItems.length}}
+          笔</span>业务至万科，用于生成清单式付款确认书。
+      </p>
+      <p style="font-weight: bold;text-align: center;">请选择推送内容： </p>
+      <div class="radio">
+        <label style="margin-left: 46%;">
+          <input type="radio" name="optionsRadios" id="optionsRadios1" value="1" [checked]="type===1"
+            (change)="typeChecked($event)">
+          可放款批次号
+        </label>
+      </div>
+      <div class="radio">
+        <label style="margin-left: 46%;">
+          <input type="radio" name="optionsRadios" id="optionsRadios2" value="2" [checked]="type===2"
+            (change)="typeChecked($event)">
+          实际付款批次号
+        </label>
+      </div>
+      <div class="radio">
+        <label style="margin-left: 46%;">
+          <input type="radio" name="optionsRadios" id="optionsRadios3" value="3" [checked]="type===3"
+            (change)="typeChecked($event)">
+          推送融资信息
+        </label>
+      </div>
+    </div>
+  </modal-body>
+  <modal-footer>
+    <button type="button" class="btn btn-primary" (click)="onCancel1()" *ngIf="params?.type===2">关闭</button>
+    <button type="button" class="btn btn-primary" (click)="onCancel1()" *ngIf="params?.type===1">取消</button>
+    <button type="button" class="btn btn-success" (click)="onOk()" *ngIf="params?.type===1"
+      [disabled]="!(type===1 || type===2 || type===3)">确定推送</button>
+    <button type="button" class="btn btn-primary" (click)="onCancel(3,'ok')" *ngIf="params?.type===3">关闭</button>
+  </modal-footer>
+</modal>

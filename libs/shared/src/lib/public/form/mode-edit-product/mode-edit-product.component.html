@@ -1,0 +1,69 @@
+<div class="row">
+  <div *ngFor="let item of orgRightInfo; let i=index;" class="ctr-wrap">
+    <div class="col-md-12 fir-sx" style="padding: 0;">
+      <div class="col-md-11" style="padding: 0;">
+        <nz-select
+          [nzAllowClear]="true"
+          (ngModelChange)="handleSelect($event, i)" name="i+1" [ngModel]="item.orgType">
+          <nz-option
+            *ngFor="let option of orgOptions"
+            [nzValue]="option.value"
+            [nzLabel]="option.label"></nz-option>
+        </nz-select>
+        <span *ngIf="item.alert" class="xn-input-alert">{{item.alert}}</span>
+      </div>
+      <div class="col-md-1" style="padding: 0;">
+        <button
+          style="margin-left: 10px;"
+          *ngIf="i === 0 && orgRightInfo.length < MAX_LENGTH"
+          type="button"
+          class="btn btn-primary btn-xs" (click)="addOrg()">
+          <i class="glyphicon glyphicon-plus"></i>
+        </button>
+        <button
+          (click)="delOrg(i)" *ngIf=" i !== 0" style="margin-left: 10px;" type="button"
+          class="btn btn-danger btn-xs">
+          <i class="glyphicon glyphicon-minus"></i>
+        </button>
+      </div>
+    </div>
+
+    <div class="col-md-12" *ngIf="item.orgType !== AGENCY_TYPE" style="margin-top: 10px;">
+      <span style="margin-right: 15px;">该机构的菜单权限:</span>
+      <span *ngIf="!judgeArray(item.productIds)">未配置</span>
+      <a *ngIf="judgeArray(item.productIds)" href="javaScript:void (0)" (click)="onEdit(item)">已配置</a>
+      <button style="margin: 0 0 5px 15px;" type="button" class="btn btn-primary btn-xs" [disabled]="!item.orgType"
+              (click)="onEdit(item)">编辑权限
+      </button>
+    </div>
+
+    <ng-container *ngIf="item.orgType === AGENCY_TYPE">
+      <div class="col-md-12" style="margin-top: 10px;">
+        <div class="col-md-3" [ngStyle]="{paddingLeft: 0, paddingRight: '10px'}">
+          <span>绑定保理商:</span>
+        </div>
+        <div class="col-md-8" style="padding: 0;">
+          <!-- 选择保理商 -->
+          <select class="form-control xn-input-font"
+                  (ngModelChange)="onFacSelect($event, i)" name="i+1" [(ngModel)]="item.factoringAppId">
+            <option value="">--请选择--</option>
+            <option *ngFor="let option of applyFactoringOptions" value="{{option.value}}">{{option.label}}</option>
+          </select>
+          <span *ngIf="item.facAlert" class="xn-input-alert">{{item.facAlert}}</span>
+        </div>
+      </div>
+      <div class="col-md-12" style="margin-top: 10px;">
+        <div class="col-md-3" [ngStyle]="{paddingLeft: 0, paddingRight: '10px'}">
+          <span>中介机构类型:</span>
+        </div>
+        <div class="col-md-9" style="padding: 0;">
+          <nz-checkbox-group
+            [(ngModel)]="item.agencyTypeOptions"
+            (ngModelChange)="agencyChange(item.agencyTypeOptions, i)"
+          ></nz-checkbox-group>
+        </div>
+      </div>
+    </ng-container>
+  </div>
+</div>
+

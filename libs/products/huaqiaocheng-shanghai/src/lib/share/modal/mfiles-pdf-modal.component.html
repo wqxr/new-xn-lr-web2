@@ -1,0 +1,45 @@
+<modal #modal [backdrop]="'static'" [keyboard]="false" [animation]="false">
+  <modal-header [showClose]="false">
+    <h4 class="modal-title">{{params.pageTitle || '标题'}}</h4>
+  </modal-header>
+  <modal-body>
+    <div class="edit-content">
+      <!-- 左侧列表 -->
+      <div class="form-group clearfix">
+        <!--左侧文件选择-->
+        <div class="col-sm-3 text-padding">
+          <div class="list-group list-group-position" *ngIf='fileLists.length>0'>
+            <ng-container *ngFor="let item of fileLists;let i=index">
+              <button
+              type="button"
+              href="javaScript:void (0)"
+              class="list-group-item"
+              (click)="switchView(item, i)"
+              [class.active]="activeIndex === i"
+              [disabled]="activeIndex === i">
+                <i class="fa  fa-check-circle-o fa-2x" [class.fa-color]="item?.status===1"></i>
+                {{item?.label}}
+              </button>
+            </ng-container>
+          </div>
+          <div class="text-center">
+            <button type="button" class="btn btn-default btn-block" (click)="onFinish()" [disabled]="false">完成</button>
+          </div>
+        </div>
+
+        <!-- 文件展示 -->
+        <div class="col-sm-9 text-padding" style="overflow: auto">
+          <div class="pdf-container" style='overflow-y: scroll;' id="thisCanvas1"></div>
+          <div>
+            <a href="https://www.lrscft.com/exe/lrscft-setup-1.0.2.exe">下载链融科技供应链服务平台桌面应用程序</a>
+          </div>
+          <!--查看合同-->
+          <button type="button" class="btn btn-default" (click)="onCancel()">取消</button>
+          <button type="button" class="btn btn-primary" (click)="onSave()">下载</button>
+        </div>
+      </div>
+    </div>
+  </modal-body>
+  <!-- <div class="modal-footer">
+  </div> -->
+</modal>

@@ -1,0 +1,13 @@
+<div class='showInfo'>
+  <div *ngIf='display' style="flex: 1;">
+    <span>省：{{ firstValue }}</span>
+    <span>市：{{ secondValue }}</span>
+  </div>
+  <div *ngIf='!display' style="flex: 1;">
+    <xn-dselect-input [row]="row" [form]="form"></xn-dselect-input>
+  </div>
+  <div style="display: flex; align-items: center;padding-left: 5px;">
+    <a style="display: block;" href='javascript:void(0)' (click)='changeInfo(false)' *ngIf="display">修改</a>
+    <a style="display: block;" href='javascript:void(0)' (click)='changeInfo(true)' *ngIf="!display">保存</a>
+  </div>
+</div>

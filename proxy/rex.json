@@ -1,0 +1,17 @@
+{
+    "/api": {
+      "target": "http://localhost:8362",
+      "secure": false,
+      "changeOrigin": true
+    },
+    "/avenger": {
+      "target": "http://localhost:8360",
+      "secure": false,
+      "changeOrigin": true
+    },
+    "/dragon": {
+      "target": "http://localhost:8366",
+     "secure": false,
+      "changeOrigin": true
+    }
+  }

@@ -1,0 +1,77 @@
+<table class="table table-bordered table-hover text-center">
+  <thead>
+    <tr>
+        <th *ngIf="config?.select" style="width: 10rem">
+            <input type="checkbox" [checked]="allCheckedStatus" (change)="checkedAll()"> 全选/取消
+          </th>
+      <th *ngFor="let head of heads">{{head.label}}</th>
+      <th *ngIf="config?.edit">操作</th>
+     
+    </tr>
+  </thead>
+  <tbody>
+    <ng-container *ngIf="data.length ; else block">
+      <tr *ngFor="let item of data;let i=index">
+          <td *ngIf="config?.select">
+              <input type="checkbox" [checked]="item?.checked" (change)="checkedSingle(item,i)">
+            </td>
+        <td *ngFor="let head of heads">
+          <div class="file-view">
+            <ng-container [ngSwitch]="head.type">
+              <!-- 一般企业公司 -->
+              <ng-container *ngSwitchCase="'enterprise'">
+                <ng-container *ngIf=" !!(item[head.value])&&(item[head.value]!=='/')&&(item[head.value] | xnJson)&&(item[head.value] | xnJson)?.length ; else block1">
+                  <div *ngFor="let sub of item[head.value] | xnJson"> {{sub.orgName}} </div>
+                </ng-container>
+              </ng-container>
+              <!-- 合同 -->
+              <ng-container *ngSwitchCase="'contract'">
+                <ng-container *ngIf=" !!(item[head.value])&&(item[head.value]!=='/')&&(item[head.value] | xnJson)&&(item[head.value] | xnJson)?.length ; else block1">
+                  <div *ngFor="let sub of item[head.value] | xnJson" class="text-left">
+                    <a href="javaScript:void(0)" (click)="viewDetail(sub)">{{sub.label}}</a>
+                  </div>
+                </ng-container>
+              </ng-container>
+              <!-- 总部公司 -->
+              <ng-container *ngSwitchCase="'headquarters'" >
+              <ng-container *ngIf='type===0'>
+                <ng-container *ngIf=" !!(item[head.value])&&(item[head.value]!=='/')&&(item[head.value] | xnJson)&&(item[head.value] | xnJson)?.length ; else block1">
+                  <div *ngFor="let sub of item[head.value] | xnJson">{{sub.orgName | xnSelectTransform : enterprisers}}</div>
+                </ng-container>
+            </ng-container>
+              </ng-container>
+              <ng-container *ngSwitchCase="'headquarters'">
+              <ng-container *ngIf='type===1'>
+                <ng-container *ngIf=" !!(item[head.value])&&(item[head.value]!=='/')&&(item[head.value] | xnJson)&&(item[head.value] | xnJson)?.length ; else block1">
+                  <div *ngFor="let sub of item[head.value] | xnJson">{{sub.orgName}}</div>
+                </ng-container>
+                </ng-container>
+              </ng-container>
+              <!-- 默认 -->
+              <ng-container *ngSwitchDefault>
+                <div [innerHTML]="item[head.value]"></div>
+              </ng-container>
+            </ng-container>
+          </div>
+        </td>
+        <td *ngIf="config?.edit">
+          <ng-container *ngIf="(item?.templateType && item.templateType === '特殊');else block1">
+            <a class="a-click" *ngFor="let row of config?.rows" href="javaScript:void(0)" (click)="handleClick(row.value,item)">{{row.label}}</a>
+          </ng-container>
+        </td>
+      
+      </tr>
+    </ng-container>
+  </tbody>
+</table>
+<ng-template #block>
+  <tr>
+    <td [attr.colspan]="colspanCols">
+      <div class="empty-message"></div>
+    </td>
+  </tr>
+</ng-template>
+
+<ng-template #block1>
+  <span>/</span>
+</ng-template>

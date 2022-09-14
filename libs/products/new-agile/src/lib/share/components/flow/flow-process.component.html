@@ -1,0 +1,8 @@
+<div class="tc-15-step col8">
+  <ol>
+    <li [ngClass]="cssClass(step.id)" *ngFor="let step of steps; last as l; trackBy: trackById">
+      <div class="tc-15-step-name">{{ step.name }}</div>
+      <div [ngClass]="{'tc-15-step-arrow': !l, 'tc-15-step-name': l }"></div>
+    </li>
+  </ol>
+</div>

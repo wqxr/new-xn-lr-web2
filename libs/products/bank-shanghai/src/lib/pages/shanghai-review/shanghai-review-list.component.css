@@ -1,0 +1,46 @@
+table {
+  display: block !important;
+}
+.table-head-btn {
+  margin-bottom: 5px;
+}
+
+.table-head-btn a {
+  padding-right: 0px !important;
+}
+.full-width {
+  width: 100%;
+}
+
+::ng-deep .ant-advanced-search-form a {
+  padding: 0 !important;
+}
+::ng-deep nz-date-picker {
+  width: 100%;
+}
+::ng-deep .antcol-19 {
+  display: block !important;
+  flex: 0 0 79.16666667% !important;
+  max-width: 79.16666667% !important;
+}
+::ng-deep .antcol-5 {
+  display: block !important;
+  flex: 0 0 20.83333333% !important;
+  max-width: 20.83333333% !important;
+}
+
+@media (min-width: 992px){
+  ::ng-deep .lg5 {
+    display: block;
+    flex: 0 0 20.83333333%;
+    max-width: 20.83333333%;
+  }
+}
+
+@media (min-width: 768px) and (max-width: 992px){
+  ::ng-deep .md10 {
+    display: block;
+    flex: 0 0 41.66666667%;
+    max-width: 41.66666667%;
+  }
+}

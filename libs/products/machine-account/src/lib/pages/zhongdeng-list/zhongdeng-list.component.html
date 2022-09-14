@@ -1,0 +1,147 @@
+<section class="content-header">
+  <h1>{{tabConfig.title}}</h1>
+</section>
+<section class="content">
+  <div class="box">
+    <div class="box-body">
+      <div class="tab-content">
+        <div class="tab-pane active" style="padding: 15px 0">
+          <div class="item-box col-sm-4" *ngFor="let row of shows">
+            <div class="item-label">
+              <label>{{row.title}}:</label>
+            </div>
+            <div class="item-control">
+              <app-dynamic-input [row]="row" [form]="searchForm" [formModule]="formModule"></app-dynamic-input>
+            </div>
+          </div>
+
+          <div class="col-sm-12 form-group text-right">
+            <!-- 头按钮 -->
+            <ng-container
+              *ngIf="currentSubTab?.edit && currentSubTab?.edit?.headButtons && currentSubTab?.edit?.headButtons.length">
+              <span *ngFor="let btn of currentSubTab.edit.headButtons">
+              </span>
+            </ng-container>
+            <ng-container *ngIf="currentSubTab.canSearch">
+              <button class="btn btn-primary" (click)="searchMsg()">查询</button>
+              <button class="btn btn-danger" (click)="reset()">重置</button>
+            </ng-container>
+          </div>
+          <!--列表交易子标签页切换,当且子标签状态多种时，显示切换标签导航-->
+          <ng-container *ngIf="currentTab.subTabList.length>1">
+            <ul class="nav nav-pills sub-ul">
+              <ng-container *ngFor="let sub of currentTab.subTabList">
+                <li role="presentation" [ngClass]="{'active': sub.value === subDefaultValue}"
+                  (click)="handleSubTabChange(sub.value)">
+                  <a class="xn-click-a">{{sub.label}}</a>
+                </li>
+              </ng-container>
+            </ul>
+          </ng-container>
+          <!--子列表-->
+          <table class="table table-bordered table-striped text-center">
+            <thead>
+              <tr class="table-head">
+                <!-- 全选按钮 -->
+                <th *ngIf="currentSubTab.canChecked" class="input-check">全选/取消
+                  <input type="checkbox" name="all" [checked]="isAllChecked()" [disabled]="!listInfo.length"
+                    (change)="checkAll()" />
+                </th>
+                <!-- 表头，搜索功能 -->
+                <th *ngFor="let head of heads">
+                  <ng-container *ngIf="head.sort;else normal">
+                    <span [ngClass]="onSortClass(head?.value)" (click)="onSort(head?.value)">{{head.label}}</span>
+                  </ng-container>
+                  <ng-template #normal>{{head.label}}</ng-template>
+                </th>
+                <!-- 行操作 -->
+                <th
+                  *ngIf="currentSubTab?.edit && currentSubTab?.edit?.rowButtons && currentSubTab?.edit?.rowButtons?.length">
+                  操作
+                </th>
+              </tr>
+            </thead>
+            <tbody>
+              <ng-container *ngIf="listInfo.length;else block">
+                <tr *ngFor="let item of listInfo;let i=index">
+                  <!-- 行选则 -->
+                  <td *ngIf="currentSubTab.canChecked">
+                    <input type="checkbox" name="single" [checked]="item['checked']" (change)="singleChecked(item,i)" />
+                  </td>
+                  <!-- 列内容 -->
+                  <td *ngFor="let head of currentSubTab.headText">
+                    <!-- 根据head type 类型配置显示方式 -->
+                    <ng-container [ngSwitch]="head.type">
+                      <!-- registerId-->
+                      <ng-container *ngSwitchCase="'registerId'">
+                        <a href="javaScript:void(0)"
+                          (click)="viewProcess(item[head.value],item.status)">{{item[head.value]}}</a>
+                      </ng-container>
+                      <!--图片文件file-->
+                      <ng-container *ngSwitchCase="'file'">
+                        <ng-container *ngIf=" item[head.value]&& item[head.value]!=='[]'">
+                          <div>
+                            <a href="javaScript:void(0)" (click)="viewFiles(item[head.value],head.value)">文件</a>
+                          </div>
+                        </ng-container>
+                      </ng-container>
+                      <ng-container *ngSwitchCase="'productType'">
+                        <p>
+                          {{ { 'type':item['type'],'selectBank':item['selectBank'] } |
+                          xnSelectDeepTransform: 'productType_all' }}
+                        </p>
+                      </ng-container>
+
+                      <ng-container *ngSwitchCase="'assetFile'">
+                        <ng-container *ngIf="hasFile[i]">
+                          <div>
+                            <a href="javaScript:void(0)" (click)="viewFiles(item[head.value],head.value)">文件</a>
+                          </div>
+                        </ng-container>
+                      </ng-container>
+                      <ng-container *ngSwitchCase="'status'">
+                        <span *ngIf="item[head.value]===1">登记中</span>
+                        <span *ngIf="item[head.value]===2">登记失败</span>
+                        <span *ngIf="item[head.value]===3">完成登记</span>
+                        <span *ngIf="item[head.value]===4">撤销登记</span>
+                        <span *ngIf="item[head.value]===5">待登记</span>
+                        <span *ngIf="item[head.value]===6">已变更</span>
+                        <span *ngIf="item[head.value]===7">变更中</span>
+                        <span *ngIf="item[head.value]===8">已注销</span>
+                      </ng-container>
+                      <!--默认-->
+                      <ng-container *ngSwitchDefault>
+                        <div [innerHTML]="item[head.value] | xnGatherType: {head:head,row:item}"></div>
+                      </ng-container>
+                    </ng-container>
+                  </td>
+                  <!-- 行按钮 -->
+                  <td
+                    *ngIf="currentSubTab?.edit &&currentSubTab?.edit?.rowButtons && currentSubTab?.edit?.rowButtons.length">
+                    <div *ngFor="let btn of currentSubTab.edit.rowButtons" class="operate-btn">
+                      <ng-container [ngSwitch]="btn.operate">
+                        <ng-container *ngSwitchDefault>
+                          <a href="javaScript:void(0)" (click)="handleRowClick(item,btn,i)">{{btn.label}}</a>
+                        </ng-container>
+                      </ng-container>
+                    </div>
+                  </td>
+                </tr>
+              </ng-container>
+            </tbody>
+          </table>
+        </div>
+        <xn-pagination [rows]="pageConfig.pageSize" [first]="pageConfig.first" [totalRecords]="pageConfig.total"
+          [pageSizeOptions]="[5,10,20,30,50,100]" (pageChange)="onPage($event)"></xn-pagination>
+      </div>
+    </div>
+  </div>
+</section>
+
+<ng-template #block>
+  <tr>
+    <td [attr.colspan]="10">
+      <div class="empty-message"></div>
+    </td>
+  </tr>
+</ng-template>

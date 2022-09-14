@@ -1,0 +1,15 @@
+<ul class="nav nav-tabs" style='margin-top: 10px;'>
+    <ng-container>
+        <li class="active">
+            <a class="xn-click-a" data-toggle="tab">
+              <span class="pull-right-container" *ngIf="!!count_agency">
+                <span class="label label-primary pull-right">{{count_agency}}</span>
+              </span>
+              中介机构待办</a>
+        </li>
+    </ng-container>
+</ul>
+<!--中介机构待办列表-->
+<ng-container>
+    <xn-home-comm-list-component [supers]="{label:dragonTodo,value:'TodoAngency'}"></xn-home-comm-list-component>
+</ng-container>

@@ -1,0 +1,13 @@
+<modal #modal [backdrop]="'static'" [keyboard]="false" [animation]="false">
+  <modal-header [showClose]="true">
+    <h4 class="modal-title">起息时间</h4>
+  </modal-header>
+  <modal-body>
+    <div style="width: 40%">
+      <app-public-date-input-component (dateOutput)="dateInput($event)"></app-public-date-input-component>
+    </div>
+  </modal-body>
+  <modal-footer>
+    <button type="button" class="btn btn-danger" (click)="onSubmit()">确定</button>
+  </modal-footer>
+</modal>

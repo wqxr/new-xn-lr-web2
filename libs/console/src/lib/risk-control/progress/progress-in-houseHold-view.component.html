@@ -1,0 +1,117 @@
+<form style="display: block;" class="houseHold" [formGroup]="profileForm">
+  <div class="title clearfix">
+    <span class="text">查看客户访谈</span>
+    <div class="pull-right">
+      <a class="btn btn-primary" (click)="onBack()">返回客户访谈列表</a>
+    </div>
+  </div>
+  <div class="info">访谈信息</div>
+  <div class="info-box">
+    <div class="row form-group">
+      <div class="col-sm-6 flex">
+        <div class="label-text text-right required-star">首访客户类型</div>
+        <div class="label-input">
+          <select class="form-control" [(ngModel)]="clientType" formControlName="clientType">
+            <option value="1">供应商</option>
+            <option value="2">核心企业</option>
+            <option value="3">保理商</option>
+            <option value="4">下游采购商</option>
+            <option value="5">金融机构</option>
+            <option value="6">平台</option>
+          </select>
+        </div>
+        <div class="label-alert"></div>
+      </div>
+      <div class="col-sm-6 flex">
+        <div class="label-text text-right required-star">受访公司名称</div>
+        <div class="label-input">
+          <input type="text" class="form-control" [(ngModel)]="visitCom" formControlName="visitCom">
+        </div>
+        <div class="label-alert"></div>
+      </div>
+    </div>
+    <div class="row form-group">
+      <div class="col-sm-6 flex">
+        <div class="label-text text-right required-star">访谈方式</div>
+        <div class="label-input">
+          <select class="form-control" [(ngModel)]="visitType" formControlName="visitType">
+            <option value="1">走访</option>
+            <option value="2">电话访问</option>
+          </select>
+        </div>
+        <div class="label-alert"></div>
+      </div>
+      <div class="col-sm-6 flex">
+        <div class="label-text text-right required-star">访谈日期</div>
+        <div class="label-input">
+          <app-public-date-input-component [dataValue]="visitDate" (dateOutput)="getVisitDate($event)">
+          </app-public-date-input-component>
+        </div>
+        <div class="label-alert"></div>
+      </div>
+    </div>
+    <div class="flex form-group">
+      <div class="label-text text-right required-star">随访人员</div>
+      <div class="label-input">
+        <table *ngIf="chechLeh('staff')" class="table table-bordered table-striped table-max">
+          <thead>
+            <tr>
+              <th>姓名</th>
+              <th>工号</th>
+              <th>联系方式</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let item of objList.staff;let i = index">
+              <td>{{item.staffName}}</td>
+              <td>{{item.staffCode}}</td>
+              <td>{{item.staffTel}}</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+    <div class="flex form-group">
+      <div class="label-text text-right required-star">受访人员</div>
+      <div class="label-input">
+        <table *ngIf="chechLeh('visited')" class="table table-bordered table-striped table-max">
+          <thead>
+            <tr>
+              <th>姓名</th>
+              <th>职务</th>
+              <th>联系方式</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let item of objList['visited'];let i = index">
+              <td>{{item.visitedName}}</td>
+              <td>{{item.visitedCode}}</td>
+              <td>{{item.visitedTel}}</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+    <div class="flex form-group">
+      <div class="label-text text-right">访谈目的</div>
+      <div class="label-input">
+        <textarea class="form-control" rows="3" [(ngModel)]="whyVisit" formControlName="whyVisit"></textarea>
+      </div>
+    </div>
+    <div class="flex form-group" style="flex-direction: column;">
+      <div class="flex">
+        <div class="label-text text-right required-star">访谈内容</div>
+        <div class="label-input">
+          <textarea class="form-control" [(ngModel)]="visitContent" formControlName="visitContent" rows="3"></textarea>
+        </div>
+      </div>
+      <div *ngIf="false" class="label-alert" style="height: 34px;"></div>
+    </div>
+    <div class="flex form-group">
+      <div class="label-text text-right">后续跟进事项</div>
+      <div class="label-input">
+        <textarea class="form-control" rows="3" [(ngModel)]="visitAfter" formControlName="visitAfter"></textarea>
+      </div>
+    </div>
+  </div>
+</form>

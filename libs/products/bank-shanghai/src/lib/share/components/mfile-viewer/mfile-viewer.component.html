@@ -1,0 +1,87 @@
+<div class="file-viewer">
+  <ng-container *ngIf="url | filesecure | async as src; else loadingTpl">
+    <div class="file-viewer_tools" *ngIf="showTools">
+      <!-- <div>{{ index + 1 }} / {{ files.length }}</div> -->
+      <span class="file-viewer_page">
+        <i nz-icon nzType="field-number" nzTheme="outline"></i>
+        {{ !!files.length ? index + 1 : 0}} / {{ files.length }}
+      </span>
+      <span class="file-viewer_filename" *ngIf="!!files.length">
+        <i nz-icon [nzType]="isPdf ? 'file-pdf' : 'file-jpg'" nzTheme="outline"></i>
+        {{fileName}}
+      </span>
+      <nz-button-group>
+        <ng-container *ngIf="files.length > 1">
+          <button nz-button nzType="default" (click)="onPrev()">
+            <i nz-icon nzType="left" nzTheme="outline"></i>
+          </button>
+          <button nz-button nzType="default" (click)="onNext()">
+            <i nz-icon nzType="right" nzTheme="outline"></i>
+          </button>
+        </ng-container>
+        <ng-container *ngIf="src !== '404'">
+          <button nz-button nzType="default" (click)="onZoomIn()">
+            <i nz-icon nzType="zoom-in" nzTheme="outline"></i>
+          </button>
+          <button nz-button nzType="default" (click)="onZoomOut()">
+            <i nz-icon nzType="zoom-out" nzTheme="outline"></i>
+          </button>
+          <button nz-button nzType="default" (click)="onRotationRight()">
+            <i nz-icon nzType="redo" nzTheme="outline"></i>
+          </button>
+          <button nz-button nzType="default" (click)="onRotationLeft()">
+            <i nz-icon nzType="undo" nzTheme="outline"></i>
+          </button>
+        </ng-container>
+      </nz-button-group>
+    </div>
+
+    <ng-container *ngIf="src !== '404'; else noFoundTpl">
+      <div
+        #content
+        class="file-viewer_content"
+        [ngStyle]="{width: width, height: height}"
+      >
+        <ng-container *ngIf="isPdf; else tplPic">
+          <pdf-viewer
+            [src]="src"
+            [render-text]="true"
+            [zoom]="zoom"
+            [rotation]="rotation"
+            [autoresize]="true"
+            (after-load-complete)="closeLoading()"
+            class="pdf-viewer"
+          ></pdf-viewer>
+        </ng-container>
+
+        <ng-template #tplPic>
+          <ng-container *ngIf="isImage; else inValidFile">
+            <img
+              class="image-viewer"
+              [src]="src"
+              ngxViewer
+              [viewerOptions]="viewerOptions"
+              (viewerViewed)="onViewerViewed()"
+              (viewerReady)="closeLoading()"
+            />
+          </ng-container>
+        </ng-template>
+      </div>
+    </ng-container>
+  </ng-container>
+
+  <ng-template #loadingTpl>
+    <nz-spin nzSimple [nzSpinning]="loading"></nz-spin>
+  </ng-template>
+  <ng-template #noFoundTpl>
+    <nz-empty nzNotFoundImage="simple" [nzNotFoundContent]="contentTpl">
+      <ng-template #contentTpl>
+        <span>找不到文件</span>
+      </ng-template>
+    </nz-empty>
+  </ng-template>
+  <ng-template #inValidFile>
+    <nz-result nzStatus="warning" nzTitle="无法预览文件，仅支持图片和pdf格式文件">
+    </nz-result>
+  </ng-template>
+</div>

@@ -1,0 +1,79 @@
+
+<section class="content-header">
+  <p>
+    <a class="xn-click-a"   routerLinkActive="active" [routerLink]="[enterUrl[0].url]">{{enterUrl[0].label}}</a> >
+    <a class="xn-click-a"   routerLinkActive="active" [routerLink]="[enterUrl[0].secondUrl]" [queryParams]="{records:enterUrl[0].records}">批量查询记录</a> > 批量查询记录详情</p>
+  <span>
+    批量查询记录详情
+  </span>
+</section>
+<section class="content">
+  <!--企业资料-->
+  <div class="box">
+    <div class="box-body">
+      <div class="tab-content">
+        <div class="tab-pane active" style="padding: 15px 0">
+          <div style='text-align: right;'>
+            <img src='../../../../assets/images/icon/down.png'>
+            <a class="xn-click-a" (click)="onload_invoice()" style='margin-right:20px' #invoiceRecord>下载详细记录</a>
+            <a class="xn-click-a btn btn-primary btn-right ng-star-inserted" (click)="onCancel()">返回</a>
+          </div>
+          <div>
+            <nz-divider nzDashed></nz-divider>
+          </div>
+          <div class="setdiv">
+            <ul>
+              <li>
+                <label>记录编号:</label><span>{{record_id}}</span>
+              </li>
+              <li>
+                <label>查询开始时间:</label><span>{{items?.start_time}}</span>
+              </li>
+              <li>
+                <label>查询成功企业数量:</label><span>{{items?.success_num}}</span>
+              </li>
+
+            </ul>
+            <ul>
+              <li>
+                <label>当前状态:</label><span>{{items?.status_name}}</span>
+              </li>
+              <li>
+                <label>查询结束时间:</label><span>{{items?.end_time}}</span>
+              </li>
+              <li>
+                <label>查询异常企业数量:</label><span>{{items?.fail_num}}</span>
+              </li>
+            </ul>
+
+          </div>
+          <p>详细记录</p>
+          <xn-table #reviewTable [data]="detailRecord" [columns]="columns" [size]="'middle'" [loading]="loading"
+            [scroll]="{ y: '600px' }" [page]="{
+        front: false,
+        total: '共'+pageConfig.total+'条记录',
+        showQuickJumper: true,
+        showSize: true,
+        pageSizes: [5, 10, 20, 30, 50, 100]
+      }" [size]="'middle'" [widthMode]="{
+        type: 'strict',
+        strictBehavior: 'truncate'
+      }"  [total]="pageConfig.total" [pageIndex]="pageConfig.pageIndex"
+            [pageSize]="pageConfig.pageSize" (change)="handleTableChange($event)">
+            <!-- 日期 -->
+            <ng-template xn-table-row="dateTpl" let-item let-index="index" let-column="column">
+              {{ item[column.index] | xnDate:'date'}}
+            </ng-template>
+            <!-- 时间具体到秒 -->
+            <ng-template xn-table-row="dateTimeTpl" let-item let-index="index" let-column="column">
+              {{ item[column.index] | xnDate:'datetime'}}
+            </ng-template>
+            <ng-template xn-table-row="operateTpl" let-item let-index="index" let-column="column">
+              <a (click)="checkDetailInfo(item)" class="xn-click-a small-font">查看</a>
+            </ng-template>
+          </xn-table>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>

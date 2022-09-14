@@ -1,0 +1,12 @@
+<div [formGroup]="form" [ngClass]="myClass">
+  <div class="btn-group" role="group">
+    <ng-container *ngFor="let item of switchOptions">
+      <a type="button" class="btn-resert btn btn-default"
+         [class.btn-active]="item.value===activeCode" [class.btn-color]="item.value===0"
+         (click)="changeClick(item)">
+        <span *ngIf="item.value===activeCode">{{item.label}}</span>
+      </a>
+    </ng-container>
+  </div>
+</div>
+<span class="xn-input-alert">{{alert}}</span>

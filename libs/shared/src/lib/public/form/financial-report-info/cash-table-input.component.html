@@ -1,0 +1,35 @@
+<div [formGroup]="form">
+  <P>
+    <button type="button" class="btn btn-default button-reset-style" (click)="handleAdd()">新增</button>
+    <!-- <span
+      class="tip-memo">请上传  {{(row?.options?.memo) ? row?.options?.memo : 'excel'}}</span> -->
+      <a href="javaScript:void(0)" (click)="downloadTp02()">下载模板</a>
+  </P>
+  <table class="table table-bordered text-center">
+    <thead>
+    <tr>
+      <th>文件序号</th>
+      <th>文件</th>
+      <th>操作</th>
+    </tr>
+    </thead>
+    <tbody>
+    <ng-container *ngIf="items.length;else block">
+      <tr *ngFor="let item of items;let i=index">
+        <td>{{i + 1}}</td>
+        <td><a href='javascript:void(0)' (click)="downFile(item.excel)" >{{(item.excel | xnJson).fileName}}</a></td>
+        <td><a class="xn-click-a" (click)="handleRemove(item,i)">删除</a></td>
+      </tr>
+    </ng-container>
+    </tbody>
+  </table>
+</div>
+<span class="xn-input-alert">{{alert}}</span>
+
+<ng-template #block>
+  <tr>
+    <td [attr.colspan]="3">
+      <div class="empty-message"></div>
+    </td>
+  </tr>
+</ng-template>

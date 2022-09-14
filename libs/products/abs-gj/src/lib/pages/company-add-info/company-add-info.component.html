@@ -1,0 +1,138 @@
+<!-- 项目公司批量签署回执 -->
+<section class="content">
+  <div class="box">
+    <div class="box-header">
+      <h3 class="box-title">项目公司补充资料交易列表</h3>
+    </div>
+    <!-- /.box-header -->
+
+    <div class="box-body">
+      <ul class="nav nav-tabs">
+        <li [ngClass]="{'active': listType === ListType.Wait}">
+          <a class="xn-click-a" data-toggle="tab" (click)="getList(ListType.Wait)">待补充信息</a>
+        </li>
+        <li [ngClass]="{'active': listType === ListType.Done}">
+          <a class="xn-click-a" data-toggle="tab" (click)="getList(ListType.Done)">已上传信息</a>
+        </li>
+        <li [ngClass]="{'active': listType === ListType.Comp}">
+          <a class="xn-click-a" data-toggle="tab" (click)="getList(ListType.Comp)">已完成</a>
+        </li>
+      </ul>
+      <div class="tab-content">
+        <div class="tab-pane active" style="padding: 5px 0">
+
+          <!-- 表头搜索项 -->
+          <xn-search-form
+            [model]="searchModel"
+            [fields]="showFields"
+            (search)="onSearch($event)"
+            (reset)="onReset()"
+          ></xn-search-form>
+
+          <!--table内容项-->
+          <table class="table table-bordered table-striped text-center">
+            <thead>
+            <tr class="table-head">
+              <ng-container *ngFor="let head of heads">
+                <th *ngIf="head.sort" [ngClass]="onSortClass(head.checkerId)" (click)="onSort(head.checkerId)">
+                  {{head.title}}
+                </th>
+                <th *ngIf="!head.sort">{{head.title}}</th>
+              </ng-container>
+              <!-- 已完成tab页，不需要操作 -->
+              <th *ngIf="listType !== ListType.Comp" style="min-width: 80px">操作</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr *ngFor="let row of rows">
+              <td *ngFor="let head of heads" style="max-width: 70px;word-wrap:break-word">
+                <ng-container [ngSwitch]="true">
+                  <ng-container *ngSwitchCase="head.checkerId === 'mainFlowId'">
+                    <!-- 交易ID -->
+                    <a [innerHTML]="row[head.checkerId]" href="javaScript:void (0)"
+                       (click)="viewProcess(row[head.checkerId])"></a>
+                  </ng-container>
+                  <!-- currentStep 交易状态-->
+                  <ng-container *ngSwitchCase="head.checkerId === 'tradeStatus'">
+                    <ng-container *ngIf="row?.tradeStatus !== TradeStatus.Stop; else otherStatus">
+                      <div>{{row.flowId | xnSelectTransform:'currentStep'}}</div>
+                    </ng-container>
+                    <ng-template #otherStatus>
+                      <ng-container *ngIf="row?.retreatStatus === RetreatType.Back">
+                        <div>退单</div>
+                      </ng-container>
+                      <ng-container *ngIf="row?.retreatStatus === RetreatType.Stop">
+                        <div>中止</div>
+                      </ng-container>
+                    </ng-template>
+                  </ng-container>
+
+                  <ng-container *ngSwitchCase="head.checkerId==='receive'">
+                    <ng-container
+                      *ngIf=" row[head.checkerId]&& row[head.checkerId]!==0 && row[head.checkerId]!==null">
+                      <div>{{row[head.checkerId].toFixed(2) | xnMoney}}</div>
+                    </ng-container>
+                  </ng-container>
+                  <ng-container *ngSwitchCase="head.checkerId === 'performanceFile'">
+
+                    <ng-container *ngIf="row[head.checkerId] && row[head.checkerId] !==''">
+                      <ng-container *ngFor="let sub1 of row[head.checkerId] | xnJson; let i = index">
+                        <div *ngIf="!!sub1.fileName">
+                          <a href="javaScript:void (0)" (click)="viewFiles(sub1)">{{sub1.fileName}}</a>
+                        </div>
+
+                        <ng-container *ngIf="!!sub1.label">
+                          <ng-container *ngIf="judgeDataType(jsonTransForm(row[head.checkerId])); else block3">
+                            <div *ngFor="let sub of row[head.checkerId] | xnJson; let i=index">
+                              <a href="javaScript:void(0)"
+                                 (click)="showContract(sub)">{{sub.label}}</a>
+                            </div>
+                          </ng-container>
+                          <ng-template #block3>
+                            <a href="javaScript:void(0)"
+                               (click)="showContract(jsonTransForm(row[head.checkerId]))">
+                              {{jsonTransForm(row[head.checkerId])['label']}}</a>
+                          </ng-template>
+                        </ng-container>
+                      </ng-container>
+                    </ng-container>
+                  </ng-container>
+                  <!--预录入发票号码-->
+                  <ng-container *ngSwitchCase="head.checkerId ==='invoiceNumInfo'">
+                    <ng-container *ngIf="arrayLength(row[head.checkerId]);else block2">
+                      <a class="xn-click-a" href="javaScript:void(0)" (click)="viewMore(row[head.checkerId])"
+                         [innerHtml]="(row[head.checkerId] | xnArrayTruncate:2:'等;')">
+                      </a>
+                    </ng-container>
+                    <ng-template #block2>
+                      <div [innerHtml]="(row[head.checkerId] | xnArrayTruncate:2:'等;')"></div>
+                    </ng-template>
+                  </ng-container>
+                  <ng-container *ngSwitchDefault>
+                    <div [innerHTML]="row[head.checkerId] | xnGatherType: {head:head,row:row}"></div>
+                  </ng-container>
+                </ng-container>
+              </td>
+              <!-- 已完成tab页，不需要操作 -->
+              <td *ngIf="listType !== ListType.Comp">
+                <a class="ml" (click)="replaceFile(row)" href="javaScript:void(0)">{{titleArr[listType] + '履约证明'}}</a>
+              </td>
+            </tr>
+            </tbody>
+          </table>
+
+          <xn-pagination
+            [rows]="pageConfig.pageSize"
+            [first]="pageConfig.first"
+            [totalRecords]="pageConfig.total"
+            [pageSizeOptions]="[10,20,50,100]"
+            (pageChange)="onPage($event)"
+          ></xn-pagination>
+        </div>
+      </div>
+    </div>
+    <!-- /.box-body -->
+  </div>
+  <!-- /.box -->
+
+</section>

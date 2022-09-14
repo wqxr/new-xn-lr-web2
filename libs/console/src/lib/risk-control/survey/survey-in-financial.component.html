@@ -1,0 +1,43 @@
+<div class="form-group">
+  <select class="form-control select-width" [(ngModel)]="classify" (change)="tableChange(classify)">
+    <option *ngFor="let item of financeEnum | xnSelectItem" [value]='item.value'>{{item.label}}</option>
+  </select>
+</div>
+<table class="table table-bordered table-striped table-max">
+  <thead>
+  <tr class="title-color">
+    <td class="title-width"></td>
+    <td>
+      <select class="form-control" (change)="handleChange($event,1)" [(ngModel)]="titleModel[classify]['change_1']">
+        <option value="">--请选择--</option>
+        <option *ngFor="let item of seasonSelectItem" [value]="item.value">{{item.label}}</option>
+      </select>
+    </td>
+    <td>
+      <select class="form-control" (change)="handleChange($event,2)" [(ngModel)]="titleModel[classify]['change_2']">
+        <option value="">--请选择--</option>
+        <option *ngFor="let item of yearSelectItem" [value]="item.value">{{item.label}}</option>
+      </select>
+    </td>
+    <td>
+      <select class="form-control" (change)="handleChange($event,3)" [(ngModel)]="titleModel[classify]['change_3']">
+        <option value="">--请选择--</option>
+        <option *ngFor="let item of seasonSelectItem" [value]="item.value">{{item.label}}</option>
+      </select>
+    </td>
+    <td>
+      <select class="form-control" (change)="handleChange($event,4)" [(ngModel)]="titleModel[classify]['change_4']">
+        <option value="">--请选择--</option>
+        <option *ngFor="let item of yearSelectItem" [value]="item.value">{{item.label}}</option>
+      </select>
+    </td>
+  </tr>
+  </thead>
+  <tbody>
+</table>
+<!--资产负债-->
+<app-survey-balance-table *ngIf="classify==='balance'" [balance]="info['balance']"></app-survey-balance-table>
+<!--利润表-->
+<app-survey-cash-table *ngIf="classify==='cash'" [cash]="info['cash']"></app-survey-cash-table>
+<!--现金流量表-->
+<app-survey-profit-table *ngIf="classify==='profit'" [profit]="info['profit']"></app-survey-profit-table>

@@ -1,0 +1,21 @@
+<div class="input-group" [formGroup]="form">
+  <span class="form-control xn-input-font xn-input-first-border-radius" [ngClass]="labelClass">
+    <span class="xn-picker-label">{{enterprise && enterprise.first}}</span>
+    <button *ngIf="showClearBtn" type="button" class="close" (click)="onClear()"><span>&times;</span></button>
+  </span>
+  <span class="input-group-btn btn-choose">
+    <input type="hidden" [formControlName]="row.name">
+    <button type="button" class="btn btn-default btn-flat xn-input-font"
+            [disabled]="ctrl.disabled"
+            [ngClass]="myClass"
+            (click)="onSelect()"
+    >选择...</button>
+  </span>
+</div>
+<span class="form-control" *ngIf="enterprise && enterprise.second">
+    {{enterprise.second}}
+</span>
+<span class="form-control" *ngIf="enterprise && enterprise.third">
+    {{enterprise.third}}
+</span>
+<span class="xn-input-alert">{{alert}}</span>

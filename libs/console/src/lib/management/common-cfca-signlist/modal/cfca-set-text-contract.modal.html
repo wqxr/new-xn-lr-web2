@@ -1,0 +1,52 @@
+<modal #modal [backdrop]="'static'" [keyboard]="false" [animation]="false">
+  <modal-header [showClose]="false">
+    <h4 class="modal-title">设置盖章关键字</h4>
+  </modal-header>
+  <modal-body>
+    <div class="form-group clearfix">
+      <!--左侧合同选择-->
+      <div class="col-sm-3 text-padding" style='max-height:600px;overflow-y:auto;'>
+        <div class="list-group list-group-position">
+          <div *ngFor='let item of signTextList;let i=index'>
+            <div class='keyword'>
+              <span>关键字{{i+1}}：</span><input type='text'[readonly]='isReadonly' class="form-control xn-input-font xn-input-border-radius"
+                [(ngModel)]='item.keyword' />
+              <a class="xn-click-a" (click)="clearText(i)">删除</a>
+            </div>
+          </div>
+
+          <div class='addkey'>
+            <a class="xn-click-a" (click)="addText()"><i style='font-size:25px' nz-icon nzIconfont="iconadd"></i></a>
+          </div>
+        </div>
+      </div>
+      <!--右侧合同签署-->
+      <div class="col-sm-9 text-padding" style="overflow: auto">
+        <div class="pdf-container" id='thisCanvas1'>
+          <!-- <canvas class="this-pdf" id="thisCanvas"></canvas> -->
+        </div>
+
+        <!--查看合同-->
+
+      </div>
+    </div>
+  </modal-body>
+  <div class='modal-footer'>
+    <div class='clearfix'>
+      <div class='button-group'>
+        <button id="left" type="button" class="btn btn-sm btn-default" (click)="rotateImg('left')">左旋
+          <i class="fa  fa-undo"></i></button>
+        <button id="right" type="button" class="btn btn-sm btn-default" (click)="rotateImg('right')">右旋
+          <i class="fa fa-repeat"></i></button>
+        <button id="large" type="button" class="btn btn-sm btn-default" (click)="scaleImg('large')">放大<i
+            class="fa fa-search-plus"></i></button>
+        <button id="small" type="button" class="btn btn-sm btn-default" (click)="scaleImg('small')">缩小<i
+            class="fa fa-search-minus"></i></button>
+        <button *ngIf='!isReadonly' type="button" class="btn btn-success" [disabled]='valid()'(click)="onSubmit()">提交</button>
+        <button type="button" class="btn btn-default" (click)="onCancel()">关闭</button>
+      </div>
+
+    </div>
+
+  </div>
+</modal>

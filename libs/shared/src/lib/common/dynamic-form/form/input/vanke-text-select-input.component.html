@@ -1,0 +1,16 @@
+<div style="display:flex">
+  <select class="form-control xn-input-font" style="width:50%" [(ngModel)]="status" name="transactionStatus"
+    [ngClass]="myClass" (change)="onBlur1()">
+    <option value="-1">请选择</option>
+    <option *ngFor="let option of row.selectOptions" value="{{ option.value }}">
+      {{option.label}}
+    </option>
+  </select>
+  <div style="width:80%" *ngIf="status==='1'">
+    <input #input class="form-control xn-input-font xn-input-border-radius" [ngClass]="myClass" type="text"
+      [placeholder]="row.placeholder" (change)='onBlur($event)' [(ngModel)]='text' autocomplete="off" />
+    <div>
+      <span class="xn-input-alert">{{ alert }}</span>
+    </div>
+  </div>
+</div>

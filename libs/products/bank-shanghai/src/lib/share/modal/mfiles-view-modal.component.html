@@ -1,0 +1,69 @@
+<modal #modal [backdrop]="'static'" [keyboard]="false" [animation]="false">
+  <modal-body>
+    <div class="edit-content">
+      <!-- 上层信息 -->
+      <div class="form-group clearfix">
+        <ng-container *ngIf="shows.length">
+          <div *ngFor="let row of shows">
+            <div class="col-sm-6 form-group">
+              <div class="col-sm-4 text-right">
+                <label>{{row.title}}</label><span class="required-label" *ngIf="row.required">*</span>
+              </div>
+              <div class="col-sm-8">
+                <xn-input [row]="row" [form]="mainForm"></xn-input>
+              </div>
+            </div>
+          </div>
+        </ng-container>
+
+      </div>
+
+      <!-- 下层图片 -->
+      <div class="edit-content-flex">
+        <ng-container *ngIf="fileType === 'img'">
+          <div class="img-container" #imgContainer>
+            <div class="img-wrapper" #outerImg>
+              <img #innerImg class="this-img" src="{{fSrc}}" *ngIf="!!fileSrc">
+            </div>
+          </div>
+        </ng-container>
+        <ng-container *ngIf="fileType === 'pdf'">
+          <div class="pdf-container">
+            <canvas class="this-pdf" id="thisCanvas"></canvas>
+          </div>
+        </ng-container>
+      </div>
+    </div>
+  </modal-body>
+  <div class="modal-footer">
+    <div class="clearfix">
+      <div class="button-group">
+        <button id="left" type="button" class="btn btn-sm btn-default" (click)="rotateImg('left')">左旋
+          <i class="fa  fa-undo"></i></button>
+        <button id="right" type="button" class="btn btn-sm btn-default" (click)="rotateImg('right')">右旋
+          <i class="fa fa-repeat"></i></button>
+        <button id="large" type="button" class="btn btn-sm btn-default" (click)="scaleImg('large')">放大<i
+            class="fa fa-search-plus"></i></button>
+        <button id="small" type="button" class="btn btn-sm btn-default" (click)="scaleImg('small')">缩小<i
+            class="fa fa-search-minus"></i></button>
+        <!--文件为pdf时显示-->
+        <ng-container *ngIf="fileType === 'pdf'">
+          <a>
+            跳转到第
+            <input type="text" value='' class="page-input" id='getpageNum' style='width: 40px;' />
+            页
+          </a>
+          <button id="gotoPage" type="button" class="btn btn-sm btn-primary">跳转</button>
+          <button id="prev" type="button" class="btn btn-sm btn-primary">上一页</button>
+          <button id="next" type="button" class="btn btn-sm btn-primary">下一页</button>
+          <span>页码: <span id="page_num">加载中</span> / <span id="page_count">加载中</span></span>
+        </ng-container>
+        <button type="button" class="btn btn-default" (click)="onCancel()">关闭</button>
+
+      </div>
+      <div class="page">
+        <xn-page [total]="total" [size]="pageSize" [showTotal]="false" (change)="onPage($event)"></xn-page>
+      </div>
+    </div>
+  </div>
+</modal>

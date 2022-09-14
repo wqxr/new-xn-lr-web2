@@ -1,0 +1,29 @@
+<div class="row" [formGroup]="form">
+  <div class="row mb15">
+    <div class="col-md-12">
+      <select class="form-control xn-input-font" [value]="firstValue" [ngClass]="firstClass" (blur)="onFirstBlur($event)" (change)="onFirstChange($event)">
+        <option value="">请选择</option>
+        <option *ngFor="let option of firstOptions" value="{{option.value}}">{{option.label}}</option>
+      </select>
+    </div>
+  </div>
+
+  <div class="row mb15" *ngIf="secondOptions.length>0">
+    <div class="col-md-12">
+      <select class="form-control xn-input-font" [value]="secondValue" [ngClass]="secondClass" (blur)="onSecondBlur($event)" (change)="onSecondChange($event)">
+        <option value="">请选择</option>
+        <option *ngFor="let option of secondOptions" value="{{option.value}}">{{option.label}}</option>
+      </select>
+    </div>
+  </div>
+
+  <div class="row mb15" *ngIf="thirdOptions.length>0">
+    <div class="col-md-12">
+      <select class="form-control xn-input-font" [value]="thirdValue" [ngClass]="thirdClass" (blur)="onThirdBlur($event)" (change)="onThirdChange($event)">
+        <option value="">请选择</option>
+        <option *ngFor="let option of thirdOptions" value="{{option.value}}">{{option.label}}</option>
+      </select>
+    </div>
+  </div>
+</div>
+<span class="xn-input-alert">{{alert}}</span>

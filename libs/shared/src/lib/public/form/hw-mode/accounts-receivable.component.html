@@ -1,0 +1,37 @@
+<div class="input-group" style="width: 100%" [formGroup]="form">
+  <table class="table table-bordered table-hover file-row-table text-center" width="100%">
+    <thead>
+    <tr>
+      <td>文件名</td>
+      <td>本批次金额</td>
+      <td>委托付款日</td>
+      <td>保理融资到期日</td>
+      <td>宽限期</td>
+      <td>操作</td>
+    </tr>
+    </thead>
+    <tbody>
+    <tr *ngFor="let item of items;let i=index">
+      <td>
+        <div *ngFor="let file of item?.files">
+          <a href="javaScript:void (0)" (click)="onViewReceivable(item,'view')">{{file.fileName}}
+          </a>
+        </div>
+      </td>
+      <td>{{item?.currentAmount | xnMoney}}</td>
+      <td>
+        {{item?.factoringDueDate}}
+      </td>
+      <td>
+        {{item?.factoringEndDate}}
+      </td>
+      <td>{{item?.graceDate}}</td>
+      <td>
+        <a href="javaScript:void (0)" class="xn-click-a a-btn" (click)="onNew(item,i)">{{btnTit}}</a>
+        <a href="javaScript:void (0)" class="xn-click-a a-btn" (click)="handleSupplement(item,i)">补录</a>
+      </td>
+    </tr>
+    </tbody>
+  </table>
+</div>
+<span class="xn-input-alert">{{alert}}</span>

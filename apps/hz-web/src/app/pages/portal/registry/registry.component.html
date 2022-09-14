@@ -1,0 +1,385 @@
+<section style='background: #FFFFFF'>
+  <div class='divClass' [ngStyle]="style">
+<!--    <new-console-header [isRegister]='cfcSecond'></new-console-header>-->
+    <portal-nav></portal-nav>
+    <p>{{pageTitle}}</p>
+  </div>
+  <div class='headclass'>
+    <div class='new-all1'>
+      <div class="registerCss" *ngIf='!cfcSecond'>
+        <nz-steps [nzCurrent]="step-1" [nzProgressDot]="progressTemplate">
+          <nz-step nzTitle="填写管理员信息"></nz-step>
+          <nz-step nzTitle="填写企业信息"></nz-step>
+          <nz-step nzTitle="创建CA数字证书管理员"></nz-step>
+          <nz-step nzTitle="填写对公信息"></nz-step>
+          <nz-step nzTitle="小额打款验证"></nz-step>
+          <nz-step nzTitle="上传资料"></nz-step>
+        </nz-steps>
+        <ng-template #progressTemplate let-dot let-status="status" let-index="index">
+          <span nz-popover style="margin-left: -100%;">
+            <ng-template [ngTemplateOutlet]="dot"></ng-template>
+          </span>
+        </ng-template>
+
+      </div>
+      <div class="registerCss" *ngIf='cfcSecond'>
+        <nz-steps [nzCurrent]="step-2" [nzProgressDot]="progressTemplate">
+          <nz-step nzTitle="补充企业信息"></nz-step>
+          <nz-step nzTitle="创建CA数字证书管理员"></nz-step>
+          <nz-step nzTitle="填写对公信息"></nz-step>
+          <nz-step nzTitle="小额打款验证"></nz-step>
+          <nz-step nzTitle="上传资料"></nz-step>
+        </nz-steps>
+        <ng-template #progressTemplate let-dot let-status="status" let-index="index">
+          <span nz-popover style="margin-left: -100%;">
+            <ng-template [ngTemplateOutlet]="dot"></ng-template>
+          </span>
+        </ng-template>
+
+      </div>
+    </div>
+  </div>
+
+  <div class='new-all'>
+    <div>
+      <ng-container *ngIf="step === 1">
+        <form class="form-horizontal" (ngSubmit)="onStep1Submit()" [formGroup]="step1Form" novalidate>
+          <div>
+            <div class='titleclass'>
+              <span>系统管理员信息</span><span class='headstyle'>（管理员具有新增用户/设置权限/移交管理员/申请数字证书等权限）</span>
+            </div>
+            <div class='infoclass'>
+              <div class='infodetail'>
+                <span class='payspan'><img src='assets/lr/img/warning.png' />&nbsp;&nbsp;
+                  注册所需上传文件有<a class="xn-click-a" href="javaScript:void(0)"
+                              (click)="getConfirmfile('授权确认函')">《<u>授权确认函</u>》</a>、
+                  《营业执照》，请您在开始注册前仔细阅读<a class="xn-click-a" (click)="getRegisterFile()"
+                                        href="javaScript:void(0)">《<u>注册指引</u>》</a></span>
+              </div>
+            </div>
+            <div class="box-body">
+              <ng-container *ngFor="let row of step1">
+                <div class="form-group">
+                  <div class="col-sm-3 xn-control-label labelwidth">
+                    <span *ngIf="row.required !== false && row.required !== 0" class="required-label">*</span>
+                    <span class='speciallabel'>{{row.title}}</span>
+                  </div>
+                  <div class="col-sm-6">
+                    <xn-input [row]="row" [form]="step1Form"></xn-input>
+                  </div>
+                  <div class="col-sm-3 xn-control-desc">
+                    {{row.memo}}
+                  </div>
+                </div>
+                <div class='headcss' *ngIf="row.name==='adminMobile'">
+                  <span class='headstyle'><img src='assets/lr/img/warning.png' />&nbsp;&nbsp;
+                    请勿使用已办理携号转网和虚拟号段(167、170、171开头手机号）的手机号
+                  </span>
+                </div>
+              </ng-container>
+
+              <div class="form-group" style='margin-top:20px;margin-bottom:40px'>
+                <div>
+                  <label class='labelCss'>
+                    <input type="checkbox" [checked]="checkboxs[0]" (click)="onCheckBox(1, $event)">
+                    已同意并阅读 <a class="xn-click-a" href="javaScript:void(0)" (click)="onRead(1)">《链融平台参与方服务协议》</a></label>
+                </div>
+                <div>
+                  <label class='labelCss'>
+                    <input type="checkbox" [checked]="checkboxs[1]" (click)="onCheckBox(2, $event)">
+                    已同意并阅读 <a class="xn-click-a" href="javaScript:void(0)" (click)="onRead(2)">
+                    《链融平台隐私权政策协议》</a>
+                  </label>
+                </div>
+                <div *ngIf='!cfcSecond'>
+                  <label class='step2P'>
+                    如需协助,请联系平台运营人员，电话：0755-29966132
+                  </label>
+                </div>
+              </div>
+              <div class="row footertop">
+                <div class="col-md-5 buttonleft">
+                  <button type="submit" [disabled]="!onStep1Valid()"
+                          class="btn btn-primary btn-lg btn-block">下一步</button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </form>
+      </ng-container>
+
+
+      <ng-container *ngIf="step === 2">
+        <form class="form-horizontal" (ngSubmit)="onNext()" [formGroup]="step2Form" novalidate>
+          <div>
+            <div class='titleclass'>
+              <span>企业信息</span>
+            </div>
+            <div class="box-body">
+              <div class="form-group" *ngFor="let row of step2">
+                <div class="col-sm-3 labelwidth xn-control-label">
+                  <span *ngIf="row.required !== false && row.required !== 0" class="required-label">*</span>
+                  <span class='speciallabel'>{{row.title}}</span>
+                </div>
+                <div class="col-sm-6">
+                  <xn-input [row]="row" [form]="step2Form"></xn-input>
+                </div>
+                <div class="col-sm-3 xn-control-desc">
+                  {{row.memo}}
+                </div>
+              </div>
+              <div class="row" style="text-align: left;margin-bottom:40px">
+                <div class="col-md-6 buttonleft">
+                  <span><img src='assets/lr/img/warning.png' />&nbsp;以上信息请核对准确无误后进行下一步操作</span>
+                </div>
+              </div>
+              <div class="form-group" *ngIf='cfcSecond'>
+                <div>
+                  <label class='labelCss'>
+                    <input type="checkbox" [checked]="checkboxs[0]" (click)="onCheckBox(1, $event)">
+                    已同意并阅读 <a class="xn-click-a" href="javaScript:void(0)" (click)="onRead(1)">《链融平台参与方服务协议》</a></label>
+                </div>
+                <div>
+                  <label class='labelCss'>
+                    <input type="checkbox" [checked]="checkboxs[1]" (click)="onCheckBox(2, $event)">
+                    已同意并阅读 <a class="xn-click-a" href="javaScript:void(0)" (click)="onRead(2)">
+                    《链融平台隐私权政策协议》</a>
+                  </label>
+                </div>
+                <div>
+                  <label class='step2P'>
+                    如需协助,请联系平台运营人员，电话：0755-29966132
+                  </label>
+                </div>
+              </div>
+              <div class="row footertop" *ngIf='!cfcSecond'>
+                <div class="col-md-3 buttonleft">
+                  <button type="button" class="btn btn-default btn-lg btn-block" (click)="onPrev()">上一步</button>
+                </div>
+                <div class="col-md-3">
+                  <button type="submit" [disabled]="!onStep2Valid()"
+                          class="btn btn-primary btn-lg btn-block">下一步</button>
+                </div>
+              </div>
+              <div class="row footertop" *ngIf='cfcSecond'>
+                <div class="col-md-offset-3 buttonleft" style='width:34%'>
+                  <button type="submit" [disabled]="!onStep2SecondValid()"
+                          class="btn btn-primary btn-lg btn-block">下一步</button>
+                </div>
+              </div>
+              <!-- <div  class="row" style='margin-bottom:60px;margin-top:15px' *ngIf='!cfcSecond'>
+                <div class="col-md-6" style='margin-left:21%'>
+                  <p class='step2P'>无法注册？请联系平台运营人员，电话：0755-29966132</p>
+                </div>
+              </div> -->
+            </div>
+          </div>
+        </form>
+      </ng-container>
+
+
+      <ng-container *ngIf="step === 3">
+        <form class="form-horizontal" (ngSubmit)="onNext()" [formGroup]="step3Form" novalidate>
+          <div>
+            <div class='titleclass'>
+              <span>创建CA数字证书管理员</span><span class='headstyle'>（CA数字证书管理员是经企业授权，通过手机验证码代表企业签署电子合同的角色）</span>
+            </div>
+            <div class="box-body">
+              <div class='headcss'>
+                <input type="checkbox" (click)='getAdminInfo($event)' value=""
+                       class="flat-red">&nbsp;&nbsp;CA数字证书管理员与系统管理员保持一致
+              </div>
+              <ng-container *ngFor="let row of adminRows">
+                <div class="form-group">
+                  <div class="col-sm-3 labelwidth xn-control-label">
+                    <span *ngIf="(!row.readonly) && (row.required!==false)" class="required-label">*</span>
+                    <span class='speciallabel'>{{row.title}}</span>
+                  </div>
+                  <div class="col-sm-6">
+                    <xn-input [row]="row" [form]="step3Form"></xn-input>
+                  </div>
+                  <div class="col-sm-3 xn-control-desc">
+                    {{row.memo}}
+                  </div>
+                </div>
+                <div style='margin-left:36%;margin-bottom:20px' *ngIf="row.name==='phone'">
+                  <span class='headstyle'><img src='assets/lr/img/warning.png' />&nbsp;&nbsp;
+                    请勿使用已办理携号转网和虚拟号段(167、170、171开头手机号）的手机号
+                  </span>
+                </div>
+              </ng-container>
+
+            </div>
+            <div class="row footertop">
+              <div class="col-md-5 col-md-offset-3 buttonleft">
+                <button type="submit" [disabled]="!step3Form.valid"
+                        class="btn btn-primary btn-lg btn-block">下一步</button>
+              </div>
+            </div>
+          </div>
+        </form>
+      </ng-container>
+
+
+      <ng-container *ngIf="step === 4">
+        <form class="form-horizontal" (ngSubmit)="onNext()" [formGroup]="step4Form" novalidate>
+          <div>
+            <div class='titleclass'>
+              <span>对公银行账号信息</span>
+            </div>
+            <div class='infoclass'>
+              <div class='infodetail'>
+                <img src='assets/lr/img/warning.png' />
+                <span class='payspan'>
+                  为验证贵司申请CA证书的意愿，“中金支付有限公司”（CFCA全资子公司）向您下方填写的银行账户打入一笔随机金额的款项，请在下个页面填写收款金额。</span></div>
+            </div>
+
+            <div class="box-body" style='padding-bottom: 20px'>
+              <ng-container *ngFor="let row of step4">
+                <div class="form-group">
+                  <div class="col-sm-3 labelwidth xn-control-label">
+                    <span *ngIf="row.required !== false && row.required !== 0" class="required-label">*</span>
+                    <span class='speciallabel'>{{row.title}}</span>
+                  </div>
+                  <div class="col-sm-6">
+                    <xn-input [row]="row" [form]="step4Form"></xn-input>
+                  </div>
+                  <div class="col-sm-3 xn-control-desc">
+                    {{row.memo}}
+                  </div>
+                </div>
+              </ng-container>
+              <div class="form-group">
+                <div class="col-sm-3 labelwidth xn-control-label">
+                  <span class="required-label">*</span>
+                  <span class='speciallabel'>授权确认函</span>
+                </div>
+                <div class="col-sm-1">
+                  <button type="button" class="btn newbutton" (click)="onDownload()">下载模板</button>
+                </div>
+                <div class="col-sm-6 xn-control-desc">
+                  <!-- 请下载《授权确认函》并盖章（骑缝章+公章+法人签字/签章），以便在“上传资料”步骤上传扫描件 -->
+                </div>
+              </div>
+              <div style='margin-left:36%;margin-bottom:20px'>
+                <span class='headstyle'>
+                  请下载《授权确认函》并盖章（每页加盖公章+尾页法定代表人签字或加盖私章），以便在“上传资料”步骤上传扫描件
+                </span><br />
+                <span class='headstyle'>{{infomsg}}
+                </span>
+              </div>
+
+            </div>
+            <div class="row footertop">
+              <div class="col-md-3 buttonleft">
+                <button type="button" class="btn btn-default btn-lg btn-block" (click)="onPrev()">上一步</button>
+              </div>
+              <div class="col-md-3">
+                <button type="submit" [disabled]="!step4Form.valid"
+                        class="btn btn-primary btn-lg btn-block">下一步</button>
+              </div>
+            </div>
+          </div>
+        </form>
+      </ng-container>
+
+
+      <ng-container *ngIf="step === 5">
+        <form class="form-horizontal" (ngSubmit)="onNext()" [formGroup]="step5Form">
+          <div>
+            <div class='titleclass'>
+              <span>对公打款验证</span>
+            </div>
+            <div class='infoclass'>
+              <div class='infodetail'>
+                <img src='assets/lr/img/warning.png' />&nbsp;&nbsp;
+                <span class='payspan'>
+                  “中金支付有限公司”（CFCA全资子公司）已向您下方填写的银行账户打入一笔随机金额的款项，请查询银行收支明细后正确填写，一般在2小时内到账，72小时内验证有效</span></div>
+            </div>
+            <div class="box-body">
+              <ng-container *ngFor="let row of step5">
+                <div class="form-group">
+                  <div class="col-sm-2 labelwidth xn-control-label">
+                    <span *ngIf="row.required !== false && row.required !== 0" class="required-label">*</span>
+                    <span class='speciallabel'>{{row.title}}</span>
+                  </div>
+                  <div class="col-sm-6">
+                    <xn-input [row]="row" [form]="step5Form"></xn-input>
+                  </div>
+                  <div class="col-sm-2 xn-control-desc">
+                    {{row.memo}}
+                  </div>
+                </div>
+                <div style='margin-left:36%;margin-bottom:20px' *ngIf="row.name==='amount'">
+                  <span class='headstyle'>
+                    提示：{{infomsg}}
+                  </span>
+                </div>
+              </ng-container>
+            </div>
+            <div class="row footertop">
+              <div class="col-md-3 buttonleft">
+                <button type="button" class="btn btn-default btn-lg btn-block" (click)="onPrev()">修改对公账号信息</button>
+              </div>
+              <div class="col-md-3">
+                <button type="submit" class="btn btn-primary btn-lg btn-block">提交</button>
+              </div>
+            </div>
+          </div>
+        </form>
+      </ng-container>
+      <ng-container *ngIf="step === 6">
+        <form class="form-horizontal" (ngSubmit)="onSubmit()" [formGroup]="step6Form">
+          <div>
+            <div class='titleclass'>
+              <span>上传资料</span>
+            </div>
+            <div class='rejectinfoclass' *ngIf="rejectReason!==''">
+              <div class='infodetail'>
+                <img src='assets/lr/img/redicon.png' />&nbsp;&nbsp;
+                <span class='payspan' style='color: #BB2020;font-weight: 400;word-break: break-word;'>
+                  退回原因：{{rejectReason}}</span></div>
+            </div>
+            <div class="box-body">
+              <ng-container *ngFor="let row of step6">
+                <div class="form-group" [ngStyle]="{'margin-bottom': row.name==='authConfirmationFile' ? '0px':'15px'}">
+                  <div class="col-sm-2 labelwidth xn-control-label">
+                    <span *ngIf="row.required !== false && row.required !== 0" class="required-label">*</span>
+                    <span class='speciallabel'>{{row.title}}</span>
+                  </div>
+                  <div [ngSwitch]="row.name">
+                    <div class="col-sm-6" style='width:700px' *ngSwitchCase="'authConfirmationFile'">
+                      <xn-input [row]="row" [form]="step6Form"></xn-input>
+                    </div>
+                    <div class="col-sm-6" style='width:530px' *ngSwitchCase="'address'">
+                      <xn-input [row]="row" [form]="step6Form"></xn-input>
+                    </div>
+                    <div class="col-sm-6" *ngSwitchDefault>
+                      <xn-input [row]="row" [form]="step6Form"></xn-input>
+                    </div>
+                  </div>
+                  <div class="col-sm-2 xn-control-desc">
+                    <span class='payspan'>
+                      <img *ngIf="row.name==='address'" src='assets/lr/img/warning.png' />{{row.memo}}
+                    </span>
+                  </div>
+                </div>
+              </ng-container>
+              <div style='margin-left:36%;margin-bottom:20px'>
+                <span class='headstyle'>{{infomsg}}
+                </span>
+              </div>
+
+            </div>
+            <div class="row footertop">
+              <div class="col-md-5 col-md-offset-3 buttonleft">
+                <button type="submit" [disabled]="!step6Form.valid" class="btn btn-primary btn-lg btn-block">提交</button>
+              </div>
+            </div>
+          </div>
+        </form>
+      </ng-container>
+    </div>
+  </div>
+</section>
+<portal-bar type="black"></portal-bar>

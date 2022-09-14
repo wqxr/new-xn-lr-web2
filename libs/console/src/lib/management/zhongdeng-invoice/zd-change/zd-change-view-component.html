@@ -1,0 +1,137 @@
+<!-- Content Header (Page header) -->
+<section class="content-header">
+    <h1>
+      {{pageTitle}}
+      <small>{{pageDesc}}</small>
+    </h1>
+  </section>
+
+  <!-- Main content -->
+  <section class="content">
+    <form class="form-horizontal" *ngIf="svrConfig" #mainForm="ngForm">
+      <div class="panel panel-default">
+        <div class="panel-heading">
+          <span class="panel-title">{{svrConfig.flow.flowName}}: {{svrConfig?.record?.title}}
+          </span>
+        </div>
+        <!-- /.box-header -->
+
+        <div class="panel-body">
+          <div class="panel panel-info xn-panel-sm">
+            <div class="panel-heading">
+              <span class="panel-title">
+                流程基本信息
+              </span>
+            </div>
+            <div class="panel-body">
+              <div class="form-group" *ngFor="let info of baseInfo">
+                <div class="col-sm-3 xn-control-label">
+                  {{info.title}}
+                </div>
+                <div class="col-sm-6">
+                  <xn-show-input [row]="info" ></xn-show-input>
+                </div>
+                <div class="col-sm-3 xn-control-desc"></div>
+              </div>
+            </div>
+            <!-- /.panel-body -->
+          </div>
+          <!-- 流程基本信息 -->
+
+          <ng-container *ngFor="let action of newSvrConfig.actions">
+            <div [ngClass]="panelCssClass(action)">
+              <div class="panel-heading" style="cursor:pointer" (click)="collapse(action)">
+                <div class="panel-title  clearfix">
+                  <!--面板折叠提示-->
+                  <div class="col-sm-6 clear-padding">
+                         <span *ngIf="action['collapse']&&action['collapse']===true ; else block"
+                               class="fa fa-minus-square"></span>
+                    <ng-template #block><span class="fa fa-plus-square"></span></ng-template>
+                    <span>第{{action.recordSeq}}步: {{action.procedureName}}
+                      ({{action.operator | xnOperator: action.procedureId}})</span>
+                  </div>
+                  <div class="col-sm-2 clear-padding ">
+                    <small><span
+                      class="red">{{action['collapse'] && action['collapse'] === true ? '点击隐藏' : '点击显示'}}</span>
+                    </small>
+                  </div>
+                  <div class="col-sm-4 clear-padding  text-right">
+                    <small><{{action.operatorName}}>在{{action.operatorTime | xnDate}}处理</small>
+                  </div>
+                </div>
+              </div>
+              <div class="panel-body" *ngIf="action['collapse']&&action['collapse']===true">
+                <ng-container *ngIf="action.procedureId==='review'">
+                  <ng-container *ngFor="let checker of action.checkers">
+                    <div class="form-group" *ngIf="checker.type !== 'sms'">
+                      <div class="col-sm-3 xn-control-label" [ngClass]="{'required-label-strong':hwModeService.checkRequiredAndReadonly(checker).bold,
+                               'required-star':hwModeService.checkRequiredAndReadonly(checker).star}">
+                        {{checker.title}}
+                      </div>
+                      <div class="col-sm-6">
+                        <xn-show-input [row]="checker" [svrConfig]="svrConfig" [newSvrconfig]="action"></xn-show-input>
+
+                      </div>
+                      <div class="col-sm-3 xn-control-desc">
+                        {{checker.memo}}
+                      </div>
+                    </div>
+                  </ng-container>
+
+                </ng-container>
+                <ng-container *ngIf="action.procedureId==='@begin'">
+                    <!-- <ng-container *ngFor="let checker of action.checkers"> -->
+                        <div>
+                            <div class="col-sm-5">
+                              <h3>修改中登类别</h3>
+                              <div class="xn-radio-row">
+                                <label class="xn-input-font labelcss" *ngFor="let option of zhondengOptions">
+                                  <ng-container>
+                                    <input type="radio" [(ngModel)]='action.checkers[0].data'
+                                      [ngModelOptions]="{standalone: true}" disabled value="{{option.value}}"
+                                      class="flat-red">&nbsp;&nbsp;{{option.label}}
+                                  </ng-container>
+                                </label>
+                              </div>
+                            </div>
+                            <div class="col-sm-12">
+                              <div class="col-sm-5" style='padding-left:0px'>
+                                <h3>补充中登信息</h3>
+                                <zd-change-info-show [formGroups]="mainForms.controls['innvoiceInfo']" [data]='action.checkers'>
+                                </zd-change-info-show>
+                              </div>
+                              <div class="col-sm-7">
+                                <zd-mfiles  [registerNo]='action.checkers[4].data' ></zd-mfiles>
+                              </div>
+                            </div>
+                          </div>
+                    <!-- </ng-container> -->
+
+                  </ng-container>
+
+                <!-- /通过的步骤 -->
+                <div class="text-right">
+                  <a class="a-handle" href="javaScript:void (0)" (click)="collapse(action)">
+                    <span class="fa fa-angle-double-up"></span>
+                  </a>
+                </div>
+              </div>
+              <!-- /.panel-body -->
+            </div>
+            <!-- /.panel -->
+          </ng-container>
+
+        </div>
+        <!-- /.panel-body -->
+
+        <div class="panel-footer text-right">
+          <button type="button" class="btn btn-default pull-left" (click)="download()">下载附件</button>
+          <button type="button" class="btn btn-default" (click)="onCancel()">返回</button>
+        </div>
+        <!-- /.panel-footer -->
+      </div>
+      <!-- /.panel -->
+    </form>
+
+  </section>
+  <!-- /.content -->

@@ -1,0 +1,42 @@
+<div class="form-group search row" *ngFor="let row of shows">
+  <div class="col-sm-4 xn-control-label">
+    {{row.title}}
+    <span *ngIf="row.required !== false" class="required-label">*</span>
+  </div>
+  <div class="col-sm-4">
+    <xn-input [row]="row" [form]="mainForm"></xn-input>
+  </div>
+</div>
+<div class="row form-group">
+  <div class="innerbox">
+    <div class="list" [class.active]="atCenter">
+      <br>
+      <p *ngIf="json1.cardName !== ''">类型： {{json1.cardName }}</p>
+      <p *ngIf="json1.cardScore !== ''">得分： {{json1.cardScore}}</p>
+      <br>
+      <!-- <p *ngFor="let detai of datalist1">{{detai.cardIndexName}}: {{ detai.cardIndexScore }}</p> -->
+      <ng-container *ngIf="datalist1&&datalist1.length">
+        <table class="table table-bordered table-striped">
+          <thead>
+          <tr>
+            <th></th>
+            <th>当前得分</th>
+            <th>上一周期得分</th>
+            <th>行业平均得分</th>
+          </tr>
+          </thead>
+          <tbody>
+          <tr *ngFor="let detai of datalist1">
+            <td>{{detai.name}}</td>
+            <td>{{detai.score}}</td>
+            <td>{{detai.pre}}</td>
+            <td>{{detai.average}}</td>
+          </tr>
+          </tbody>
+        </table>
+      </ng-container>
+
+    </div>
+    <div #chart1 class="chartbox chart-height-400"></div>
+  </div>
+</div>

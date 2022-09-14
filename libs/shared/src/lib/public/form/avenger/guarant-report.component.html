@@ -1,0 +1,36 @@
+<div>
+  <table class="table table-bordered table-striped text-center">
+    <thead>
+      <tr class="table-head">
+        <th>
+          <span>序号</span>
+        </th>
+        <th><span>交易对手名称</span></th>
+        <th><span>业务模式</span></th>
+        <th><span>业务余额</span></th>
+        <th><span>交易场景分析</span></th>
+        <th><a href='javascript:void(0)' (click)='addCounterparties()'>新增</a></th>
+      </tr>
+    </thead>
+    <tbody>
+      <ng-container *ngIf="datalist.length ;else block">
+        <tr *ngFor="let item of datalist;let i=index">
+          <!-- 行选则 -->
+
+          <!-- 列内容 -->
+          <td>{{i+1}}</td>
+          <td>{{item.nameofCounterparty}}</td>
+          <td>{{item.flag}}</td>
+          <td>{{item.balance }}</td>
+          <td>{{item.analysis }}</td>
+          <td><a href="javaScript:void(0)" (click)='cleardata(i)'>删除</a></td>
+        </tr>
+      </ng-container>
+    </tbody>
+  </table>
+  <ng-template #block>
+    <td colspan="11">
+      <div class="empty-message"></div>
+    </td>
+  </ng-template>
+</div>

@@ -1,0 +1,218 @@
+@import '~ng-zorro-antd/style/themes/default.less';
+
+@pro-header-hover-bg: rgba(0, 0, 0, 0.025);
+
+:host ::ng-deep {
+  text-align: right;
+
+  .logo {
+    display: inline-block;
+    height: @layout-header-height;
+    padding: 0 0 0 24px;
+    font-size: 20px;
+    line-height: @layout-header-height;
+    vertical-align: top;
+    cursor: pointer;
+    img {
+      display: inline-block;
+      vertical-align: middle;
+    }
+  }
+  .iconspecial {
+    margin-right:6px;
+    font-size:10px;
+    margin-left:6px;
+  }
+ ul {
+  list-style: none;
+ }
+
+.imenu {
+    position: relative;
+    display: inline-block;
+    height: 60px;
+    padding: 0 20px;
+    color: #333;
+    &:hover {
+      background-color: gray;
+      >.dropdown{
+        display: block;
+      }
+  }
+}
+.dropdown {
+    display: none;
+    width: 86px;
+    position: absolute;
+    left: -12px;
+    padding-top: 20px;
+}
+.dropdown-content {
+    background-color: #fff;
+    border: 1px solid #000;
+    padding: 0 10px;
+}
+.dropdown-item {
+    height: 30px;
+    color: #333;
+    font-size: 14px;
+    line-height: 30px;
+    transition: all 0.3s;
+    text-align: center;
+    &:hover {
+      background-color: blue;
+      color: red;
+      cursor: pointer;
+    }
+}
+
+
+  .menu {
+    //:global(.anticon) {
+    .anticon {
+      margin-right: 8px;
+    }
+
+    //:global(.ant-dropdown-menu-item) {
+    .ant-dropdown-menu-item {
+      min-width: 160px;
+    }
+  }
+
+  .trigger {
+    height: @layout-header-height;
+    padding: ~'calc((@{layout-header-height} - 20px) / 2)' 24px;
+    font-size: 20px;
+    cursor: pointer;
+    transition: all 0.3s, padding 0s;
+
+    &:hover {
+      background: @pro-header-hover-bg;
+    }
+  }
+
+  .right {
+    float: right;
+    height: 100%;
+    margin-left: auto;
+    overflow: hidden;
+
+    .action {
+      display: inline-block;
+      vertical-align: middle;
+      height: 100%;
+      padding: 0 22px 0 12px;
+      cursor: pointer;
+      transition: all 0.3s;
+
+      > i {
+        color: @text-color;
+        vertical-align: middle;
+      }
+
+      &:hover {
+        background: @pro-header-hover-bg;
+      }
+
+      //&:global(.opened) {
+      &.opened {
+        background: @pro-header-hover-bg;
+      }
+    }
+
+    .action.tip {
+      padding-right: 12px;
+    }
+
+    .search {
+      padding: 0 12px;
+
+      &:hover {
+        background: transparent;
+      }
+    }
+
+    .account {
+      .avatar {
+        margin: ~'calc((@{layout-header-height} - 24px) / 2)' 0;
+        margin-right: 8px;
+        color: @primary-color;
+        vertical-align: top;
+        background: rgba(255, 255, 255, 0.85);
+      }
+    }
+  }
+
+  .dark {
+    height: @layout-header-height;
+
+    .action {
+      color: rgba(255, 255, 255, 0.85);
+
+      > i {
+        color: rgba(255, 255, 255, 0.85);
+      }
+
+      &:hover,
+        //&:global(.opened) {
+      &.opened {
+        background: @primary-color;
+      }
+    }
+  }
+
+  //:global(.ant-pro-global-header) {
+  .ant-pro-global-header {
+    .dark {
+      .action {
+        color: @text-color;
+
+        > i {
+          color: @text-color;
+        }
+
+        &:hover {
+          color: rgba(255, 255, 255, 0.85);
+
+          > i {
+            color: rgba(255, 255, 255, 0.85);
+          }
+        }
+      }
+    }
+  }
+
+
+  @media only screen and (max-width: @screen-md) {
+    //:global(.ant-divider-vertical) {
+    .ant-divider-vertical {
+      vertical-align: unset;
+    }
+
+    .name {
+      display: none;
+    }
+
+    i.trigger {
+      padding: 22px 12px;
+    }
+
+    .logo {
+      position: relative;
+      padding-right: 12px;
+      padding-left: 12px;
+    }
+
+    .right {
+      position: absolute;
+      top: 0;
+      right: 12px;
+
+      .account {
+        .avatar {
+          margin-right: 0;
+        }
+      }
+    }
+  }
+}

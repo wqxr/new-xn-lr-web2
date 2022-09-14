@@ -1,0 +1,68 @@
+<div [ngClass]="[store.isPhone ? 'h5-technology' : 'technology']">
+  <div id="system" class="scorllTarget"></div>
+  <div [ngClass]="[store.isPhone ? 'h5-portal-panel' : 'portal-panel']">
+    <div class="title-box">
+      <div class="title-name">技术体系</div>
+      <div class="title-line"></div>
+    </div>
+    <div class="desc-box">
+      <div class="desc">
+        链融科技基于区块链、大数据、人工智能、云计算等技术，实现数据存证、智能适配、智能定制、智能链接、智能推送、智能合约，业务处理全程电子化、数字化、自动化、可视化，在保障真实性与安全性的前提下，实现客户极速体验。
+      </div>
+    </div>
+    <div class="card-box">
+      <div [ngClass]="['card', store.isPhone ? '' : 'float-shadow']" *ngFor="let card of cardList;" style="position: relative;">
+        <div (click)="onClick(card)">
+          <img class="icon-img" [src]="store.isPhone ? card.h5src : card.src">
+          <div class="title">{{card.title}}</div>
+          <div class="desc">{{card.desc}}</div>
+          <img *ngIf="!store.isPhone" class="hover-img" src="assets/images/pic/blockchain-pic.png" alt="" >
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div [ngClass]="[store.isPhone ? 'h5-service' : 'technology']" [ngStyle]="{'background-color': store.isPhone ? '' : 'white'}">
+  <div id="service" class="scorllTarget"></div>
+  <div [ngClass]="[store.isPhone ? '' : 'portal-panel']">
+    <div class="title-box">
+      <div class="title-name">服务方案</div>
+      <div class="title-line"></div>
+    </div>
+    <div class="desc-box">
+      <div class="desc">
+        链融科技依托平台、场景、联盟和服务优势，为核心企业、金融机构、第三方机构提供平台技术支持、供应链资产服务、
+        特定场景金融科技应用等私有化专业服务，实现生态善赢。
+      </div>
+    </div>
+    <div class="over-box">
+      <ng-container *ngIf="!store.isPhone">
+        <div class="over-card" *ngFor="let item of overCardList">
+          <div class="font">
+            <div class="card-icon"
+            style="background: url(assets/images/technology/fuwufangan-bg.png) no-repeat;
+            background-position: center;">{{ item.serial }}</div>
+            <div class="card-name">{{ item.title }}</div>
+            <div class="card-line"></div>
+          </div>
+          <div class="back">
+            <div class="desc-title">{{ item.title }}</div>
+            <div class="desc-line"></div>
+            <div class="desc-content">{{ item.desc }}</div>
+          </div>
+        </div>
+      </ng-container>
+      <ng-container *ngIf="store.isPhone">
+        <div class="over-card" *ngFor="let item of overCardList">
+          <div class="card-top">
+            <div class="card-icon" style="background: url(assets/images/technology/fuwufangan-bg-h5.svg) no-repeat;
+                    background-position: center;">{{ item.serial }}</div>
+            <div class="card-name">{{ item.title }}</div>
+          </div>
+          <div class="desc-content">{{ item.desc }}</div>
+      </div>
+      </ng-container>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,24 @@
+ul {
+  padding-top: .5em;
+}
+.paginate_button.previous a, .paginate_button.next a{
+  padding: 8px;
+}
+
+.total-info {
+  padding: .5em;
+}
+
+.dropdown,.dropup {
+  margin: 0 .4em;
+  padding: .3em;
+  height: 29px;
+  border: 1px solid #ccc;
+  cursor: pointer;
+}
+
+.jumper input {
+  width: 28px;
+  height: 28px;
+  border: 1px solid #ccc;
+}

@@ -1,0 +1,64 @@
+
+<section class="content-header">
+  <span>关联记录</span>
+</section>
+<section class="content">
+  <div class="box">
+    <div class="box-body">
+    <div class="tab-content">
+      <div class="tab-pane active" style="padding: 15px 0">
+        <div>
+          <nz-divider nzDashed></nz-divider>
+        </div>
+        <xn-table
+        #reviewTable
+        [data]="items"
+        [columns]="columns"
+        [size]="'middle'"
+        [loading]="loading"
+        [scroll]="{ y: '800px' }"
+        [page]="{
+          front: false,
+          total: '共'+pageConfig.total+'条记录',
+          showQuickJumper: true,
+          showSize: true,
+          pageSizes: [5, 10, 20, 30, 50, 100]
+        }"
+        [size]="'middle'"
+        [widthMode]="{
+          type: 'strict',
+          strictBehavior: 'truncate'
+        }"
+        [total]="pageConfig.total"
+        [pageIndex]="pageConfig.pageIndex"
+        [pageSize]="pageConfig.pageSize"
+        (change)="handleTableChange($event)">
+          <!-- 查看流程 -->
+          <ng-template xn-table-row="classType" let-item let-index="index" let-column="column">
+            {{ item[column.index] | xnSelectTransform:'zhongdengClassify'}}
+          </ng-template>
+          <!-- 转让财产描述 -->
+          <ng-template xn-table-row="transferAssetDesc" let-item let-index="index" let-column="column">
+            <span style='word-break: break-all;white-space: normal;display:block'>
+              {{ item[column.index]}}
+            </span>
+          </ng-template>
+          <!-- 日期 -->
+          <ng-template xn-table-row="dateTpl" let-item let-index="index" let-column="column">
+            {{ item[column.index] | xnDate:'date'}}
+          </ng-template>
+          <!-- 时间具体到秒 -->
+          <ng-template xn-table-row="dateTimeTpl" let-item let-index="index" let-column="column">
+            {{ item[column.index] | xnDate:'datetime'}}
+          </ng-template>
+          <ng-template xn-table-row="operateTpl" let-item let-index="index" let-column="column">
+            <a (click)="showContract(item)" class="xn-click-a small-font">中登附件</a>
+          </ng-template>
+        </xn-table>
+
+      </div>
+
+    </div>
+    </div>
+  </div>
+</section>

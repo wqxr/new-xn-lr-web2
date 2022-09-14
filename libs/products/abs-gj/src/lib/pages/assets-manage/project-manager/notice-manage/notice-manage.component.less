@@ -1,0 +1,135 @@
+.item-box {
+  position: relative;
+  display: flex;
+  margin-bottom: 10px;
+}
+
+.item-label label {
+  min-width: 150px;
+  padding-right: 8px;
+  font-weight: normal;
+  line-height: 34px;
+  text-align: right;
+}
+
+.item-control {
+  flex: 1;
+}
+
+.item-control select {
+  width: 100%
+}
+
+.operate-btn {
+  min-width: 90px;
+}
+
+.input-check {
+  width: 100px;
+}
+
+.table-head .sorting, .table-head .sorting_asc, .table-head .sorting_desc {
+  /*position: relative;*/
+  cursor: pointer
+}
+
+.table-head .sorting:after, .table-head .sorting_asc:after, .table-head .sorting_desc:after {
+  font-family: 'Glyphicons Halflings';
+  opacity: 0.5;
+}
+
+.table-head .sorting:after {
+  content: "\e150";
+  opacity: 0.2
+}
+
+.table-head .sorting_asc:after {
+  content: "\e155"
+}
+
+.table-head .sorting_desc:after {
+  content: "\e156"
+}
+
+.head-height .sorting, .table-head .sorting_asc, .table-head .sorting_desc {
+  /*position: relative;*/
+  cursor: pointer
+}
+
+.head-height .sorting:after, .table-head .sorting_asc:after, .table-head .sorting_desc:after {
+  font-family: 'Glyphicons Halflings';
+  opacity: 0.5;
+}
+
+.head-height .sorting:after {
+  content: "\e150";
+  opacity: 0.2
+}
+
+.head-height .sorting_asc:after {
+  content: "\e155"
+}
+
+.head-height .sorting_desc:after {
+  content: "\e156"
+}
+
+.table-display tr td, th {
+  width: 150px;
+  vertical-align: middle;
+}
+
+.relative {
+  position: relative
+}
+
+.head-height {
+  border: 1px solid transparent;
+  position: relative;
+}
+
+.table-height {
+  max-height: 470px;
+  overflow: scroll;
+}
+
+.table {
+  table-layout: fixed;
+  border-collapse: separate;
+  border-spacing: 0;
+}
+
+.table-display {
+  margin: 0;
+}
+
+ul.sub-ul {
+  margin-bottom: 5px;
+  border-bottom: 1px solid #3c8dbc;
+}
+
+ul.sub-ul > li > a {
+  padding: 5px 35px;
+  border-top: none;
+  background-color: #F2F2F2;
+}
+
+ul.sub-ul > li.active > a {
+  background-color: #3c8dbc;
+}
+
+.disabled {
+  pointer-events: none;
+  filter: alpha(opacity=50); /*IE滤镜，透明度50%*/
+  -moz-opacity: 0.5; /*Firefox私有，透明度50%*/
+  opacity: 0.5; /*其他，透明度50%*/
+}
+
+tbody tr:hover {
+  background-color: #e6f7ff;
+  transition: all 0.1s linear
+}
+
+.table > tbody > tr > td {
+  vertical-align: middle;
+}

@@ -1,0 +1,38 @@
+<modal #modal [backdrop]="'static'" [keyboard]="false" [animation]="false" (onDismiss)="oncancel()">
+  <modal-header [showClose]="true" style='text-align:center'>
+
+    <div><span class='title'>您上传的资料可能有误，请返回检查</span></div>
+  </modal-header>
+  <modal-body>
+    <div style="padding: 5px 60px">
+      <table class="table table-bordered text-center">
+        <tbody>
+          <tr>
+            <td>项目</td>
+            <td>万科供应商 - 所传资料信息</td>
+            <td>上游客户 - 所传资料信息</td>
+          </tr>
+          <tr>
+            <th class="th-title">发票号码</th>
+            <td><span *ngFor='let item of vanke.invoiceticket'
+                [ngStyle]="{'color':invoiceticketsame.includes(item)===true?'black':'red'}" style='margin-right:10px'>{{item}},</span></td>
+            <td><span *ngFor='let item of upstream.invoiceticket'
+                [ngStyle]="{'color':invoiceticketsame.includes(item)===true?'black':'red'}" style='margin-right:10px'>{{item}},</span></td>
+          </tr>
+          <tr>
+            <th class="th-title">合同号码</th>
+            <td><span *ngFor='let item of vanke.contract'
+                [ngStyle]="{'color':contractsame.includes(item)===true?'black':'red'}" style='margin-right:10px'>{{item}},</span></td>
+            <td><span *ngFor='let item of upstream.contract'
+                [ngStyle]="{'color':contractsame.includes(item)===true?'black':'red'}" style='margin-right:10px'>{{item}},</span></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    <!-- <p class="xn-text-indent">如确认所传资料无误，请将资料退回并联系【（此处填写万科供应商名称）】</p> -->
+  </modal-body>
+  <modal-footer>
+    <button type="button" class="btn btn-danger" (click)="oncancel()">取消</button>
+    <button type="button" class="btn btn-danger" (click)="onOk()">确定</button>
+  </modal-footer>
+</modal>

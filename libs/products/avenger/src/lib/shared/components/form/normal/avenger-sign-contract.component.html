@@ -1,0 +1,16 @@
+<div [formGroup]="form">
+    <select class="form-control xn-input-font floatselect"  [value]='formValue.firstValue' [ngClass]="myClass" (blur)="onBlur()" (change)="inputChange($event,'firstValue')">
+      <option value="">请选择</option>
+      <option *ngFor="let option of row.selectOptions" [value]="option.value">{{option.label}}</option>
+    </select>
+    <select class="form-control xn-input-font floatselect" [value]='formValue.secondValue' [ngClass]="myClass" (blur)="onBlur()" (change)="inputChange($event,'secondValue')">
+        <option value="">请选择</option>
+        <option *ngFor="let option of  secondSelect" [value]="option.value">{{option.label}}</option>
+      </select>
+
+      <select class="form-control xn-input-font floatselect" [value]='formValue.thirdValue'  [ngClass]="myClass" (blur)="onBlur()" (change)="inputChange($event,'thirdValue')">
+        <option value="">请选择</option>
+        <option *ngFor="let option of thirdSelect" [value]="option.value">{{option.label}}</option>
+      </select>
+  </div>
+  <span class="xn-input-alert">{{alert}}</span>

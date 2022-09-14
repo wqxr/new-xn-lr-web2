@@ -1,0 +1,177 @@
+<modal #modal [backdrop]="'static'" [keyboard]="false" [animation]="false">
+  <modal-header [showClose]="false">
+    <h4 class="modal-title">{{params?.title}}</h4>
+  </modal-header>
+  <modal-body>
+    <div class="clearfix" style="clear:both;">
+      <div class="this-left" style="margin-top:3px">
+        <div class="form-group item-box col-sm-3" *ngFor="let row of shows">
+          <div class="item-label">
+            <label>{{row.title}}:</label>
+          </div>
+          <div class="item-control">
+            <xn-input [row]="row" [form]="form"></xn-input>
+          </div>
+        </div>
+        <ng-container *ngIf="params?.searches?.length">
+          <div class="form-group item-box col-sm-3 text-left" style="margin-top: 25px;">
+            <ng-container>
+              <button class="btn btn-primary" (click)="searchMsg()">查询</button>
+              <button class="btn btn-danger" (click)="reset()">重置</button>
+            </ng-container>
+          </div>
+        </ng-container>
+      </div>
+      <div class="searchList">
+        <div class="table-head" #listHead>
+          <table class="table">
+            <thead>
+              <tr>
+                <th style="width:50px">序号</th>
+                <th *ngFor="let head of heads">
+                  <ng-container *ngIf="head?. _inList?.sort;else normal">
+                    <span [ngClass]="onSortClass(head?.value)" (click)="onSort(head?.value)">{{head.label}}</span>
+                  </ng-container>
+                  <ng-template #normal>{{head.label}}</ng-template>
+                </th>
+                <ng-container *ngIf="params?.multiple && params.multiple === 'check'">
+                  <th style='width:80px'>
+                    <input type="checkbox" name="all" [checked]="isAllChecked()" (change)="checkAll()"
+                      [disabled]="!data.length" />全选/取消
+                  </th>
+                </ng-container>
+                <ng-container *ngIf="params?.multiple && params.multiple === 'single'">
+                  <th style='width:80px'>单选</th>
+                </ng-container>
+              </tr>
+            </thead>
+          </table>
+        </div>
+        <div class="table-body" #listBody>
+          <!-- table-bordered  text-center table-striped -->
+          <table class="table" #listTbody>
+            <tbody>
+              <tr *ngFor="let item of data; let i = index">
+                <!--序号-->
+                <td style="width:50px">{{i + 1}}</td>
+                <td *ngFor="let head of heads">
+                  <ng-container [ngSwitch]="head.type">
+                    <!-- mainFlowId-->
+                    <ng-container *ngSwitchCase="'mainFlowId'">
+                      <a href="javaScript:void(0)"
+                        (click)="hwModeService.AgileXingshunViewProcess(item[head.value])">{{item[head.value]}}</a>
+                    </ng-container>
+                    <ng-container *ngSwitchCase="'date'">
+                      <ng-container *ngIf="item[head.value] && item[head.value]!==''">
+                        <div>{{item[head.value] | xnDate: 'datetime'}}</div>
+                      </ng-container>
+                    </ng-container>
+                    <!--图片文件file-->
+                    <ng-container *ngSwitchCase="'file'">
+                      <ng-container *ngIf="item[head.value] && item[head.value]!==''">
+                        <div *ngFor="let sub of item[head.value] | xnJson">
+                          <a href="javaScript:void(0)" (click)="viewFiles(sub)">{{sub.fileName}}</a>
+                        </div>
+                      </ng-container>
+                    </ng-container>
+                    <ng-container *ngSwitchCase="'capitalPoolName'">
+                      <ng-container *ngIf="item[head.value] && item[head.value]!==''">
+                        <div [ngStyle]="{'color':options['capitalPoolId'] === item['capitalPoolId']?'black':'red'}"
+                          [innerHTML]="item[head.value]"></div>
+                      </ng-container>
+                    </ng-container>
+                    <ng-container *ngSwitchCase="'operateId'">
+                      <div [innerHTML]="item[head.value] | xnSelectTransform:'operateType'"></div>
+                    </ng-container>
+                    <ng-container *ngSwitchCase="'payConfimDownload'">
+                      <div [innerHTML]="item[head.value] | xnSelectTransform:'payConfimDownload'"></div>
+                    </ng-container>
+                    <ng-container *ngSwitchCase="'ruleType'">
+                      <div [innerHTML]="item[head.value] | xnSelectTransform:'ruleType'"></div>
+                    </ng-container>
+                    <ng-container *ngSwitchCase="'receive'">
+                      <div [innerHTML]="item[head.value] | xnMoney"></div>
+                    </ng-container>
+                    <ng-container *ngSwitchCase="'message'">
+                      <p [ngStyle]="{'color':item.result==='失败'?'red':'black'}" [innerHTML]="item[head.value]"></p>
+                    </ng-container>
+                    <!-- 合同类型 -->
+                    <ng-container *ngSwitchCase="'contractType'">
+                      <ng-container *ngIf='item["isProxy"]===57'>
+                        <div [innerHTML]="item[head.value] | xnSelectTransform:'vankeContracttype'">
+                        </div>
+                      </ng-container>
+                    </ng-container>
+                    <!-- 查看附件url -->
+                    <ng-container *ngSwitchCase="'exturl'">
+                      <ng-container *ngIf="item[head.value]">
+                        <a [href]="item[head.value]" target="_blank">{{item[head.value]}}</a>
+                      </ng-container>
+                    </ng-container>
+                    <!-- fileType 文件类型 -->
+                    <ng-container *ngSwitchCase="'fileType'">
+                      <div [innerHTML]="item[head.value] | xnSelectTransform:'AgileXingshunFileType'">
+                      </div>
+                    </ng-container>
+                    <!-- fileNature 文件形式 -->
+                    <ng-container *ngSwitchCase="'fileNature'">
+                      <div [innerHTML]="item[head.value] | xnSelectTransform:'AgileXingshunFileNature'">
+                      </div>
+                    </ng-container>
+                    <!--默认-->
+                    <ng-container *ngSwitchDefault>
+                      <div [innerHTML]="item[head.value] | xnGatherType: {head:head,row:item}"></div>
+                    </ng-container>
+                  </ng-container>
+                </td>
+                <ng-container *ngIf="params?.multiple && params.multiple === 'check'">
+                  <td style='width:80px'>
+                    <input type="checkbox" [checked]="item?.checked" (change)="singelChecked($event, item, i)" />
+                  </td>
+                </ng-container>
+                <ng-container *ngIf="params?.multiple && params.multiple === 'single'">
+                  <td style='width:80px'>
+                    <input type="radio" [checked]="item?.checked" (change)="radioChecked($event, item, i)" />
+                  </td>
+                </ng-container>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+      <xn-pagination [rows]="pageConfig.pageSize" [first]="pageConfig.first" [totalRecords]="pageConfig.total"
+        [pageSizeOptions]="[5,10, 20, 30, 50, 100]" (pageChange)="onPage($event)"></xn-pagination>
+      <div *ngIf="showTotal" class="print" style="margin-top: 15px;">
+        <div class="form-group text-left">
+          <span>已选择：{{ selectItems.length }}项</span>
+          <span style="margin-left:30px">所选应收账款金额：{{ selectSumReceive | xnMoney }}元</span>
+          <a href="javaScript:void(0)" style="margin-left:30px;color: red;" (click)="clearSelectItem()">清空选择</a>
+        </div>
+      </div>
+    </div>
+  </modal-body>
+  <modal-footer>
+    <div class="col-sm-6 text-left">
+      <div class="btn-group" role="group" aria-label="leftButtons">
+        <!-- 左按钮 -->
+        <ng-container *ngFor="let btn of leftButtons">
+          <span>
+            <button *ngIf="btn" type="button" (click)="onBtnClick(btn)" class="btn btn-default">{{btn.label}}</button>
+          </span>
+        </ng-container>
+      </div>
+    </div>
+    <div class="col-sm-6 text-right">
+      <div class="btn-group" role="group" aria-label="rightButtons">
+        <!-- 右按钮 -->
+        <ng-container *ngFor="let btn of rightButtons">
+          <span>
+            <button *ngIf="btn" type="button" (click)="onBtnClick(btn)" [ngClass]="getBtnClass(btn.value)"
+              [disabled]="params?.multiple && btn.value==='submit' && !selectItems?.length">{{btn.label}}
+            </button>
+          </span>
+        </ng-container>
+      </div>
+    </div>
+  </modal-footer>
+</modal>

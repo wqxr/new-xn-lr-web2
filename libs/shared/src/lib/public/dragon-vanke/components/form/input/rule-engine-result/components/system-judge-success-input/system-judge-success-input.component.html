@@ -1,0 +1,50 @@
+<section>
+  <div>
+    <p class="rule-index">应用节点:
+      <span>{{pointInfo.pointName}}</span>
+    </p>
+    <div *ngFor="let rs of rsList; let i = index">
+      <p class="rule-clump">规则集名称:
+        <span>{{rs.rsName}}</span>
+        <span>{{rs.rsCode}}</span>
+      </p>
+      <xn-table [data]="rs.ruleList" [columns]="headsColumns" [size]="'middle'" [scroll]="{ y: '400px' }"
+        [size]="'middle'" [page]="{ show: false }" [widthMode]="{type: 'strict',strictBehavior: 'truncate'}">
+        <!-- 结果 -->
+        <ng-template xn-table-row="ResultTpl" let-item let-index="index" let-column="column">
+          <i style="color: #40BD78;" nz-icon nzType="check-circle" nzTheme="outline"></i>
+        </ng-template>
+        <!-- 规则校验类型 -->
+        <ng-template xn-table-row="VaildTypeTpl" let-item let-index="index" let-column="column">
+          <span>{{ item[column.index] | xnSelectTransform: vaildTypeOptions }}</span>
+        </ng-template>
+        <!-- 规则名称,悬浮展示规则表达式 -->
+        <ng-template xn-table-row="ruleNameTpl" let-item let-index="index" let-column="column">
+          <span nz-tooltip [nzTooltipTitle]="item['expressionCn']">{{ item[column.index] }}</span>
+        </ng-template>
+        <!--指标内容 -->
+        <ng-template xn-table-row="indexTpl" let-item let-index="index" let-column="column">
+          <p *ngFor="let indexInfo of item[column.index]">
+            <span>{{ indexInfo['indexName'] }}</span>: <span style='font-weight: bold;'>{{ indexInfo['indexValue'] }}</span>
+          </p>
+        </ng-template>
+        <!-- 操作 -->
+        <ng-template xn-table-row="ActionTpl" let-item let-index="index" let-column="column">
+          <ng-container *ngIf="item.file">
+            <p>
+              <a href="javaScript:void(0)" (click)="onViewFile(item.file)">查看文件</a>
+              <nz-divider nzType="vertical"></nz-divider>
+            </p>
+            <p *ngIf="!readonly">
+              <a href="javaScript:void(0)" (click)="delFile(item,i,index)">删除文件</a>
+              <nz-divider *ngIf="item.userRemark" nzType="vertical"></nz-divider>
+            </p>
+          </ng-container>
+          <p *ngIf="item.userRemark">
+            <a nz-tooltip [nzTooltipTitle]="item.userRemark">查看备注</a>
+          </p>
+        </ng-template>
+      </xn-table>
+    </div>
+  </div>
+</section>

@@ -1,0 +1,52 @@
+<div class="input-group" style="width: 100%" [formGroup]="form">
+  <table class="table table-bordered table-hover file-row-table text-center" width="100%">
+    <thead>
+    <tr>
+      <td>
+        <span style="line-height: 20px;">合同编号</span>
+      </td>
+      <td>
+        <span style="line-height: 20px;">合同金额</span>
+      </td>
+      <td>
+          <span style="line-height: 20px;">合同类型
+            <span class="required-label">*</span>
+          </span>
+      </td>
+      <td>
+          <span style="line-height: 20px;">合同名称
+            <span class="required-label">*</span>
+          </span>
+      </td>
+      <td>
+          <span style="line-height: 20px;">合同签订时间
+            <!--<span class="required-label">*</span>-->
+          </span>
+      </td>
+      <td>
+        <span style="line-height: 20px;">图片文件</span>
+      </td>
+      <td>
+        <span style="line-height: 20px;">操作</span>
+      </td>
+    </tr>
+    </thead>
+    <tbody>
+    <tr *ngFor="let item of items">
+      <!--<td *ngIf="!map">{{item.contractTitle}}</td>-->
+      <td>{{item.files?.contractNum}}</td>
+      <td>{{item.files?.contractAmount | number :'1.2-3'}}</td>
+      <td>{{item?.files?.contractType}}</td>
+      <td>{{item?.files?.contractName}}</td>
+      <td>{{item?.files?.contractSignTime}}</td>
+      <td>
+        <a class="xn-click-a" (click)="onEdit(item)">文件</a>
+      </td>
+      <td>
+        <a class="xn-click-a" (click)="onEdit(item)">补录</a>
+      </td>
+    </tr>
+    </tbody>
+  </table>
+</div>
+<span class="xn-input-alert">{{alert}}</span>

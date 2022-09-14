@@ -1,0 +1,32 @@
+<div class="block-chain-info">
+  <nz-card nzTitle="区块信息">
+    <div class="block-chain-info-label">
+      <span>基础资产ID：</span>
+      <span>{{accessId}}</span>
+    </div>
+    <div class="block-chain-info-line"></div>
+    <nz-table style="margin-top: 20px;" #columnTable [nzData]="tableDataPage" [nzShowPagination]="false">
+      <thead>
+      <tr>
+        <th nzWidth="120px">序号</th>
+        <th>存证Hash</th>
+        <th nzWidth="240px">上链时间</th>
+        <th nzWidth="100px">详情</th>
+      </tr>
+      </thead>
+      <tbody>
+      <tr *ngFor="let data of columnTable.data;let key = index;">
+        <td [ngClass]="{'zebra': key % 2 === 0}">{{ key + 1 }}</td>
+        <td [ngClass]="{'zebra': key % 2 === 0}">{{ data.hash }}</td>
+        <td [ngClass]="{'zebra': key % 2 === 0}">{{ data.datetime }}</td>
+        <td><a class="detail-icon" (click)="toDetail(data, key)" title="查看详情">...</a></td>
+      </tr>
+      </tbody>
+    </nz-table>
+    <div class="pagination-box">
+      <nz-pagination [(nzPageIndex)]="pageNum" [nzPageSize]="10" [nzTotal]="tableData.length" [nzSize]="'small'" [nzShowTotal]="totalTemplate" (nzPageIndexChange)="pageChange($event)"></nz-pagination>
+      <ng-template #totalTemplate let-total>共 {{tableData.length}} 条</ng-template>
+    </div>
+  </nz-card>
+</div>
+

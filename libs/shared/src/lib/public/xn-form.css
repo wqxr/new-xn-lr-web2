@@ -1,0 +1,154 @@
+.xn-control-label {
+  font-size: 13px;
+  color: #353535;
+  padding-top: 7px;
+  text-align: right;
+}
+
+.xn-control-desc {
+  font-size: 13px;
+  color: #9a9a9a;
+  padding-top: 7px;
+  margin-bottom: 0;
+}
+
+.xn-input-font {
+  font-size: 13px;
+}
+
+.xn-input-border-radius {
+  border-radius: 3px;
+}
+
+.xn-input-first-border-radius {
+  border-radius: 3px 0 0 3px;
+}
+
+xn-input .input-group-btn:last-child > .btn {
+  border-radius: 0 3px 3px 0;
+  height: 34px;
+}
+
+xn-sms-input button {
+  width: 100px;
+}
+
+.xn-control-valid,
+.input-group .xn-control-valid {
+  border-color: #42a948;
+}
+
+.xn-control-invalid,
+.input-group .xn-control-invalid {
+  border-color: #e15f63;
+}
+
+.xn-input-alert {
+  font-size: 12px;
+  color: #e15f63;
+  position:relative;
+}
+
+/********/
+
+.processor_bar {
+  border-color: #e6e7ea;
+  text-align: center;
+  height: 60px;
+  line-height: 60px;
+  counter-reset: step;
+}
+
+.processor_bar h4 {
+  display: inline-block;
+  vertical-align: middle;
+  font-weight: normal;
+  font-size: 16px;
+}
+
+.processor_bar .step {
+  display: inline-block;
+  color: #9a9a9a
+}
+
+.processor_bar .step.current {
+  color: #1aad19
+}
+
+.processor_bar .step.finish {
+  color: #9a9a9a;
+}
+
+.processor_bar .step:before {
+  counter-increment: step;
+  content: counter(step);
+  display: inline-block;
+  vertical-align: text-bottom;
+  width: 18px;
+  height: 18px;
+  line-height: 17px;
+  border: 1px solid;
+  border-radius: 50%
+}
+
+.processor_bar .step:after {
+  content: "";
+  display: inline-block;
+  margin: 10px;
+  width: 40px;
+  border-bottom: 1px solid #e7e7eb;
+  vertical-align: middle
+}
+
+.processor_bar .step:last-child:after {
+  display: none
+}
+
+/* 全局列表无数据显示状态*/
+.empty-message {
+  color: #bfb2b2a1;
+  display: block;
+  width: 80px;
+  margin: 1rem auto;
+  font: normal normal normal 14px/1 FontAwesome;
+  font-size: inherit;
+  text-rendering: auto;
+  -webkit-font-smoothing: antialiased;
+}
+
+.empty-message:before {
+  content: "\F06A";
+}
+
+.empty-message:after {
+  content: '暂无数据';
+  font-size: 12px;
+}
+
+.label-text {
+  background-color: #F2F9FC
+}
+
+.required-star::after {
+  content: '*';
+  color: #ff5500;
+}
+
+.label-tips {
+  display: inline-block;
+  font-size: 12px;
+  opacity: .8;
+  padding: 0 10px;
+}
+
+.label-tips::before {
+  content: '*';
+  color: #ff5500;
+}
+.this-img {
+  transition: all 0.5s ease-in-out;
+}
+
+.table-head > table {
+  margin-bottom: -1px !important;
+}

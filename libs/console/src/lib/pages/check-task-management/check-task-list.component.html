@@ -1,0 +1,208 @@
+<section class="content-header">
+  <h1 style="display: inline-block">{{ tabConfig?.title }}</h1>
+</section>
+<section class="content">
+  <div class="box">
+    <div class="box-body">
+      <div class="tab-content">
+        <div class="tab-pane active" style="padding: 15px 0">
+          <!-- 搜索项 -->
+          <xn-search-form
+            #searchForm
+            [fields]="showFields"
+            [model]="showModel"
+            (search)="onSearch($event)"
+            (reset)="onReset(searchForm)"
+          ></xn-search-form>
+          <div>
+            <nz-divider nzDashed></nz-divider>
+          </div>
+          <div
+            style="
+              display: flex;
+              justify-content: space-between;
+              margin-bottom: 10px;
+            "
+          >
+            <div>
+              <button nz-button nzType="primary" (click)="getCustomlist()">
+                自定义页面字段
+              </button>
+              <button
+                style="margin-left: 10px"
+                nz-button
+                nzType="primary"
+                (click)="getCustomSearch()"
+              >
+                自定义筛选条件
+              </button>
+            </div>
+            <div>
+              <button
+                [disabled]="!listInfo.length"
+                style="margin-right: 10px"
+                nz-button
+                nzType="primary"
+                (click)="exportData()"
+              >
+                导出
+              </button>
+              <button
+                [disabled]="!selectedItems.length"
+                nz-button
+                nzType="primary"
+                (click)="setChecker()"
+              >
+                设置审单人员
+              </button>
+            </div>
+          </div>
+
+          <xn-table
+            #reviewTable
+            [data]="listInfo"
+            [columns]="columns"
+            [size]="'middle'"
+            [loading]="loading"
+            [scroll]="{ x: '1000px', y: '400px' }"
+            [page]="{
+              front: false,
+              total: '共' + pageConfig.total + '条记录',
+              showQuickJumper: true,
+              showSize: true,
+              pageSizes: [5, 10, 20, 30, 50, 100]
+            }"
+            [size]="'middle'"
+            [widthMode]="{
+              type: 'strict',
+              strictBehavior: 'truncate'
+            }"
+            [footer]="footerSumTpl"
+            [total]="pageConfig.total"
+            [pageIndex]="pageConfig.pageIndex"
+            [pageSize]="pageConfig.pageSize"
+            (change)="handleTableChange($event, searchForm)"
+          >
+            <!-- mainFlowId -->
+            <ng-template
+              xn-table-row="mainFlowIdTpl"
+              let-item
+              let-column="column"
+            >
+              <a
+                href="javaScript:void(0)"
+                (click)="
+                  hwModeService.viewProcess(item[column.index], item.isProxy)
+                "
+                >{{ item[column.index] }}</a
+              >
+            </ng-template>
+            <!-- receive -->
+            <ng-template xn-table-row="receiveTpl" let-item let-column="column">
+              {{ item[column.index].toFixed(2) | xnMoney }}
+            </ng-template>
+            <!-- 任务状态 -->
+            <ng-template
+              xn-table-row="taskStatusTpl"
+              let-item
+              let-column="column"
+            >
+              {{ item[column.index] | xnSelectTransform: taskStatus }}
+            </ng-template>
+            <!-- 交易状态 -->
+            <ng-template
+              xn-table-row="tradeStatusTpl"
+              let-item
+              let-column="column"
+            >
+              {{ item[column.index] | xnSelectTransform: tradeStatus }}
+            </ng-template>
+            <!-- 审单人员 -->
+            <ng-template
+              xn-table-row="operatorsTpl"
+              let-item
+              let-column="column"
+            >
+              <ng-container
+                *ngFor="let userInfo of item[column.index]; let i = index"
+              >
+                <span>
+                  {{ userInfo.userName }} <span *ngIf="i+1 < item[column.index].length">|</span>
+                </span>
+              </ng-container>
+            </ng-template>
+            <!-- 产品名称 -->
+            <ng-template
+              xn-table-row="productTypeTpl"
+              let-item
+              let-column="column"
+            >
+              {{
+                {
+                  type: item["type"],
+                  selectBank: item["selectBank"]
+                } | xnSelectDeepTransform: "productType_dw"
+              }}
+            </ng-template>
+            <!-- 日期 -->
+            <ng-template xn-table-row="dateTpl" let-item let-column="column">
+              <ng-container *ngIf="item[column.index]">
+                {{ item[column.index] | xnDate: "date" }}
+              </ng-container>
+            </ng-template>
+            <!-- 时间具体到秒 -->
+            <ng-template
+              xn-table-row="dateTimeTpl"
+              let-item
+              let-column="column"
+            >
+              <ng-container *ngIf="item[column.index]">
+                {{ item[column.index] | xnDate: "datetime" }}
+              </ng-container>
+            </ng-template>
+          </xn-table>
+          <ng-template #footerSumTpl>
+            <span>
+              <i
+                nz-icon
+                [nzType]="
+                  !!selectedItems.length ? 'check-circle' : 'exclamation-circle'
+                "
+                nzTheme="fill"
+                [ngStyle]="{
+                  color: !!selectedItems.length ? '#1D67C7' : '#b0aaaa9c'
+                }"
+              ></i>
+              已选{{ selectedItems.length }}项
+            </span>
+          </ng-template>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<xn-form-modal
+  [form]="modelForm"
+  title="设置审核人员"
+  [isVisible]="isVisible"
+  [model]="model"
+  [fields]="formModalFields"
+  [modalFooter]="cFooter"
+  [maskClosable]="false"
+  (cancel)="modalCancel()"
+>
+  <ng-template #cFooter>
+    <button nz-button nzType="default" (click)="modalCancel()">取消</button>
+
+    <button
+      nz-button
+      nzType="primary"
+      [nzLoading]="isLoading"
+      [disabled]="isVisible && !modelForm?.valid"
+      (click)="modalOK()"
+    >
+      确定
+    </button>
+  </ng-template>
+</xn-form-modal>

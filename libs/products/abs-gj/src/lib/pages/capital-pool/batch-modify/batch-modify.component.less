@@ -1,0 +1,33 @@
+table {
+  table-layout: fixed;
+  margin: 0;
+}
+
+table tr td:first-child, table tr th:first-child {
+  width: 196px;
+}
+
+.scroll-height {
+  max-height: calc(100vh - 450px);
+  overflow-y: auto
+}
+
+.scroll-height > table {
+  border-top: none;
+}
+
+.scroll-height > table tr:first-child td {
+  border-top: 0;
+}
+
+.checkbox label {
+  padding-right: 6px;
+}
+
+.padding-0 {
+  padding: 0;
+}
+
+.text-error {
+  color: red;
+}

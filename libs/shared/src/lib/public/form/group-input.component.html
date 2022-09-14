@@ -1,0 +1,49 @@
+<div class="input-group" style="width: 100%" [formGroup]="form">
+  <table class="table table-bordered table-hover file-row-table" width="100%">
+    <thead>
+      <tr>
+        <th>
+          <span style="line-height: 20px;">扫描件</span>
+        </th>
+        <th>
+          <span style="line-height: 20px;">文件ID</span>
+        </th>
+        <th>
+          <span style="line-height: 20px;">金额</span>
+        </th>
+        <th>
+          <span style="line-height: 20px;">保理到期日</span>
+        </th>
+        <th>
+          <span style="line-height: 20px;">集团付款确认书编号</span>
+        </th>
+        <th style="width: 120px;">
+          <a class="xn-click-a" style="line-height: 20px;" (click)="onNew()">新增</a>
+        </th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let item of items">
+        <td>
+          <a class="xn-click-a" (click)="onView(item)">文件</a>
+        </td>
+        <td>
+          <div *ngIf="item['files'] && item['files']['length'] > 0">
+            <div *ngFor="let file of item['files']">
+              <p>{{file.fileId}}</p>
+            </div>
+          </div>
+        </td>
+        <td>{{item.amount}}</td>
+        <td>{{item.factoryDate}}</td>
+        <td>{{item.num}}</td>
+        <td>
+          <a class="xn-click-a" (click)="onEdit(item)" style="margin-right: 6px;">编辑</a>
+          <a class="xn-click-a" (click)="onRemove(item)" style="margin-right: 6px;">删除</a>
+          <a class="xn-click-a" (click)="onView(item)">查看</a>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+<span class="xn-input-alert">{{alert}}</span>

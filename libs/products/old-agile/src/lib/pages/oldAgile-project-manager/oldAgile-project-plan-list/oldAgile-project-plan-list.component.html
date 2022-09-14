@@ -1,0 +1,426 @@
+<section class="content-header">
+  <h1>
+    <a [routerLink]="['/old-agile/assets-management/project-list']" [queryParams]="{first:backPageNumber,defaultValue:backDefaultValue}"
+      routerLinkActive="router-link-active">{{title.split('>')[0]}}
+    </a>>{{title.split('>')[1]}}>{{title.split('>')[2]}}
+  </h1>
+</section>
+<section class="content">
+  <div class="box">
+    <div class="box-body">
+      <ng-container *ngIf="tabConfig?.tabList && tabConfig?.tabList?.length > 1">
+        <ul class="nav nav-tabs">
+          <ng-container *ngFor="let tab of tabConfig.tabList;let i=index">
+            <li [ngClass]="{'active': tab.value===defaultValue}">
+              <a class="xn-click-a" data-toggle="tab" (click)="initData(tab.value)">{{tab.label}}</a>
+            </li>
+          </ng-container>
+        </ul>
+      </ng-container>
+      <div class="tab-content">
+        <div class="tab-pane active" style="padding: 15px 0">
+          <!-- 搜索项 -->
+          <div *ngIf='!displayShow' style='clear:both'>
+            <div class="item-box col-sm-4" *ngFor="let row of shows">
+              <div class="item-label">
+                <label style='min-width: 180px !important'>{{row.title}}:</label>
+              </div>
+              <div class="item-control">
+                <app-dynamic-input [row]="row" [form]="form" [formModule]="formModule"></app-dynamic-input>
+              </div>
+            </div>
+          </div>
+          <div *ngIf='displayShow' style='clear:both'>
+            <div class="item-box col-sm-4" *ngFor="let row of shows.slice(0, 3)">
+              <div class="item-label">
+                <label style='min-width: 180px !important'>{{row.title}}:</label>
+              </div>
+              <div class="item-control">
+                <app-dynamic-input [row]="row" [form]="form" [formModule]="formModule"></app-dynamic-input>
+              </div>
+            </div>
+          </div>
+          <div>
+            <div class="center-block" style='border-bottom: 1px solid #ccc;float:left'></div>
+            <div class="center-block" style='border-bottom: 1px solid #ccc;float:right'></div>
+          </div>
+          <div class='showClass' (click)='show()'>
+            <a *ngIf='displayShow' class="xn-click-a"><i class="fa fa-angle-double-down" aria-hidden="true"></i>更多
+            </a>
+            <a class="xn-click-a" *ngIf='!displayShow'><i class="fa fa-angle-double-up" aria-hidden="true"></i>收起
+            </a>
+          </div>
+
+          <div class="col-sm-6 form-group text-left">
+            <!-- 左头按钮 -->
+            <ng-container *ngIf="currentSubTab?.edit && currentSubTab?.edit?.leftheadButtons && currentSubTab?.edit.leftheadButtons.length">
+              <span *ngFor="let btn of currentSubTab?.edit.leftheadButtons">
+                <ng-container *ngIf="btn?.children && btn.children.length;else noChildBtnLeft">
+                  <div class="btn-group" role="group">
+                    <div class="dropdown">
+                      <button class="btn btn-default dropdown-toggle" type="button" id="dropdownMenuRight" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+                        {{btn.label}}
+                        <span class="caret"></span>
+                      </button>
+                      <ul class="dropdown-menu" aria-labelledby="dropdownMenuRight">
+                        <ng-container *ngFor="let childBtn of btn.children">
+                          <li [ngClass]="{'disabled': childBtn?.disabled}" [ngStyle]="{'background-color': childBtn?.disabled ? '#e7dddd3d' : ''}">
+                            <a href="javaScript:void(0)" (click)='handleHeadClick(childBtn)'>{{childBtn.label}}</a>
+                          </li>
+                        </ng-container>
+                      </ul>
+                    </div>
+                  </div>
+                </ng-container>
+                <!-- 头按钮 -->
+                <ng-template #noChildBtnLeft>
+                  <button type="button" class="btn btn-primary" [disabled]="btn.disabled" (click)="handleHeadClick(btn)">{{btn.label}}
+                  </button>
+                </ng-template>
+              </span>
+            </ng-container>
+          </div>
+          <div class="col-sm-12 form-group text-right">
+            <!-- 右头按钮 -->
+            <ng-container *ngIf="currentSubTab?.edit && currentSubTab?.edit?.rightheadButtons && currentSubTab?.edit.rightheadButtons.length">
+              <div class="btn-group" role="group" aria-label="rightheadBtnGroup-1">
+                <ng-container *ngFor="let btn of currentSubTab?.edit.rightheadButtons">
+                  <ng-container *ngIf="btn?.children && btn.children.length;else noChildBtnRight">
+                    <span>
+                      <div class="btn-group" role="group">
+                        <div class="dropdown">
+                          <button class="btn btn-default dropdown-toggle" type="button" id="dropdownMenuRight" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+                            {{btn.label}}
+                            <span class="caret"></span>
+                          </button>
+                          <ul class="dropdown-menu" aria-labelledby="dropdownMenuRight">
+                            <ng-container *ngFor="let childBtn of btn.children">
+                              <li [ngClass]="{'disabled': childBtn?.disabled}" [ngStyle]="{'background-color': childBtn?.disabled ? '#e7dddd3d' : ''}">
+                                <a href="javaScript:void(0)" (click)='handleHeadClick(childBtn)'>{{childBtn.label}}</a>
+                              </li>
+                            </ng-container>
+                          </ul>
+                        </div>
+                      </div>
+                    </span>
+                  </ng-container>
+                  <!-- 头按钮 -->
+                  <ng-template #noChildBtnRight>
+                    <span>
+                      <ng-container [ngSwitch]="btn.operate">
+                        <ng-container *ngSwitchCase="'chose-plan'">
+                          <!--projectNum==='201808080000009'为无储架项目-选择项目  -->
+                          <ng-container *ngIf="projectNum==='201808080000009'">
+                            <button type="button" class="btn btn-primary" [disabled]='btn.disabled' (click)="handleHeadClick(btn)">{{btn.label}}
+                            </button>
+                          </ng-container>
+                        </ng-container>
+                        <ng-container *ngSwitchCase="'set-oldplan'">
+                          <!-- 老万科-设立专项计划（旧） -->
+                          <ng-container *ngIf="projectNum!=='201808080000009' && headquarters.indexOf('龙光')===-1">
+                            <button type="button" class="btn btn-primary" (click)="handleHeadClick(btn)">{{btn.label}}
+                            </button>
+                          </ng-container>
+                        </ng-container>
+                        <ng-container *ngSwitchDefault>
+                          <ng-container *ngIf="projectNum!=='201808080000009'">
+                            <button type="button" class="btn btn-primary" [disabled]="btn.disabled" (click)="handleHeadClick(btn)">{{btn.label}}
+                            </button>
+                          </ng-container>
+                        </ng-container>
+                      </ng-container>
+                    </span>
+                  </ng-template>
+                </ng-container>
+                
+              </div>
+            </ng-container>
+            <ng-container *ngIf="currentSubTab?.canSearch">
+              <span><button class="btn btn-primary" (click)="searchMsg()">查询</button></span>
+              <span><button class="btn btn-danger" (click)="reset()">重置</button></span>
+            </ng-container>
+          </div>
+
+          <!--列表交易子标签页切换,当且子标签状态多种时，显示切换标签导航-->
+          <ng-container *ngIf="currentTab.subTabList.length>1">
+            <ul class="nav nav-pills sub-ul">
+              <ng-container *ngFor="let sub of currentTab.subTabList">
+                <li role="presentation" [ngClass]="{'active': sub.value === subDefaultValue}"
+                  (click)="handleSubTabChange(sub.value)">
+                  <a class="xn-click-a">{{sub.label}}</a>
+                </li>
+              </ng-container>
+            </ul>
+          </ng-container>
+
+          <!--子列表-->
+          <table class="table table-bordered table-striped text-center">
+            <thead>
+              <tr class="table-head">
+                <!-- 全选按钮 -->
+                <th *ngIf="currentSubTab.canChecked" class="input-check">全选/取消
+                  <input type="checkbox" name="all" [checked]="isAllChecked()" [disabled]="!listInfo.length"
+                    (change)="checkAll()" />
+                </th>
+                <th>序号</th>
+                <!-- 表头，搜索功能 -->
+                <th *ngFor="let head of heads">
+                  <ng-container *ngIf="head.sort;else normal">
+                    <span [ngClass]="onSortClass(head?.value)" (click)="onSort(head?.value)">{{head.label}}</span>
+                  </ng-container>
+                  <ng-template #normal>{{head.label}}</ng-template>
+                </th>
+                <!-- 行操作 -->
+                <th
+                  *ngIf="currentSubTab?.edit && currentSubTab?.edit?.rowButtons && currentSubTab?.edit?.rowButtons?.length">
+                  操作
+                </th>
+              </tr>
+            </thead>
+            <tbody>
+              <ng-container *ngIf="listInfo.length;else block">
+                <tr *ngFor="let item of listInfo;let i=index">
+                  <!-- 行选则 -->
+                  <td *ngIf="currentSubTab.canChecked">
+                    <input type="checkbox" name="single" [checked]="item['checked']" (change)="singleChecked(item,i)" />
+                  </td>
+                  <!--序号-->
+                  <td [ngStyle]="{'background-color':item.poolFlag===0?'#D9D9D9':''}">{{i + 1}}</td>
+                  <!-- 列内容 -->
+                  <td *ngFor="let head of currentSubTab.headText" style="max-width: 70px;word-wrap:break-word">
+                    <!-- 根据head type 类型配置显示方式 -->
+                    <ng-container [ngSwitch]="head.type">
+                      <!-- mainFlowId-->
+                      <ng-container *ngSwitchCase="'mainFlowId'">
+                        <a href="javaScript:void(0)" (click)="getPlan(item)">{{item[head.value]}}</a>
+                      </ng-container>
+                      <!--invoiceNum-->
+                      <ng-container *ngSwitchCase="'moreDate'">
+
+                        <ng-container *ngFor='let value of item[head.value]'>
+                          <p>{{value | xnDate:'date'}}</p>
+                        </ng-container>
+                      </ng-container>
+                      <ng-container *ngSwitchCase="'invoiceNum'">
+
+                        <ng-container *ngIf="arrayLength(item[head.value]);else block2">
+                          <a class="xn-click-a" href="javaScript:void(0)" (click)="viewMore(item[head.value])"
+                            [innerHtml]="(item[head.value] | xnArrayTruncate:2:'等;')">
+                          </a>
+                        </ng-container>
+                        <ng-template #block2>
+                          <div [innerHtml]="(item[head.value] | xnArrayTruncate:2:'等;')"></div>
+                        </ng-template>
+                      </ng-container>
+                      <!--contract-->
+                      <ng-container *ngSwitchCase="'contract'">
+                        <ng-container *ngIf=" item[head.value]&& item[head.value]!==''">
+                          <ng-container *ngIf="judgeDataType(jsonTransForm(item[head.value])); else block3">
+                            <div *ngFor="let sub of item[head.value] | xnJson; let i=index">
+                              <a href="javaScript:void(0)" (click)="showContract(sub)">{{sub.label}}</a>
+                            </div>
+                          </ng-container>
+                          <ng-template #block3>
+                            <a href="javaScript:void(0)" (click)="showContract(jsonTransForm(item[head.value]))">
+                              {{jsonTransForm(item[head.value])['label']}}</a>
+                          </ng-template>
+                        </ng-container>
+                      </ng-container>
+                      <!--图片文件file-->
+                      <ng-container *ngSwitchCase="'file'">
+                        <ng-container *ngIf="item[head.value] && item[head.value]!==''">
+                          <div *ngFor="let sub of item[head.value] | xnJson">
+                            <a href="javaScript:void(0)" (click)="viewFiles(sub)">{{sub.fileName}}</a>
+                          </div>
+                        </ng-container>
+                      </ng-container>
+                      <ng-container *ngSwitchCase="'date'">
+                        <ng-container *ngIf="item[head.value] && item[head.value]!==''">
+                          <div>
+                            {{item[head.value] | xnDate: 'date'}}
+                          </div>
+                        </ng-container>
+                      </ng-container>
+                      <!-- 应收账款金额 -->
+                      <ng-container *ngSwitchCase="'receive'">
+                        <ng-container
+                          *ngIf=" item[head.value] !==undefiend &&item[head.value] !==null && item[head.value]!==0">
+                          <div>{{item[head.value].toFixed(2) | xnMoney}}</div>
+                        </ng-container>
+                      </ng-container>
+                      <ng-container *ngSwitchCase="'qrsMatchMethod'">
+                        <div [innerHTML]="item[head.value] |xnSelectTransform:'qrsMatchMethod'"></div>
+                      </ng-container>
+                      <ng-container *ngSwitchCase="'projectName'">
+                        <ng-container *ngIf="item.poolFlag===1;else part1">
+                          <div [innerHTML]="item[head.value]+(item['capitalManageNum']!=='' ? item['capitalManageNum']+'号' : '')+
+                          (item['managerPeriods']!=='' ? '第'+item['managerPeriods']+'期' : '')+'资产支持专项计划'"></div>
+                        </ng-container>
+                        <ng-template #part1>
+                          <div [innerHTML]="item[head.value]"></div>
+                        </ng-template>
+                      </ng-container>
+                      <!--默认-->
+                      <ng-container *ngSwitchDefault>
+                        <div [innerHTML]="item[head.value] | xnGatherType: {head:head,row:item}"></div>
+                      </ng-container>
+                    </ng-container>
+                  </td>
+                  <!-- 行按钮 -->
+                  <td *ngIf="currentSubTab?.edit &&currentSubTab?.edit?.rowButtons && currentSubTab?.edit?.rowButtons.length">
+                    <div class="operate-btn">
+                      <ng-container *ngFor="let btn of currentSubTab.edit.rowButtons">
+                        <ng-container>
+                          <!-- 非添加交易按钮 -->
+                          <ng-container *ngIf="btn.operate!=='add_transaction';else block6">
+                            <!-- 设置-多按钮操作 -->
+                            <ng-container *ngIf="btn.operate === 'set-up-button' && btn?.children.length>0">
+                              <!-- 新项目资产池-中介机构根据权限配置表展示- poolFlag=1-新项目 -->
+                              <div class="btn-group" *ngIf="item.poolFlag===1">
+                                <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown"
+                                  aria-expanded="false" style='padding:0;'>{{btn.label}}
+                                  <span class="caret"></span>
+                                </button>
+                                <ul class="dropdown-menu" role="menu">
+                                  <ng-container>
+                                    <li *ngFor="let t of btn?.children">
+                                      <ng-container [ngSwitch]="t.operate">
+                                        <!-- 锁定 -->
+                                        <ng-container *ngSwitchCase="'lock_pool'">
+                                          <a *ngIf="item.isLocking !== lockStatus.Locked;"
+                                            [ngClass]="{'disabled': t?.disabled}" href="javaScript:void(0)"
+                                            (click)='handleRowClick(item,t,i)'>{{t.label}}</a>
+                                        </ng-container>
+                                        <!-- 解锁 -->
+                                        <ng-container *ngSwitchCase="'unlock_pool'">
+                                          <a *ngIf="item.isLocking === lockStatus.Locked;"
+                                            [ngClass]="{'disabled': t?.disabled}" href="javaScript:void(0)"
+                                            (click)='handleRowClick(item,t,i)'>{{t.label}}</a>
+                                        </ng-container>
+                                        <ng-container *ngSwitchDefault>
+                                          <a [ngClass]="{'disabled': t?.disabled}" href="javaScript:void(0)"
+                                            (click)='handleRowClick(item,t,i)'>{{t.label}}</a>
+                                        </ng-container>
+                                      </ng-container>
+
+                                    </li>
+                                  </ng-container>
+                                </ul>
+                              </div>
+                            </ng-container>
+                            <!-- 统计信息-新万科项目资产池- -->
+                            <ng-container
+                              *ngIf="btn.operate === 'total_info' && item.poolFlag===1">
+                              <a style="position: relative;margin-right: 10px;" href="javaScript:void(0)"
+                                (click)="handleRowClick(item,btn,i)">{{btn.label}} <span *ngIf="showPiont(item)" class="piont"></span></a>
+                            </ng-container>
+                          </ng-container>
+                          <!-- 添加交易按钮 -->
+                          <ng-template #block6>
+                            <!-- 资产池非锁定状态 -->
+                            <ng-container *ngIf="item.isLocking !== lockStatus.Locked">
+                              <a style="margin-right: 10px;" href="javaScript:void(0)" (click)="handleRowClick(item,btn,i)">{{btn.label}}</a>
+                            </ng-container>
+                          </ng-template>
+                        </ng-container>
+                      </ng-container>
+                      <!-- 老龙光项目资产池-锁定状态-中介机构不可见- -->
+                      <button class="btn btn-sm btn-danger"
+                        *ngIf="item.isLocking === lockStatus.Locked && headquarters.indexOf('龙光')>-1 && isShowByOrgType && item?.poolFlag!==1"
+                        (click)="dragonhandleLock(item)">解锁
+                      </button>
+                      <!-- 老龙光项目资产池-未锁定状态-中介机构不可见- -->
+                      <div class="btn-group"
+                        *ngIf="item.isLocking === lockStatus.Unlock && isShowByOrgType && headquarters.indexOf('龙光')>-1 && item?.poolFlag!==1">
+                        <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-expanded="false">设置
+                          <span class="caret"></span>
+                        </button>
+                        <ul class="dropdown-menu" role="menu">
+                          <li *ngIf="showButtonBool">
+                            <a href="javascript:void(0)" (click)="dragonbankCardAdd(item)">绑定信息</a>
+                          </li>
+                          <ng-container *ngIf="showButtonBool">
+                            <li>
+                              <a href="javascript:void(0)" (click)="dragonhandleLock(item)" *ngIf="item.isLocking === lockStatus.Unlock">
+                                锁定
+                              </a>
+                            </li>
+                          </ng-container>
+                          <ng-container>
+                            <li><a href="javascript:void(0)" (click)="dragonalertRatioForm({id: item.capitalPoolId,value: item})">
+                                设置警戒比例
+                            </a></li>
+                            <li><a href="javascript:void(0)" (click)="dragoncapitalItemForm({id: item.capitalPoolId,name: item.capitalPoolName})">
+                                重命名
+                            </a></li>
+                            <!-- <li><a href="javascript:void(0)" (click)="dragonintermediaryAgencyForm({value:projectId})">中介机构</a>
+                            </li> -->
+                          </ng-container>
+                        </ul>
+                      </div>
+                      <!-- 老万科项目资产池-中介机构不可见 poolFlag:  0-老万科  1-新万科-->
+                      <ng-container *ngIf=" headquarters.indexOf('龙光')===-1 ">
+                        <div class="btn-group" *ngIf="item.poolFlag===0 && isShowByOrgType">
+                          <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown"
+                            aria-expanded="false" style='padding:0 0;background-color: #dee1e2;'>设置
+                            <span class="caret"></span>
+                          </button>
+                          <ul class="dropdown-menu" role="menu">
+                            <ng-container>
+                              <li><button class="btn btn-sm btn-primary" (click)="bankCardAdd(item)">绑定信息</button>
+                              </li>
+                              <li>
+                                <button (click)="alertRatioForm({id:item.capitalPoolId, value: item})" class="btn btn-sm btn-primary">设置警戒比例
+                                </button>
+                              </li>
+                              <li>
+                                <button (click)="handleLock(item)" class="btn btn-sm btn-default" *ngIf=" item.isLocking!==1">锁定
+                                </button>
+                                <button class="btn btn-sm btn-default" *ngIf=" item.isLocking===1" disabled>已锁定</button>
+                              </li>
+                              <li>
+                                <button (click)="capitalItemForm({id:item.capitalPoolId, name: item.capitalPoolName})" class="btn btn-sm btn-default">重命名
+                                </button>
+                              </li>
+                              <!-- <li>
+                                <button (click)="dragonintermediaryAgencyForm({value:projectId})" class="btn btn-sm btn-default">中介机构</button>
+                              </li> -->
+                            </ng-container>
+                          </ul>
+                        </div>
+                      </ng-container>
+                    </div>
+                  </td>
+                </tr>
+              </ng-container>
+            </tbody>
+          </table>
+        </div>
+        <!-- <div class="print">
+                  <span>应付账款金额汇总：</span>
+                  <span style="margin-left:30px">所选交易转让金额汇总：</span>
+                  <span style="margin-left:30px">笔数：</span>
+                  <span>筛选条件下应收转让金额汇总：</span>
+                  <span style="margin-left:30px">筛选条件下所有交易的转让金额汇总：</span>
+                </div> -->
+        <xn-pagination [rows]="pageConfig.pageSize" [first]="pageConfig.first" [totalRecords]="pageConfig.total"
+          [pageSizeOptions]="[5,10,20,30,50,100]" (pageChange)="onPage($event)"></xn-pagination>
+      </div>
+      <div class="text-right box-footer" style="border-top: none;margin-top: 40px;">
+        <button type="button" class="btn btn-default pull-left" (click)="navBack()">
+          返回
+        </button>
+      </div>
+    </div>
+
+  </div>
+
+</section>
+
+<ng-template #block>
+  <tr>
+    <td [attr.colspan]="calcAttrColspan()">
+      <div class="empty-message"></div>
+    </td>
+  </tr>
+</ng-template>

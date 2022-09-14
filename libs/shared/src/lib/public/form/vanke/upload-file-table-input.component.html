@@ -1,0 +1,75 @@
+<div class="height" [formGroup]="form">
+  <div class="head-height">
+    <table class="table table-bordered table-hover text-center table-display relative" [style.left.px]="headLeft">
+      <thead>
+        <tr>
+          <th>交易 ID</th>
+          <th>申请付款单位</th>
+          <th>收款单位</th>
+          <th>总部公司</th>
+          <th>合同编号</th>
+          <th>发票号</th>
+          <th>发票金额</th>
+          <th>应收账款金额</th>
+          <th>付款确认书编号</th>
+          <th>付款确认书</th>
+          <th>资金渠道</th>
+          <th>起息时间</th>
+          <th>保理到期日</th>
+          <th>实际放款日</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let item of data">
+          <!--交易 ID-->
+          <td ngClass="word-break"><a href="javaScript:void (0)" (click)="viewProcess(item)">{{item.mainFlowId}}</a></td>
+          <!--申请付款单位-->
+          <td>{{item.projectCompany}}</td>
+          <!--收款单位-->
+          <td>{{item.debtUnit}}</td>
+          <!--总部公司-->
+          <td>{{item.headquarters | xnSelectTransform :enterpriserSelectItems}}</td>
+          <!--合同编号-->
+          <td>{{item.contractId}}</td>
+          <!--发票号-->
+          <td>
+            <span *ngIf="item.invoiceLength <= 2">{{item.invoiceNumLocal}}</span>
+            <a *ngIf="item.invoiceLength > 2" class="xn-click-a" (click)="viewAllInvoice(item)">{{item.invoiceNumLocal}}</a>
+          </td>
+          <!--发票金额-->
+          <td>{{item.realInvoiceAmount}}</td>
+          <!--应收账款金额-->
+          <td>{{item.receivable}}</td>
+          <!--付款确认书编号-->
+          <td>{{item.payConfirmId}}</td>
+          <!-- 付款确认书 -->
+          <td>
+            <div *ngFor="let sub of item.pdfProjectFiles | xnJson; let i=index">
+              <a href="javaScript:void(0)" (click)="showContract(sub.id,sub.secret,sub.label)">{{sub.label}}</a>
+            </div>
+          </td>
+          <!--资金渠道-->
+          <td>
+            {{item?.moneyChannel | xnSelectTransform: moneyChannelOptions}}
+          </td>
+          <!--起息时间-->
+          <td>
+            <span *ngIf="item.payDate == null || item.payDate === 0 || item.payDate === ''">/</span>
+            <span *ngIf="item.payDate && item.payDate !== 0 || item.payDate !== ''">{{item.payDate | xnDate: 'date'}}</span>
+          </td>
+          <!--保理到期日-->
+          <td>
+            <span *ngIf="item.factoringEndDate == null || item.factoringEndDate === 0 || item.factoringEndDate === ''">/</span>
+            <span *ngIf="item.factoringEndDate && item.factoringEndDate !== 0 || item.factoringEndDate !== ''">{{item.factoringEndDate}}</span>
+          </td>
+          <!--实际放款日-->
+          <td>
+            <span *ngIf="item.payTime == null || item.payTime === 0 || item.payTime === ''">/</span>
+            <span *ngIf="item.payTime && item.payTime !== 0 || item.payTime !== ''">{{item.payTime | xnDate: 'date'}}</span>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+<span class="xn-input-alert">{{alert}}</span>

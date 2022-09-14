@@ -1,0 +1,31 @@
+<div [ngClass]="[store.isPhone ? 'h5-product-system' : 'product-system']">
+  <div [ngClass]="[store.isPhone ? 'h5-portal-panel' : 'portal-panel']">
+    <div class="desc-box">
+      <div class="desc">
+        链融科技通过对链接的工业供应链、消费流通供应链、地产供应链等业务场景运用大数据分析，适配标准化产品，生成标准化文件，实现资金精准对接，最终集成多个定制化云平台。
+      </div>
+    </div>
+  </div>
+  <div class="product-box" *ngFor="let product of productList;">
+    <div *ngIf="!!product.scrollToEl" [attr.id]="product.scrollToEl" class="scorllTarget"></div>
+    <div [ngClass]="[store.isPhone ? 'h5-portal-panel' : 'portal-panel']">
+      <div class="product">
+        <img [src]="store.isPhone ? product.h5Src : product.src">
+        <div class="detail">
+          <div class="name">
+            {{product.name}}
+          </div>
+          <div class="line"></div>
+          <div class="desc">{{product.desc}}</div>
+          <div *ngIf="!store.isPhone" class="link-button">
+            <button nz-button nzType="primary" nzSize="default" (click)="handleNavToProduct(product)">
+              {{ product.linkText }}
+              <nz-divider nzType="vertical" class="link-divider"></nz-divider>
+              <i nz-icon nzType="right" nzTheme="outline"></i>
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,330 @@
+.page-wrap {
+  width: 100%;
+  background: #fff;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  padding: 0 12px;
+  margin-top: 8px;
+}
+.file-source-wrap {
+  font-size: 14px;
+  height: 48px;
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-start;
+  align-items: center;
+  /* padding: 8px 0; */
+}
+.source-btn-wrap {
+  display: flex;
+  margin-left: 8px;
+  flex-direction: row;
+  align-items: center;
+}
+.flex-wrap {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-around;
+  align-items: flex-start;
+  padding-bottom: 8px;
+}
+.flex-wrap .flex-content {
+  /* height: 100%; */
+  /* width: 50%; */
+  flex-direction: column;
+  justify-content: center;
+  align-items: flex-start;
+  position: relative;
+}
+.img-container {
+  width: 100%;
+  height: 985px;
+  overflow: scroll;
+  text-align: center;
+  position: relative;
+  background: #e6e6e6;
+  box-shadow: 0px 0px 4px 1px #ddd;
+}
+.img-wrapper {
+  transition: all 0.5s ease-in-out;
+  transform-origin: 50% 50%;
+}
+.this-img {
+  width: 100%;
+  /* height: calc(100% - 40px); */
+  border: none;
+  box-shadow: 8px 8px 15px #888888;
+}
+.pdf-container {
+  position: relative;
+  height: 985px;
+  overflow: scroll;
+  border: 0;
+  background: #e6e6e6;
+  box-shadow: 0px 0px 4px 1px #ddd;
+}
+#canvas-box {
+  position: absolute;
+  cursor: pointer;
+}
+.pdf-canvas {
+  border: none;
+  box-shadow: 8px 8px 15px #888888;
+  cursor: pointer;
+}
+.canvas-btn-wrap {
+  /* padding: 8px; */
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-end;
+  align-items: center;
+  padding-top: 6px;
+}
+
+.pdf-pagination {
+  margin: 0 8px;
+}
+.form-content {
+  padding-left: 12px;
+  /* overflow: hidden; */
+  /* position: relative; */
+}
+
+.fileType-label {
+  position: relative;
+  margin-right: 4px;
+}
+.fileType-label::after {
+  content: "*";
+  color: red;
+  position: absolute;
+  right: 0px;
+  top: 0px;
+}
+
+/* 跳过select控件和按钮 */
+.btnGroup-wrap {
+  width: 98%;
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-start;
+  align-items: center;
+  flex-wrap: wrap;
+}
+.btn-extra {
+  margin-right: 4px;
+  margin-bottom: 8px;
+}
+.cards-wrap {
+  height: 800px;
+  overflow-y: scroll;
+}
+.file-data-wrap {
+  /* width: 98%; */
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: center;
+  margin-bottom: 8px;
+}
+.file-data-item {
+  width: calc(100% - 16px);
+  height: 100%;
+  display: flex;
+  justify-content: space-between;
+  padding: 12px 8px;
+  background: #fff;
+  border-radius: 4px;
+  border: 1px solid #ddd;
+  position: relative;
+}
+.subItem-label {
+  display: inline-block;
+  font-weight: 500;
+}
+
+.contractLabel {
+  display: inline-block;
+  position: relative;
+  margin: 0 8px;
+}
+.contractLabel::before {
+  content: "";
+  position: absolute;
+  width: 4px;
+  height: 18px;
+  background: #1890ff;
+  left: -8px;
+  top: 1px;
+}
+.labelRequire {
+  position: relative;
+}
+.labelRequire::after {
+  content: "*";
+  color: red;
+  position: absolute;
+  right: -8px;
+  top: -2px;
+}
+.item-middle-text {
+  position: absolute;
+  top: 12px;
+  right: 168px;
+}
+.input-wrap {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+  margin: 0 0 4px 0;
+  width: 100%;
+}
+.input-wrap .inputLabel {
+  position: relative;
+  margin-right: 4px;
+  margin-bottom: 0 !important;
+  color: #3b3b3b;
+  font-weight: normal;
+  width: 40%;
+}
+.inputRequire {
+  position: relative;
+}
+.inputRequire::before {
+  content: "*";
+  color: red;
+  position: absolute;
+  left: -8px;
+  top: -2px;
+}
+.expand-link {
+  color: #1890ff;
+  cursor: pointer;
+  margin-right: 4px;
+}
+.expandWrap {
+  display: flex;
+  flex-direction: column;
+  width: calc(100% - 16px);
+  min-height: 300px;
+  border: 1px solid #cecece;
+  margin-top: -2px;
+  padding: 2px 24px 0;
+  animation: expand 0.3s ease-in;
+  align-items: center;
+  justify-content: flex-start;
+}
+@keyframes expand {
+  0% {
+    min-height: 0px;
+    opacity: 0;
+  }
+  100% {
+    min-height: 300px;
+    opacity: 100;
+  }
+}
+.collapse {
+  overflow: hidden;
+  min-height: 300px;
+  animation: collapseNone 0.3s ease-out;
+}
+@keyframes collapseNone {
+  0% {
+    min-height: 300px;
+  }
+  100% {
+    height: 0;
+  }
+}
+.wrap-top-handlers {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+}
+.btn-text {
+  color: #1890ff;
+}
+.classify-wrap {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: center;
+  margin-top: 4px;
+}
+.classify-title {
+  width: 100%;
+  padding: 2px 0;
+  border-bottom: 1px solid #ddd;
+  font-size: 14px;
+  color: #3b3b3b;
+}
+.classify-content {
+  width: 100%;
+  padding: 8px 0;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: center;
+}
+.classify-content > label {
+  margin: 0 !important;
+}
+.footer-bar {
+  display: flex;
+  width: 100%;
+  height: 100%;
+  justify-content: flex-start;
+  align-items: center;
+}
+
+#getpageNum {
+  display: inline-block;
+  border-radius: 2px;
+  height: 32px;
+  width: 32px;
+  border: 1px solid #d9d9d9;
+}
+.set-ul{
+  max-height:500px;
+  overflow-y:auto;
+}
+.bg{
+  background: #E62129;
+  border-color: #E62129;
+}
+
+.image-viewer {
+  display: none
+}
+
+.load-wrap {
+  position: absolute;
+  z-index: 10;
+  left: 50%;
+  transform: translateX(-50%);
+  top: 50%;
+  transform: translateY(-50%);
+}
+
+.fileToolIcon {
+  position: absolute;
+  font-size: 45px;
+  top: 50%;
+  cursor: pointer;
+  padding: 5px;
+  transform: translateY(-50%);
+  border-radius: 50%;
+  background-color: #ddd;
+}
+
+.preFileIcon {
+  left: 10px;
+}
+
+.nextFileIcon {
+  right: 10px;
+}

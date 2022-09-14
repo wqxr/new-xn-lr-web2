@@ -1,0 +1,128 @@
+<modal #modal [backdrop]="'static'" [keyboard]="false" [animation]="false">
+  <modal-header [showClose]="false">
+    <h4 class="modal-title">{{ params.title }}</h4>
+  </modal-header>
+  <modal-body>
+    <div class="clearfix" style="max-height: calc( 100vh - 400px);overflow-y: auto;overflow-x:hidden;">
+      <!-- 交易信息 -->
+      <div class="form-group" style="overflow: hidden;">
+        <div class="col-sm-2 xn-control-label" style="font-size: 14px;">交易信息</div>
+        <div class="col-sm-8">
+          <div class="height" style="width:100%">
+            <div class="head-height">
+              <table class="table table-bordered table-hover text-center table-display relative"
+                [style.left.px]="headLeft">
+                <thead>
+                  <tr>
+                    <th style='width:50px'>序号</th>
+                    <!-- 表头，搜索功能 -->
+                    <ng-container *ngFor="let head of heads">
+                      <th style='width:120px;word-break: break-all;'>
+                        {{head.label}}
+                      </th>
+                    </ng-container>
+                  </tr>
+                </thead>
+              </table>
+            </div>
+          </div>
+          <div class="table-height" (scroll)="onScroll($event)">
+            <table class="table table-bordered table-hover text-center table-display">
+              <tbody>
+                <ng-container *ngIf="tableInfo.length;">
+                  <tr *ngFor="let item of tableInfo;let i=index">
+                    <!--序号-->
+                    <td style='width:50px'>{{i + 1}}</td>
+                    <!-- 列内容 -->
+                    <td *ngFor="let head of heads" style="width:120px; word-break: break-all;">
+                      <!-- 根据head type 类型配置显示方式 -->
+                      <ng-container [ngSwitch]="true">
+                        <!-- currentStep 交易状态-->
+                        <ng-container *ngSwitchCase="head.type==='currentStep'">
+                          <ng-container>
+                            <div [innerHTML]="item[head.value] | xnSelectTransform:'agileXsTradeStatus'"></div>
+                          </ng-container>
+                        </ng-container>
+                        <ng-container *ngSwitchCase="head.type==='date'">
+                          <ng-container *ngIf="item[head.value] && item[head.value]!==''">
+                            <p>
+                              {{item[head.value] | xnDate: 'date'}}
+                            </p>
+                          </ng-container>
+                        </ng-container>
+                        <!-- 金额类型 -->
+                        <ng-container *ngSwitchCase="head.type==='money'">
+                          <ng-container *ngIf=" item[head.value] !==undefiend &&item[head.value] !==null">
+                            <p>{{item[head.value].toFixed(2) | xnMoney}}</p>
+                          </ng-container>
+                        </ng-container>
+                        <ng-container *ngSwitchDefault>
+                          <p [innerHTML]="item[head.value] | xnGatherType: {head:head,row:item}"></p>
+                        </ng-container>
+                      </ng-container>
+                    </td>
+                  </tr>
+                </ng-container>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+      <!-- 文件类型选择 -->
+      <div class="form-group" style="margin-top: 20px;">
+        <div class="col-sm-2 xn-control-label required-star" style="font-size: 14px;">文件类别</div>
+        <div class="col-sm-8">
+          <select class=" form-control xn-input-font" [(ngModel)]="fileType" (change)="fileTypeChange($event)"
+            [disabled]="params?.type==='view'">
+            <option value="">-请选择-</option>
+            <option *ngFor="let option of selectOptions" value="{{option.value}}">{{option.label}}</option>
+          </select>
+        </div>
+      </div>
+
+      <!-- 子类别文件 -->
+      <form class="form-horizontal" (ngSubmit)="handleSubmit()" [formGroup]="mainForm" *ngIf="!!mainForm">
+        <div class="col-md-12" style="margin-top: 20px;" *ngIf="fileType">
+          <div class="form-group" *ngFor="let row of childrenChecker">
+            <div class="col-sm-2 xn-control-label" style="padding-top: 3px;"
+              [class.required-star]="row.required !== false && row.required !== 0">
+              {{ row.title }}
+              <i style='font-size: 16px;' class='fa fa-question-circle' [tooltip]='helpTip' max-width='300px'
+                z-index='2000' content-type="template">
+              </i>
+              <ng-template #helpTip>
+                <div>
+                  <div>
+                    <span>帮助提示：</span>
+                    <ul>
+                      <li>{{row?.other}}</li>
+                    </ul>
+                  </div>
+
+                </div>
+              </ng-template>
+            </div>
+            <div class="col-sm-8">
+              <app-dynamic-input [row]="row" [form]="mainForm" [svrConfig]="svrConfig" formModule="dragon-input">
+              </app-dynamic-input>
+            </div>
+            <div class="col-sm-2 xn-control-desc">
+              {{ row.memo }}
+            </div>
+          </div>
+        </div>
+      </form>
+    </div>
+  </modal-body>
+  <modal-footer>
+    <span *ngIf="params?.options?.tips" class="label-tips">{{params?.options?.tips}}</span>
+    <button type="button" class="btn btn-default" (click)="handleCancel()">
+      {{ params.buttons[0] }}
+    </button>
+    <button type="submit" *ngIf="params.buttons[1] && params.buttons[1] !== ''"
+      [disabled]='!mainForm?.valid && !fileType' class="btn btn-success"
+      (click)="handleSubmit()">{{ params.buttons[1] }}
+    </button>
+  </modal-footer>
+</modal>

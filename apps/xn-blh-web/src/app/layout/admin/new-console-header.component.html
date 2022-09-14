@@ -1,0 +1,81 @@
+<header class="main-header">
+  <div class='newhead'>
+    <div>
+      <a routerLinkActive="active" routerLink="/portal/home" class="logo" style='background-color: transparent;'>
+        <span class="logo-lg">
+          <img src="assets/lr/img/logo-white.png">
+        </span>
+      </a>
+      <!-- 导航 -->
+      <nav class="navbar navbar-lr menu" style='background-color: transparent;'>
+
+        <div class="navbar-custom-menu">
+          <ul class="nav navbar-nav">
+            <!-- User Account: style can be found in dropdown.less -->
+            <li class="dropdown user user-menu" *ngIf="!!logined">
+              <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                <img src="assets/admin-lte/img/avatar0.png" class="user-image" alt="User Image">
+                <span class="hidden-xs">{{userName}}</span>
+              </a>
+              <ul class="dropdown-menu" style="margin-top:1px;">
+                <!-- User image -->
+                <li class="user-header" style="height:fit-content">
+                  <img src="assets/admin-lte/img/avatar0.png" class="img-circle" alt="User Image">
+                  <p>
+                    欢迎您，{{userName}}
+                    <small>{{orgName}}</small>
+                    <small><span *ngFor="let item of rolesCn">{{item}}</span></small>
+                  </p>
+                </li>
+                <!-- Menu Footer-->
+                <li class="user-footer">
+                  <div class="row">
+                    <div class="col-md-4">
+                      <ng-container *ngIf="currentLoginedType!==99">
+                        <a routerLink="/console/record/info" class="btn btn-default btn-flat">我的资料</a>
+                      </ng-container>
+                    </div>
+                    <div class="col-md-4">
+                      <!-- <ng-container *ngIf="currentLoginedType!==99 && multiOrgs && multiOrgs.length > 0">
+                            <a (click)="onSwitchMode()" class="btn btn-default btn-flat btn-switch">切换</a>
+                          </ng-container> -->
+                    </div>
+                    <div class="col-md-4">
+                      <a (click)="onLogout(1)" class="btn btn-default btn-flat btn-logout">注销</a>
+                    </div>
+                  </div>
+                </li>
+              </ul>
+            </li>
+            <!-- <li *ngIf="!logined">
+            <a (click)="onLogin()" class="console-header-login-btn xn-click-a" style="min-width: 0">登录</a>
+          </li> -->
+          </ul>
+        </div>
+        <div class="console-header-container">
+          <div class="collapse navbar-collapse">
+            <ul class="nav navbar-nav">
+                <li *ngIf="!logined" (click)="onLogin()" style='float:right'><a class="xn-click-a">登录</a></li>
+              <ng-container *ngFor="let item of items">
+                <li class="dropdown" *ngIf="!!item.children">
+                  <a routerLink="/portal/column/{{item.id}}" class="dropdown-toggle" data-toggle="dropdown"
+                    role="button" aria-haspopup="true" aria-expanded="false">{{item.title}} <span
+                      class="caret"></span></a>
+                  <ul class="dropdown-menu">
+                    <li *ngFor="let child of item.children"><a
+                        routerLink="/portal/column/{{child.id}}">{{child.title}}</a>
+                    </li>
+                  </ul>
+                </li>
+                <li *ngIf="!item.children"><a routerLink="/portal/column/{{item.id}}">{{item.title}}</a></li>
+              </ng-container>
+            </ul>
+          </div>
+        </div>
+      </nav>
+    </div>
+  </div>
+  <!-- Logo -->
+
+</header>
+<!--<login-modal #loginModal></login-modal>-->

@@ -1,0 +1,10 @@
+<div class="inMemo" *ngIf="inMemo !== ''">{{inMemo}}</div>
+<div class="input-group" [formGroup]="form">
+    <span class="form-control xn-input-font xn-input-first-border-radius">{{label}}</span>
+    <div class="input-group-btn">
+      <div class="btn btn-default btn-file">
+        <span class="hidden-xs xn-input-font" (click)="onPicker()">选择...</span>
+      </div>
+    </div>
+</div>
+<span class="xn-input-alert">{{alert}}</span>

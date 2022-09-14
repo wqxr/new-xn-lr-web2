@@ -1,0 +1,68 @@
+.check-title {
+  display: flex;
+  justify-content: center;
+}
+
+.success-btn {
+  width: 120px;
+  height: 34px;
+  color: #40BD78;
+  background-color: #fff;
+  border: 1px solid #1D67C7;
+  border-radius: inherit;
+}
+.special-btn {
+  float: right;
+  margin-right: 50px;
+  margin-top: 60px;
+}
+
+
+.error-btn {
+  width: 120px;
+  height: 34px;
+  color: #FB9E17;
+  background-color: #fff;
+  border: 1px solid #1D67C7;
+  border-radius: inherit;
+}
+
+.system-judge {
+  margin-top: 60px;
+}
+
+.judge-type {
+  border-left: 5px solid #1D67C7;
+  margin-bottom: 30px;
+}
+
+.judge-title {
+  font-weight: bold;
+  margin-left: 10px;
+  font-size: 18px
+}
+
+.rule-index {
+  font-size: 16px;
+}
+
+.rule-index span {
+  margin-left: 10px;
+  font-weight: bold;
+  font-size: 17px;
+}
+
+.rule-clump {
+  font-size: 16px;
+}
+
+.rule-clump span {
+  margin-left: 10px;
+  font-weight: bold;
+  font-size: 17px;
+}
+
+.active-btn {
+  background-color: #1D67C7;
+  color: #fff;
+}

@@ -1,0 +1,73 @@
+<section class="content-header">
+    <h1>
+        {{pageTitle}}
+        <small>{{pageDesc}}</small>
+    </h1>
+</section>
+
+<section class="content">
+    <div class="box">
+        <div class="box-header">
+            <h3 class="box-title">{{tableTitle}}</h3>
+            <div class="date-time pull-right">
+              <input type="text" #configDate class="form-control date-input" placeholder="请选择时间段">
+              <i class="glyphicon glyphicon-calendar fa fa-calendar"></i>
+            </div>
+        </div>
+        <!-- /.box-header -->
+        <div class="box-body">
+            <div class="row form-group">
+              <div #chart1 class="col-sm-12">
+                  <table class="table table-bordered table-striped">
+                      <tr class="text-center">
+                          <td  *ngFor="let item of column">{{item}}</td>
+                      </tr>
+                      <tr *ngFor="let items of list">
+                          <td *ngFor="let item of items.slice(0, 1)" class="text-center">
+                            {{item}}
+                          </td>
+                          <td *ngFor="let item of items.slice(1, items.length - 1)" class="text-right">
+                            {{item}}
+                          </td>
+                          <td *ngFor="let item of items.slice(-1)" style="width: 70px">
+                            <a class="xn-click-a" (click)="onView(item)">详情</a>
+                          </td>
+                      </tr>
+                      <tr>
+                        <td *ngFor="let item of total.slice(0, 1)" class="text-center">
+                          {{item}}
+                        </td>
+                        <td *ngFor="let item of total.slice(1, 2)" class="text-right">{{item | xnMoney}}</td>
+                        <td *ngFor="let item of total.slice(2, 3)" class="text-right">
+                          100.00%
+                        </td>
+                        <td *ngFor="let item of total.slice(3, total.length)" class="text-right">{{item | xnMoney}}</td>
+                        <td></td> <!-- 这个留空白 -->
+                      </tr>
+                  </table>
+              </div>
+            </div>
+          </div>
+          <!-- /.box-body -->
+      </div>
+
+      <div class="box" *ngFor="let bar of chartBars; let i = index">
+        <div class="box-body">
+          <div class="row form-group">
+            <div #chartBar class="col-sm-12 chart-height-400 chart2"></div>
+          </div>
+        </div>
+          <!-- /.box-body -->
+      </div>
+
+      <div class="box" *ngFor="let bar of chartPies; let i = index">
+          <div class="box-body">
+            <div class="row form-group">
+              <div #chartPie class="col-sm-12 chart-height-400 chart2"></div>
+            </div>
+          </div>
+            <!-- /.box-body -->
+        </div>
+
+  </section>
+<!-- /.content -->

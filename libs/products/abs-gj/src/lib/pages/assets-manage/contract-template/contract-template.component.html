@@ -1,0 +1,168 @@
+<section class="content-header">
+  <h1>{{tabConfig.title}}</h1>
+</section>
+<section class="content">
+  <div class="box">
+    <div class="box-body">
+      <ul class="nav nav-tabs">
+        <ng-container *ngFor="let tab of tabConfig.tabList;let i=index">
+          <li [ngClass]="{'active': tab.value===defaultValue}">
+            <a class="xn-click-a" data-toggle="tab" (click)="initData(tab.value)">{{tab.label}}</a>
+          </li>
+        </ng-container>
+      </ul>
+
+      <div class="tab-content">
+        <div class="tab-pane active" style="padding: 15px 0">
+
+          <!-- 表头搜索项 -->
+          <xn-search-form
+            [model]="searchModel"
+            [fields]="showFields"
+            (search)="onSearch($event)"
+            (reset)="onReset()"
+          ></xn-search-form>
+
+          <!--子列表-->
+          <table class="table table-bordered table-striped text-center">
+            <thead>
+            <tr class="table-head">
+              <th>序号</th>
+              <!-- 表头，搜索功能 -->
+              <th *ngFor="let head of heads">{{head.label}}</th>
+              <!-- 行操作 -->
+              <th
+                *ngIf="currentSubTab?.edit && currentSubTab?.edit?.rowButtons && currentSubTab?.edit?.rowButtons?.length">
+                操作
+              </th>
+            </tr>
+            </thead>
+            <tbody>
+            <ng-container *ngIf="listInfo.length;else block">
+              <tr *ngFor="let item of listInfo;let i=index">
+                <!--序号-->
+                <td>{{i + 1}}</td>
+                <!-- 列内容 -->
+                <td *ngFor="let head of currentSubTab.headText" style="max-width: 70px;word-wrap:break-word">
+                  <!-- 根据head type 类型配置显示方式 -->
+                  <ng-container [ngSwitch]="head.type">
+                    <!-- mainFlowId-->
+                    <ng-container *ngSwitchCase="'mainFlowId'">
+                      <a href="javaScript:void(0)"
+                         (click)="toolKitSrv.viewProcess(item[head.value])">{{item[head.value]}}</a>
+                    </ng-container>
+                    <ng-container *ngSwitchCase="'contractStatus'">
+                      <div *ngIf='item[head.value]===1'>未生效</div>
+                      <div *ngIf='item[head.value]===2'>已生效</div>
+                    </ng-container>
+                    <!--contract-->
+                    <ng-container *ngSwitchCase="'contract'">
+                      <div class="file-view">
+                        <ng-container *ngIf=" item[head.value]&& item[head.value]!==''">
+                          <ng-container *ngIf="judgeDataType(jsonTransForm(item[head.value])); else block3">
+                            <div *ngFor="let sub of item[head.value] | xnJson; let i=index">
+                              <a href="javaScript:void(0)" (click)="showContract(sub, item.id)">{{sub.label}}</a>
+                            </div>
+                          </ng-container>
+                          <ng-template #block3>
+                            <a href="javaScript:void(0)" (click)="showContract(jsonTransForm(item[head.value]), item.id)">
+                              {{jsonTransForm(item[head.value])['label']}}</a>
+                          </ng-template>
+                        </ng-container>
+                      </div>
+                    </ng-container>
+                    <!--图片文件file-->
+                    <ng-container *ngSwitchCase="'file'">
+                      <ng-container *ngIf="item[head.value] && item[head.value]!==''">
+                        <div *ngFor="let sub of item[head.value] | xnJson">
+                          <a href="javaScript:void(0)" (click)="viewFiles(sub)">{{sub.fileName}}</a>
+                        </div>
+                      </ng-container>
+                    </ng-container>
+                    <ng-container *ngSwitchCase="'date'">
+                      <ng-container *ngIf="item[head.value] && item[head.value]!==''">
+                        <div>
+                          {{item[head.value] | xnDate: 'datetime'}}
+                        </div>
+                      </ng-container>
+                    </ng-container>
+                    <!-- 签署方 -->
+                    <ng-container *ngSwitchCase="'signer'">
+                      <ng-container *ngIf="judgeDataType(jsonTransForm(item[head.value]))">
+                        <div *ngFor="let sig of item[head.value] | xnJson;let i=index">
+                          {{sig | xnSignerType}}&nbsp;
+                        </div>
+                      </ng-container>
+                    </ng-container>
+                    <!-- 合同模板状态 -->
+                    <ng-container *ngSwitchCase="'templateStatus'">
+                      <div *ngIf='item[head.value]===1'>未生效</div>
+                      <div *ngIf='item[head.value]===2'>已生效</div>
+                    </ng-container>
+                    <!-- 特定条件 -->
+                    <ng-container *ngSwitchCase="'specialCondition'">
+                      <div *ngIf='item[head.value]===0'>/</div>
+                      <div *ngIf='item[head.value]===1'>首笔业务签署</div>
+                      <div *ngIf='item[head.value]===2'>上传发票与预录不一致</div>
+                    </ng-container>
+                    <!-- 合同模板类型 -->
+                    <ng-container *ngSwitchCase="'templateType'">
+                      <div *ngIf='item[head.value]===0'>主合同</div>
+                      <div *ngIf='item[head.value]===1'>普通合同</div>
+                      <div *ngIf='item[head.value]===2'>特殊合同</div>
+                    </ng-container>
+                    <!-- 签署方式 -->
+                    <ng-container *ngSwitchCase="'signType'">
+                      <div *ngIf='item[head.value]===0'>线上签署</div>
+                      <div *ngIf='item[head.value]===1'>线下签署</div>
+                    </ng-container>
+                    <!-- 生成逻辑 -->
+                    <ng-container *ngSwitchCase="'style'">
+                      <div *ngIf='item[head.value]===0'>单笔单出</div>
+                      <div *ngIf='item[head.value]===1'>项目清单式</div>
+                      <div *ngIf='item[head.value]===2'>总部清单式</div>
+                    </ng-container>
+                    <ng-container *ngSwitchCase="'qrsMatchMethod'">
+                      <div [innerHTML]="item[head.value] |xnSelectTransform:'qrsMatchMethod'"></div>
+                    </ng-container>
+                    <!--默认-->
+                    <ng-container *ngSwitchDefault>
+                      <div [innerHTML]="item[head.value] | xnGatherType: {head:head,row:item}"></div>
+                    </ng-container>
+                  </ng-container>
+                </td>
+                <!-- 行按钮 -->
+                <td
+                  *ngIf="currentSubTab?.edit &&currentSubTab?.edit?.rowButtons && currentSubTab?.edit?.rowButtons.length">
+                  <div *ngFor="let btn of currentSubTab.edit.rowButtons" class="operate-btn">
+                    <ng-container [ngSwitch]="btn.operate">
+                      <ng-container *ngSwitchDefault>
+                        <a href="javaScript:void(0)" (click)="handleRowClick(item,btn,i)">{{btn.label}}</a>
+                      </ng-container>
+                    </ng-container>
+                  </div>
+                </td>
+              </tr>
+            </ng-container>
+            </tbody>
+          </table>
+        </div>
+        <xn-pagination
+          [rows]="pageConfig.pageSize"
+          [first]="pageConfig.first"
+          [totalRecords]="pageConfig.total"
+          [pageSizeOptions]="[5,10,20,30,50,100]"
+          (pageChange)="onPage($event)"
+        ></xn-pagination>
+      </div>
+    </div>
+  </div>
+</section>
+
+<ng-template #block>
+  <tr>
+    <td [attr.colspan]="calcAttrColspan()">
+      <div class="empty-message"></div>
+    </td>
+  </tr>
+</ng-template>

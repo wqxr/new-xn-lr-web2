@@ -1,0 +1,48 @@
+<div class="height">
+      <div class="head-height">
+        <table class="table table-data-content table-bordered table-hover text-center table-display relative"
+          [style.left.px]="headLeft">
+          <thead>
+            <tr>
+              <ng-container *ngFor="let item of heads.headText">
+                <td>
+                  <span style="word-wrap: break-word;">{{item.label}}</span>
+                </td>
+              </ng-container>
+            </tr>
+          </thead>
+        </table>
+      </div>
+      <div class="table-height" (scroll)="onScroll($event)">
+        <table class="table table-data-content table-bordered table-hover text-center table-display">
+          <tbody>
+
+              <tr>
+                <td *ngFor="let head of heads.headText">
+                  <ng-container *ngIf="head?.options">
+                    <span *ngIf="head.options.type==='money'" [ngClass]="head.options.style">{{items[head.value] |
+                      number:'1.2-3'}}</span>
+                    <span *ngIf="head.options.type==='def'" [ngClass]="head.options.style">{{items[head.value]}}</span>
+                    <span *ngIf="head.options.type==='boolean'"
+                      [ngClass]="head.options.style">{{(items[head.value]===true || items[head.value]===1) ? '是':'否'}}</span>
+                    <!--当有多张内容时-->
+                    <div *ngIf="head.options.type==='multiple'">
+                      <ng-container *ngIf="hwModeService.arrayLength(items[head.value]);else block2">
+                        <a class="xn-click-a" href="javaScript:void(0)" (click)="viewMoreDetailInfo(items[head.value])"
+                          [innerHtml]="(items[head.value] | xnStringToArray:2:'等;')">
+                        </a>
+                      </ng-container>
+                      <ng-template #block2>
+                        <div [innerHtml]="(items[head.value] | xnStringToArray:2:'等;')"></div>
+                      </ng-template>
+                    </div>
+
+                  </ng-container>
+                  <span *ngIf="!head.options">{{items[head.value]}}</span>
+                </td>
+              </tr>
+
+          </tbody>
+        </table>
+      </div>
+    </div>

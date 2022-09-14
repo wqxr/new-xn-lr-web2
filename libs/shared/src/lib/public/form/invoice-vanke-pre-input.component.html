@@ -1,0 +1,26 @@
+<div [formGroup]="form">
+  <table class="table table-bordered text-center table-hover">
+    <thead>
+    <tr>
+      <td>发票号码</td>
+      <td>是否已上传</td>
+    </tr>
+    </thead>
+  </table>
+  <div class="scroll-height">
+    <table class="table table-bordered text-center table-hover">
+      <ng-container *ngIf="items?.list&&items.list.length">
+        <tr *ngFor="let item of items?.list">
+          <td>{{item.invoiceNum}}</td>
+          <td [ngClass]="{'red':item.status !== 1}">{{item.status===1?'√':'X'}}</td>
+        </tr>
+      </ng-container>
+    </table>
+  </div>
+  <table class="table table-bordered text-center table-hover">
+    <tr>
+      <td>总额</td>
+      <td>{{items?.amountAll | xnMoney}}</td>
+    </tr>
+  </table>
+</div>

@@ -1,0 +1,21 @@
+<div class="inMemo" *ngIf="inMemo !== ''">{{inMemo}}</div>
+<div [formGroup]="form">
+  <div [ngClass]="{'input-group': row.options?.unit}">
+    <input
+      #input
+      class="hide"
+      [ngClass]="myClass"
+      type="text"
+      [formControlName]="row.name"
+      [placeholder]="row.placeholder"
+      autocomplete="off"
+      [attr.aria-describedby]="row.name"
+    >
+    <input
+      class="form-control xn-input-font xn-input-border-radius"
+      #inputEx type="text" (input)="exInput($event)" (blur)="onBlur($event)"
+    >
+    <span class="input-group-addon" *ngIf="row.options?.unit" [attr.id]="row.name">{{row.options?.unit}}</span>
+  </div>
+</div>
+<span class="xn-money-alert" #moneyAlertRef>{{alert}}</span>

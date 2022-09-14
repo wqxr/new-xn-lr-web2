@@ -1,0 +1,53 @@
+<div class="deal">
+  <div class="title">{{appName}}</div>
+  <p>{{appName}}保理容量/保理公司保理总量: {{amountRatio | number:"2.2-2"}}%</p>
+  <p>{{appName}}保理容量/保理公司保理总量: {{balanceRatio | number:"2.2-2"}}%</p>
+  <table class="table table-bordered table-striped table-max">
+    <thead>
+      <tr>
+        <th *ngFor="let item of table">{{item.des}}</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td *ngFor="let item of table">{{item.amount | xnText}}</td>
+      </tr>
+      <tr>
+        <td *ngFor="let item of table">{{item.amountRatio | xnText}}</td>
+      </tr>
+      <tr>
+        <td *ngFor="let item of table">{{item.balance | xnText}}</td>
+      </tr>
+      <tr>
+        <td *ngFor="let item of table">{{item.balanceRatio | xnText}}</td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+
+<div class="deal">
+  <div class="title">{{appName}}及其关联公司</div>
+  <p>{{appName}}保理容量/保理公司保理总量: {{amountRatio | number:"2.2-2"}}%</p>
+  <p>{{appName}}保理容量/保理公司保理总量: {{balanceRatio | number:"2.2-2"}}%</p>
+  <table class="table table-bordered table-striped table-max">
+    <thead>
+      <tr>
+        <th *ngFor="let item of table">{{item.des}}</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td *ngFor="let item of table">{{item.amount | xnText}}</td>
+      </tr>
+      <tr>
+        <td *ngFor="let item of table">{{item.amountRatio | xnText}}</td>
+      </tr>
+      <tr>
+        <td *ngFor="let item of table">{{item.balance | xnText}}</td>
+      </tr>
+      <tr>
+        <td *ngFor="let item of table">{{item.balanceRatio | xnText}}</td>
+      </tr>
+    </tbody>
+  </table>
+</div>

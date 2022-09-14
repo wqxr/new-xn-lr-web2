@@ -1,0 +1,52 @@
+<modal #modal [backdrop]="'static'" [keyboard]="false" [animation]="false">
+  <form class="form-horizontal" (ngSubmit)='onSubmit()' *ngIf="!!mainForm" [formGroup]="mainForm">
+    <modal-header [showClose]="true">
+      <span class='spanClass' style='padding-left:0px'> 上传授权文件</span>
+    </modal-header>
+    <modal-body>
+      <div class='rejectinfoclass' *ngIf="rejectReason!==''">
+        <div class='infodetail'>
+          <img src='assets/lr/img/redicon.png' />&nbsp;&nbsp;
+          <span class='payspan' style='color: #BB2020;font-weight: 400;word-break: break-word;'>
+            退回原因：{{rejectReason}}</span></div>
+      </div>
+      <div class="form-group" *ngFor="let row of step6">
+        <div class="col-sm-2 labelwidth xn-control-label">
+          <span *ngIf="row.required !== false && row.required !== 0" class="required-label">*</span>
+          <span class='speciallabel'>{{row.title}}</span>
+        </div>
+        <div [ngSwitch]="row.name">
+          <div class="col-sm-6" style='width:620px' *ngSwitchCase="'authConfirmationFile'">
+            <xn-input [row]="row" [form]="mainForm"></xn-input>
+          </div>
+          <div class="col-sm-6" style='width:530px' *ngSwitchCase="'address'">
+            <xn-input [row]="row" [form]="mainForm"></xn-input>
+          </div>
+          <div class="col-sm-6"  *ngSwitchDefault>
+            <xn-input [row]="row" [form]="mainForm"></xn-input>
+          </div>
+        </div>
+
+
+      <!-- <ng-template #elseBlock>
+            <div class="col-sm-6">
+              <xn-input [row]="row" [form]="mainForm"></xn-input>
+            </div>
+          </ng-template> -->
+
+      <div class="col-sm-2 xn-control-desc" style='width:20%'>
+        <img *ngIf="row.name==='address'" src='assets/lr/img/warning.png' />{{row.memo}}
+      </div>
+      </div>
+    </modal-body>
+    <modal-footer>
+      <button (click)='onPrev()' style='float: left' class="btn btn-primary">上一步</button>
+      <button (click)='onCancel()' class="btn btn-cancel">取消</button>
+      <button type='submit' [disabled]="!mainForm.valid" class="btn btn-primary">提交</button>
+    </modal-footer>
+
+
+  </form>
+
+
+</modal>

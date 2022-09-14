@@ -1,0 +1,20 @@
+<div   [formGroup]="form" style='display:inline-flex' >
+    <input #input
+           class="form-control xn-input-font xn-input-border-radius half-width"
+           type="text"
+           [ngStyle]="{'color':errorClass===true?'red':'black'}"
+           [value]='formValue.firstValue'
+           (change)="inputChange($event,'firstValue')"
+           autocomplete="off" style='width:50%'/>
+    <span style="font-size: 16px;color:#000;display: block;line-height: 33px;">-</span>
+    <input #input
+           class="form-control xn-input-font xn-input-border-radius half-width"
+           type="text"
+           [value]='formValue.secondValue'
+           [ngStyle]="{'color':errorClass===true?'red':'black'}"
+           (change)="inputChange($event,'secondValue')"
+           autocomplete="off"
+           style='width:50%'
+           />
+  </div>
+  <span class="xn-input-alert">{{alert}}</span>

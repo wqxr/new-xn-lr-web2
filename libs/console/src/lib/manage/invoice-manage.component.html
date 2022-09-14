@@ -1,0 +1,56 @@
+<section class="content-header">
+  <h1>
+    {{pageTitle}}
+    <small>{{pageDesc}}</small>
+  </h1>
+</section>
+
+<section class="content">
+  <div class="box">
+    <div class="box-header">
+      <h3 class="box-title">{{tableTitle}}</h3>
+    </div>
+    <!-- /.box-header -->
+    <div class="box-body">
+
+      <table class="table table-bordered table-striped">
+        <thead>
+        <tr>
+          <th>交易ID</th>
+          <th>核心企业名称</th>
+          <th>保理日期</th>
+          <th>保理到期日</th>
+          <th>现有发票(元)</th>
+          <th>待补发票(元)</th>
+          <th>操作</th>
+          <!-- <th>发送短信</th> -->
+        </tr>
+        </thead>
+        <tbody>
+        <tr *ngFor="let item of items; let i = index">
+          <td>{{item.mainFlowId}}</td>
+          <td>{{item.enterpriseOrgName}}</td>
+          <td>{{item.payTime | xnDate:'date'}}</td>
+          <td>{{item.factoringDate}}</td>
+          <td>{{item.invoiceAmounts | xnMoney}}</td>
+          <td>{{(item.billAmounts - item.invoiceAmounts).toFixed(2) | xnMoney}}</td>
+          <td>
+            <a class="xn-click-a" (click)="c(item)">补充发票</a>
+            <!-- <a class="xn-click-a" (click)="onViewDelete(item)">删除</a> -->
+          </td>
+          <!-- <td>
+            <a class="btn-more-a btn btn-primary"  [ngClass]="onCssClass(item.isSms)" (click)="onSms(i, item.mainFlowId)">发送</a>
+          </td> -->
+        </tr>
+        </tbody>
+      </table>
+      <div class="btn-more" *ngIf="showBtn">
+        <a class="btn-more-a btn btn-primary" (click)="onload(start)">点击加载更多</a>
+      </div>
+
+    </div>
+    <!-- /.box-body -->
+  </div>
+
+</section>
+<!-- /.content -->

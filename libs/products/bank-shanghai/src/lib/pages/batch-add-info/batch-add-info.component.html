@@ -1,0 +1,57 @@
+
+<!-- 内容头部 -->
+<section class="content-header">
+  <h1>批量补充信息</h1>
+  <ol class="breadcrumb">
+      <li><a [routerLink]="['/bank-shanghai/account-list']" routerLinkActive="router-link-active">
+          <i class="fa fa-dashboard"></i>上海银行台账列表</a>
+      </li>
+      <li class="active">批量补充信息</li>
+  </ol>
+</section>
+<!-- 内容头部 /-->
+
+<!-- 正文区域 -->
+<section class="content">
+  <!-- <div class="box-body">
+  </div>
+  <div class="box-footer"></div> -->
+  <form class="form-horizontal" *ngIf="svrConfig" [formGroup]="mainForm" (ngSubmit)="onSubmit()">
+      <div class="panel panel-default">
+          <div class="panel-heading">
+              <span class="panel-title">批量补充信息</span>
+          </div>
+          <div class="panel-body">
+  
+              <div class="form-group" *ngFor="let row of rows">
+                  <div class="col-sm-2 xn-control-label" [ngClass]="{'required-label-strong': hwModeService.checkRequiredAndReadonly(row).bold,
+                      'required-star': hwModeService.checkRequiredAndReadonly(row).star,'fa fa-question-circle': hwModeService.checkHelp(row).help}">
+                      {{ row.title }}
+                  </div>
+                  <div class="col-sm-8">
+                      <app-dynamic-input 
+                      [row]="row" 
+                      [form]="mainForm" 
+                      [formModule]="formModule"
+                      [svrConfig]="svrConfig">
+                      </app-dynamic-input>
+                  </div>
+                  <!--tips-->
+                  <div class="col-sm-2 control-desc">
+                    {{row.memo}}
+                  </div>
+              </div>
+              
+          </div>
+          <div class="panel-footer text-right">
+              <button type="button" class="btn btn-default pull-left" (click)="onCancel()">
+                  返回
+              </button>
+              <button type="submit" class="btn btn-primary" [disabled]="!mainForm.valid">
+                  提交
+              </button>
+          </div>
+      </div>
+  </form>
+</section>
+<!-- 正文区域 /-->

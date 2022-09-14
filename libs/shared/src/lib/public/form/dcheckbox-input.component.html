@@ -1,0 +1,17 @@
+<div class="row" [formGroup]="form">
+  <label class="xn-input-font" *ngFor="let option of ctrl.value | xnJson">
+    <input #checkbox type="checkbox" class="flat-red" [checked]="option.checked" [disabled]="changeDisabled"
+           (click)="updateSelection($event,option.checked,option.label);">&nbsp;&nbsp;{{option.label}}
+  </label>
+  <button *ngIf="ctrl.value.length > 2" type="button" class="close" [disabled]="changeDisabled" (click)="onClear()"><span>&times;</span></button>
+  <div class="row">
+    <ng-container *ngFor="let option of ctrl.value | xnJson">
+      <ng-container *ngIf="option.checked===true&&option.data && option.data.length">
+        {{option.label}}公司性质：
+        <label class="xn-input-font" *ngFor="let sub of option.data">
+          <input type="checkbox" [disabled]="changeDisabled" class="flat-red" [checked]="sub.checked" (click)="subSelection($event,option,sub);">&nbsp;&nbsp;{{sub.label}}
+        </label>
+      </ng-container>
+    </ng-container>
+  </div>
+</div>

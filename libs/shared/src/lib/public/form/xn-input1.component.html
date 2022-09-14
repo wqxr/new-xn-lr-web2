@@ -1,0 +1,10 @@
+<ng-container [ngSwitch]="row.type">
+  <xn-text-input *ngSwitchCase="'text'" [row]="row" [form]="form"></xn-text-input>
+  <xn-tselect-input *ngSwitchCase="'tselect'" [row]="row" [form]="form" [factory]="factory"></xn-tselect-input>
+  <xn-wselect-input *ngSwitchCase="'wselect'" [row]="row" [form]="form" [factory]="factory"></xn-wselect-input>
+  <xn-money-input *ngSwitchCase="'money'" [row]="row" [form]="form"></xn-money-input>
+  <xn-select1-input *ngSwitchCase="'select1'" [row]="row" [form]="form"></xn-select1-input>
+  <xn-quantum1-input *ngSwitchCase="'quantum1'" [row]="row" [form]="form"></xn-quantum1-input>
+
+  <xn-text-input *ngSwitchDefault [row]="row" [form]="form"></xn-text-input>
+</ng-container>

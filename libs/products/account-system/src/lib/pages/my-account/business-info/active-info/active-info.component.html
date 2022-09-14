@@ -1,0 +1,60 @@
+<xn-page-header-wrapper>
+  <nz-card nzTitle="打款激活信息" *ngIf="loading; else loadingTemplate">
+    <div [attr.id]="'html2save'">
+      <div class="head-box" nz-row>
+        <div nz-col nzSpan="20">
+          <span style="margin-right: 5px;">
+            <i style="color: #4380d0; font-size: 20px;" nz-icon nzType="exclamation-circle" nzTheme="outline"></i>
+          </span>
+          <span>请按下述要求，在 <span style="color: red;">{{ accountInfo.activateLimitDate }}</span>
+            前完成打款激活操作。</span> <span>注意：共有<span style="color: red;"> {{ bankInfoList.length }}
+            </span>个账户需进行打款激活。</span>
+        </div>
+        <div style="text-align: right;" nz-col nzSpan="4">
+          <a (click)="downLoadList()">下载打款提示单</a>
+        </div>
+      </div>
+      <div style="margin-top: 40px;" *ngIf="bankInfoList.length; else empty">
+        <div style="margin: 10px 40px;" nz-row *ngFor="let bank of bankInfoList">
+          <div class="account-info" nz-col nzSpan="8">
+            <div class="account-item">
+              <p style="color: black;">付款账户信息：</p>
+              <p>账户名：{{ bank.accountName }}</p>
+              <p>账号：{{ bank.accountNo }}</p>
+              <p>开户行：{{ bank.bankName }}</p>
+            </div>
+          </div>
+          <div style="padding: 40px 30px 0 30px;" nz-col nzSpan="8">
+            <p style="padding-left: 40px;">打款金额：<span style="color: red;">{{ accountInfo.payAmount }} 元</span></p>
+            <div class="right-arrow"></div>
+          </div>
+          <div class="account-info" nz-col nzSpan="8">
+            <div class="account-item">
+              <p style="color: black;">收款账户信息：</p>
+              <p>账户名：{{ accountInfo.receiveAccountName }}</p>
+              <p>账号：{{ accountInfo.receiveAccountNo }}</p>
+              <p>开户行：{{ accountInfo.receiveAcctBank }}</p>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div style="text-align: center;" nz-row>
+        <div style="margin-top: 45px;" nz-col nzSpan="24">
+          <button style="margin-right: 10px;" nz-button nzType="primary" [disabled]="!bankInfoList.length"
+            (click)="activeAccount()">打款后，请点击此按钮</button>
+        </div>
+      </div>
+    </div>
+  </nz-card>
+  <xn-footer-toolbar style="align-items: center;">
+    <button nz-button nzType="default" (click)="goBack()">返回</button>
+  </xn-footer-toolbar>
+</xn-page-header-wrapper>
+
+<ng-template #loadingTemplate>
+  <nz-skeleton [nzActive]="true"></nz-skeleton>
+</ng-template>
+
+<ng-template #empty>
+  <nz-empty style="margin-top: 40px;"></nz-empty>
+</ng-template>

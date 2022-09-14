@@ -1,0 +1,24 @@
+{
+  "/api": {
+    "target": "https://demo.lrscft.com",
+    "secure": false,
+    "changeOrigin": true
+  },
+  "/avenger": {
+    "target": "https://demo.lrscft.com",
+
+    "secure": false,
+    "changeOrigin": true
+  },
+  "/dragon": {
+    "target": "https://demo.lrscft.com",
+
+   "secure": false,
+    "changeOrigin": true
+  },
+  "/operation_record": {
+    "target": "https://demo.lrscft.com",
+   "secure": false,
+    "changeOrigin": true
+  }
+}

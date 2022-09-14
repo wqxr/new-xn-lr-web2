@@ -1,0 +1,92 @@
+<section class="content">
+  <div class="box">
+    <div class="box-header">
+      <h3 class="box-title">{{base.superConfig.showName}}列表</h3>
+    </div>
+    <!-- /.box-header -->
+
+    <div class="box-body">
+      <div>
+        <div class="item-box col-md-6" *ngFor="let row of shows">
+          <div class="item-label">
+            <label>{{row.title}}:</label>
+          </div>
+          <div class="item-control">
+            <ng-container>
+              <xn-input [row]="row" [form]="mainForm"></xn-input>
+            </ng-container>
+          </div>
+        </div>
+      </div>
+      <div class="" *ngIf="base.superConfig.list?.headButtons">
+        <div class="col-sm-12 btn-label">
+          <span class="fr">
+            <ng-container *ngFor="let btn of base.superConfig.list?.headButtons">
+              <a *ngIf="btn.type === 'a' && btn.search" (click)="onSearch()" class="{{btn.class}}">{{btn.title}}</a>
+              <a *ngIf="btn.type === 'a' && btn.clearSearch" (click)="clearSearch()"
+                 class="{{btn.class}}">{{btn.title}}</a>
+              <a *ngIf="btn.type === 'a' && btn.customClick" (click)="btn.click(xn, base)" class="{{btn.class}}">{{btn.title}}</a>
+              <a *ngIf="btn.type === 'a' && btn.showClick && unShowBtn" (click)="btn.click(base, xn, rows)"
+                 class="{{btn.class}}">{{btn.title}}</a>
+              <div *ngIf="btn.type === 'input' && btn.clicked" class="btn btn-default btn-file xn-table-upload btn-cus">
+                <a class="{{btn.class}}">{{btn.title}}</a>
+                <input type="file" (change)="btn.click(xn, base, $event)" multiple>
+              </div>
+              <!-- <input *ngIf="btn.type === 'input' && btn.clicked" type="file" (click)="btn.click(xn, $event)" class="{{btn.class}}">{{btn.title}}</input> -->
+              <a *ngIf="btn.type === 'a' && btn.link" routerLink="{{btn.href}}" class="btn btn-danger">
+                <span>{{btn.title}}</span>
+              </a>
+            </ng-container>
+            <a *ngIf="base.canAdd()" class="btn btn-info" (click)="base.onNavigateAdd()">新增</a>
+          </span>
+        </div>
+      </div>
+
+      <table class="table table-bordered table-striped text-center">
+        <thead>
+        <tr class="table-head">
+          <ng-container *ngFor="let head of heads">
+            <th *ngIf="head.sort" [ngClass]="onSortClass(head.checkerId)" (click)="onSort(head.checkerId)">
+              {{head.title}}
+            </th>
+            <th *ngIf="!head.sort">{{head.title}}</th>
+          </ng-container>
+          <th style="min-width: 80px" *ngIf="base.superConfig?.canDo">操作</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr *ngFor="let row of rows">
+          <td *ngFor="let head of heads" [ngClass]="onTextClass(head['type'])"
+              style="max-width: 70px;word-wrap:break-word">
+            <div *ngIf="head.checkerId!=='mainFlowId'" [innerHTML]="row[head.checkerId] | xnGatherType: {head:head,row:row}"></div>
+            <a *ngIf="head.checkerId==='mainFlowId'" [innerHTML]="row[head.checkerId]" href="javaScript:void (0)"
+               (click)="viewProcess(row[head.checkerId])"></a>
+          </td>
+          <td>
+            <a *ngIf="base.canDetail(row)" (click)="base.onNavigateDetail(row)" class="xn-click-a small-font">查看</a>
+            <a *ngIf="base.canEdit(row)" (click)="base.onNavigateEdit(row)" class="xn-click-a small-font">编辑</a>
+            <ng-container *ngFor="let btn of base.superConfig.list?.rowButtons">
+              <a *ngIf="btn.type === 'a' && btn.can && onBtnShow(btn, row)" (click)="onBtnClick(btn, row)"
+                 class="xn-click-a small-font">{{btn.title}}</a>
+              <a *ngIf="btn.type === 'edit' && btn.can && onBtnEdit(btn, row)" (click)="onBtnClick(btn, row)"
+                 class="xn-click-a small-font">{{btn.title}}</a>
+              <label *ngIf="btn.type === 'checkbox'" class="plege" [ngClass]="onCssClass(row.status)">
+                <input type="checkbox" [checked]="row.status" (click)="onBtnClickEvent(btn, row, $event)">{{btn.title}}</label>
+            </ng-container>
+          </td>
+        </tr>
+        </tbody>
+      </table>
+
+      <xn-page *ngIf="base.superConfig?.showPage" [total]="total" [size]="pageSize" [backPage]="paging"
+               (change)="onPage($event)"></xn-page>
+      <div class="btn-more" *ngIf="base.superConfig?.showMore && showBtn">
+        <a class="btn-more-a btn btn-primary" (click)="base.onMore(start, beginTime, endTime)">点击加载更多</a>
+      </div>
+    </div>
+    <!-- /.box-body -->
+  </div>
+  <!-- /.box -->
+
+</section>
+<!-- /.content -->

@@ -1,0 +1,39 @@
+<section class="content-header">
+  <h1>
+    {{pageTitle}}
+    <small>新版模式修改，与权限系统关联</small>
+    <button style="float: right" (click)="navToOld()" nz-button nzType="primary">返回到旧版</button>
+  </h1>
+</section>
+<section class="content">
+  <div class="box" style="padding-top: 3rem;min-height: 30rem">
+    <div class="box-body" style="width: 55%;margin: auto">
+      <div nz-row>
+        <form nz-col nzSpan="22" nz-form [nzNoColon]="false" [formGroup]="searchForm">
+          <formly-form
+            [form]="searchForm"
+            [options]="options"
+            [fields]="searchFields"
+          >
+          </formly-form>
+        </form>
+        <div nz-col nzSpan="2">
+          <button nz-button nzType="primary" (click)="doSearch()">搜索</button>
+        </div>
+      </div>
+
+      <form class="edit-form" *ngIf="isSearched" nz-form [nzNoColon]="false" [formGroup]="editForm">
+        <formly-form
+          [form]="editForm"
+          [options]="options"
+          [fields]="editFields"
+          [model]="editModel"
+        >
+        </formly-form>
+      </form>
+    </div>
+    <div class="box-footer text-right" style="width: 50%;margin: auto" *ngIf="isSearched">
+      <button type="button" class="btn btn-success" [disabled]="!editForm.valid" (click)="save()">保存</button>
+    </div>
+  </div>
+</section>

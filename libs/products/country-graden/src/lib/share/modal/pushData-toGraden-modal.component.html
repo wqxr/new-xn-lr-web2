@@ -1,0 +1,82 @@
+<modal #modal [backdrop]="'static'" [keyboard]="false" [animation]="false">
+  <modal-header [showClose]="false" style='text-align:left'>
+    <h4 class="modal-title">{{params?.title}}</h4>
+  </modal-header>
+  <modal-body>
+    <!-- 查验数据/推送数据结果 -->
+    <div class="height" *ngIf="datalist.length>0">
+      <p *ngIf="params?.type===1" style="text-align: center;">将推送 <span
+          style="color: #cc0000;">{{params.selectedItems.length}}
+          笔</span>业务至碧桂园系统，请确认以下推送清单内容。
+      </p>
+      <div class="head-height table-head" style="width: calc(100% - 17px)">
+        <table class="table table-bordered table-hover text-center table-display relative" style='width:100%'
+          [style.left.px]="headLeft">
+          <thead style='width:99%'>
+            <tr>
+              <!-- 表头 -->
+              <th style="width: 60px;">序号</th>
+              <th *ngFor="let head of heads">
+                <ng-container>
+                  <span>{{head.label}}</span>
+                </ng-container>
+              </th>
+            </tr>
+          </thead>
+        </table>
+      </div>
+      <div class="table-height" (scroll)="onScroll($event)">
+        <table class="table table-bordered table-hover text-center table-display" style='width:100%'>
+          <tbody style='width:100%'>
+            <tr *ngFor='let item of datalist;let i=index'>
+              <td style="width: 60px;">{{i+1}}</td>
+              <td *ngFor="let head of heads" style="word-wrap:break-word">
+                <!-- 根据head type 类型配置显示方式 -->
+                <ng-container [ngSwitch]="head.type">
+                  <!-- money-->
+                  <ng-container *ngSwitchCase="'money'">
+                    <ng-container
+                      *ngIf=" item[head.value] !==undefiend &&item[head.value] !==null && item[head.value]!==0">
+                      <div> {{item[head.value].toFixed(2)| xnMoney}}</div>
+                    </ng-container>
+                  </ng-container>
+                  <!-- date-->
+                  <ng-container *ngSwitchCase="'date'">
+                    <ng-container>
+                      <div [innerHTML]="item[head.value] | xnDate:'date'"></div>
+                    </ng-container>
+                  </ng-container>
+                  <!-- result-->
+                  <ng-container *ngSwitchCase="'result'">
+                    <ng-container>
+                      <div *ngIf="item[head.value]===1" style="color: red;">失败</div>
+                      <div *ngIf="item[head.value]===0">成功</div>
+                    </ng-container>
+                  </ng-container>
+                  <!-- discountRate-->
+                  <ng-container *ngSwitchCase="'discountRate'">
+                    <ng-container>
+                      <div>{{item[head.value]}}%</div>
+                    </ng-container>
+                  </ng-container>
+                  <!--默认-->
+                  <ng-container *ngSwitchDefault>
+                    <ng-container *ngIf=" item[head.value]&& item[head.value]!==''">
+                      <div [innerHTML]="item[head.value] | xnGatherType: {head:head,row:item}"></div>
+                    </ng-container>
+                  </ng-container>
+                </ng-container>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </modal-body>
+  <modal-footer>
+    <button type="button" class="btn btn-primary" (click)="onCancel1()" *ngIf="params?.type===2">关闭</button>
+    <button type="button" class="btn btn-primary" (click)="onCancel1()" *ngIf="params?.type===1">取消</button>
+    <button type="button" class="btn btn-success" (click)="onOk()" *ngIf="params?.type===1">确定推送</button>
+    <button type="button" class="btn btn-primary" (click)="onCancel(3,'ok')" *ngIf="params?.type===3">关闭</button>
+  </modal-footer>
+</modal>

@@ -1,0 +1,28 @@
+<div [formGroup]="form">
+  <!-- <span
+    class="go-check span"
+    *ngIf="row.name === 'desc' && row.title === '更正登记描述'"
+    >{{ msg }};{{ msgStr }}</span> -->
+  <button
+    type="button"
+    [disabled]="row?.options?.readonly"
+    class="btn btn-primary go-check"
+    *ngIf="row.name === 'desc' && row.title === '更正登记描述' && goCheck === 3"
+    (click)="goRegister()"
+  >
+    去变更登记
+  </button>
+
+  <textarea
+    class="form-control xn-input-textarea xn-input-font xn-input-border-radius"
+    rows="6"
+    style="white-space: pre-wrap;margin-bottom:10px"
+    [formControlName]="row.name"
+    [ngClass]="myClass"
+    [placeholder]="row.placeholder || row.options?.placeholder || '请输入'"
+    (blur)="onBlur()"
+    autocomplete="off"
+  ></textarea>
+ <span *ngIf="row.checkerId==='precautions' && row.flowId==='sub_cfca_financing_sign' && showDown">*请下载模板清单中所有PDF文件，线下盖鲜章后上传扫描件，并将原件按照下列邮寄地址寄出</span>
+</div>
+<span class="xn-input-alert">{{ alert }}</span>

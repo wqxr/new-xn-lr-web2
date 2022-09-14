@@ -1,0 +1,23 @@
+<div class="row" [formGroup]="form">
+  <table class="table table-bordered table-hover file-row-table col-sm-12">
+    <tr>
+      <td class="col-sm-12">
+        核心企业: {{enterprise.label}}
+      </td>
+    </tr>
+    <tr *ngIf="conditions && conditions.length > 0">
+      <td class="col-sm-12">
+        <div class="xn-input-font" *ngFor="let option of conditions; let i = index;">
+          <input #checkbox type="checkbox" class="flat-red" [checked]="option.checked" (click)="updateSelection($event,option.label,i);">
+          <span class="check-value">{{option.label}}</span>
+          <a class="xn-click-a v-top" (click)="onViewRead(option)">查看</a>
+        </div>
+      </td>
+    </tr>
+    <tr *ngIf="!(conditions && conditions.length > 0)">
+      <td class="col-sm-12">
+        无
+      </td>
+    </tr>
+  </table>
+</div>

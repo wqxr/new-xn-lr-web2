@@ -1,0 +1,47 @@
+<section class="content-header">
+  <h1>
+    控制台首页
+  </h1>
+</section>
+<ul class="nav nav-tabs" style='margin-top: 20px;'>
+  <ng-container>
+    <li [ngClass]="{'active': defaultValue==='C' }" *ngIf="!!dragonTodoCount">
+      <a class="xn-click-a" data-toggle="tab" (click)="initData('C')">
+        <span class="pull-right-container" *ngIf="!!dragonTodoCount">
+          <span class="label label-primary pull-right">{{dragonTodoCount}}</span>
+        </span>
+        地产类业务列表</a>
+    </li>
+    <li [ngClass]="{'active': defaultValue==='todo' }" *ngIf="!!todoCount">
+      <a class="xn-click-a" data-toggle="tab" (click)="initData('todo')">
+        <span class="pull-right-container" *ngIf="!!todoCount">
+          <span class="label label-primary pull-right">{{todoCount}}</span>
+        </span>
+        雅居乐</a>
+    </li>
+    <li [ngClass]="{'active': defaultValue==='A'}">
+      <a class="xn-click-a" data-toggle="tab" (click)="initData('A')">
+        <span class="pull-right-container" *ngIf="!!otherTodoCount">
+          <span class="label label-primary pull-right">{{otherTodoCount}}</span>
+        </span>
+        其它待办</a>
+    </li>
+  </ng-container>
+</ul>
+<!--雅居乐-星顺业务列表-->
+<ng-container *ngIf="defaultValue==='todo' && todoCount">
+  <xn-new-agile-home-comm-list-component [supers]="{label:todoConfig, value:'todo'}"></xn-new-agile-home-comm-list-component>
+</ng-container>
+<!-- 首页代办 -->
+<ng-container *ngIf="defaultValue==='A'">
+  <xn-home-comm-list-component [supers]="{label:todoConfig,value:'todo'}"></xn-home-comm-list-component>
+</ng-container>
+<!--龙光业务列表-->
+<ng-container *ngIf="defaultValue==='C'">
+  <xn-home-comm-list-component [supers]="{label:dragonTodoConfig,value:'dragonTodo'}"></xn-home-comm-list-component>
+</ng-container>
+<!-- 系统消息 -->
+<xn-new-agile-home-comm-list-component [supers]="{label:msgConfig,value:'sysMsg'}"></xn-new-agile-home-comm-list-component>
+<!-- 备付通知 -->
+<xn-new-agile-home-comm-list-component [supers]="{label:payMsgConfig,value:'payMsg'}">
+</xn-new-agile-home-comm-list-component>

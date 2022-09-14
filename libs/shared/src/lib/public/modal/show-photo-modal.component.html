@@ -1,0 +1,27 @@
+<modal #modal [backdrop]="'static'" [keyboard]="false" [animation]="false">
+  <modal-header [showClose]="false">
+    <h4 class="modal-title">查看文件</h4>
+    <a class="button-rotate rotate-left" title="点击旋转图片" (click)="rotateImg('left')"><i class="fa fa-undo fa-3x"></i></a>
+    <a class="button-rotate rotate-right" title="点击旋转图片" (click)="rotateImg('right')"><i class="fa fa-repeat fa-3x"></i></a>
+  </modal-header>
+  <modal-body>
+
+    <div class="row form-group text-center">
+      <div class="img-container" #imgContainer>
+        <div class="img-wrapper" #outerImg>
+          <img #innerImg class="this-img">
+        </div>
+      </div>
+    </div>
+
+  </modal-body>
+  <modal-footer>
+    <div class="button-group" *ngIf="fileType === 'pdf'" >
+      <button id="prev" class="btn btn-primary">上一页</button>
+      <button id="next" class="btn btn-primary">下一页</button>
+      &nbsp; &nbsp;
+      <span>页码: <span id="page_num">加载中</span> / <span id="page_count">加载中</span></span>
+    </div>
+    <button type="button" class="btn btn-danger" (click)="onOk()">关闭</button>
+  </modal-footer>
+</modal>

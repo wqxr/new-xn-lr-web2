@@ -1,0 +1,15 @@
+<div class="chart clearfix">
+  <div class="col-sm-12 inchart">
+    <table class="table table-bordered table-striped table-hover">
+      <tbody>
+        <tr *ngFor="let option of fields; let i = index" (click)="updateSelection(option.activated, i)" [ngClass]="getClass(option.activated, i)">
+          <td>{{ option.fieldName }}</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+  <div class="chart-title">{{title}}</div>
+  <!-- /.box-body -->
+</div>
+
+<!-- /.content -->

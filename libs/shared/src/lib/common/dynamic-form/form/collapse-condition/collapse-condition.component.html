@@ -1,0 +1,54 @@
+<div *ngIf="!displayShow" style="clear: both;">
+  <div class="form-group flex" [ngClass]="col" *ngFor="let row of shows">
+    <div class="title xn-control-label">
+      <span [ngClass]="{ colon: showColon }">{{ row.title }}</span>
+      <span *ngIf="row.required !== false" class="required-label">*</span>
+    </div>
+    <div class="label">
+      <app-dynamic-input
+        [row]="row"
+        [form]="form"
+        [formModule]="formModule"
+      ></app-dynamic-input>
+    </div>
+  </div>
+</div>
+<div *ngIf="displayShow" style="clear: both;">
+  <div
+    class="form-group flex"
+    [ngClass]="col"
+    *ngFor="let row of shows.slice(0, defaultRowNum)"
+  >
+    <div class="title xn-control-label">
+      <span [ngClass]="{ colon: showColon }">{{ row.title }}</span>
+      <span *ngIf="row.required !== false" class="required-label">*</span>
+    </div>
+    <div class="label">
+      <app-dynamic-input
+        [row]="row"
+        [form]="form"
+        [formModule]="formModule"
+      ></app-dynamic-input>
+    </div>
+  </div>
+</div>
+<ng-container *ngIf="shows && shows.length > 4">
+  <div>
+    <div
+      class="center-block"
+      style="border-bottom: 1px solid #ccc; float: left;"
+    ></div>
+    <div
+      class="center-block"
+      style="border-bottom: 1px solid #ccc; float: right;"
+    ></div>
+  </div>
+  <div class="showClass" (click)="show()">
+    <a *ngIf="displayShow" class="xn-click-a"
+      ><i class="fa fa-angle-double-down" aria-hidden="true"></i>更多
+    </a>
+    <a class="xn-click-a" *ngIf="!displayShow"
+      ><i class="fa fa-angle-double-up" aria-hidden="true"></i>收起
+    </a>
+  </div>
+</ng-container>

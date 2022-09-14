@@ -1,0 +1,103 @@
+.item-box {
+  position: relative;
+  display: flex;
+  margin-bottom: 10px;
+}
+
+.item-label label {
+  min-width: 150px;
+  padding-right: 8px;
+  font-weight: normal;
+  line-height: 34px;
+  text-align: right;
+}
+
+.item-control {
+  flex: 1;
+}
+
+.item-control select {
+  width: 100%
+}
+
+.operate-btn {
+  min-width: 90px;
+}
+
+.input-check {
+  width: 100px;
+}
+
+.table-head .sorting, .table-head .sorting_asc, .table-head .sorting_desc {
+  /*position: relative;*/
+  cursor: pointer
+}
+
+.table-head .sorting:after, .table-head .sorting_asc:after, .table-head .sorting_desc:after {
+  font-family: 'Glyphicons Halflings';
+  opacity: 0.5;
+}
+
+.table-head .sorting:after {
+  content: "\e150";
+  opacity: 0.2
+}
+
+.table-head .sorting_asc:after {
+  content: "\e155"
+}
+
+.table-head .sorting_desc:after {
+  content: "\e156"
+}
+
+ul.sub-ul {
+  margin-bottom: 5px;
+  border-bottom: 1px solid #3c8dbc;
+}
+
+ul.sub-ul > li > a {
+  padding: 5px 35px;
+  border-top: none;
+  background-color: #F2F2F2;
+}
+
+ul.sub-ul > li.active > a {
+  background-color: #3c8dbc;
+}
+
+.center-block {
+  clear: both;
+  border-bottom: 1px solid #ccc;
+  width: 43.9%;
+  height: 1px;
+}
+
+.showClass {
+  width: 12.5%;
+  margin: 0 auto;
+  border: 1px solid #ccc;
+  text-align: center;
+  border-top: 0;
+  clear: both;
+  border-bottom-left-radius: 10px;
+  border-bottom-right-radius: 10px;
+}
+
+.disabled {
+  pointer-events: none;
+  filter: alpha(opacity=50); /*IE滤镜，透明度50%*/
+  -moz-opacity: 0.5; /*Firefox私有，透明度50%*/
+  opacity: 0.5; /*其他，透明度50%*/
+}
+
+.piont {
+  color: red;
+  position: absolute;
+  top: -2px;
+  right: -1px;
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background-color: red;
+}

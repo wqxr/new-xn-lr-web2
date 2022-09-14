@@ -1,0 +1,58 @@
+<section class="content-header">
+  <h1>
+    控制台首页
+  </h1>
+</section>
+<!--采购融资保理业务信息-->
+<xn-index-component *ngIf='factoringBusinessBoolean && avengerShow' [fac]='fac'></xn-index-component>
+<ul class="nav nav-tabs" style='margin-top: 20px;'>
+  <ng-container>
+
+    <li [ngClass]="{'active': defaultValue==='C' }" *ngIf="!!todoCount03">
+      <a class="xn-click-a" data-toggle="tab" (click)="initData('C')">
+        <span class="pull-right-container" *ngIf="!!todoCount03">
+          <span class="label label-primary pull-right">{{todoCount03}}</span>
+        </span>
+        地产类业务列表</a>
+    </li>
+    <li [ngClass]="{'active': defaultValue==='D' }" *ngIf="showNewAgile">
+      <a class="xn-click-a" data-toggle="tab" (click)="initData('D')">
+        <span class="pull-right-container" *ngIf="!!todoCountXinShun">
+          <span class="label label-primary pull-right">{{todoCountXinShun}}</span>
+        </span>
+        雅居乐-星顺列表</a>
+    <li [ngClass]="{'active': defaultValue==='B' }" *ngIf="!!todoCount02">
+      <a class="xn-click-a" data-toggle="tab" (click)="initData('B')">
+        <span class="pull-right-container" *ngIf="!!todoCount02">
+          <span class="label label-primary pull-right">{{todoCount02}}</span>
+        </span>
+        审批放款列表</a>
+    </li>
+    <li [ngClass]="{'active': defaultValue==='A'}">
+      <a class="xn-click-a" data-toggle="tab" (click)="initData('A')">
+        <span class="pull-right-container" *ngIf="!!todoCount01">
+          <span class="label label-primary pull-right">{{todoCount01}}</span>
+        </span>
+        其它待办</a>
+    </li>
+  </ng-container>
+</ul>
+<!-- 首页代办 -->
+<ng-container *ngIf="defaultValue==='A'">
+  <xn-home-comm-list-component [supers]="{label:todoConfig,value:'todo'}"></xn-home-comm-list-component>
+</ng-container>
+<ng-container *ngIf="defaultValue==='B' && !!todoCount02">
+  <xn-home-comm-list-component [supers]="{label:avengertodo,value:'avengerTodo'}"></xn-home-comm-list-component>
+</ng-container>
+<!--龙光业务列表-->
+<ng-container *ngIf="defaultValue==='C'">
+  <xn-home-comm-list-component [supers]="{label:dragonTodo,value:'dragonTodo'}"></xn-home-comm-list-component>
+</ng-container>
+<ng-container *ngIf="defaultValue==='D'">
+  <xn-new-agile-home-comm-list-component [supers]="{label:newAgileTodo, value:'todo'}"></xn-new-agile-home-comm-list-component>
+</ng-container>
+<!-- 系统消息 -->
+<xn-home-comm-list-component [supers]="{label:msgConfig,value:'sysMsg'}"></xn-home-comm-list-component>
+<!-- 备付通知 -->
+<xn-home-comm-list-component *ngIf="showPaymentMessage" [supers]="{label:payMsgConfig,value:'payMsg'}">
+</xn-home-comm-list-component>

@@ -1,0 +1,61 @@
+<div class="input-group" style="width: 100%; display: block" [formGroup]="form">
+  <div style="padding-bottom: 5px">
+    <div class="btn btn-default" type="button" (click)="downloadTp()">
+      <span style="color: #3c8dbc;font-size: 12px">下载模板</span>
+    </div>
+    <div class="btn btn-default btn-file xn-table-upload">
+      <!--<span style="color: #3c8dbc;font-size: 12px" (click)="uploadExcel($event)">上传Excel</span>-->
+      <span class="hidden-xs xn-input-font">上传Excel</span>
+      <input type="file" (change)="uploadExcel($event)" (click)="beforeUpload($event)">
+    </div>
+    <span *ngIf="items.length>0" style="float: right;padding: 6px 12px; margin-bottom: 0;">总计：{{items.length}}笔</span>
+  </div>
+  <div class="height">
+    <div class="head-height">
+      <table class="table table-bordered table-hover text-center table-display relative" [style.left.px]="headLeft">
+        <thead>
+        <tr>
+          <ng-container *ngFor="let item of heads[enterprise]?.headText">
+            <td>
+              <span>{{item.label}}</span>
+            </td>
+          </ng-container>
+        </tr>
+        </thead>
+      </table>
+    </div>
+    <div class="table-height" (scroll)="onScroll($event)">
+      <table class="table table-bordered table-hover text-center table-display">
+        <tbody>
+        <ng-container *ngIf="ctrl.value">
+          <ng-container *ngFor="let item of items">
+            <tr>
+              <td *ngFor="let head of heads[enterprise]?.headText">
+                <ng-container *ngIf="head?.options">
+                  <span *ngIf="head.options.type==='money'" [ngClass]="head.options.style">{{item[head.value] | number:'1.2-3'}}</span>
+                  <span *ngIf="head.options.type==='def'" [ngClass]="head.options.style">{{item[head.value]}}</span>
+                  <span *ngIf="head.options.type==='boolean'" [ngClass]="head.options.style">{{item[head.value]===true?'是':'否'}}</span>
+                  <!--当有多张内容时-->
+                  <div *ngIf="head.options.type==='multiple'">
+                    <ng-container *ngIf="hwModeService.arrayLength(item[head.value]);else block2">
+                      <a class="xn-click-a" href="javaScript:void(0)" (click)="viewMore(item[head.value])"
+                         [innerHtml]="(item[head.value] | xnStringToArray:2:'等;')">
+                      </a>
+                    </ng-container>
+                    <ng-template #block2>
+                      <div [innerHtml]="(item[head.value] | xnStringToArray:2:'等;')"></div>
+                    </ng-template>
+                  </div>
+                </ng-container>
+                <span *ngIf="!head.options">{{item[head.value]}}</span>
+              </td>
+            </tr>
+          </ng-container>
+        </ng-container>
+
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+<span class="xn-input-alert">{{alert}}</span>

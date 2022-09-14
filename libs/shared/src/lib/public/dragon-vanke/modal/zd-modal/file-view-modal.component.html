@@ -1,0 +1,38 @@
+<modal #modal [backdrop]="'static'" [keyboard]="false" [animation]="false">
+  <modal-body>
+    <div class="edit-content">
+      <!-- 上层信息 -->
+      <!-- 下层图片 -->
+      <div class="edit-content-flex">
+        <ng-container *ngIf="fileType === 'pdf'">
+          <div class="display-content" id='container'>
+            <div class="pdf-container" id='thisCanvas1'>
+              <!-- <canvas class="this-pdf" id="thisCanvas"></canvas> -->
+            </div>
+          </div>
+        </ng-container>
+      </div>
+    </div>
+  </modal-body>
+  <div class="modal-footer">
+    <div class="clearfix">
+      <div class="button-group">
+        <!--文件为pdf时显示-->
+
+        <button id="left" type="button" class="btn btn-sm btn-default" (click)="rotateImg('left')">左旋
+          <i class="fa  fa-undo"></i></button>
+        <button id="right" type="button" class="btn btn-sm btn-default" (click)="rotateImg('right')">右旋
+          <i class="fa fa-repeat"></i></button>
+        <button id="large" type="button" class="btn btn-sm btn-default" (click)="scaleImg('large')">放大<i
+            class="fa fa-search-plus"></i></button>
+        <button id="small" type="button" class="btn btn-sm btn-default" (click)="scaleImg('small')">缩小<i
+            class="fa fa-search-minus"></i></button>
+        <button type="button" class="btn btn-success" (click)="downLoadFiles()">下载附件</button>
+        <button type="button" class="btn btn-default" (click)="onCancel()">关闭</button>
+      </div>
+      <div style='position:absolute;left:30px'>
+        <xn-page [total]="total" [size]="pageSize" [showTotal]="false" (change)="onPage($event)"></xn-page>
+      </div>
+    </div>
+  </div>
+</modal>

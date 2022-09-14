@@ -1,0 +1,45 @@
+<div>
+  <table class="table table-bordered text-center" style='float:left'>
+    <thead>
+      <tr class="table-head">
+        <!-- 全选按钮 -->
+        <!-- title -->
+        <th>序号</th>
+        <th>
+          模板名称
+        </th>
+        <th *ngIf='!isShowoperate'>
+          设置盖章关键字
+        </th>
+        <!-- 行操作 -->
+        <th *ngIf='!isShowoperate'>操作
+        </th>
+      </tr>
+    </thead>
+
+    <tbody>
+      <ng-container *ngIf="items.length>0;">
+        <tr *ngFor="let sub of items;let i=index">
+          <ng-container>
+            <td>
+              <span>{{i+1}}</span>
+            </td>
+            <td>
+              <a href='javascript:void(0)' (click)="fileView(sub)">
+                {{sub.fileName}}
+              </a>
+            </td>
+            <td *ngIf='!isShowoperate'>
+              <i nz-icon nzIconfont="iconsuccess-green" *ngIf='sub.keyword.length>0;else block'></i>
+              <ng-template #block>
+                <i nz-icon nzIconfont="iconrefuse"></i>
+              </ng-template>
+            </td>
+            <td *ngIf='!isShowoperate'>
+              <a href='javascript:void(0)' (click)='setSignText(sub,i)'>查看盖章关键字</a>
+          </ng-container>
+        </tr>
+      </ng-container>
+    </tbody>
+  </table>
+</div>

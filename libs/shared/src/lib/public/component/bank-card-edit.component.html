@@ -1,0 +1,106 @@
+<modal #modal [backdrop]="'static'" [keyboard]="false" [animation]="false">
+        <modal-header [showClose]="false">
+            <h4 class="modal-title">修改账号</h4>
+        </modal-header>
+
+        <modal-body>
+            <form class="form-horizontal" (ngSubmit)="onSubmit()" #myForm="ngForm">
+                <div class="panel panel-default">
+                    <div class="panel-body">
+
+                        <div class="form-group">
+                            <div class="col-sm-3 xn-control-label">
+                                户名 <span class="required-label">*</span>
+                            </div>
+                            <div class="col-sm-7">
+                                <input class="input" class="form-control" required [(ngModel)]="accountHolder" name="accountHolder" autocomplete="off">
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <div class="col-sm-3 xn-control-label">
+                                账号 <span class="required-label">*</span>
+                            </div>
+                            <div class="col-sm-7">
+                                <input class="input" class="form-control" required [(ngModel)]="cardCode" name="cardCode" autocomplete="off" value="{{cardCode}}" disabled>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                                <div class="col-sm-3 xn-control-label">
+                                    选择开户行省市 <span class="required-label">*</span>
+                                </div>
+                                <div class="col-sm-3" style="padding-right: 0">
+                                    <select class="form-control" required name="province" [(ngModel)]="province"
+                                    (change)="changePro(province)">
+                                        <option value="">请选择省份</option>
+                                        <option [value]="option.value" *ngFor="let option of china.first">{{option.label}}</option>
+                                    </select>
+                                </div>
+                                <div class="col-sm-4" style="padding-left: 0">
+                                    <select class="form-control" required name="city" [(ngModel)]="city" (change)="changeCity(city)">
+                                        <option value="">请选择城市</option>
+                                        <option [value]="option.value" *ngFor="let option of citys">{{option.label}}</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <div class="col-sm-3 xn-control-label">
+                                    选择银行 <span class="required-label">*</span>
+                                </div>
+                                <div class="col-sm-3" style="padding-right: 0">
+                                    <input type="search" placeholder="搜索" class="form-control" name="headBank_search"
+                                    [(ngModel)]="headBank_search" autocomplete="off" (keyup)="bankSearch(headBank_search)">
+                                </div>
+                                <div class="col-sm-4" style="padding-left: 0">
+                                    <select class="form-control" required name="bankHead" [(ngModel)]="bankHead" (change)="changeBankHead(bankHead)">
+                                            <option value="">请选择银行</option>
+                                        <option [value]="option.value" *ngFor="let option of headbanks">{{option.label}}</option>
+                                    </select>
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <div class="col-sm-3 xn-control-label">
+                                    选择开户行 <span class="required-label">*</span>
+                                </div>
+                                <div class="col-sm-3" style="padding-right: 0">
+                                    <input type="search" placeholder="搜索" class="form-control" name="detailBank_search"
+                                    [(ngModel)]="detailBank_search" autocomplete="off" (keyup)="detailSearch(detailBank_search)">
+                                </div>
+                                <div class="col-sm-4" style="padding-left: 0">
+                                    <select class="form-control" required name="bankName" [(ngModel)]="bankName" (change)="changeBankName(bankName)">
+                                        <option value="">请选择开户行</option>
+                                        <option [value]="option.bankName" *ngFor="let option of list">{{option.bankName}}</option>
+                                    </select>
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <div class="col-sm-3 xn-control-label">
+                                    开户行行号 <span class="required-label">*</span>
+                                </div>
+                                <div class="col-sm-7">
+                                    <input class="input" class="form-control" name="bankId" readonly placeholder="根据开户行匹配" [(ngModel)]="bankId">
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <div class="col-sm-3 xn-control-label">
+                                    账号备注 <span class="required-label">*</span>
+                                </div>
+                                <div class="col-sm-7">
+                                    <input class="input" class="form-control" required name="desc" [(ngModel)]="desc" autocomplete="off">
+                                </div>
+                            </div>
+
+                    </div>
+                </div>
+            </form>
+        </modal-body>
+
+        <modal-footer>
+            <button type="button" class="btn btn-white" (click)="onCancel();$event.stopPropagation();">取消</button>
+            <button type="button" class="btn btn-success" [disabled]="!myForm.valid" (click)="onSubmit();$event.stopPropagation();">确定</button>
+        </modal-footer>
+    </modal>

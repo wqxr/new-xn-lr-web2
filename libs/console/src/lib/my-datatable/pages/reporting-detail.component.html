@@ -1,0 +1,771 @@
+<section class="content-header">
+  <h1>
+    {{pageTitle}}
+    <small>{{pageDesc}}</small>
+  </h1>
+</section>
+
+<section class="content">
+  <div class="box">
+    <div class="box-header">
+      <h3 class="box-title">企业信息</h3>
+    </div>
+    <!-- /.box-header -->
+    <div class="box-body">
+
+      <table class="table table-bordered table-striped">
+        <tbody>
+          <tr *ngIf="data.appId">
+            <td class="col-sm-3">核心企业ID</td>
+            <td>{{data.appId}}</td>
+          </tr>
+          <tr *ngIf="data.sign">
+            <td>核心企业签名</td>
+            <td>{{data.sign}}</td>
+          </tr>
+          <tr *ngIf="data.messageSeq">
+            <td>指令顺序号</td>
+            <td>{{data.messageSeq}}</td>
+          </tr>
+          <tr *ngIf="data.operateType">
+            <td>操作类型</td>
+            <td>{{data.operateType === 1 ? '新增' : '修改'}}</td>
+          </tr>
+          <tr>
+            <td>预案平台顺序号</td>
+            <td>{{data.platformSeq ? data.platformSeq : '该商票为核心企业手动出票'}}</td>
+          </tr>
+          <tr *ngIf="data.timestamp">
+            <td>指令发送时间</td>
+            <td>{{data.timestamp | xnDate:'datetime'}}</td>
+          </tr>
+          <tr *ngIf="data.payType">
+            <td>付款方式</td>
+            <td>{{data.payType | xnPay}}</td>
+          </tr>
+          <tr *ngIf="data.accountPayGenDate">
+            <td>应付账款生成日期</td>
+            <td>{{data.accountPayGenDate | xnDate: 'stringtodate'}}</td>
+          </tr>
+          <tr *ngIf="data.accountPayStatus">
+            <td>应付款状态</td>
+            <td>{{data.accountPayStatus}}</td>
+          </tr>
+          <tr *ngIf="data.accountPayNumber">
+            <td>应付账款编号</td>
+            <td>{{data.accountPayNumber}}</td>
+          </tr>
+          <tr *ngIf="data.planPayDate">
+            <td>计划付款日期</td>
+            <td>{{data.planPayDate}}</td>
+          </tr>
+          <tr *ngIf="data.orderNumber">
+            <td>订单号码</td>
+            <td>{{data.orderNumber}}</td>
+          </tr>
+          <tr *ngIf="data.remark">
+            <td>备注</td>
+            <td>{{data.remark}}</td>
+          </tr>
+        </tbody>
+      </table>
+
+    </div>
+    <!-- /.box-body -->
+  </div>
+
+  <!-- 1~N张汇票信息 -->
+  <div *ngIf="data.bills && data.bills.length !== 0">
+    <div class="box" *ngFor="let bill of data.bills">
+      <div class="box-header">
+        <h3 class="box-title">汇票信息</h3>
+      </div>
+      <!-- /.box-header -->
+      <div class="box-body">
+
+        <table class="table table-bordered table-striped">
+          <tbody>
+            <tr *ngIf="bill.issueDate">
+              <td class="col-sm-3">汇票出票日期</td>
+              <td>{{bill.issueDate}}</td>
+            </tr>
+            <tr *ngIf="bill.dueDate">
+              <td>汇票到期日</td>
+              <td>{{bill.dueDate | xnDate: 'stringtodate'}}</td>
+            </tr>
+            <tr *ngIf="bill.billNumber">
+              <td>汇票票据号码</td>
+              <td>{{bill.billNumber}}</td>
+            </tr>
+            <tr *ngIf="bill.drawerName">
+              <td>出票人全称</td>
+              <td>{{bill.drawerName}}</td>
+            </tr>
+            <tr *ngIf="bill.drawerAccount">
+              <td>出票人账号</td>
+              <td>{{bill.drawerAccount}}</td>
+            </tr>
+            <tr *ngIf="bill.drawerBankNumber">
+              <td>出票人开户银行</td>
+              <td>{{bill.drawerBankNumber}}</td>
+            </tr>
+            <tr *ngIf="bill.payeeName">
+              <td>收款人全称</td>
+              <td>{{bill.payeeName}}</td>
+            </tr>
+            <tr *ngIf="bill.payeeAccount">
+              <td>收款人账号</td>
+              <td>{{bill.payeeAccount}}</td>
+            </tr>
+            <tr *ngIf="bill.payeeBankNumber">
+              <td>收款人开户银行</td>
+              <td>{{bill.payeeBankNumber}}</td>
+            </tr>
+            <tr *ngIf="bill.billAmount">
+              <td>票据金额</td>
+              <td>{{bill.billAmount}}</td>
+            </tr>
+            <tr *ngIf="bill.acceptorName">
+              <td>承兑人全称</td>
+              <td>{{bill.acceptorName}}</td>
+            </tr>
+            <tr *ngIf="bill.acceptorAccount">
+              <td>承兑人账号</td>
+              <td>{{bill.acceptorAccount}}</td>
+            </tr>
+            <tr *ngIf="bill.acceptorBankNumber">
+              <td>承兑人开户行行号</td>
+              <td>{{bill.acceptorBankNumber}}</td>
+            </tr>
+            <tr *ngIf="bill.acceptorBankName">
+              <td>承兑人开户行名称</td>
+              <td>{{bill.acceptorBankName}}</td>
+            </tr>
+            <tr *ngIf="bill.isBillTransfer">
+              <td>能否转让</td>
+              <td>{{bill.isBillTransfer}}</td>
+            </tr>
+            <tr *ngIf="bill.isUseQuota">
+              <td>是否占用核心企业额度</td>
+              <td>{{bill.isUseQuota === 1 ? '可融资' : '不可融资'}}</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <!-- 0~N张发票信息 -->
+  <div *ngIf="data.invoices && data.invoices.length !== 0">
+    <div class="box" *ngFor="let bill of data.invoices">
+      <div class="box-header">
+        <h3 class="box-title">发票信息</h3>
+      </div>
+      <!-- /.box-header -->
+      <div class="box-body">
+
+        <table class="table table-bordered table-striped">
+          <tbody>
+            <tr *ngIf="bill.invoiceCode">
+              <td class="col-sm-3">发票代码</td>
+              <td>{{bill.invoiceCode}}</td>
+            </tr>
+            <tr *ngIf="bill.invoiceNumber">
+              <td>发票号码</td>
+              <td>{{bill.invoiceNumber}}</td>
+            </tr>
+            <tr *ngIf="bill.invoiceDate">
+              <td>开票日期</td>
+              <td>{{bill.invoiceDate | xnDate: 'stringtodate'}}</td>
+            </tr>
+            <tr *ngIf="bill.inviocePurchaseName">
+              <td>购买方单位名称</td>
+              <td>{{bill.inviocePurchaseName}}</td>
+            </tr>
+            <tr *ngIf="bill.buyerTaxIdenNumber">
+              <td>购买方纳税人识别号</td>
+              <td>{{bill.buyerTaxIdenNumber}}</td>
+            </tr>
+            <tr *ngIf="bill.buyerAddress">
+              <td>购买方地址</td>
+              <td>{{bill.buyerAddress}}</td>
+            </tr>
+            <tr *ngIf="bill.buyerPhone">
+              <td>购买方电话</td>
+              <td>{{bill.buyerPhone}}</td>
+            </tr>
+            <tr *ngIf="bill.buyerBankNumber">
+              <td>购买方开户银行</td>
+              <td>{{bill.buyerBankNumber}}</td>
+            </tr>
+            <tr *ngIf="bill.buyerAccount">
+              <td>购买方账号</td>
+              <td>{{bill.buyerAccount}}</td>
+            </tr>
+            <tr *ngIf="bill.commodityName">
+              <td>商品或劳务名称</td>
+              <td>{{bill.commodityName}}</td>
+            </tr>
+            <tr *ngIf="bill.commodityType">
+              <td>规格型号</td>
+              <td>{{bill.commodityType}}</td>
+            </tr>
+            <tr *ngIf="bill.commodityUnit">
+              <td>单位</td>
+              <td>{{bill.commodityUnit}}</td>
+            </tr>
+            <tr *ngIf="bill.commodityQuantity">
+              <td>数量</td>
+              <td>{{bill.commodityQuantity}}</td>
+            </tr>
+            <tr *ngIf="bill.commodityPrice">
+              <td>单价</td>
+              <td>{{bill.commodityPrice}}</td>
+            </tr>
+            <tr *ngIf="bill.commodityAmount">
+              <td>金额</td>
+              <td>{{bill.commodityAmount}}</td>
+            </tr>
+            <tr *ngIf="bill.taxRate">
+              <td>税率</td>
+              <td>{{bill.taxRate}}</td>
+            </tr>
+            <tr *ngIf="bill.taxAmount">
+              <td>税额</td>
+              <td>{{bill.taxAmount}}</td>
+            </tr>
+            <tr *ngIf="bill.invoiceAmount">
+              <td>发票金额</td>
+              <td>{{bill.invoiceAmount}}</td>
+            </tr>
+            <tr *ngIf="bill.sellerName">
+              <td>销售方企业名称</td>
+              <td>{{bill.sellerName}}</td>
+            </tr>
+            <tr *ngIf="bill.sellerTaxIdenNumber">
+              <td>销售方纳税人识别号</td>
+              <td>{{bill.sellerTaxIdenNumber}}</td>
+            </tr>
+            <tr *ngIf="bill.sellerAddress">
+              <td>销售方地址</td>
+              <td>{{bill.sellerAddress}}</td>
+            </tr>
+            <tr *ngIf="bill.sellerPhone">
+              <td>销售方电话</td>
+              <td>{{bill.sellerPhone}}</td>
+            </tr>
+            <tr *ngIf="bill.sellerBankNumber">
+              <td>销售方开户银行</td>
+              <td>{{bill.sellerBankNumber}}</td>
+            </tr>
+            <tr *ngIf="bill.sellerAccount">
+              <td>销售方账号</td>
+              <td>{{bill.sellerAccount}}</td>
+            </tr>
+            <tr *ngIf="bill.invioceRemarks">
+              <td>发票备注</td>
+              <td>{{bill.invioceRemarks}}</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <!-- 合同信息 -->
+  <div *ngIf="data.contract && data.contract.length !== 0">
+    <div class="box">
+      <div class="box-header">
+        <h3 class="box-title">合同信息</h3>
+      </div>
+      <!-- /.box-header -->
+      <div class="box-body">
+
+        <table class="table table-bordered table-striped">
+          <tbody>
+            <tr *ngIf="data.contract.contractName">
+              <td class="col-sm-3">合同名称</td>
+              <td>{{data.contract.contractName}}</td>
+            </tr>
+            <tr *ngIf="data.contract.contractNumber">
+              <td class="col-sm-3">交易合同号</td>
+              <td>{{data.contract.contractNumber}}</td>
+            </tr>
+            <tr *ngIf="data.contract.partyAName">
+              <td class="col-sm-3">合同甲方名称</td>
+              <td>{{data.contract.partyAName}}</td>
+            </tr>
+            <tr *ngIf="data.contract.partyBName">
+              <td class="col-sm-3">合同乙方名称</td>
+              <td>{{data.contract.partyBName}}</td>
+            </tr>
+            <tr *ngIf="data.contract.contractSignTime">
+              <td class="col-sm-3">合同签订时间</td>
+              <td>{{data.contract.contractSignTime | xnDate: 'stringtodate'}}</td>
+            </tr>
+            <tr *ngIf="data.contract.contractAmount">
+              <td class="col-sm-3">合同总金额</td>
+              <td>{{data.contract.contractAmount}}</td>
+            </tr>
+            <tr *ngIf="data.contract.subjectName">
+              <td class="col-sm-3">标的名称</td>
+              <td>{{data.contract.subjectName}}</td>
+            </tr>
+            <tr *ngIf="data.contract.subjectQuantity">
+              <td class="col-sm-3">标的数量</td>
+              <td>{{data.contract.subjectQuantity}}</td>
+            </tr>
+            <tr *ngIf="data.contract.subjectAmount">
+              <td class="col-sm-3">标的金额</td>
+              <td>{{data.contract.subjectAmount}}</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <!-- 物流信息 -->
+  <div *ngIf="data.logistics && data.logistics.length !== 0">
+    <div class="box">
+      <div class="box-header">
+        <h3 class="box-title">物流信息</h3>
+      </div>
+      <!-- /.box-header -->
+      <div class="box-body" *ngFor="let item of data.logistics">
+
+        <table class="table table-bordered table-striped">
+          <tbody>
+            <tr *ngIf="item.logisticsName">
+              <td class="col-sm-3">物流企业名称</td>
+              <td>{{item.logisticsName}}</td>
+            </tr>
+            <tr *ngIf="item.logisticsOrderNumber">
+              <td class="col-sm-3">物流单号</td>
+              <td>{{item.logisticsOrderNumber}}</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <!-- 仓单信息 -->
+  <div *ngIf="data.receipt && data.receipt.length !== 0">
+    <div class="box">
+      <div class="box-header">
+        <h3 class="box-title">仓单信息</h3>
+      </div>
+      <!-- /.box-header -->
+      <div class="box-body" *ngFor="let item of data.receipt">
+
+        <table class="table table-bordered table-striped">
+          <tbody>
+            <tr *ngIf="item.receiptNumber">
+              <td class="col-sm-3">入仓单单号</td>
+              <td>{{item.receiptNumber}}</td>
+            </tr>
+            <tr *ngIf="item.receiptName">
+              <td class="col-sm-3">入仓单标的</td>
+              <td>{{item.receiptName}}</td>
+            </tr>
+            <tr *ngIf="item.receiptAcceptQuantity">
+              <td class="col-sm-3">入仓单验收数量</td>
+              <td>{{item.receiptAcceptQuantity}}</td>
+            </tr>
+            <tr *ngIf="item.actualQuantity">
+              <td class="col-sm-3">实收数量</td>
+              <td>{{item.actualQuantity}}</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <!-- 下游向核心企业下订单列表 -->
+  <div *ngIf="data.listPurchaseOrder && data.listPurchaseOrder.length > 0">
+    <div class="box">
+      <div class="box-header">
+        <h3 class="box-title">下游向核心企业下订单列表</h3>
+      </div>
+      <!-- /.box-header -->
+      <div class="box-body" *ngFor="let item of data.listPurchaseOrder; let i = index">
+
+        <table class="table table-bordered table-striped">
+          <tbody>
+            <tr>
+              <td colspan='2'>订单{{ i + 1 }}</td>
+            </tr>
+            <tr *ngIf="item.platformSeq">
+              <td class="col-sm-3">平台顺序号</td>
+              <td>{{item.platformSeq}}</td>
+            </tr>
+            <tr *ngIf="item.messageSeq">
+              <td class="col-sm-3">指令顺序号</td>
+              <td>{{item.messageSeq}}</td>
+            </tr>
+            <tr *ngIf="item.relationPlatformSeq">
+              <td class="col-sm-3">关联交易流程ID</td>
+              <td>{{item.relationPlatformSeq}}</td>
+            </tr>
+            <tr *ngIf="item.contractName">
+              <td class="col-sm-3">合同名称</td>
+              <td>{{item.contractName}}</td>
+            </tr>
+            <tr *ngIf="item.contractNumber">
+              <td class="col-sm-3">交易合同号</td>
+              <td>{{item.contractNumber}}</td>
+            </tr>
+            <tr *ngIf="item.depositRate !== ''">
+              <td class="col-sm-3">保证金比例</td>
+              <td>{{item.depositRate}}</td>
+            </tr>
+            <tr *ngIf="item.appId">
+              <td class="col-sm-3">核心企业ID</td>
+              <td>{{item.appId}}</td>
+            </tr>
+            <tr *ngIf="item.purchaserID">
+              <td class="col-sm-3">下游采购商在核心企业系统内的ID</td>
+              <td>{{item.purchaserID}}</td>
+            </tr>
+            <tr *ngIf="item.purchaserName">
+              <td class="col-sm-3">下游采购商名称</td>
+              <td>{{item.purchaserName}}</td>
+            </tr>
+            <tr *ngIf="item.purchaseOrderID">
+              <td class="col-sm-3">下游向核心企业下订单的ID</td>
+              <td>{{item.purchaseOrderID}}</td>
+            </tr>
+            <tr *ngIf="item.purchaseOrderTime">
+              <td class="col-sm-3">下订单时间</td>
+              <td>{{item.purchaseOrderTime | xnDate:'stringtodate'}}</td>
+            </tr>
+            <tr *ngIf="item.commodities && item.commodities.length > 0">
+              <td class="col-sm-3">商品信息</td>
+              <td>
+                <table class="table table-bordered table-striped">
+                  <tr>
+                    <th>名称</th>
+                    <th>规格型号</th>
+                    <th>数量</th>
+                    <th>单位</th>
+                    <th>价格</th>
+                  </tr>
+                  <tr *ngFor="let comi of item.commodities">
+                    <td>{{comi.name}}</td>
+                    <td>{{comi.specification}}</td>
+                    <td>{{comi.quantity}}</td>
+                    <td>{{comi.unit}}</td>
+                    <td>{{comi.price}}</td>
+                  </tr>
+                </table>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <!-- 核心企业向上游供应商下订单列表 -->
+  <div *ngIf="data.listsupplyOrder && data.listsupplyOrder.length > 0">
+    <div class="box">
+      <div class="box-header">
+        <h3 class="box-title">核心企业向上游供应商下订单列表</h3>
+      </div>
+      <!-- /.box-header -->
+      <div class="box-body" *ngFor="let item of data.listsupplyOrder; let i = index">
+
+        <table class="table table-bordered table-striped">
+          <tbody>
+            <tr>
+              <td colspan='2'>订单{{ i + 1 }}</td>
+            </tr>
+            <tr *ngIf="item.platformSeq">
+              <td class="col-sm-3">平台顺序号</td>
+              <td>{{item.platformSeq}}</td>
+            </tr>
+            <tr *ngIf="item.messageSeq">
+              <td class="col-sm-3">指令顺序号</td>
+              <td>{{item.messageSeq}}</td>
+            </tr>
+            <tr *ngIf="item.relationPlatformSeq">
+              <td class="col-sm-3">关联交易流程ID</td>
+              <td>{{item.relationPlatformSeq}}</td>
+            </tr>
+            <tr *ngIf="item.contractName">
+              <td class="col-sm-3">合同名称</td>
+              <td>{{item.contractName}}</td>
+            </tr>
+            <tr *ngIf="item.contractNumber">
+              <td class="col-sm-3">交易合同号</td>
+              <td>{{item.contractNumber}}</td>
+            </tr>
+            <tr *ngIf="item.appId">
+              <td class="col-sm-3">核心企业ID</td>
+              <td>{{item.appId}}</td>
+            </tr>
+            <tr *ngIf="item.supplierID">
+              <td class="col-sm-3">下游采购商在核心企业系统内的ID</td>
+              <td>{{item.supplierID}}</td>
+            </tr>
+            <tr *ngIf="item.supplierName">
+              <td class="col-sm-3">下游采购商名称</td>
+              <td>{{item.supplierName}}</td>
+            </tr>
+            <tr *ngIf="item.supplyOrderID">
+              <td class="col-sm-3">下游向核心企业下订单的ID</td>
+              <td>{{item.supplyOrderID}}</td>
+            </tr>
+            <tr *ngIf="item.supplyOrderTime">
+              <td class="col-sm-3">下订单时间</td>
+              <td>{{item.supplyOrderTime | xnDate:'stringtodate'}}</td>
+            </tr>
+            <tr *ngIf="item.commodities && item.commodities.length > 0">
+              <td class="col-sm-3">商品信息</td>
+              <td>
+                <table class="table table-bordered table-striped">
+                  <tr>
+                    <th>名称</th>
+                    <th>规格型号</th>
+                    <th>数量</th>
+                    <th>单位</th>
+                    <th>价格</th>
+                  </tr>
+                  <tr *ngFor="let comi of item.commodities">
+                    <td>{{comi.name}}</td>
+                    <td>{{comi.specification}}</td>
+                    <td>{{comi.quantity}}</td>
+                    <td>{{comi.unit}}</td>
+                    <td>{{comi.price}}</td>
+                  </tr>
+                </table>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <!-- 商品入库列表 -->
+  <div *ngIf="data.liststockIn && data.liststockIn.length > 0">
+    <div class="box">
+      <div class="box-header">
+        <h3 class="box-title">商品入库列表</h3>
+      </div>
+      <!-- /.box-header -->
+      <div class="box-body" *ngFor="let item of data.liststockIn; let i = index">
+
+        <table class="table table-bordered table-striped">
+          <tbody>
+            <tr>
+              <td colspan='2'>订单{{ i + 1 }}</td>
+            </tr>
+            <tr *ngIf="item.platformSeq">
+              <td class="col-sm-3">平台顺序号</td>
+              <td>{{item.platformSeq}}</td>
+            </tr>
+            <tr *ngIf="item.messageSeq">
+              <td class="col-sm-3">指令顺序号</td>
+              <td>{{item.messageSeq}}</td>
+            </tr>
+            <tr *ngIf="item.relationPlatformSeq">
+              <td class="col-sm-3">关联交易流程ID</td>
+              <td>{{item.relationPlatformSeq}}</td>
+            </tr>
+            <tr *ngIf="item.contractName">
+              <td class="col-sm-3">合同名称</td>
+              <td>{{item.contractName}}</td>
+            </tr>
+            <tr *ngIf="item.contractNumber">
+              <td class="col-sm-3">交易合同号</td>
+              <td>{{item.contractNumber}}</td>
+            </tr>
+            <tr *ngIf="item.appId">
+              <td class="col-sm-3">核心企业ID</td>
+              <td>{{item.appId}}</td>
+            </tr>
+            <tr *ngIf="item.storageName">
+              <td class="col-sm-3">仓库名</td>
+              <td>{{item.storageName}}</td>
+            </tr>
+            <tr *ngIf="item.storageType">
+              <td class="col-sm-3">仓库类型</td>
+              <td>{{item.storageType | xnStorageType}}</td>
+            </tr>
+            <tr *ngIf="item.storageAddress">
+              <td class="col-sm-3">仓库地点</td>
+              <td>{{item.storageAddress}}</td>
+            </tr>
+            <tr *ngIf="item.storageOwner">
+              <td class="col-sm-3">仓库所属企业</td>
+              <td>{{item.storageOwner}}</td>
+            </tr>
+            <tr *ngIf="item.stackInfo">
+              <td class="col-sm-3">堆放信息/位置</td>
+              <td>{{item.stackInfo}}</td>
+            </tr>
+            <tr *ngIf="item.stockInID">
+              <td class="col-sm-3">入库单ID</td>
+              <td>{{item.stockInID}}</td>
+            </tr>
+            <tr *ngIf="item.stockInTime">
+              <td class="col-sm-3">入库时间</td>
+              <td>{{item.stockInTime}}</td>
+            </tr>
+            <tr *ngIf="item.stockInUser">
+              <td class="col-sm-3">入库人名称</td>
+              <td>{{item.stockInUser}}</td>
+            </tr>
+            <tr *ngIf="item.stockInUserContact">
+              <td class="col-sm-3">入库人联系方式</td>
+              <td>{{item.stockInUserContact}}</td>
+            </tr>
+            <tr *ngIf="item.stockInTrackingNo">
+              <td class="col-sm-3">入库物流单号</td>
+              <td>{{item.stockInTrackingNo}}</td>
+            </tr>
+            <tr *ngIf="item.stockInExpressCompany">
+              <td class="col-sm-3">入库物流公司</td>
+              <td>{{item.stockInExpressCompany}}</td>
+            </tr>
+            <tr *ngIf="item.commodities && item.commodities.length > 0">
+              <td class="col-sm-3">商品信息</td>
+              <td>
+                <table class="table table-bordered table-striped">
+                  <tr>
+                    <th>名称</th>
+                    <th>规格型号</th>
+                    <th>数量</th>
+                    <th>单位</th>
+                    <th>价格</th>
+                  </tr>
+                  <tr *ngFor="let comi of item.commodities">
+                    <td>{{comi.name}}</td>
+                    <td>{{comi.specification}}</td>
+                    <td>{{comi.quantity}}</td>
+                    <td>{{comi.unit}}</td>
+                    <td>{{comi.price}}</td>
+                  </tr>
+                </table>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <!-- 商品出库列表 -->
+  <div *ngIf="data.liststockOut && data.liststockOut.length > 0">
+    <div class="box">
+      <div class="box-header">
+        <h3 class="box-title">商品出库列表</h3>
+      </div>
+      <!-- /.box-header -->
+      <div class="box-body" *ngFor="let item of data.liststockOut; let i = index">
+
+        <table class="table table-bordered table-striped">
+          <tbody>
+            <tr>
+              <td colspan='2'>订单{{ i + 1 }}</td>
+            </tr>
+            <tr *ngIf="item.platformSeq">
+              <td class="col-sm-3">平台顺序号</td>
+              <td>{{item.platformSeq}}</td>
+            </tr>
+            <tr *ngIf="item.messageSeq">
+              <td class="col-sm-3">指令顺序号</td>
+              <td>{{item.messageSeq}}</td>
+            </tr>
+            <tr *ngIf="item.relationPlatformSeq">
+              <td class="col-sm-3">关联交易流程ID</td>
+              <td>{{item.relationPlatformSeq}}</td>
+            </tr>
+            <tr *ngIf="item.contractName">
+              <td class="col-sm-3">合同名称</td>
+              <td>{{item.contractName}}</td>
+            </tr>
+            <tr *ngIf="item.contractNumber">
+              <td class="col-sm-3">交易合同号</td>
+              <td>{{item.contractNumber}}</td>
+            </tr>
+            <tr *ngIf="item.appId">
+              <td class="col-sm-3">核心企业ID</td>
+              <td>{{item.appId}}</td>
+            </tr>
+            <tr *ngIf="item.storageName">
+              <td class="col-sm-3">仓库名</td>
+              <td>{{item.storageName}}</td>
+            </tr>
+            <tr *ngIf="item.storageType">
+              <td class="col-sm-3">仓库类型</td>
+              <td>{{item.storageType | xnStorageType}}</td>
+            </tr>
+            <tr *ngIf="item.storageAddress">
+              <td class="col-sm-3">仓库地点</td>
+              <td>{{item.storageAddress}}</td>
+            </tr>
+            <tr *ngIf="item.storageOwner">
+              <td class="col-sm-3">仓库所属企业</td>
+              <td>{{item.storageOwner}}</td>
+            </tr>
+            <tr *ngIf="item.stackInfo">
+              <td class="col-sm-3">堆放信息/位置</td>
+              <td>{{item.stackInfo}}</td>
+            </tr>
+            <tr *ngIf="item.stockOutID">
+              <td class="col-sm-3">出库单ID</td>
+              <td>{{item.stockOutID}}</td>
+            </tr>
+            <tr *ngIf="item.stockOutTime">
+              <td class="col-sm-3">出库时间</td>
+              <td>{{item.stockOutTime}}</td>
+            </tr>
+            <tr *ngIf="item.stockOutUser">
+              <td class="col-sm-3">出库人名称</td>
+              <td>{{item.stockOutUser}}</td>
+            </tr>
+            <tr *ngIf="item.stockOutUserContact">
+              <td class="col-sm-3">出库人联系方式</td>
+              <td>{{item.stockOutUserContact}}</td>
+            </tr>
+            <tr *ngIf="item.stockOutTrackingNo">
+              <td class="col-sm-3">出库物流单号</td>
+              <td>{{item.stockOutTrackingNo}}</td>
+            </tr>
+            <tr *ngIf="item.stockOutExpressCompany">
+              <td class="col-sm-3">出库物流公司</td>
+              <td>{{item.stockOutExpressCompany}}</td>
+            </tr>
+            <tr *ngIf="item.commodities && item.commodities.length > 0">
+              <td class="col-sm-3">商品信息</td>
+              <td>
+                <table class="table table-bordered table-striped">
+                  <tr>
+                    <th>名称</th>
+                    <th>规格型号</th>
+                    <th>数量</th>
+                    <th>单位</th>
+                    <th>价格</th>
+                  </tr>
+                  <tr *ngFor="let comi of item.commodities">
+                    <td>{{comi.name}}</td>
+                    <td>{{comi.specification}}</td>
+                    <td>{{comi.quantity}}</td>
+                    <td>{{comi.unit}}</td>
+                    <td>{{comi.price}}</td>
+                  </tr>
+                </table>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+</section>
+<!-- /.content -->

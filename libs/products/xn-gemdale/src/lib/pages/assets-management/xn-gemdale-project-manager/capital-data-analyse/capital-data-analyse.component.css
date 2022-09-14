@@ -1,0 +1,231 @@
+.item-box {
+    position: relative;
+    display: flex;
+    margin-bottom: 10px;
+}
+.item-label label {
+    min-width: 150px;
+    padding-right: 8px;
+    font-weight: normal;
+    line-height: 34px;
+    text-align:right;
+}
+.item-control {
+    flex: 1;
+}
+.box-body {
+    min-height: 2400px;
+}
+/* article nav bar csss */
+#article-nav {
+    position: fixed;
+    right: 60px;
+    top: 25%;
+    z-index: 1001;
+}
+.ax_default {
+    font-family: 'Arial Normal', 'Arial';
+    font-weight: 400;
+    font-style: normal;
+    font-size: 12px;
+    color: #333333;
+    text-align: center;
+    line-height: normal;
+}
+.panel-state {
+    position: relative;
+    left: 0px;
+    top: 0px;
+    width: 155px;
+    height: 394px;
+    background-image: none;
+}
+.pane-content {
+    position: absolute;
+    left: 0px;
+    top: 0px;
+    width: 1px;
+    height: 1px;
+}
+.label {
+    font-size: 12px;
+    text-align: left;
+}
+.rectangle {
+    position: absolute;
+    left: 28px;
+    width: 100%;
+    height: 25px;
+    font-size: 12px;
+    cursor: pointer;
+}
+#nav-line {
+    position: absolute;
+    left: 8px;
+    top: 17px;
+    width: 1px;
+    height: 324px;
+}
+.nav-line-img {
+    position: absolute;
+    left: 0px;
+    top: 0px;
+    width: 2px;
+    height: 325px;
+}
+#nav-top-point {
+    position: absolute;
+    left: 0px;
+    top: 0px;
+    width: 17px;
+    height: 17px;
+}
+#nav-bottom-point {
+    position: absolute;
+    left: 0px;
+    top: 332px;
+    width: 17px;
+    height: 17px;
+}
+.nav-point-img {
+    position: absolute;
+    left: 0px;
+    top: 0px;
+    width: 17px;
+    height: 17px;
+}
+#nav-download {
+    position: absolute;
+    left: 28px;
+    top: 326px;
+    width: 103px;
+    height: 29px;
+    font-family: '微软雅黑';
+    font-weight: 400;
+    font-style: normal;
+    font-size: 12px;
+    color: #3C8DBC;
+}
+.nav-btn-div {
+    position: absolute;
+    left: 0px;
+    top: 0px;
+    width: 102px;
+    height: 29px;
+    background: inherit;
+    background-color: rgba(255, 255, 255, 1);
+    box-sizing: border-box;
+    border-width: 1px;
+    border-style: solid;
+    border-color: rgba(204, 204, 204, 1);
+    border-radius: 3px;
+    -moz-box-shadow: none;
+    -webkit-box-shadow: none;
+    box-shadow: none;
+    font-family: '微软雅黑';
+    font-weight: 400;
+    font-style: normal;
+    font-size: 12px;
+    color: #3C8DBC;
+}
+.nav-download-text {
+    top: 6px;
+    left: 2px;
+    width: 97px;
+    transform-origin: 49.5px 6.5px;
+    position: absolute;
+    word-wrap: break-word;
+}
+#nav-back {
+    position: absolute;
+    left: 0px;
+    top: 365px;
+    width: 131px;
+    height: 29px;
+    font-family: '微软雅黑';
+    font-weight: 400;
+    font-style: normal;
+    font-size: 12px;
+    color: #666666;
+}
+.nav-back-text {
+    top: 6px;
+    left: 2px;
+    width: 97px;
+    transform-origin: 63.5px 7px;
+    position: absolute;
+    word-wrap: break-word;
+}
+.nav-line-text {
+    display: none;
+    visibility: hidden;
+    position: absolute;
+    left: 2px;
+    top: 154px;
+    width: 1px;
+    visibility: hidden;
+    word-wrap: break-word;
+}
+.nav-div {
+    position: absolute;
+    left: 0px;
+    top: 0px;
+    width: 125px;
+    height: 25px;
+    background: inherit;
+    background-color: rgba(255, 255, 255, 0);
+    border: none;
+    border-radius: 0px;
+    -moz-box-shadow: none;
+    -webkit-box-shadow: none;
+    box-shadow: none;
+    font-size: 12px;
+}
+.nav-text {
+    position: absolute;
+    left: 0px;
+    top: 6px;
+    width: 120px;
+    white-space: nowrap;
+    top: 5px;
+    transform-origin: 50.5px 7.5px;
+}
+.nav-text p {
+    margin: 0px;
+    text-rendering: optimizeLegibility;
+    font-feature-settings: "kern" 1;
+    -webkit-font-feature-settings: "kern";
+    -moz-font-feature-settings: "kern";
+    -moz-font-feature-settings: "kern=1";
+    font-kerning: normal;
+}
+.nav-text-a {
+    display: block;
+    transition: all 0.2s;
+    color: #333;
+}
+.table_info  thead
+tr{
+ width: 97%;
+ z-index: 1000;
+ background: #ccc;
+}
+
+.table_info thead {
+ width: calc(100% - 17px);
+}
+.table_info .sorting:after {
+ content: "\e150";
+ opacity: .2;
+ font-family: Glyphicons Halflings;
+}
+.table_info .sorting_desc:after{
+ content:"\e156";
+ opacity: .2;
+ font-family: Glyphicons Halflings;
+}
+.table_info .sorting_asc:after{
+ content:"\e155";
+ opacity: .2;
+ font-family: Glyphicons Halflings;
+}

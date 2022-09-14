@@ -1,0 +1,10 @@
+<div [formGroup]="form">
+    <div class="" rows="6" style="height: 100px;border: 1px solid #d2d6de;overflow: auto;" [formControlName]="row.name"
+    ngDefaultControl [ngClass]="myClass" (blur)="onBlur()" autocomplete="off">
+        <span class="pull-left-container" *ngFor="let item of newRow;let i = index">
+            <span class="label label-files">{{item}}</span>
+        </span>
+    </div>
+    <p style="margin-top: 2px;font-size: 12px;color:#9d9b9b" *ngIf="showP">{{supplierCount}}</p>
+</div>
+<span class="xn-input-alert">{{alert}}</span>

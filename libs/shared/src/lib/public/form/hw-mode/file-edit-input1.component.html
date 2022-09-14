@@ -1,0 +1,12 @@
+<div class="input-group form-control" [formGroup]="form" [ngClass]="myClass">
+  <table class="" *ngIf="files.length > 0">
+    <tbody>
+    <tr *ngFor="let file of files">
+      <td>
+        <a class="xn-click-a" (click)="edit(files)">{{file.fileName}}</a>
+      </td>
+    </tr>
+    </tbody>
+  </table>
+</div>
+<span class="xn-input-alert">{{alert}}</span>

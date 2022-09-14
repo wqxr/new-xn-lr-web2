@@ -1,0 +1,25 @@
+<section>
+  <!-- 二维码 -->
+  <div class="qr pull-right" *ngIf="isOperate && isfinancing6">
+    <div class="qrbtn">
+      <a class="btn btn-primary xn-click-a " (click)="uploadQr()">二维码</a>
+      <a class="btn btn-primary xn-click-a " (click)="fresh()">获取移动端图片</a>
+    </div>
+  </div>
+  <!-- <div class="qrbox">
+    <div class="inqr">
+      <div class="box">
+        <img class="qrcode-img" src="{{fileSrc}}" *ngIf="!!fileSrc">
+      </div>
+      <div class="box">
+        <div class="box-atten">
+          <p>1、请扫描二维码；</p>
+          <p>2、用手机上传图片；</p>
+          <p>3、手机保存图片后，点击以下确定按钮将图片拉取到PC端。</p>
+          <a class="btn btn-primary xn-click-a btn-block">确定</a>
+        </div>
+      </div>
+    </div>
+  </div> -->
+
+</section>

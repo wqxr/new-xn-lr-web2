@@ -1,0 +1,29 @@
+<div style="display: flex;">
+  <div class="xn-mselect-right" style="flex: 1;">
+    <!-- 省 -->
+    <select class="form-control xn-input-font" [ngClass]="myClass" [(ngModel)]="ctrlValue.provice.proviceCode"
+      (blur)="onBlur($event)" [disabled]="row.options.readonly" (change)="onChange($event, proviceLevel)">
+      <option value="">-请选择-</option>
+      <option *ngFor="let proviceObj of proviceOptions" value="{{proviceObj.proviceCode}}">{{proviceObj.provice}}
+      </option>
+    </select>
+  </div>
+  <!-- 市 -->
+  <div class="xn-mselect-right xn-mselect-left" *ngIf="cityOptions.length" style="flex: 1;">
+    <select class="form-control xn-input-font" [ngClass]="myClass" [(ngModel)]="ctrlValue.city.cityCode"
+      (blur)="onBlur($event)" [disabled]="row.options.readonly" (change)="onChange($event, cityLevel)">
+      <option value="">-请选择-</option>
+      <option *ngFor="let cityObj of cityOptions" value="{{cityObj.cityCode}}">{{cityObj.city}}</option>
+    </select>
+  </div>
+  <!-- 区 -->
+  <div class="xn-mselect-left" *ngIf="areaOptions.length" style="flex: 1;">
+    <select class="form-control xn-input-font" [ngClass]="myClass" [(ngModel)]="ctrlValue.area.areaCode"
+      (blur)="onBlur($event)" [disabled]="row.options.readonly" (change)="onChange($event, areaLevel)">
+      <option value="">-请选择-</option>
+      <option *ngFor="let areaObj of areaOptions" value="{{areaObj.areaCode}}">{{areaObj.area}}</option>
+    </select>
+  </div>
+</div>
+<span class="xn-input-alert">{{alert}}</span>
+

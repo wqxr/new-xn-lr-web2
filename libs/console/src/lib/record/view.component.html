@@ -1,0 +1,112 @@
+<!-- Content Header (Page header) -->
+<section class="content-header">
+  <h1>
+    {{pageTitle}}
+    <small>{{pageDesc}}</small>
+  </h1>
+</section>
+
+<!-- Main content -->
+<section class="content">
+  <div class="app-flow-process" *ngIf="flowProcess.show">
+    <app-flow-process [steped]="flowProcess.steped" [proxy]="flowProcess.proxy"></app-flow-process>
+  </div>
+
+  <form class="form-horizontal" *ngIf="svrConfig" (ngSubmit)="onSubmit()" #mainForm="ngForm">
+    <div class="panel panel-default">
+      <div class="panel-heading">
+        <span class="panel-title">{{svrConfig.flow.flowName}}: {{svrConfig?.record?.title}}
+        </span>
+      </div>
+      <!-- /.box-header -->
+
+      <div class="panel-body">
+        <div class="panel panel-info xn-panel-sm">
+          <div class="panel-heading">
+            <span class="panel-title">
+              流程基本信息
+            </span>
+          </div>
+          <div class="panel-body">
+            <div class="form-group" *ngFor="let info of baseInfo">
+              <div class="col-sm-3 xn-control-label">
+                {{info.title}}
+              </div>
+              <div class="col-sm-6">
+                <xn-show-input [row]="info"></xn-show-input>
+              </div>
+              <div class="col-sm-3 xn-control-desc"></div>
+            </div>
+          </div>
+          <!-- /.panel-body -->
+        </div>
+        <!-- 流程基本信息 -->
+
+        <ng-container *ngFor="let action of newSvrConfig.actions">
+          <div [ngClass]="panelCssClass(action)">
+            <div class="panel-heading" style="cursor:pointer" (click)="collapse(action)">
+              <div class="panel-title  clearfix">
+                <!--面板折叠提示-->
+                <div class="col-sm-6 clear-padding">
+                       <span *ngIf="action['collapse']&&action['collapse']===true ; else block"
+                             class="fa fa-minus-square"></span>
+                  <ng-template #block><span class="fa fa-plus-square"></span></ng-template>
+                  <span>第{{action.recordSeq}}步: {{action.procedureName}} ({{action.operator | xnOperator: action.procedureId}})</span>
+                </div>
+                <div class="col-sm-2 clear-padding ">
+                  <small><span class="red">{{action['collapse']&&action['collapse']===true?'点击隐藏':'点击显示'}}</span>
+                  </small>
+                </div>
+                <div class="col-sm-4 clear-padding  text-right">
+                  <small><{{action.operatorName}}>在{{action.operatorTime | xnDate}}处理</small>
+                </div>
+              </div>
+            </div>
+            <div class="panel-body" *ngIf="action['collapse']&&action['collapse']===true">
+              <ng-container *ngIf="action.operator===1">
+                <ng-container *ngFor="let checker of action.checkers">
+                  <div class="form-group" *ngIf="checker.type !== 'sms'">
+                    <div class="col-sm-3 xn-control-label" [ngClass]="{'required-label-strong':hwModeService.checkRequiredAndReadonly(checker).bold,
+                             'required-star':hwModeService.checkRequiredAndReadonly(checker).star}">
+                      {{checker.title}}
+                    </div>
+                    <div class="col-sm-6">
+                      <xn-show-input [row]="checker" [svrConfig]="svrConfig" [newSvrconfig]="action"></xn-show-input>
+                    </div>
+                    <div class="col-sm-3 xn-control-desc">
+                      {{checker.memo}}
+                    </div>
+                  </div>
+                </ng-container>
+                <xn-memo [memo]="action.memo"></xn-memo>
+                <xn-contract [contracts]="action.contracts"></xn-contract>
+              </ng-container>
+              <!-- /通过的步骤 -->
+
+              <xn-memo [memo]="action.memo" *ngIf="action.operator===2 || action.operator===3"></xn-memo>
+
+              <div class="text-right">
+                <a class="a-handle" href="javaScript:void (0)" (click)="collapse(action)">
+                  <span class="fa fa-angle-double-up"></span>
+                </a>
+              </div>
+            </div>
+            <!-- /.panel-body -->
+          </div>
+          <!-- /.panel -->
+        </ng-container>
+
+      </div>
+      <!-- /.panel-body -->
+
+      <div class="panel-footer text-right">
+        <button type="button" class="btn btn-default pull-left" (click)="download()">下载附件</button>
+        <button type="button" class="btn btn-default" (click)="onCancel()">返回</button>
+      </div>
+      <!-- /.panel-footer -->
+    </div>
+    <!-- /.panel -->
+  </form>
+
+</section>
+<!-- /.content -->

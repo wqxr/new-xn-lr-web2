@@ -1,0 +1,177 @@
+<section class="content-header">
+  <h1>{{tabConfig.title}}-{{orgName}}</h1>
+</section>
+<section class="content">
+  <div class="box">
+    <div class="box-body">
+
+      <div class="tab-content">
+        <div class="tab-pane active" style="padding: 15px 0">
+
+          <div class="form-group col-sm-6 flex" *ngFor="let row of shows">
+            <div class="title xn-control-label">
+              {{row.title}}
+              <span *ngIf="row.required !== false" class="required-label">*</span>
+            </div>
+            <div class="label">
+              <ng-container>
+                <xn-input [row]="row" [form]="form"></xn-input>
+              </ng-container>
+            </div>
+          </div>
+          <!-- <div style='margin-top:60px'>
+            <ul class="nav nav-tabs" style='border-bottom: 0px !important;'>
+              <ng-container *ngFor="let tab of tabConfig.tabList;let i=index">
+                <li [ngClass]="{'active': tab.value===label}">
+                  <a class="xn-click-a" data-toggle="tab" (click)="initData(tab.value)">{{tab.label}}</a>
+                </li>
+              </ng-container>
+            </ul>
+          </div> -->
+
+          <div class="col-sm-12 form-group text-right">
+            <!-- 头按钮 -->
+            <!-- 头按钮 -->
+            <ng-container *ngIf="currentTab.edit && currentTab.edit.headButtons && currentTab.edit.headButtons.length">
+              <span *ngFor="let btn of currentTab.edit.headButtons">
+                <button type="button" class="btn btn-primary"
+                  [disabled]="!selectedItems.length && btn.disabled&&btn.disabled===true"
+                  (click)="routeUrl()">{{btn.label}}</button>
+              </span>
+            </ng-container>
+            <ng-container *ngIf="currentTab.canSearch">
+              <button class="btn btn-primary" (click)="searchMsg()">查询</button>
+              <button class="btn btn-danger" (click)="reset()">重置</button>
+            </ng-container>
+          </div>
+          <ng-container>
+            <ul class="nav nav-pills sub-ul" style='height:36px'>
+              <ng-container *ngFor="let tab of tabConfig.tabList;let i=index">
+                <li role="presentation" [ngClass]="{'active': tab.value===label}" (click)="initData(tab.value)"
+                  style='height:100%'>
+                  <a class="xn-click-a" style='height:100%;line-height:100%'>{{tab.label}}</a>
+                </li>
+              </ng-container>
+            </ul>
+          </ng-container>
+          <div>
+            <table class="table table-bordered table-striped text-center">
+              <thead>
+                <tr class="table-head">
+                  <!-- 全选按钮 -->
+
+                  <!-- title -->
+                  <th *ngFor="let head of currentTab.headText">
+                    <ng-container *ngIf="head.sort;else normal">
+                      <span [ngClass]="onSortClass(head?.value)" (click)="onSort(head?.value)">{{head.label}}</span>
+                    </ng-container>
+                    <ng-template #normal>{{head.label}}</ng-template>
+                  </th>
+                  <!-- 行操作 -->
+                  <th>操作</th>
+                </tr>
+              </thead>
+              <!-- 操作===> 根据查看历史报告 和 查看异常来分别展示列表信息 fileType===1查看历史报告 fileType===2查看异常-->
+              <tbody>
+                <ng-container *ngIf="data.length>0 && type=== CONST01 && fileType===1">
+                  <tr *ngFor="let item of data;let i=index">
+                    <!-- 序号 -->
+                    <td>{{i+1}}</td>
+                    <!-- 报告文件     -->
+                    <td><a href='javascript:void(0)' (click)="openCompanyDetail(item)">系统监测报告</a></td>
+                    <!-- 更新时间 -->
+                    <td>{{item.createTime}}</td>
+                    <!-- 操作 -->
+                    <td>
+                      <a href='javascript:void(0)' class='editor_view' (click)="openCompanyDetail(item)">查看</a>
+                      <a href='javascript:void(0)' class='editor_view' (click)='downloadCompanyDetail(item)'>点击下载</a>
+                    </td>
+                  </tr>
+                </ng-container>
+                <tr *ngIf='data.length===0 && type=== CONST01 && fileType===1'>
+                  <td [attr.colspan]="4">
+                    <div class="empty-message"></div>
+                  </td>
+                </tr>
+                <ng-container *ngIf="data.length && type=== CONST01 && fileType===2">
+                  <tr *ngFor="let item of data;let i=index">
+                    <!-- 序号 -->
+                    <td>{{i+1}}</td>
+                    <!-- 报告文件     -->
+                    <td><a href='javascript:void(0)' (click)="openCheckDetail(item)">自查报告</a></td>
+                    <!-- 更新时间 -->
+                    <td>{{item.createTime}}</td>
+                    <!-- 操作 -->
+                    <td>
+                      <a href='javascript:void(0)' class='editor_view' (click)="openCheckDetail(item)">查看</a>
+                      <a href='javascript:void(0)' class='editor_view' (click)='downloadCheckDetail(item)'>点击下载</a>
+                    </td>
+                  </tr>
+                </ng-container>
+                <tr *ngIf="data.length===0 && type=== CONST01 && fileType===2">
+                  <td [attr.colspan]="4">
+                    <div class="empty-message"></div>
+                  </td>
+                </tr>
+
+
+                <ng-container *ngIf="data.length && type=== CONST02 && fileType===1">
+                  <tr *ngFor="let item of data;let i=index">
+                    <!-- 列内容 -->
+                    <td>{{i+1}}</td>
+                    <td>{{item.warnType}}</td>
+                    <td>{{item.expression}}</td>
+                    <td>{{item.dt}}</td>
+                    <td>{{item.warnStatus}}</td>
+                    <td>{{item.handleTime}}</td>
+                    <td>{{item.handlePerson}}</td>
+                    <!-- 行按钮 -->
+                    <td *ngIf="type === CONST02 && item.warnStatus === '预警'"> <a href='javascript:void(0)'
+                        (click)='processWarningInfo(item)'>处理预警信息</a>
+                    </td>
+                    <td *ngIf="type === CONST02 && item.warnStatus !== '预警'"> /
+                  </td>
+                  </tr>
+                </ng-container>
+                <tr *ngIf="data.length===0 && type=== CONST02 && fileType===1">
+                  <td [attr.colspan]="8">
+                    <div class="empty-message"></div>
+                  </td>
+                </tr>
+                <ng-container *ngIf="data.length && type=== CONST02 && fileType===2">
+                  <tr *ngFor="let item of data;let i=index">
+                    <!-- 列内容 -->
+                    <td>{{i+1}}</td>
+                    <td>{{item.warnType}}</td>
+                    <td>{{item.expression}}</td>
+                    <td>{{item.dt}}</td>
+                  </tr>
+                </ng-container>
+                <tr *ngIf='data.length===0 && type=== CONST02 && fileType===2'>
+                  <td [attr.colspan]="5">
+                    <div class="empty-message"></div>
+                  </td>
+                </tr>
+
+              </tbody>
+            </table>
+          </div>
+          <xn-pagination [rows]="pageConfig.pageSize" [first]="pageConfig.first" [totalRecords]="pageConfig.total"
+            [pageSizeOptions]="[5,10,20,30,50,100]" (pageChange)="onPage($event)"></xn-pagination>
+
+        </div>
+      </div>
+    </div>
+    <div class="panel-footer text-right" style='height:50px'>
+      <button type="button" class="btn btn-default pull-left" (click)="onCancel()">返回</button>
+    </div>
+  </div>
+</section>
+
+<ng-template #block>
+  <tr>
+    <td [attr.colspan]=" currentTab.headText.length+2">
+      <div class="empty-message"></div>
+    </td>
+  </tr>
+</ng-template>

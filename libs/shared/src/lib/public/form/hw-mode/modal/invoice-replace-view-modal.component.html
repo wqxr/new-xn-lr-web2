@@ -1,0 +1,38 @@
+<modal #modal [backdrop]="'static'" [keyboard]="false" [animation]="false">
+  <modal-header [showClose]="false">
+    <h4 class="modal-title">查看发票明细</h4>
+  </modal-header>
+  <modal-body>
+    <div class="xn-content">
+      <table class="table table-hover table-bordered">
+        <thead>
+        <tr>
+          <th>发票代码</th>
+          <th>发票号码</th>
+          <th>开票日期</th>
+          <th>不含税金额</th>
+          <th>含税金额</th>
+          <th>发票接收日期</th>
+          <th>发票回款日</th>
+        </tr>
+        </thead>
+        <tbody>
+        <ng-container *ngFor="let item of items">
+          <tr>
+            <td>{{ item.invoiceCode || ''}}</td>
+            <td>{{ item.invoiceNum || ''}}</td>
+            <td>{{ item.invoiceDate }}</td>
+            <td>{{ item.amount || '' | xnMoney}}</td>
+            <td>{{ item.totalAmount || '' | xnMoney }}</td>
+            <td>{{item.invoiceAcceptDate}}</td>
+            <td>{{item.invoiceRepaymentDate}}</td>
+          </tr>
+        </ng-container>
+        </tbody>
+      </table>
+    </div>
+  </modal-body>
+  <modal-footer>
+    <button type="button" class="btn btn-danger" (click)="onOk()">关闭</button>
+  </modal-footer>
+</modal>

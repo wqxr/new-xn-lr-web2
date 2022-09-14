@@ -1,0 +1,55 @@
+<div>
+  <div>
+    <table class="table table-bordered table-striped text-center">
+      <thead>
+        <tr class="table-head">
+          <!-- 全选按钮 -->
+
+          <th>序号</th>
+          <!-- 表头，搜索功能 -->
+          <th>文件</th>
+          <th>文件来源</th>
+          <th>操作</th>
+        </tr>
+      </thead>
+      <tbody>
+        <ng-container *ngIf="data.length;">
+          <tr *ngFor="let item of data;let i=index">
+            <!-- 行选则 -->
+
+            <!--序号-->
+            <td>{{i + 1}}</td>
+            <td>
+              <div>
+                <ng-container *ngIf="data[i][0]!==''">
+                  <ng-container>
+                    <ng-container>
+                      <div>
+                        <a href="javaScript:void(0)" (click)="viewMFiles(data[i][0])">{{showFile(data[i][0])}}</a>
+                      </div>
+
+                    </ng-container>
+                  </ng-container>
+                </ng-container>
+              </div>
+            </td>
+            <td>{{data[i][1]}}</td>
+            <td><a href="javaScript:void(0)" (click)="donwLoadFiles(data[i][0])">下载</a></td>
+          </tr>
+        </ng-container>
+      </tbody>
+    </table>
+  </div>
+  <xn-pagination [rows]="pageConfig.pageSize" [first]="pageConfig.first" [totalRecords]="pageConfig.total"
+    [pageSizeOptions]="[5,10,20,30,50,100]" (pageChange)="onPage($event)"></xn-pagination>
+  <div class="box-footer">
+
+    <button type="button" class="btn btn-default" (click)="download()">
+      下载附件
+    </button>
+    <button type="button" class="btn btn-default" (click)="onCancel()">
+      返回
+    </button>
+  </div>
+
+</div>

@@ -1,0 +1,114 @@
+<section class="content">
+  <div class='box'>
+    <div class="box-header">
+      <h3 class="box-title">上传付款计划-雅居乐-星顺</h3>
+    </div>
+    <div class="box-body">
+      <!-- 表头搜索项 -->
+      <form name="query" #queryForm>
+        <div class="item-box col-md-6">
+          <div class="item-label"><label>流程记录ID:</label></div>
+          <div class="item-control">
+            <input type="text" name="flowId" class="form-control xn-input-font" [(ngModel)]="query.recordId" />
+          </div>
+        </div>
+        <div class="item-box col-md-6">
+          <div class="item-label"><label>创建时间:</label></div>
+          <div class="item-control">
+            <input class="form-control xn-input-font" type="text" name="daterangeInput" maxlength="23" daterangepicker
+              (selected)="selectedDate($event)" />
+          </div>
+        </div>
+        <div class="item-box col-md-6">
+          <div class="item-label"><label>状态:</label></div>
+          <div class="item-control">
+            <select class="form-control xn-input-font" name="status" [(ngModel)]="query.status">
+              <option value="">请选择</option>
+              <option *ngFor="let o of status" [value]="o.value">{{o.label}}</option>
+            </select>
+          </div>
+        </div>
+        <div class="item-box col-md-6">
+          <div class="item-label"><label>渠道:</label></div>
+          <div class="item-control">
+            <select class="form-control xn-input-font" name="status" [(ngModel)]="query.type">
+              <option value="">请选择</option>
+              <option *ngFor="let o of type" [value]="o.value">{{o.label}}</option>
+            </select>
+          </div>
+        </div>
+        <div class="col-sm-12 btn-label">
+          <span class="fr">
+            <button type="button" class="btn btn-info" (click)="search()">查询</button>
+            <button type="button" class="btn btn-danger" (click)="reset()">重置</button>
+            <button type="button" class="btn btn-danger" (click)="newProcess()">发起交易申请</button>
+          </span>
+        </div>
+      </form>
+      <div class="">
+        <div class="col-sm-12 btn-label"></div>
+      </div>
+
+      <table class="table table-bordered table-striped text-center">
+        <thead>
+          <tr class="table-head">
+            <th>流程记录ID</th>
+            <th>流程名</th>
+            <th>当前步骤</th>
+            <th>状态</th>
+            <th>渠道</th>
+            <th>总部公司</th>
+            <th>登记编码/修改码</th>
+            <th>完成度</th>
+            <th>创建时间</th>
+            <th>最后更新时间</th>
+            <th style="min-width: 80px">操作</th>
+          </tr>
+        </thead>
+        <tbody>
+          <ng-container *ngIf="data && data.length; else block">
+            <tr *ngFor="let row of data">
+              <td>{{ row.recordId }}</td>
+              <td><a href="javaScript:void (0)" (click)="doProcess(row)">{{row.flowName}}</a></td>
+              <td>{{ row.nowProcedureName }}</td>
+              <td>
+                <div [innerHTML]="row.status | xnGatherType: { head: { type: 'xnRecordStatus' }, row: row }"></div>
+              </td>
+              <td>
+                <!--  -->
+                <div [innerHTML]="row.type | xnSelectTransform:'productType_new_jd'"></div>
+              </td>
+              <td>{{ row.headquarters }}
+              </td>
+              <td>
+                <ng-container *ngIf="row.zdList && row.zdList.length>0">
+                  <a class="xn-click-a small-font" href="javaScript:void(0)" (click)="viewZdList(row.zdList)">更多</a>
+                </ng-container>
+              </td>
+              <td>{{ row.donePercent }}</td>
+              <td>
+                <div [innerHTML]="row.createTime | xnGatherType: { head: { type: 'dateTime' }, row: row }"></div>
+              </td>
+              <td>
+                <div [innerHTML]="row.updateTime | xnGatherType: { head: { type: 'dateTime' }, row: row }"></div>
+              </td>
+              <td>
+                <a class="xn-click-a small-font" href="javaScript:void(0)" (click)="viewProcess(row)">查看处理</a>
+              </td>
+            </tr>
+          </ng-container>
+        </tbody>
+      </table>
+      <xn-pagination [rows]="pageConfig.pageSize" [first]="pageConfig.first" [totalRecords]="pageConfig.total"
+        [pageSizeOptions]="[10, 20, 30, 50, 100]" (pageChange)="onPage($event)"></xn-pagination>
+    </div>
+  </div>
+</section>
+<!-- 列表为空时 -->
+<ng-template #block>
+  <tr>
+    <td [attr.colspan]="12">
+      <div class="empty-message"></div>
+    </td>
+  </tr>
+</ng-template>

@@ -1,0 +1,98 @@
+@import '../../../../../assets/styles/utils.less';
+.product-solution {
+  width: 100%;
+  background-color: #F3F5F9;
+  .solution-box {
+    padding: 60px 0 100px 0;
+    >p {
+      text-align: center;
+      height: 72px;
+      font-size: 20px;
+      font-weight: 400;
+      color: #1F2B38;
+      line-height: 36px;
+      margin-bottom: 60px;
+    }
+    .img-box {
+      position: relative;
+      >img {
+        width: 100%;
+        height: 362px;
+      }
+      .left-txt, .right-txt {
+        position: absolute;
+        top: 64px;
+        div {
+          font-size: 18px;
+          font-weight: 400;
+          color: #F3F5F9;
+          line-height: 45px;
+          &:first-child {
+            height: 45px;
+            font-size: 32px;
+            font-weight: 600;
+            color: #F3F5F9;
+            line-height: 45px;
+            margin-bottom: 13px;
+          }
+        }
+      }
+      .left-txt {
+        left: 115px;
+      }
+      .right-txt {
+        right: 236px;
+      }
+    }
+  }
+}
+.h5-product-solution {
+  width: 100%;
+  background-color: #F3F5F9;
+  .solution-box {
+    >p {
+      .px2rem(padding-top, 30);
+      .px2rem(padding-bottom, 30);
+      .px2rem(font-size, 15);
+      .px2rem(line-height, 30);
+      text-align: justify;
+      color: #1F2B38;
+    }
+    .img-box {
+      .px2rem(margin-right, -20);
+      .px2rem(margin-bottom, 20);
+      .px2rem(margin-left, -20);
+      &:last-child {
+        .px2rem(margin-bottom, 40);
+      }
+      position: relative;
+      >img {
+        .px2rem(height, 265);
+        width: 100%;
+      }
+      .left-txt, .right-txt {
+        position: absolute;
+        div {
+          .px2rem(font-size, 15);
+          .px2rem(line-height, 40);
+          color: #F3F5F9;
+          &:first-child {
+            .px2rem(font-size, 18);
+            .px2rem(line-height, 25);
+            .px2rem(margin-bottom, 10);
+            font-weight: 600;
+            color: #F3F5F9;
+          }
+        }
+      }
+      .left-txt {
+        .px2rem(top, 40);
+        .px2rem(left, 40);
+      }
+      .right-txt {
+        .px2rem(bottom, 40);
+        .px2rem(left, 40);
+      }
+    }
+  }
+}

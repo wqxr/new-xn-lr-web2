@@ -1,0 +1,30 @@
+<modal #modal [backdrop]="'static'" [keyboard]="false" [animation]="false" (onDismiss)="onOk()">
+  <modal-header [showClose]="true">
+    <h4 class="modal-title">删除</h4>
+  </modal-header>
+  <modal-body>
+
+
+    <div class="panel panel-default">
+      <div class="panel panel-primary xn-panel-sm">
+        <div class="panel-body">
+          <div class="form-group">
+            <div class="col-sm-3 xn-control-label">
+              确定删除该条件
+            </div>
+            <div class="col-sm-6 xn-content">
+              {{content}}
+            </div>
+          </div>
+        </div>
+        <!-- /.panel-body -->
+      </div>
+      <!-- /.panel -->
+    </div>
+
+
+  </modal-body>
+  <modal-footer>
+    <button type="button" class="btn btn-danger" (click)="onSubmit()">确定删除</button>
+  </modal-footer>
+</modal>

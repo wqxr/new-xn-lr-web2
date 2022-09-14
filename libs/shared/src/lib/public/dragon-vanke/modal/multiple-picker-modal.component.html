@@ -1,0 +1,96 @@
+<modal #modal [backdrop]="'static'" [keyboard]="false" [animation]="false">
+  <modal-header [showClose]="true">
+    <h4 class="modal-title">请选择企业</h4>
+  </modal-header>
+  <modal-body>
+    <div class="clearfix">
+      <div class="form-group clearfix">
+        <div class="col-sm-6 col-sm-offset-6">
+          <div class="input-group">
+            <input
+              type="text"
+              class="form-control"
+              [(ngModel)]="searchValue"
+              placeholder="搜索..."
+              (keyup)="search(searchValue)"
+            />
+            <span class="input-group-btn"
+              ><button
+                class="btn btn-default"
+                (click)="search(searchValue)"
+                type="button"
+              >
+                <span class="glyphicon glyphicon-search"></span></button
+            ></span>
+          </div>
+        </div>
+      </div>
+      <table class="table table-bordered  text-center table-striped">
+        <thead>
+          <tr>
+            <ng-container *ngFor="let head of heads">
+              <th *ngIf="!head.hide">{{ head.label }}</th>
+            </ng-container>
+            <th>
+              <ng-container *ngIf="params?.multiple">
+                <input
+                  type="checkbox"
+                  [checked]="allCheckedStatus"
+                  (change)="allPageChecked()"
+                />
+                全选/取消
+              </ng-container>
+            </th>
+          </tr>
+        </thead>
+      </table>
+      <div class="scroll-height">
+        <table class="table table-bordered  text-center table-striped">
+          <tbody>
+            <tr *ngFor="let item of data; let i = index">
+              <ng-container *ngFor="let head of heads">
+                <td *ngIf="!head.hide">{{ item[head.value] }}</td>
+              </ng-container>
+              <th>
+                <input
+                  *ngIf="params?.multiple"
+                  type="checkbox"
+                  [checked]="item?.checked"
+                  (change)="checkedSingle(item, i)"
+                />
+                <a
+                  class="xn-click-a"
+                  *ngIf="!params?.multiple"
+                  href="javaScript:void (0)"
+                  (click)="selected(item)"
+                  >选择</a
+                >
+              </th>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <xn-pagination
+        [rows]="pageSize"
+        [first]="first"
+        [totalRecords]="total"
+        [pageSizeOptions]="[10, 20, 30, 50, 100]"
+        (pageChange)="onPage($event)"
+      ></xn-pagination>
+    </div>
+  </modal-body>
+  <modal-footer>
+    <button type="button" class="btn btn-default" (click)="cancel()">
+      返回
+    </button>
+    <button
+      *ngIf="params?.multiple"
+      type="button"
+      class="btn btn-primary"
+      [disabled]="!selectItemsUnique(selectItems)?.length"
+      (click)="handleAdd()"
+    >
+      添加
+    </button>
+  </modal-footer>
+</modal>

@@ -1,0 +1,235 @@
+<section class="content-header">
+  <h4>客户管理 > 客户详情</h4>
+  <span>企业名称:<a href='javascript:void(0)' class='editor_view' (click)='companyDeatilInfo()'>{{orgName}}</a></span>
+</section>
+<section class="content">
+  <div class="box">
+    <div class="box-body">
+      <ul class="nav nav-tabs">
+        <ng-container *ngFor="let tab of tabConfig.tabList;let i=index">
+          <li [ngClass]="{'active': tab.value===label}">
+            <a class="xn-click-a" data-toggle="tab" (click)="initData(tab.value)">{{tab.label}}</a>
+          </li>
+        </ng-container>
+      </ul>
+      <div class="tab-content">
+        <div class="tab-pane active" style="padding: 15px 0">
+          <div>
+            <h4>{{currentTab.tablelist[0].title}}</h4>
+            <table class="table table-bordered table-striped text-center">
+              <thead>
+                <tr class="table-head">
+                  <!-- 全选按钮 -->
+
+                  <!-- title -->
+                  <th *ngFor="let item of currentTab.tablelist[0].tableone">
+                    {{item.label}}
+                  </th>
+                  <!-- 行操作 -->
+                  <th>操作</th>
+                </tr>
+              </thead>
+              <tbody>
+                <ng-container *ngIf="data.length;else block">
+                  <tr *ngFor="let item of data;let i=index">
+                    <!-- 行选则 -->
+
+                    <!-- 列内容 -->
+                    <td>{{i+1}}</td>
+                    <td><a href='javascript:void(0)' (click)="hwModeService.viewProcess(item.mainFlowId,item.isProxy)">{{item.mainFlowId}}</a></td>
+                    <td>{{item.upstreamName}}</td>
+                    <td>{{item.supplierName}}</td>
+                    <td>{{item.honorNum}}</td>
+                    <td>{{item.receive}}</td>
+                    <td>{{item.comprehensiverate}}</td>
+                    <td>{{item.statusName}}</td>
+                    <td>{{item.backStatus}}</td>
+                    <td>{{item.receiveDate}}</td>
+                    <td>{{item.loanDate}}</td>
+                    <td>{{item.backDate}}</td>
+                    <td>{{item.createTime}}</td>
+
+                    <!-- 行按钮 -->
+                    <td>
+                      <a href='javascript:void(0)' (click)="hwModeService.viewProcess(item.mainFlowId,item.isProxy)" >查看</a>&nbsp;
+                      <a href='javascript:void(0)' (click)='invoiceDetail(item)'>发票详情</a>
+                    </td>
+                  </tr>
+                </ng-container>
+
+              </tbody>
+            </table>
+          </div>
+          <xn-pagination [rows]="onepageConfig.pageSize" [first]="onepageConfig.first"
+            [totalRecords]="onepageConfig.total" [pageSizeOptions]="[5,10,20,30,50,100]" (pageChange)="onepage($event)">
+          </xn-pagination>
+        </div>
+      </div>
+
+      <div class="col-sm-12 form-group text-right" style="margin-top: 20px;" *ngIf="currentTab.tablelist.length>1">
+        <!-- 头按钮 -->
+        <span>
+          <button type="button" class="btn btn-primary" (click)="addAgreement()">添加协议</button>
+        </span>
+      </div>
+
+      <div class="tab-content" *ngIf="currentTab.tablelist.length>1;else block">
+        <div class="tab-pane active" style="padding: 15px 0">
+          <div>
+            <h4>{{currentTab.tablelist[1].title}}</h4>
+            <table class="table table-bordered table-striped text-center">
+              <thead>
+                <tr class="table-head">
+                  <!-- 全选按钮 -->
+
+                  <!-- title -->
+                  <th *ngFor="let item of currentTab.tablelist[1].tableone">
+                    {{item.label}}
+                  </th>
+                  <!-- 行操作 -->
+                  <th>操作</th>
+                </tr>
+              </thead>
+              <tbody>
+                <ng-container *ngIf="datatwo.length;else block">
+                  <tr *ngFor="let item of datatwo;let i=index">
+                    <!-- 行选则 -->
+
+                    <!-- 列内容 -->
+                    <td *ngIf="item.cooperationAgreement;else block">{{i+1}}</td>
+                    <td *ngIf="item.cooperationAgreement;else block">合作协议</td>
+                    <td *ngIf="item.cooperationAgreement;else block"><a href='javascript:void(0)' class='editor_view'
+                        (click)="contractView(item.cooperationAgreement[0])">{{item.cooperationAgreement[0].label}}</a>
+                    </td>
+                    <td *ngIf="item.cooperationAgreement;else block"></td>
+                    <td *ngIf="item.cooperationAgreement;else block"></td>
+                    <td *ngIf="item.cooperationAgreement;else block"></td>
+                  </tr>
+                  <tr *ngFor="let item of datatwo;let i=index">
+                    <!-- 行选则 -->
+
+                    <!-- 列内容 -->
+                    <td *ngIf="item.guaranteePhotocopy;else block">{{i+1}}</td>
+                    <td *ngIf="item.guaranteePhotocopy;else block">担保协议</td>
+                    <td *ngIf="item.guaranteePhotocopy;else block"><a href='javascript:void(0)' class='editor_view'
+                      (click)="fileCgFile(item.guaranteePhotocopy[0].fileId)">{{item.guaranteePhotocopy[0].fileName}}</a></td>
+                    <td *ngIf="item.guaranteePhotocopy;else block"></td>
+                    <td *ngIf="item.guaranteePhotocopy;else block"></td>
+                    <td *ngIf="item.guaranteePhotocopy;else block"></td>
+                  </tr>
+                  <tr *ngFor="let item of datatwo;let i=index">
+                    <!-- 行选则 -->
+
+                    <!-- 列内容 -->
+                    <td *ngIf="item.otherAgreement;else block">{{i+1}}</td>
+                    <td *ngIf="item.otherAgreement;else block">其他协议</td>
+                    <td *ngIf="item.otherAgreement;else block"><a href='javascript:void(0)' class='editor_view'
+                        (click)="fileView(item.otherAgreement[0].fileId)">{{item.otherAgreement[0].fileName}}</a></td>
+                    <td *ngIf="item.otherAgreement;else block"><a href='javascript:void(0)' class='editor_view'
+                        (click)="lookflowId(item.otherAgreement[0].recordId)">{{item.otherAgreement[0].recordId}}</a>
+                    </td>
+                    <td *ngIf="item.otherAgreement;else block">
+                      {{item.otherAgreement[0].updateTime  | xnDate: 'datetime'}}</td>
+                    <td *ngIf="item.otherAgreement;else block"></td>
+                  </tr>
+                </ng-container>
+
+              </tbody>
+            </table>
+          </div>
+          <xn-pagination [rows]="pageConfig.pageSize" [first]="pageConfig.first" [totalRecords]="pageConfig.total"
+            [pageSizeOptions]="[5,10,20,30,50,100]" (pageChange)="onPage($event)"></xn-pagination>
+        </div>
+      </div>
+      <div class="tab-content" *ngIf="currentTab.value==='do_not'">
+        <div class="tab-pane active" style="padding: 15px 0">
+          <div>
+            <h4>{{currentTab.tablelist[2].title}}</h4>
+          </div>
+        </div>
+      </div>
+      <ng-container>
+        <div id='chart1' class="col-sm-10 chart-height-400"
+          [ngStyle]="{'display':currentTab.value==='do_not'?'block':'none'}"></div>
+        <div id='chart2' class="col-sm-10 chart-height-400" style="margin-bottom:40px"
+          [ngStyle]="{'display':currentTab.value==='do_not'?'block':'none'}"></div>
+      </ng-container>
+
+      <ng-container *ngIf="currentTab.tablelist.length>1">
+        <ng-container *ngFor='let sub of restdatatable;let j=index'>
+          <h4 style="clear:both">{{sub.title}}</h4>
+          <table class="table table-bordered table-hover file-row-table" width="100%" style="margin-top:30px">
+            <thead>
+              <tr>
+                <td>序号</td>
+                <th *ngFor="let head of sub.headText">{{head.label}}</th>
+
+              </tr>
+            </thead>
+            <tbody>
+              <ng-container *ngIf="sub.data.length">
+                <tr *ngFor="let item of sub.data; let i=index">
+                  <td>{{i+1}}</td>
+                  <td *ngFor="let head of sub.headText">
+                    <ng-container [ngSwitch]="head.type">
+                      <ng-container *ngSwitchCase="'mainFlowId'">
+                        <a href="javaScript:void(0)"
+                          (click)="hwModeService.viewProcess(item[head.value],item.isProxy)">{{item[head.value]}}</a>
+                      </ng-container>
+                      <ng-container *ngSwitchCase="'file'">
+                        <ng-container *ngIf=" item[head.value]&& item[head.value]!==''">
+                          <div *ngFor="let sublist of item[head.value] | xnJson; let k=index">
+                            <a href="javaScript:void(0)" (click)="downCreditFiles(sublist)">{{sublist.fileName}}</a>
+                          </div>
+                        </ng-container>
+                      </ng-container>
+                      <ng-container *ngSwitchCase="'excel'">
+                        <ng-container *ngIf=" item[head.value]&& item[head.value]!==''">
+                          <div *ngFor="let sublist of item[head.value] | xnJson; let k=index">
+                            <a href="javaScript:void(0)" (click)="downFinanceFiles(sublist)">{{sublist.fileName}}</a>
+                          </div>
+                        </ng-container>
+                      </ng-container>
+                      <ng-container *ngSwitchCase="'contract'">
+                        <ng-container *ngIf=" item[head.value]&& item[head.value]!==''">
+                          <ng-container *ngIf="judgeDataType(jsonTransForm(item[head.value])); else block3">
+                            <div *ngFor="let sub of item[head.value] | xnJson; let i=index">
+                              <a href="javaScript:void(0)" (click)="showContract(sub)">{{sub.label}}</a>
+                            </div>
+                          </ng-container>
+                          <ng-template #block3>
+                            <a href="javaScript:void(0)" (click)="showContract(jsonTransForm(item[head.value]))">
+                              {{jsonTransForm(item[head.value])['label']}}</a>
+                          </ng-template>
+                        </ng-container>
+                      </ng-container>
+                      <ng-container *ngSwitchDefault>
+                        <div [innerHTML]="item[head.value] | xnGatherType: {head:head,row:item}"></div>
+                      </ng-container>
+                    </ng-container>
+                  </td>
+                </tr>
+              </ng-container>
+              <tr *ngIf="sub.data.length===0">
+                <td [attr.colspan]="calcAttrColspan(sub)">
+                  <div class="empty-message"></div>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+          <xn-pagination [rows]="sub.pageConfig.pageSize" [first]="sub.pageConfig.first"
+            [totalRecords]="sub.pageConfig.total" [pageSizeOptions]="[5,10,20,30,50,100]"
+            (pageChange)="financialCountPage(sub.label,$event)">
+          </xn-pagination>
+        </ng-container>
+      </ng-container>
+    </div>
+  </div>
+</section>
+<ng-template #block>
+  <!-- <tr>
+          <td [attr.colspan]=" currentTab.tableone.length+2">
+            <div class="empty-message"></div>
+          </td>
+        </tr> -->
+</ng-template>

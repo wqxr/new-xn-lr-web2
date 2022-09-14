@@ -1,0 +1,43 @@
+<modal #modal [backdrop]="'static'" [keyboard]="false" [animation]="false">
+  <modal-header [showClose]="true">
+    <h4 class="modal-title">请选择要登录的机构</h4>
+  </modal-header>
+  <modal-body>
+    <div class="list-content my-scroll">
+      <div *ngFor="let item of items">
+        <ng-container
+          [ngTemplateOutlet]="item.agileMode ? agileMode : defaultMode"
+          [ngTemplateOutletContext]="{ item: item }"
+        ></ng-container>
+        <ng-template #agileMode let-item="item">
+          <div class="panel panel-default">
+            <div class="panel-heading">{{ item.orgName }}</div>
+            <div class="panel-body">
+              <span class="select-mode-label">选择业务模式登录：</span>
+              <ul class="nav nav-pills">
+                <li
+                  role="presentation"
+                  *ngFor="let mode of item.loginModelList"
+                >
+                  <a
+                    (click)="onSelect(item.appId, item.orgType,item.registerType,item.factorAppId,item.agencyType,item,mode.modelId)"
+                    >{{ mode.name }}</a
+                  >
+                </li>
+              </ul>
+            </div>
+          </div>
+        </ng-template>
+        <ng-template #defaultMode let-item="item">
+          <div class="list-group">
+            <a
+              class="list-group-item xn-click-a"
+              (click)="onSelect(item.appId, item.orgType,item.registerType,item.factorAppId,item.agencyType,item,item.modelId)"
+              >{{ item.orgName }}</a
+            >
+          </div>
+        </ng-template>
+      </div>
+    </div>
+  </modal-body>
+</modal>

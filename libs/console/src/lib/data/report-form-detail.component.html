@@ -1,0 +1,232 @@
+<section class="content-header">
+  <h1>
+    {{pageTitle}}
+    <a class="xn-click-a btn-export btn btn-primary" (click)="exportExcel(data)">导出为Excel</a>
+  </h1>
+</section>
+
+<section class="content">
+  <div class="box">
+    <div class="box-header">
+      <h3 class="box-title">主流程详情</h3>
+    </div>
+    <!-- /.box-header -->
+    <div class="box-body">
+
+      <table class="table table-bordered table-striped">
+        <tbody>
+          <!-- 主流程 -->
+          <tr *ngIf="data.mainFlowId">
+            <td class="col-sm-3">主流程ID</td>
+            <td>{{data.mainFlowId}}</td>
+          </tr>
+          <tr *ngIf="data.mainFlowId">
+            <td class="col-sm-3">主流程状态</td>
+            <td>{{data.status | xnMainFlowStatus}}</td>
+          </tr>
+
+          <!-- 区块链信息 -->
+          <tr *ngIf="data.bcLedgerId">
+            <td class="col-sm-3">区块链账本ID</td>
+            <td>{{data.bcLedgerId}}</td>
+          </tr>
+          <tr *ngIf="data.bcOrderId">
+            <td class="col-sm-3">区块链上的订单Id</td>
+            <td>{{data.bcOrderId}}</td>
+          </tr>
+          <tr *ngIf="data.bcOrderNO">
+            <td class="col-sm-3">区块链上的订单编号</td>
+            <td>{{data.bcOrderNO}}</td>
+          </tr>
+
+          <!-- 供应商 -->
+          <tr *ngIf="data.supplierAppId">
+            <td class="col-sm-3">供应商AppId</td>
+            <td>{{data.supplierAppId}}</td>
+          </tr>
+          <tr *ngIf="data.supplierOrgName">
+            <td class="col-sm-3">供应商名称</td>
+            <td>{{data.supplierOrgName}}</td>
+          </tr>
+          <tr *ngIf="data.supplierOrgId">
+            <td class="col-sm-3">供应商区块链ID</td>
+            <td>{{data.supplierOrgId}}</td>
+          </tr>
+          <tr *ngIf="data.supplierInfo && data.supplierInfo.supplierBank">
+            <td class="col-sm-3">供应商开户银行</td>
+            <td>{{data.supplierInfo.supplierBank}}</td>
+          </tr>
+          <tr *ngIf="data.supplierInfo && data.supplierInfo.supplierBankNo">
+            <td class="col-sm-3">供应商银行账号</td>
+            <td>{{data.supplierInfo.supplierBankNo}}</td>
+          </tr>
+
+          <!-- 保理商 -->
+          <tr *ngIf="data.factoringAppId">
+            <td class="col-sm-3">保理商AppId</td>
+            <td>{{data.factoringAppId}}</td>
+          </tr>
+          <tr *ngIf="data.factoringOrgName">
+            <td class="col-sm-3">保理商名称</td>
+            <td>{{data.factoringOrgName}}</td>
+          </tr>
+          <tr *ngIf="data.factoringOrgId">
+            <td class="col-sm-3">保理商区块链ID</td>
+            <td>{{data.factoringOrgId}}</td>
+          </tr>
+          <tr *ngIf="data.factoringInfo && data.factoringInfo.supplierBank">
+            <td class="col-sm-3">保理商开户银行</td>
+            <td>{{data.factoringInfo.supplierBank}}</td>
+          </tr>
+          <tr *ngIf="data.factoringInfo && data.factoringInfo.supplierBankNo">
+            <td class="col-sm-3">保理商银行账号</td>
+            <td>{{data.factoringInfo.supplierBankNo}}</td>
+          </tr>
+
+          <!-- 核心企业 -->
+          <tr *ngIf="data.enterpriseAppId">
+            <td class="col-sm-3">核心企业AppId</td>
+            <td>{{data.enterpriseAppId}}</td>
+          </tr>
+          <tr *ngIf="data.enterpriseOrgName">
+            <td class="col-sm-3">核心企业名称</td>
+            <td>{{data.enterpriseOrgName}}</td>
+          </tr>
+          <tr *ngIf="data.enterpriseOrgId">
+            <td class="col-sm-3">核心企业区块链ID</td>
+            <td>{{data.enterpriseOrgId}}</td>
+          </tr>
+          <tr *ngIf="data.enterpriseInfo && data.enterpriseInfo.supplierBank">
+            <td class="col-sm-3">核心企业开户银行</td>
+            <td>{{data.enterpriseInfo.supplierBank}}</td>
+          </tr>
+          <tr *ngIf="data.enterpriseInfo && data.enterpriseInfo.supplierBankNo">
+            <td class="col-sm-3">核心企业银行账号</td>
+            <td>{{data.enterpriseInfo.supplierBankNo}}</td>
+          </tr>
+
+          <tr *ngIf="data.isProxy">
+            <td class="col-sm-3">贴现</td>
+            <td>{{data.isProxy === 0 ? '供应商贴现' : '核心企业代贴现'}}</td>
+          </tr>
+
+          <tr *ngIf="data.contractAmount">
+            <td class="col-sm-3">合同金额</td>
+            <td>{{data.contractAmount}}</td>
+          </tr>
+
+          <tr *ngIf="data.invoiceAmounts">
+            <td class="col-sm-3">发票金额</td>
+            <td>{{data.invoiceAmounts}}</td>
+          </tr>
+
+        </tbody>
+      </table>
+
+    </div>
+    <!-- /.box-body -->
+  </div>
+
+  <!-- 合同信息 -->
+  <div class="box" *ngIf="data.contractInfo && data.contractInfo.length !== 0">
+    <div class="box-header">
+      <h3 class="box-title">合同信息</h3>
+    </div>
+    <!-- /.box-header -->
+    <div class="box-body">
+      <table class="table table-bordered table-striped">
+        <tbody>
+            <table class="table table-bordered table-hover file-row-table" width="100%">
+              <tr>
+                <th><span style="line-height: 20px;">合同扫描件</span></th>
+                <th><span style="line-height: 20px;">合同名称</span></th>
+                <th><span style="line-height: 20px;">合同编号</span></th>
+                <th><span style="line-height: 20px;">机构名称</span></th>
+                <th><span style="line-height: 20px;">机构类型</span></th>
+                <th><span style="line-height: 20px;">行业</span></th>
+                <th><span style="line-height: 20px;">所在省市</span></th>
+                <th style="width: 80px;">操作</th>
+              </tr>
+              <tr *ngFor="let item of data.contractInfo">
+                  <td>
+                    <a class="xn-click-a" (click)="onViewContract(item)">文件</a>
+                  </td>
+                  <td>{{item.contractTitle}}</td>
+                  <td>{{item.contractNum}}</td>
+                  <td>{{item.appName}}</td>
+                  <td>{{item.orgType | xnOrg}}</td>
+                  <td>{{item.orgIndustry | xnDselect}}</td>
+                  <td>{{item.orgCity | xnDselect}}</td>
+                  <td>
+                    <a class="xn-click-a" (click)="onViewContract(item)">查看</a>
+                  </td>
+            </table>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- 商票信息 -->
+  <div class="box" *ngIf="data.honourInfo !== ''">
+    <div class="box-header">
+      <h3 class="box-title">商票信息</h3>
+    </div>
+    <!-- /.box-header -->
+    <div class="box-body">
+      <table class="table table-bordered table-striped">
+        <tbody>
+            <table class="table table-bordered table-hover file-row-table" width="100%">
+              <tr>
+                <th><span style="line-height: 20px;">商票扫描件</span></th>
+                <th><span style="line-height: 20px;">商票号码</span></th>
+                <th><span style="line-height: 20px;">商票金额</span></th>
+                <th style="width: 80px;">操作</th>
+              </tr>
+              <tr *ngIf="data && data.honourInfo !== ''">
+                <td *ngIf="data.honourInfo && data.honourInfo.fileName">
+                  <a class="xn-click-a" (click)="onViewHonour(data.honourInfo)">{{data.honourInfo.fileName || '无图片'}}</a>
+                </td>
+                <td *ngIf="data.honourInfo && data.honourInfo.honourNum">{{data.honourInfo.honourNum || ''}}</td>
+                <td *ngIf="data.honourInfo && data.honourInfo.honourAmount">{{data.honourInfo.honourAmount || '' | xnMoney}}</td>
+                <td>
+                    <a class="xn-click-a" (click)="onViewHonour(data.honourInfo)">查看</a>
+                </td>
+            </table>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+    <!-- 发票信息 -->
+    <div class="box" *ngIf="data.invoiceInfo && data.invoiceInfo.length !== 0">
+      <div class="box-header">
+        <h3 class="box-title">发票信息</h3>
+      </div>
+      <!-- /.box-header -->
+      <div class="box-body">
+        <table class="table table-bordered table-striped">
+          <tbody>
+              <table class="table table-bordered table-hover file-row-table" width="100%">
+                <tr>
+                  <th><span style="line-height: 20px;">发票扫描件</span></th>
+                  <th><span style="line-height: 20px;">发票号码</span></th>
+                  <th><span style="line-height: 20px;">发票金额</span></th>
+                  <th style="width: 80px;">操作</th>
+                </tr>
+                <tr *ngFor="let item of data.invoiceInfo">
+                  <td>
+                    <a class="xn-click-a" (click)="onViewInvoice(item)">{{item.fileName}}</a>
+                  </td>
+                  <td>{{item.invoiceNum || ''}}</td>
+                  <td>{{item.invoiceAmount || '' | xnMoney}}</td>
+                  <td>
+                    <a class="xn-click-a" (click)="onViewInvoice(item)">查看</a>
+                  </td>
+              </table>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+</section>
+<!-- /.content -->

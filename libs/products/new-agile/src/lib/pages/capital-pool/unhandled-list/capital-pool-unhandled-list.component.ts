@@ -1,0 +1,1009 @@
+import { Component, OnInit, ViewContainerRef } from '@angular/core';
+import { ActivatedRoute, Router } from '@angular/router';
+import { FormGroup } from '@angular/forms';
+import { map, switchMap } from 'rxjs/operators';
+
+import CommBase from 'libs/shared/src/lib/public/component/comm-base';
+
+
+import * as moment from 'moment';
+import { CommonPage, PageTypes } from 'libs/shared/src/lib/public/component/comm-page';
+import { EnumOperating } from '../capital-pool-index.component';
+import { XnService } from 'libs/shared/src/lib/services/xn.service';
+import CommUtils from 'libs/shared/src/lib/public/component/comm-utils';
+import { XnUtils } from 'libs/shared/src/lib/common/xn-utils';
+import { XnModalUtils } from 'libs/shared/src/lib/common/xn-modal-utils';
+import { GeneratingContractModalComponent } from 'libs/shared/src/lib/public/modal/generating-contract-modal.component';
+import { FinancingFactoringVankeModalComponent } from 'libs/shared/src/lib/public/modal/financing-factoring-vanke-modal.component';
+import { DownloadAttachmentsmodalComponent } from 'libs/shared/src/lib/public/modal/download-attachmentsmodal.component';
+import { ExportListModalComponent } from 'libs/shared/src/lib/public/modal/export-list-modal.component';
+import { NewFileModalComponent } from 'libs/shared/src/lib/public/form/hw-mode/modal/new-file-modal.component';
+import { PdfSignModalComponent } from 'libs/shared/src/lib/public/modal/pdf-sign-modal.component';
+import { FileViewModalComponent } from 'libs/shared/src/lib/public/modal/file-view-modal.component';
+import { XnFormUtils } from 'libs/shared/src/lib/common/xn-form-utils';
+import { BusinessMode } from 'libs/shared/src/lib/common/enums';
+import { SelectOptions } from 'libs/shared/src/lib/config/select-options';
+
+
+/**
+ * base: src\app\public\component\capital-pool-unhandled-list.component.ts
+ */
+@Component({
+    templateUrl: './capital-pool-unhandled-list.component.html',
+    styleUrls: ['./capital-pool-unhandled-list.component.css']
+})
+export class CapitalPoolUnhandledListComponent extends CommonPage implements OnInit {
+    total = 0;
+    pageSize = 10;
+    first = 0;
+    rows: any[] = [];
+    words = '';
+
+    sorting = ''; // 共享该变量
+    naming = ''; // 共享该变量
+    paging = 0; // 共享该变量
+    beginTime: any;
+    endTime: any;
+    arrObjs = {} as any; // 缓存后退的变量
+
+    heads: any[];
+    searches: any[];
+    shows: any[];
+    base: CommBase;
+    mainForm: FormGroup;
+    isClearing = false;
+    timeId = [];
+    tolerance = [];
+    nowTimeCheckId = '';
+    searchArr = [];
+    start: 0;
+    showBtn: false;
+    title: string;
+    public currentPage: any;
+    // 资产池传入数据 exp {capitalId: "CASH_POOLING_4", type: "2"}
+    public formCapitalPool: any;
+    // 资产池操作枚举
+    public enumOperating = EnumOperating;
+    // 按照资产池需要显示
+    public isCapitalPool: boolean;
+    // 资产池选中的项 的mainflowId集合
+    public capitalSelecteds: any[];
+    // 增加，移除按钮状态
+    public btnStatusBool = false;
+    // 是否显示合同
+    public showSign: boolean;
+    // 是否显示资产化平台合同签署按钮
+    public isShowPbtn = this.xn.user.orgType === 77;
+    // 是否显示资产池交易列表按钮
+    public isShowTradingBtn = false;
+    // 全选，取消全选
+    public allChecked = false;
+    public isProjectenter = false;
+    enterpriserSelectItems = SelectOptions.get('abs_headquarters'); // 总部企业对应
+
+    refreshDataAfterAttachComponent = () => {
+        this.onPage({ page: this.paging, pageSize: this.pageSize });
+    }
+
+    constructor(
+        public xn: XnService,
+        public vcr: ViewContainerRef,
+        public route: ActivatedRoute,
+    ) {
+        super(PageTypes.List);
+    }
+
+    ngOnInit() {
+        const initPage = ((params: { queryParams: any; data: any }) => {
+            const superConfig = params.data;
+            this.addExtraFields(superConfig.fields);
+            this.base = new CommBase(this, superConfig);
+            this.heads = CommUtils.getListFields(superConfig.fields);
+            this.searches = CommUtils.getSearchFields(superConfig.fields);
+            this.title = this.base.superConfig.showName.replace(
+                '$',
+                params.queryParams.capitalPoolName ||
+                this.route.snapshot.queryParams.capitalPoolName ||
+                ''
+            );
+            this.buildShow(this.searches);
+            this.pageSize =
+                (superConfig.list && superConfig.list.pageSize) ||
+                this.pageSize;
+            // this.onPage({ page: this.paging, pageSize: this.pageSize });
+        }).bind(this);
+
+        this.route.queryParams
+            .pipe(
+                map(x => {
+                    this.formCapitalPool = x;
+                    this.isProjectenter = x.isProjectenter === undefined ? false : true;
+                    this.currentPage = this.formCapitalPool.currentPage;
+                    if (this.formCapitalPool.isLocking) {
+                        // 是否可签署合同
+                        this.showSign = this.formCapitalPool.isLocking === '1';
+                    }
+                    // 显示资产池
+                    this.isCapitalPool =
+                        this.formCapitalPool &&
+                        (this.formCapitalPool.type === '2' ||
+                            this.formCapitalPool.type === '3');
+                    this.isShowTradingBtn =
+                        this.formCapitalPool &&
+                        this.formCapitalPool.type === '1';
+
+                    return x;
+                }),
+                switchMap(
+                    x => {
+                        return this.route.data;
+                    },
+                    (outerValue, innerValue) => {
+                        return { queryParams: outerValue, data: innerValue };
+                    }
+                )
+            )
+            .subscribe(initPage);
+    }
+
+    public onPage(event: { page: number; pageSize: number }): void {
+        this.paging = event.page;
+        this.pageSize = event.pageSize;
+
+        const params = this.buildParams();
+        this.onList(params);
+    }
+
+    /**
+     *  加载列表信息
+     * @param params
+     */
+    private onList(params) {
+        this.xn.loading.open();
+        this.xn.api.post('/mdz/main/all?method=get', params).subscribe(json => {
+            this.total = json.data.recordsTotal;
+            this.rows = json.data.data;
+        },
+        err => {},
+        () => this.xn.loading.close());
+    }
+
+    public onSort(sort: string): void {
+        // 如果已经点击过了，就切换asc 和 desc
+        if (this.sorting === sort) {
+            this.naming = this.naming === 'desc' ? 'asc' : 'desc';
+        } else {
+            this.sorting = sort;
+            this.naming = 'asc';
+        }
+
+        this.onPage({ page: this.paging, pageSize: this.pageSize });
+    }
+
+    public onSortClass(checkerId: string): string {
+        if (checkerId === this.sorting) {
+            return 'sorting_' + this.naming;
+        } else {
+            return 'sorting';
+        }
+    }
+
+    public onTextClass(type) {
+        return type === 'money' ? 'text-right' : '';
+    }
+
+    public onSearch(): void {
+        this.onPage({ page: this.paging, pageSize: this.pageSize });
+    }
+
+    public onCssClass(status) {
+        return status === 1 ? 'active' : '';
+    }
+
+    public clearSearch() {
+        for (const key in this.arrObjs) {
+            if (this.arrObjs.hasOwnProperty(key)) {
+                delete this.arrObjs[key];
+            }
+        }
+
+        this.isClearing = true;
+        this.searches
+        .map((c) => c.checkerId)
+        .forEach((key) => {
+            if (this.mainForm.controls[key]) {
+                this.mainForm.controls[key].setValue(null);
+            }
+        });
+
+        this.beginTime = moment().subtract(365, 'days').valueOf(); // 初始化时间兼容后退时间
+        this.endTime = moment().valueOf();
+
+        this.buildCondition(this.searches);
+        this.isClearing = false;
+        // 清除 创建时间 值
+        this.mainForm.controls.createTime.setValue(null);
+        this.mainForm.controls.payTime.setValue(null);
+
+        this.onSearch(); // 清空之后自动调一次search
+        this.paging = 1; // 回到第一页
+    }
+
+    // 资产池选择框改变
+    public inputChange(val: any, index: number) {
+        if (val.checked && val.checked === true) {
+            val.checked = false;
+        } else {
+            val.checked = true;
+        }
+        this.capitalSelecteds = this.rows
+            .filter(item => item.checked && item.checked === true)
+            .map((x: any) => x.mainFlowId);
+        this.btnStatusBool =
+            this.capitalSelecteds && this.capitalSelecteds.length > 0;
+        // 当数组中不具有clicked 且为false。没有找到则表示全选中。
+        this.allChecked = !this.rows.find(
+            (x: any) => x.checked === undefined || x.checked === false
+        );
+    }
+
+    // 删除-选中的
+    public handleCapital() {
+        if (this.rows && this.rows.length) {
+            if (this.capitalSelecteds && this.capitalSelecteds.length) {
+                const params = {
+                    mainFlowIds: this.capitalSelecteds,
+                    capitalPoolId: this.formCapitalPool.capitalId
+                };
+                // 执行操作
+                if (this.formCapitalPool.type === '2') {
+                    // 添加操作
+                    this.addOrRemoveCapitalPool(
+                        '/ljx/capital_pool/add_main_flows',
+                        params
+                    );
+                } else if (this.formCapitalPool.type === '3') {
+                    // 删除操作
+                    this.addOrRemoveCapitalPool(
+                        '/ljx/capital_pool/remove_main_flows ',
+                        params
+                    );
+                }
+            }
+        }
+    }
+
+
+    /**
+     * 全选，取消全选
+     */
+    public handleAllSelect() {
+        this.allChecked = !this.allChecked;
+        if (this.allChecked) {
+            this.rows.map(item => (item.checked = true));
+        } else {
+            this.rows.map(item => (item.checked = false));
+        }
+        this.capitalSelecteds = this.rows
+            .filter(
+                item =>
+                    item.checked &&
+                    item.checked === true &&
+                    item.capitalPoolContract === ''
+            )
+            .map((x: any) => x.mainFlowId);
+        this.btnStatusBool =
+            this.capitalSelecteds && this.capitalSelecteds.length > 0;
+    }
+
+    /**
+     * 下载Excel abs资金管理
+     */
+    public downloadCapitalPoolExcel() {
+        // 拼接文件名
+        const time = new Date().getTime();
+        const filename = `${
+            this.formCapitalPool.capitalId
+            }_${time}_雅居乐资产池交易.xlsx`;
+        // appId + '-' + orgName + '-' + time + '.zip';
+        this.xn.api
+            .download('/attachment/download/index', {
+                key: `${this.formCapitalPool.capitalId}雅居乐资产池交易.xlsx`
+            })
+            .subscribe((v: any) => {
+                this.xn.api.save(v._body, filename);
+            });
+    }
+
+    public goback() {
+        window.history.back();
+        // if (this.isProjectenter) {
+        //     window.history.back();
+        //     // this.xn.router.navigate(['/logan/projectPlan-management'], {
+        //     //     queryParams: { currentPage: this.currentPage }
+        //     // });
+        // } else {
+        //     this.xn.router.navigate(['/new-agile/capital-pool'], {
+        //         queryParams: { currentPage: this.currentPage }
+        //     });
+        // }
+    }
+
+    /**
+     * 查看交易流程
+     * @param item
+     */
+    public viewProcess(item: any) {
+        this.xn.router.navigate([`new-agile/main-list/detail/${item}`]);
+    }
+
+    /**
+     * 操作前检查
+     */
+    private doBefore() {
+        if (!this.rows || this.rows.length === 0) {
+            this.xn.msgBox.open(false, '资产池内没有数据，不能执行此操作！');
+            return;
+        }
+        // 选择的行
+        const selectedRows = this.rows.filter(
+            (x: any) => x.checked && x.checked === true
+        );
+        // 选择的公司名称
+        const selectedCompany = XnUtils.distinctArray(selectedRows.map(c => c.headquarters));
+        if (!selectedRows || selectedRows.length === 0) {
+            this.xn.msgBox.open(false, '没有选择数据，不能执行此操作！');
+            return;
+        }
+        if (selectedCompany.length > 1) {
+            this.xn.msgBox.open(false, '必须选择相同公司时，才能执行此操作！');
+            return;
+        }
+        return {
+            selectedCompany,
+            selectedRows
+        };
+    }
+
+    /**
+     * 生成合同
+     */
+    public generate() {
+        const { selectedCompany, selectedRows } = this.doBefore();
+        // 传递给组件的参数
+        const param = selectedCompany[0];
+        // 接口
+        const urls = {
+            capital03: '/llz/capital_list/capital03', // 应收账款转让通知书回执（适用于雅居乐下属公司向保理商出具）
+            update_capital03: '/llz/capital_list/update_capital03',
+            exp_capital03: { noStamp: true },
+            capital04: '/llz/capital_list/capital04', // 应收账款转让通知书回执（适用于雅居乐控股向保理商出具）
+            update_capital04: '/llz/capital_list/update_capital04',
+            exp_capital04: { noStamp: true },
+            headquarters_receipt: '/custom/vanke_v5/contract/headquarters_receipt', // 生成《应收账款转让通知书回执（适用于雅居乐控股向供应商出具）》（清单式）
+            update_headquarters_receipt: '/custom/vanke_v5/contract/update_headquarters_receipt', // 《应收账款转让通知书回执（适用于雅居乐控股向供应商出具）》生成以后，把合同更新到该资产池的所有交易信息中
+            exp_headquarters_receipt: { noStamp: true },
+            project_receipt: '/custom/vanke_v5/contract/project_receipt', // 生成《应收账款转让通知书回执（适用于雅居乐下属公司向供应商出具）》 （单笔单出）
+            update_project_receipt: '/custom/vanke_v5/contract/update_project_receipt', // 《应收账款转让通知书回执（适用于雅居乐下属公司向供应商出具）》生成以后，把合同更新到该资产池的所有交易信息中
+            exp_project_receipt: { noStamp: true },
+            headquarters_qrs: '/custom/vanke_v5/contract/headquarters_qrs', // 生成《付款确认书（总部致保理商）》 (清单式)
+            update_headquarters_qrs: '/custom/vanke_v5/contract/update_headquarters_qrs', // 《付款确认书（总部致保理商）》生成以后，把合同更新到该资产池的所有交易信息中
+            exp_headquarters_qrs: { noStamp: true },
+            project_qrs: '/custom/vanke_v5/contract/project_qrs', // 生成《付款确认书（适用于雅居乐下属公司向供应商出具）》 （单笔单出）
+            update_project_qrs: '/custom/vanke_v5/contract/update_project_qrs', // 《付款确认书（适用于雅居乐下属公司向供应商出具）》生成以后，把合同更新到该资产池的所有交易信息中
+            exp_project_qrs: { noStamp: true },
+            traders_qrs: '/custom/vanke_v5/contract/traders_qrs', // 生成《付款确认书（雅居乐控股致券商）》 (清单式)
+            update_traders_qrs: '/custom/vanke_v5/contract/update_traders_qrs', // 《付款确认书（雅居乐控股致券商）》生成以后，把合同更新到该资产池的所有交易信息中
+            exp_traders_qrs: { noStamp: true },
+            // 生成确认函
+            confirm_file: '/custom/vanke_v5/contract/confirm_file', // 生成《确认函》 (清单式)
+            update_confirm_file: '/custom/vanke_v5/contract/update_confirm_file', // 《确认函》生成以后，把合同更新到该资产池的所有交易信息中
+            exp_confirm_file: { noStamp: true }
+        };
+        XnModalUtils.openInViewContainer(
+            this.xn,
+            this.vcr,
+            GeneratingContractModalComponent,
+            param
+        ).subscribe(x => {
+            if (x !== '') {
+                this.xn.loading.open();
+                // 准备参数
+                const params = {
+                    list: selectedRows.map(r => {
+                        return {
+                            mainFlowId: r.mainFlowId,
+                            capitalPoolId: this.formCapitalPool.capitalId,
+                            status: r.status
+                        };
+                    })
+                };
+                // 准备url
+                const url = {
+                    generate: urls[x.generatingContract],
+                    update: urls[`update_${x.generatingContract}`],
+                    exp: urls[`exp_${x.generatingContract}`]
+                };
+                this.doGenerateOrSign(url, params);
+            }
+        });
+    }
+
+    /**
+     *  合同弹窗--可签署或不签署
+     * @param url
+     * @param params
+     */
+    private doGenerateOrSign(url, params) {
+        this.xn.api.post(url.generate, params)
+            .pipe(
+                map(con => {
+                    this.xn.loading.close();
+                    const contractList =
+                        con.data.contractList ||
+                        [].concat(con.data.list).reduce((prev, curr) => {
+                            [].concat(curr.contractList).forEach(item => {
+                                item.mainFlowId = curr.mainFlowId;
+                            });
+                            return [...prev].concat(curr.contractList);
+                        }, []);
+                    const result = JSON.parse(JSON.stringify(contractList));
+                    if (result.length) {
+                        result.forEach(tracts => {
+                            tracts.config = { text: '（盖章）' };
+                            // 不需要签合同
+                            if (url.exp.noStamp) {
+                                tracts.readonly = true;
+                                tracts.isNoSignTitle = true;
+                            }
+                        });
+                        XnModalUtils.openInViewContainer(
+                            this.xn,
+                            this.vcr,
+                            FinancingFactoringVankeModalComponent,
+                            result
+                        ).subscribe(x => {
+                            this.xn.loading.open();
+                            // 更新添加到库
+                            if (x === 'ok') {
+                                // 上一步接口返回数据，原样传递回去
+                                const p = con.data;
+                                this.xn.api.post(url.update, p).subscribe(() => {
+                                    this.xn.loading.close();
+                                    this.onPage({
+                                        page: this.paging,
+                                        pageSize: this.pageSize
+                                    });
+                                });
+                            }
+                        });
+                    }
+                })
+            ).subscribe();
+    }
+
+    /**
+     * 下载附件
+     */
+    public downloadSelectedAttach() {
+        // 选择的行
+        const selectedRows = this.rows.filter(
+            (x: any) => x.checked && x.checked === true
+        );
+        const params = { hasSelect: !!selectedRows && selectedRows.length > 0, selectedCompany: '' };
+        // 未选择列表中数据时，检查公司名称是否一致
+        if (!params.hasSelect) {
+            params.selectedCompany = XnUtils.distinctArray(this.rows.map(c => c.headquarters));
+            if (params.selectedCompany.length > 1) {
+                this.xn.msgBox.open(false, '筛选条件下，具有不同公司！');
+                return;
+            } else {
+                params.selectedCompany = params.selectedCompany.toString();
+            }
+        } else {
+            params.selectedCompany = XnUtils.distinctArray(selectedRows.map(c => c.headquarters)).toString();
+        }
+        XnModalUtils.openInViewContainer(
+            this.xn,
+            this.vcr,
+            DownloadAttachmentsmodalComponent,
+            params
+        ).subscribe(x => {
+            if (x !== '') {
+                this.xn.loading.open();
+                const param = { mainIdList: [], chooseFile: '' };
+                param.chooseFile = x.chooseFile.split(',').filter(c => c !== '');
+                if (x.downloadRange === 'all') {
+                    param.mainIdList = this.rows.map(c => c.mainFlowId);
+                } else if (x.downloadRange === 'selected') {
+                    param.mainIdList = selectedRows.map(c => c.mainFlowId);
+                }
+                this.xn.api.download('/custom/vanke_v5/contract/load_attachment', param).subscribe((v: any) => {
+                    this.xn.loading.close();
+                    const reader = new FileReader();
+                    reader.onload = () => {
+                        try {
+                            const content = JSON.parse(`${reader.result}`); // 内容就在这里
+                            if (content.ret === 1000) {
+                                this.xn.msgBox.open(false, content.msg);
+                            }
+                        } catch (e) {
+                            this.xn.api.save(v._body, '资产池附件.zip');
+                        }
+                    };
+                    reader.readAsText(v._body);
+                });
+            }
+        });
+    }
+
+    /**
+     * 下载全部附件
+     */
+    public downAnnex() {
+        if (this.rows && this.rows.length) {
+            // 找到所有的合同，并且修改该合同的label= 该交易id+合同名称；
+            const contracts = this.rows.filter(x => this.hasContract(x));
+            const data = this.getDownloadData(contracts);
+            this.download(data);
+        } else {
+            this.xn.msgBox.open(false, '没有可下载的附件');
+        }
+    }
+
+    /**
+     * 导出清单
+     *  hasSelect 导出选中项
+     *  导出全部交易
+     */
+    public exportCapital() {
+        const params = { hasSelect: !!this.capitalSelecteds && this.capitalSelecteds.length > 0 };
+        XnModalUtils.openInViewContainer(
+            this.xn,
+            this.vcr,
+            ExportListModalComponent,
+            params
+        ).subscribe(x => {
+            if (x === '') {
+                return;
+            }
+            this.xn.loading.open();
+            const param = {
+                isProxy: +this.formCapitalPool.isProxy,
+                mainFlowIds: []
+            };
+            if (x.exportList === 'all') {
+                param.mainFlowIds = this.rows.map(c => c.mainFlowId);
+            } else if (x.exportList === 'selected') {
+                param.mainFlowIds = this.capitalSelecteds;
+            }
+            this.xn.api.download('/mdz/down_file/load_list', param).subscribe((v: any) => {
+                this.xn.api.save(v._body, '资产池清单.xlsx');
+                this.xn.loading.close();
+            });
+        });
+    }
+
+    /**
+     * 上传文件
+     * @param row
+     * @param head
+     */
+    public uploadContract(row, head) {
+        const params = {
+            title: `上传${head.title}`,
+            checker: [
+                {
+                    title: `${head.title}`, checkerId: 'proveImg', type: 'mfile',
+                    options: {
+                        filename: `${head.title}`,
+                        fileext: 'jpg, jpeg, png, pdf',
+                        picSize: '500'
+                    }, memo: '请上传图片、PDF'
+                },
+            ]
+        };
+        XnModalUtils.openInViewContainer(this.xn, this.vcr, NewFileModalComponent, params).subscribe(v => {
+            this.xn.loading.open();
+            if (v === null) {
+                this.xn.loading.close();
+                return;
+            }
+            const noi = {
+                capitalPoolContract03: 'photoCopy01',
+                capitalPoolContract04: 'photoCopy02',
+                headquartersReceipt: 'photoCopy03',
+                projectReceipt: 'photoCopy04',
+                pdfProjectFiles: 'photoCopy05',
+                projectQrs: 'photoCopy06',
+                tradersQrs: 'photoCopy07'
+            };
+            const param = {
+                mainIdList: [row.mainFlowId],
+                files: v.files,
+                uploadType: noi[head.checkerId]
+            };
+            this.xn.api.post('/custom/vanke_v5/contract/upload_files', param)
+                .subscribe(() => {
+                    this.xn.loading.close();
+                    this.onPage({
+                        page: this.paging,
+                        pageSize: this.pageSize
+                    });
+                });
+        });
+    }
+
+    /**
+     * 查看合同
+     * @param row
+     *  readonly  只读
+     */
+    public viewContract(row: any) {
+        const params = typeof row === 'string' ? JSON.parse(row)[0] : row;
+        params.readonly = true;
+        XnModalUtils.openInViewContainer(
+            this.xn,
+            this.vcr,
+            PdfSignModalComponent,
+            params
+        ).subscribe(() => {
+            // do nothing
+        });
+    }
+
+    /**
+     * 查看回传文件
+     * @param item
+     */
+    public fileView(item) {
+        XnModalUtils.openInViewContainer(this.xn, this.vcr, FileViewModalComponent, JSON.parse(item)[0]).subscribe(() => {
+        });
+    }
+
+    /**
+     *  添加，删除
+     * @param url
+     * @param params
+     */
+    private addOrRemoveCapitalPool(
+        url: string,
+        params: { mainFlowIds: any[]; capitalPoolId: any }
+    ) {
+        this.xn.api.post(url, params).subscribe(() => {
+            this.onPage({
+                page: this.paging,
+                pageSize: this.pageSize
+            });
+            this.allChecked = false;
+        });
+    }
+
+    /**
+     * 返回资产池
+     */
+    returnBackCapital() {
+        // this.xn.router.navigate(['/new-agile/capital-pool/trading-list'], {
+        //     queryParams: {
+        //         capitalId: this.formCapitalPool.capitalId,
+        //         capitalPoolName: this.formCapitalPool.capitalPoolName || '',
+        //         headquarters: this.formCapitalPool.headquarters,
+        //         isProxy: this.formCapitalPool.isProxy,
+        //         type: '1',   // this.formCapitalPool.type
+        //         currentPage: this.formCapitalPool.currentPage,
+        //         isLocking: this.formCapitalPool.headquarters
+        //     }
+        // });
+        this.xn.user.navigateBack()
+    }
+
+    /**
+     *  是否存在
+     * @param item
+     */
+    private hasContract(item: any): any {
+        return (
+            item.capitalPoolContract !== '' ||
+            item.capitalPoolContract01 !== '' ||
+            item.capitalPoolContract02 !== '' ||
+            item.capitalPoolContract03 !== '' ||
+            item.capitalPoolContract04 !== ''
+        );
+    }
+
+    /**
+     *  格式化下载数据
+     * @param capitalSelecteds
+     */
+    private getDownloadData(capitalSelecteds: any[]) {
+        const data = [];
+        capitalSelecteds.forEach(x => {
+            this.prepareContract(x.capitalPoolContract, x.mainFlowId, data);
+            this.prepareContract(x.capitalPoolContract01, x.mainFlowId, data);
+            this.prepareContract(x.capitalPoolContract02, x.mainFlowId, data);
+            this.prepareContract(x.capitalPoolContract03, x.mainFlowId, data);
+            this.prepareContract(x.capitalPoolContract04, x.mainFlowId, data);
+        });
+        return data;
+    }
+
+    private prepareContract(contract: any, mainFlowId: string, data: any[]) {
+        if (contract !== '' && JSON.parse(contract) instanceof Array) {
+            JSON.parse(contract).forEach(y => {
+                y.label = `${y.label}_${mainFlowId}`;
+                data.push(y);
+            });
+        }
+    }
+
+    private download(data: any[]) {
+        if (!(data && data.length > 0)) {
+            this.xn.msgBox.open(false, '没有可下载的附件');
+            return;
+        }
+
+        this.xn.api
+            .download('/file/down_file', { files: data })
+            .subscribe((x: any) => {
+                this.xn.api.save(x._body, '资产池附件.zip');
+                this.xn.loading.close();
+            });
+    }
+
+    /**
+     *  添加资金渠道
+     * @param fields
+     */
+    private addExtraFields(fields: Array<any> = []) {
+        const proxyTypeOptions = SelectOptions.get('proxyType');
+        const obj = proxyTypeOptions.find((x: any) => x.label === '金地模式');
+        const idx = fields.findIndex((x: any) => x.checkerId === 'moneyChannel');
+        const isProxy = this.formCapitalPool.isProxy === obj.value.toString();
+        if (isProxy && idx < 0) {
+            const filed = {
+                title: '资金渠道',
+                checkerId: 'moneyChannel',
+                type: 'xnMoneyChannel',
+                memo: '',
+                _inSearch: {
+                    number: 13,
+                    type: 'select',
+                    selectOptions: 'moneyChannel',
+                    base: 'number'
+                },
+                _inList: {
+                    sort: false,
+                    search: true
+                }
+            };
+            fields.splice(10, 0, filed);
+        } else if (!isProxy && idx > -1) {
+            fields.splice(idx, 1);
+        }
+    }
+
+    /**
+     *  构建列表
+     * @param searches
+     */
+    private buildShow(searches) {
+        this.shows = [];
+        this.buildCondition(searches);
+    }
+
+    private buildCondition(searches) {
+        const tmpTime = {
+            beginTime: this.beginTime,
+            endTime: this.endTime
+        };
+        const objList = [];
+        this.timeId = $.extend(
+            true,
+            [],
+            this.searches
+                .filter(v => v.type === 'quantum')
+                .map(v => v.checkerId)
+        );
+        for (let i = 0; i < searches.length; i++) {
+            const obj = {} as any;
+            obj.title = searches[i].title;
+            obj.checkerId = searches[i].checkerId;
+            obj.required = false;
+            obj.type = searches[i].type;
+            obj.number = searches[i].number;
+            obj.options = { ref: searches[i].selectOptions };
+            if (searches[i].checkerId === this.timeId[0]) {
+                obj.value = JSON.stringify(tmpTime);
+            } else {
+                obj.value = this.arrObjs[searches[i].checkerId];
+            }
+
+            if (!obj.type || obj.type === 'listing') {
+                obj.type = 'text';
+            }
+            objList.push(obj);
+        }
+        this.shows = $.extend(
+            true,
+            [],
+            objList.sort(function(a, b) {
+                return a.number - b.number;
+            })
+        ); // 深拷贝;
+        XnFormUtils.buildSelectOptions(this.shows);
+        this.buildChecker(this.shows);
+        this.mainForm = XnFormUtils.buildFormGroup(this.shows);
+
+        const time = this.searches.filter(v => v.type === 'quantum');
+        this.tolerance = $.extend(
+            true,
+            [],
+            this.searches
+                .filter(v => v.type === 'tolerance')
+                .map(v => v.checkerId)
+        );
+
+        const forSearch = this.searches
+            .filter(v => v.type !== 'quantum')
+            .map(v => v && v.checkerId);
+        this.searchArr = $.extend(true, [], forSearch); // 深拷贝;
+        const timeCheckId = time[0] && time[0].checkerId;
+        this.nowTimeCheckId = timeCheckId;
+
+        this.mainForm.valueChanges.subscribe(v => {
+            const changeId = v[timeCheckId];
+            delete v[timeCheckId];
+            if (changeId && this.nowTimeCheckId) {
+                const paramsTime = JSON.parse(changeId);
+                const beginTime = paramsTime.beginTime;
+                const endTime = paramsTime.endTime;
+
+                if (beginTime === this.beginTime && endTime === this.endTime) {
+                    // return;
+                } else {
+                    this.beginTime = beginTime;
+                    this.endTime = endTime;
+                    this.paging = 1;
+                    this.rows.splice(0, this.rows.length);
+                    const params = this.buildParams();
+                    this.onList(params);
+                }
+            }
+            const arrObj = {} as any;
+            for (const item in v) {
+                if (v.hasOwnProperty(item) && v[item] !== '') {
+                    const searchFilter = this.searches
+                        .filter(vv => vv && vv.base === 'number')
+                        .map(c => c.checkerId);
+                    if (searchFilter.indexOf(item) >= 0) {
+                        arrObj[item] = Number(v[item]);
+                    } else {
+                        arrObj[item] = v[item];
+                    }
+                }
+            }
+            this.arrObjs = $.extend(true, {}, arrObj); // 深拷贝;要进行搜索的变量
+        });
+    }
+
+    private buildChecker(stepRows) {
+        for (const row of stepRows) {
+            // 设置总部公司选项的类型
+            if (row.checkerId === 'headquarters') {
+                row.options.isProxy = this.formCapitalPool.isProxy;
+            }
+
+            XnFormUtils.convertChecker(row);
+        }
+    }
+
+    /**
+     *  构建参数
+     */
+    private buildParams() {
+        // 分页处理
+        const params: any = {
+            start: ((this.paging < 0 ? 1 : this.paging) - 1) * this.pageSize,
+            length: this.pageSize,
+            beginTime: Number(this.beginTime),
+            endTime: Number(this.endTime),
+            modelId: BusinessMode.Yjl,
+        };
+        // 如果是资产池的操作
+        // 资产池交易未入池添加操作
+        if (this.formCapitalPool && this.formCapitalPool.type === '2') {
+            params.where = {
+                _complex: {
+                    _logic: 'AND',
+                    // isProxy: ['in', [this.formCapitalPool.isProxy]],
+                    iscapitalPool: 0,
+                    status: ['in', [1, 2, 3, 4, 5, 6]]
+                }
+            };
+        }
+        // 资产池交易移除,查看资产池交易
+        if (
+            this.formCapitalPool &&
+            (this.formCapitalPool.type === '3' ||
+                this.formCapitalPool.type === '1')
+        ) {
+            params.where = {
+                _complex: {
+                    _logic: 'AND',
+                    iscapitalPool:
+                        this.formCapitalPool.type === '1' ? 1 : undefined,
+                    capitalPoolId: this.formCapitalPool.capitalId,
+                    status: ['in', [1, 2, 3, 4, 5, 6]]
+                }
+            };
+        }
+        // 排序处理
+        if (this.sorting && this.naming) {
+            params.order = [this.sorting + ' ' + this.naming];
+        }
+        // 搜索处理
+        if (this.searches.length > 0) {
+            if (!$.isEmptyObject(this.arrObjs)) {
+                // 如果参数已存在where属性，不重新添加新属性
+                if (!params.where) {
+                    params.where = {
+                        _complex: {
+                            _logic: 'AND' // 搜索时是AND查询
+                        }
+                    };
+                }
+            }
+
+            for (const search of this.searches) {
+                if (!XnUtils.isEmpty(this.arrObjs[search.checkerId])) {
+                    switch (search.checkerId) {
+                        case 'capitalPoolContract01':
+                        case 'capitalPoolContract02':
+                        case 'capitalPoolContract03':
+                        case 'capitalPoolContract04': {
+                            params.where._complex[search.checkerId] =
+                                this.arrObjs[search.checkerId].toString() ===
+                                    '1'
+                                    ? ['!=', '']
+                                    : ['=', ''];
+                            break;
+                        }
+                        case 'payConfirmId':
+                        case 'moneyChannel': {
+                            params[search.checkerId] = this.arrObjs[
+                                search.checkerId
+                            ];
+                            break;
+                        }
+                        case 'status': {
+                            if (this.arrObjs[search.checkerId]) {
+                                params.where._complex[search.checkerId] = [
+                                    'like',
+                                    `%${this.arrObjs[search.checkerId]}%`
+                                ];
+                            }
+                            break;
+                        }
+                        default: {
+                            params.where._complex[search.checkerId] = [
+                                'like',
+                                `%${this.arrObjs[search.checkerId]}%`
+                            ];
+                        }
+                    }
+                }
+            }
+        }
+        // 总部公司
+        params.where._complex.headquarters = [
+            'like',
+            `%${this.formCapitalPool.headquarters}%`
+        ];
+        // 交易模式（万科模式: 6 , 金地模式: 14 ）
+        params.where._complex.isProxy = this.formCapitalPool.isProxy;
+        // (params.where._complex['dcType'] = this.isWankeMode ? 4 : 5);
+        params.where._complex.dcType = 4;
+        return params;
+    }
+
+}

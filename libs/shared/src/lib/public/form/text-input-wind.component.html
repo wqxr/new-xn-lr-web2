@@ -1,0 +1,5 @@
+<div class="inMemo" *ngIf="inMemo !== ''">{{inMemo}}</div>
+<div [formGroup]="form">
+  <input #input class="form-control xn-input-font xn-input-border-radius" [ngClass]="myClass" type="text"
+         [formControlName]="row.name" [placeholder]="row.placeholder" (blur)="onBlur($event)" autocomplete="off">
+</div>

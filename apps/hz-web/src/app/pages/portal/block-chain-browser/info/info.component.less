@@ -1,0 +1,96 @@
+.block-chain-info {
+  .ant-card::ng-deep{
+    .ant-card-head-title {
+      font-size: 18px;
+      font-weight: 600;
+      color: #1F2B38;
+    }
+  }
+  &-label {
+    margin-bottom: 14px;
+    >span {
+      &:first-child {
+        font-weight: 400;
+        color: rgba(31, 43, 56, 0.66);
+      }
+      &:last-child {
+        font-weight: 600;
+        color: rgba(31, 43, 56, 1);
+      }
+    }
+  }
+  &-line {
+    height: 1px;
+    background: #E9E9E9;
+  }
+  .ant-table-wrapper::ng-deep {
+    .ant-table-thead > tr > th {
+      color: #1F2B38;
+      font-weight: bold;
+      background-color: #fff;
+    }
+    .ant-table-tbody > tr {
+      td {
+        font-weight: 400;
+        color: rgba(31, 43, 56, 0.66);
+      }
+    }
+  }
+  .detail-icon {
+    width: 16px;
+    height: 16px;
+    border-radius: 50%;
+    border: 1px solid #1D67C7;
+    line-height: 5px;
+    text-align: center;
+    display: inline-block;
+  }
+  .pagination-box {
+    width: 100%;
+    background-color: #fff;
+    padding-top: 20px;
+    .ant-pagination::ng-deep {
+      display: flex;
+      justify-content: center;
+      .ant-pagination-item {
+        padding: 0;
+        min-width: unset;
+        margin-right: 30px;
+        margin-top: 1px;
+        a {
+          padding: 0;
+        }
+        &:hover {
+          a {
+            color: #E62129!important;
+          }
+        }
+      }
+      .ant-pagination-item-active {
+        border: none;
+        border-bottom: 1px solid #E62129!important;
+        >a {
+          color: #E62129!important;
+        }
+      }
+      .anticon {
+        &:hover {
+          color: #E62129!important;
+        }
+      }
+      .ant-pagination-prev {
+        margin-right: 30px;
+      }
+      .ant-pagination-prev, .ant-pagination-next {
+        min-width: unset;
+        button {
+          padding: 0;
+        }
+        .ant-pagination-item-link {
+          display: flex;
+          align-items: center;
+        }
+      }
+    }
+  }
+}

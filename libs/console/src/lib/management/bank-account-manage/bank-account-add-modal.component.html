@@ -1,0 +1,69 @@
+<modal #modal [backdrop]="'static'" [keyboard]="false" [animation]="false">
+  <modal-header [showClose]="false">
+    <h4 class="modal-title">{{operation}}账号</h4>
+  </modal-header>
+
+  <modal-body>
+    <form class="form-horizontal" (ngSubmit)="onSubmit()" [formGroup]="form">
+      <div class="panel panel-default">
+        <div class="panel-body">
+
+          <div class="form-group">
+            <div class="col-sm-3 xn-control-label">
+              选择开户行省市 <span class="required-label">*</span>
+            </div>
+            <div class="col-sm-3" style="padding-right: 0">
+              <select class="form-control" required name="province" formControlName="province">
+                <option value="">-请选择省份-</option>
+                <option [value]="option.value" *ngFor="let option of china.first">{{option.label}}</option>
+              </select>
+            </div>
+            <div class="col-sm-4" style="padding-left: 0">
+              <select class="form-control" required name="city" formControlName="city">
+                <option value="">-请选择城市-</option>
+                <option [value]="option.value" *ngFor="let option of citys">{{option.label}}</option>
+              </select>
+            </div>
+          </div>
+          <div class="form-group">
+            <div class="col-sm-3 xn-control-label">
+              银行名称 <span class="required-label">*</span>
+            </div>
+            <div class="col-sm-7" style="padding-right: 0">
+              <input type="search" placeholder="请输入银行名称" class="form-control" name="headBank_search" [maxLength]="50"
+                     formControlName="bankHead" autocomplete="off" >
+            </div>
+          </div>
+
+          <div class="form-group">
+            <div class="col-sm-3 xn-control-label">
+              开户行名称 <span class="required-label">*</span>
+            </div>
+            <div class="col-sm-7" style="padding-right: 0">
+              <input type="search" placeholder="请输入开户行名称" class="form-control" name="detailBank_search" [maxLength]="50"
+                     formControlName="bankName" autocomplete="off">
+            </div>
+          </div>
+
+          <div class="form-group">
+            <div class="col-sm-3 xn-control-label">
+              开户行行号 <span class="required-label">*</span>
+            </div>
+            <div class="col-sm-7" style="padding-right: 0">
+              <input class="input" class="form-control" name="bankId" placeholder="请输入开户行行号" formControlName="bankId" autocomplete="off">
+              <div class="xn-input-alert" *ngIf="bankId.invalid && (bankId.touched || bankId.dirty)">
+                <span *ngIf="bankId.errors.lengthError">{{bankId.errors.lengthError}}</span>
+              </div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </form>
+  </modal-body>
+
+  <modal-footer>
+    <button type="button" class="btn btn-white" (click)="close();$event.stopPropagation();">取消</button>
+    <button type="button" class="btn btn-success" [disabled]="form.invalid" (click)="onSubmit();$event.stopPropagation();">确定</button>
+  </modal-footer>
+</modal>

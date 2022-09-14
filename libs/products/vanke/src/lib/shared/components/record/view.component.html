@@ -1,0 +1,30 @@
+<!-- Content Header (Page header) -->
+<section class="content-header">
+  <h1>
+    {{ pageTitle }}
+    <small>{{ pageDesc }}</small>
+  </h1>
+</section>
+
+<!-- Main content -->
+<section class="content">
+  <div
+    class="app-flow-process"
+    *ngIf="flowId !== '' && isshowProgress === false"
+  >
+    <ng-container>
+      <xn-vanke-flow-process-component
+        [mainFlowId]="mainFlowId"
+        [flowId]="flowId"
+      ></xn-vanke-flow-process-component>
+    </ng-container>
+  </div>
+
+  <ng-container *ngIf='svrConfig && !svrConfig.isStep'>
+    <old-vanke-view-component [mainForm]="mainForm" [svrConfig]="svrConfig" [baseInfo]="baseInfo"></old-vanke-view-component>
+  </ng-container>
+  <ng-container *ngIf='svrConfig && svrConfig.isStep'>
+    <step-vanke-view [mainForm]="mainForm" [svrConfig]="svrConfig" [baseInfo]="baseInfo"></step-vanke-view>
+  </ng-container>
+</section>
+<!-- /.content -->

@@ -1,0 +1,99 @@
+<section class="content-header">
+  <h1>
+    {{pageTitle}}
+    <small>{{pageDesc}}</small>
+  </h1>
+</section>
+
+<section class="content">
+  <div class="box">
+    <div class="box-header">
+      <h3 class="box-title">{{tableTitle}}</h3>
+    </div>
+    <!-- /.box-header -->
+    <div class="box-body">
+
+      <div class="row form-group block-data">
+        <table class="table table-bordered table-striped table-hover">
+          <thead>
+            <tr class="table-head">
+              <th>核心企业</th>
+              <th *ngFor="let title of titles">{{title.year + '年' + title.MMmonth + '月'}} </th>
+              <th>已回款总额</th>
+            </tr>
+          </thead>
+
+          <tbody>
+            <tr *ngFor="let data of datas; let i = index" [ngClass]="onCss(i)" class="table-tr" (click)="clickOn(i)">
+              <td class="enterprise-name">{{data.name}}</td>
+              <td *ngFor="let item of titles">
+                <div *ngFor="let in of data.value">
+                  <div *ngIf="in.month == item.month">
+                    <p class="purple margin-bottom-0 text-right" *ngIf="in && in.backAmont && in.backAmont !== 0 && in.month == nowMonth">{{in && in.backAmont.toFixed(2) | xnMoney}}</p>
+                    <p class="black margin-bottom-0 text-right" *ngIf="in && in.loanAmount && in.loanAmount !== 0">{{in && in.loanAmount.toFixed(2) | xnMoney}}</p>
+                    <p class="red margin-bottom-0 text-right" *ngIf="in && in.overAmont && in.overAmont !== 0">{{in && in.overAmont.toFixed(2) | xnMoney}}</p>
+                    <p class="green margin-bottom-0 text-right" *ngIf="in && in.repaymentAmount && in.repaymentAmount !== 0">{{in && in.repaymentAmount.toFixed(2) | xnMoney}}</p>
+                  </div>
+                </div>
+              </td>
+              <td class="enterprise-name">{{data.total | xnMoney}}</td>
+            </tr>
+
+            <tr>
+              <td>总计</td>
+              <td *ngFor="let item of titles;let i = index">
+                <p class="purple margin-bottom-0 text-right" *ngIf="this.sums['backAmont'][i] && (1 * this.sums['backAmont'][i]) !== 0 && i == nowMonthIndex">{{ (this.sums['backAmont'][i] * 1000000).toFixed(2) | xnMoney}}</p>
+                <p class="black margin-bottom-0 text-right" *ngIf="this.sums['loanAmount'][i] && (1 * this.sums['loanAmount'][i]) !== 0">{{ (this.sums['loanAmount'][i] * 1000000).toFixed(2) | xnMoney}}</p>
+                <p class="black margin-bottom-0 text-right" *ngIf="(1 * this.sums['loanAmount'][i]) === 0">0</p>
+                <p class="red margin-bottom-0 text-right" *ngIf="this.sums['overAmont'][i] && (1 * this.sums['overAmont'][i]) !== 0">{{ (this.sums['overAmont'][i] * 1000000).toFixed(2) | xnMoney}}</p>
+                <p class="green margin-bottom-0 text-right" *ngIf="this.sums['repaymentAmount'][i] && (1 * this.sums['repaymentAmount'][i]) !== 0">{{ (this.sums['repaymentAmount'][i] * 1000000).toFixed(2) | xnMoney}}</p>
+              </td>
+              <td>{{ ((this.sums && this.sums['allRepayment'] || 0) * 1000000).toFixed(2) | xnMoney}}</td>
+            </tr>
+
+            <tr>
+              <td colspan="13" style="text-align: left">
+                <span class="green mr3">绿色："已回款" </span>
+                <span class="purple mr3">紫色："回款中" </span>
+                <span class="red mr3">红色："逾期" </span>
+              </td>
+            </tr>
+          </tbody>
+
+        </table>
+      </div>
+
+    </div>
+    <!-- /.box-body -->
+  </div>
+
+  <div class="box">
+    <div class="box-header">
+      <h3 class="box-title">{{tableTitle}}</h3>
+    </div>
+    <!-- /.box-header -->
+    <div class="box-body">
+      <div class="row form-group overflow-hidden">
+        <div #chart1 class="col-sm-12 chart-height-600"></div>
+      </div>
+    </div>
+    <!-- /.box-body -->
+  </div>
+
+  <div class="box">
+    <div class="box-body">
+      <div class="row form-group over-hidden">
+        <div #chart2 class="col-sm-12 chart-height-400"></div>
+      </div>
+    </div>
+  </div>
+  <div class="box">
+    <div class="box-body">
+      <div class="row form-group over-hidden">
+        <div #chart3 class="col-sm-12 chart-height-400"></div>
+      </div>
+    </div>
+  </div>
+
+</section>
+<!-- /.content -->

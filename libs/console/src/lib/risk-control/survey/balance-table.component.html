@@ -1,0 +1,317 @@
+<table class="table table-bordered table-striped table-max">
+  <tbody>
+  <!--资产负债-->
+  <tr>
+    <th colspan="5">资产（单位：元）</th>
+  </tr>
+  <tr>
+    <th colspan="5">流动资产</th>
+  </tr>
+  <tr>
+    <td>货币资金</td>
+    <td *ngFor="let item of balance.F019_THS013">{{item | xnText}}</td>
+  </tr>
+  <tr>
+    <td>以公允价值计量且其变动计入当期损益的金融资产</td>
+    <td *ngFor="let item of balance.F020_THS013">{{item | xnText }}</td>
+  </tr>
+  <tr>
+    <td>衍生金融资产</td>
+    <td *ngFor="let item of balance.F057_THS013">{{item | xnText }}</td>
+  </tr>
+  <tr>
+    <td>应收票据</td>
+    <td *ngFor="let item of balance.F021_THS013">{{item | xnText }}</td>
+  </tr>
+  <tr>
+    <td>应收账款</td>
+    <td *ngFor="let item of balance.F022_THS013">{{item | xnText }}</td>
+  </tr>
+  <tr>
+    <td>预付款项</td>
+    <td *ngFor="let item of balance.F023_THS013">{{item | xnText }}</td>
+  </tr>
+  <tr>
+    <td>应收利息</td>
+    <td *ngFor="let item of balance.F024_THS013">{{item | xnText }}</td>
+  </tr>
+  <tr>
+    <td>应收股利</td>
+    <td *ngFor="let item of balance.F025_THS013">{{item | xnText }}</td>
+  </tr>
+  <tr>
+    <td>其他应收款</td>
+    <td *ngFor="let item of balance.F026_THS013">{{item | xnText }}</td>
+  </tr>
+  <tr>
+    <td>存货</td>
+    <td *ngFor="let item of balance.F027_THS013">{{item | xnText }}</td>
+  </tr>
+  <!--暂时值空-->
+  <tr>
+    <td>持有待售资产</td>
+    <td *ngFor="let item of ['','','','']">{{item | xnText }}</td>
+  </tr>
+  <tr>
+    <td>一年内到期的非流动资产</td>
+    <td *ngFor="let item of balance.F028_THS013">{{item | xnText }}</td>
+  </tr>
+  <tr>
+    <td>其他流动资产</td>
+    <td *ngFor="let item of balance.F029_THS013">{{item | xnText }}</td>
+  </tr>
+  <tr>
+    <td>流动资产合计</td>
+    <td *ngFor="let item of balance.F032_THS013">{{item | xnText }}</td>
+  </tr>
+  <!--非流动资产-->
+  <tr>
+    <th colspan="5">非流动资产</th>
+  </tr>
+  <tr>
+    <td>可供出售金融资产</td>
+    <td *ngFor="let item of balance.F033_THS013">{{item | xnText }}</td>
+  </tr>
+  <tr>
+    <td>持有至到期投资</td>
+    <td *ngFor="let item of balance.F034_THS013">{{item | xnText }}</td>
+  </tr>
+  <tr>
+    <td>长期应收款</td>
+    <td *ngFor="let item of balance.F035_THS013">{{item | xnText }}</td>
+  </tr>
+  <tr>
+    <td>长期股权投资</td>
+    <td *ngFor="let item of balance.F036_THS013">{{item | xnText }}</td>
+  </tr>
+  <tr>
+    <td>投资性房地产</td>
+    <td *ngFor="let item of balance.F037_THS013">{{item | xnText }}</td>
+  </tr>
+  <tr>
+    <td>固定资产</td>
+    <td *ngFor="let item of balance.F038_THS013">{{item | xnText }}</td>
+  </tr>
+  <tr>
+    <td>在建工程</td>
+    <td *ngFor="let item of balance.F039_THS013">{{item | xnText }}</td>
+  </tr>
+  <tr>
+    <td>工程物资</td>
+    <td *ngFor="let item of balance.F040_THS013">{{item | xnText }}</td>
+  </tr>
+  <tr>
+    <td>固定资产清理</td>
+    <td *ngFor="let item of balance.F041_THS013">{{item | xnText }}</td>
+  </tr>
+  <tr>
+    <td>生产性生物资产</td>
+    <td *ngFor="let item of balance.F042_THS013">{{item | xnText }}</td>
+  </tr>
+  <tr>
+    <td>油气资产</td>
+    <td *ngFor="let item of balance.F043_THS013">{{item | xnText }}</td>
+  </tr>
+  <tr>
+    <td>无形资产</td>
+    <td *ngFor="let item of balance.F044_THS013">{{item | xnText }}</td>
+  </tr>
+  <tr>
+    <td>开发支出</td>
+    <td *ngFor="let item of balance.F045_THS013">{{item | xnText }}</td>
+  </tr>
+  <tr>
+    <td>商誉</td>
+    <td *ngFor="let item of balance.F046_THS013">{{item | xnText }}</td>
+  </tr>
+  <tr>
+    <td>长期待摊费用</td>
+    <td *ngFor="let item of balance.F047_THS013">{{item | xnText }}</td>
+  </tr>
+  <tr>
+    <td>递延所得税资产</td>
+    <td *ngFor="let item of balance.F048_THS013">{{item | xnText }}</td>
+  </tr>
+  <tr>
+    <td>其他非流动资产</td>
+    <td *ngFor="let item of balance.F049_THS013">{{item | xnText }}</td>
+  </tr>
+  <tr>
+    <td>非流动资产合计</td>
+    <td *ngFor="let item of balance.F052_THS013">{{item | xnText }}</td>
+  </tr>
+  <tr>
+    <td>资产总计</td>
+    <td *ngFor="let item of balance.F080_THS013">{{item | xnText }}</td>
+  </tr>
+  <!--负债和所有者权益（或股东权益）-->
+  <tr>
+    <th colspan="5">负债和所有者权益（或股东权益）（单位：元）</th>
+  </tr>
+  <tr>
+    <th colspan="5">流动负债</th>
+  </tr>
+  <tr>
+    <td>短期借款</td>
+    <td *ngFor="let item of balance.F081_THS013">{{item | xnText }}</td>
+  </tr>
+  <tr>
+    <td>以公允价值计量且其变动计入当期损益的金融负债</td>
+    <td *ngFor="let item of balance.F082_THS013">{{item | xnText }}</td>
+  </tr>
+  <tr>
+    <td>衍生金融负债</td>
+    <td *ngFor="let item of balance.F109_THS013">{{item | xnText }}</td>
+  </tr>
+  <tr>
+    <td>应付票据</td>
+    <td *ngFor="let item of balance.F083_THS013">{{item | xnText }}</td>
+  </tr>
+  <tr>
+    <td>应付账款</td>
+    <td *ngFor="let item of balance.F084_THS013">{{item | xnText }}</td>
+  </tr>
+  <tr>
+    <td>预付款项</td>
+    <td *ngFor="let item of balance.F085_THS013">{{item | xnText }}</td>
+  </tr>
+  <tr>
+    <td>应付职工薪酬</td>
+    <td *ngFor="let item of balance.F086_THS013">{{item | xnText }}</td>
+  </tr>
+  <tr>
+    <td>应交税费</td>
+    <td *ngFor="let item of balance.F087_THS013">{{item | xnText }}</td>
+  </tr>
+  <tr>
+    <td>应付利息</td>
+    <td *ngFor="let item of balance.F088_THS013">{{item | xnText }}</td>
+  </tr>
+  <tr>
+    <td>应付股利</td>
+    <td *ngFor="let item of balance.F089_THS013">{{item | xnText }}</td>
+  </tr>
+  <!--暂时值空-->
+  <tr>
+    <td>持有待售负债</td>
+    <td *ngFor="let item of ['','','','']">{{item | xnText }}</td>
+  </tr>
+  <tr>
+    <td>其他应付款</td>
+    <td *ngFor="let item of balance.F090_THS013">{{item | xnText }}</td>
+  </tr>
+  <tr>
+    <td>一年内到期的非流动负债</td>
+    <td *ngFor="let item of balance.F091_THS013">{{item | xnText }}</td>
+  </tr>
+  <tr>
+    <td>其他流动负债</td>
+    <td *ngFor="let item of balance.F092_THS013">{{item | xnText }}</td>
+  </tr>
+  <tr>
+    <td>流动负债合计</td>
+    <td *ngFor="let item of balance.F095_THS013">{{item | xnText }}</td>
+  </tr>
+  <!--非流动兴负债-->
+  <tr>
+    <th colspan="5">非流动负债</th>
+  </tr>
+  <tr>
+    <td>长期借款</td>
+    <td *ngFor="let item of balance.F096_THS013">{{item | xnText }}</td>
+  </tr>
+  <tr>
+    <td>应付债券</td>
+    <td *ngFor="let item of balance.F097_THS013">{{item | xnText }}</td>
+  </tr>
+  <tr>
+    <td>其中：优先股</td>
+    <td *ngFor="let item of ['','','','']">{{item | xnText }}</td>
+  </tr>
+  <tr>
+    <td>永续股</td>
+    <td *ngFor="let item of ['','','','']">{{item | xnText }}</td>
+  </tr>
+  <tr>
+    <td>长期应付款</td>
+    <td *ngFor="let item of balance.F098_THS013">{{item | xnText }}</td>
+  </tr>
+  <tr>
+    <td>长期应付款</td>
+    <td *ngFor="let item of balance.F099_THS013">{{item | xnText }}</td>
+  </tr>
+  <tr>
+    <td>预计负债</td>
+    <td *ngFor="let item of balance.F100_THS013">{{item | xnText }}</td>
+  </tr>
+  <tr>
+    <td>递延收益</td>
+    <td *ngFor="let item of balance.F153_THS013">{{item | xnText }}</td>
+  </tr>
+  <tr>
+    <td>递延所得税负债</td>
+    <td *ngFor="let item of balance.F101_THS013">{{item | xnText }}</td>
+  </tr>
+  <tr>
+    <td>其他非流动负债</td>
+    <td *ngFor="let item of balance.F102_THS013">{{item | xnText }}</td>
+  </tr>
+  <tr>
+    <td>非流动负债合计</td>
+    <td *ngFor="let item of balance.F105_THS013">{{item | xnText }}</td>
+  </tr>
+  <tr>
+    <td>负债合计</td>
+    <td *ngFor="let item of balance.F129_THS013">{{item | xnText }}</td>
+  </tr>
+
+  <!--所有者权益-->
+  <tr>
+    <th colspan="5">所有者权益(或股东权益)</th>
+  </tr>
+  <tr>
+    <td>实收资本(或股本)</td>
+    <td *ngFor="let item of balance.F130_THS013">{{item | xnText }}</td>
+  </tr>
+  <tr>
+    <td>其他权益工具</td>
+    <td *ngFor="let item of balance.F161_THS013">{{item | xnText }}</td>
+  </tr>
+  <tr>
+    <td>其中：优先股</td>
+    <td *ngFor="let item of balance.F162_THS013">{{item | xnText }}</td>
+  </tr>
+  <tr>
+    <td>永续债</td>
+    <td *ngFor="let item of balance.F163_THS013">{{item | xnText }}</td>
+  </tr>
+  <tr>
+    <td>资本公积</td>
+    <td *ngFor="let item of balance.F131_THS013">{{item | xnText }}</td>
+  </tr>
+  <tr>
+    <td>减:库存股</td>
+    <td *ngFor="let item of balance.F132_THS013">{{item | xnText }}</td>
+  </tr>
+  <tr>
+    <td>其他综合收益</td>
+    <td *ngFor="let item of balance.F159_THS013">{{item | xnText }}</td>
+  </tr>
+  <tr>
+    <td>盈余公积</td>
+    <td *ngFor="let item of balance.F134_THS013">{{item | xnText }}</td>
+  </tr>
+  <tr>
+    <td>未分配利润</td>
+    <td *ngFor="let item of balance.F137_THS013">{{item | xnText }}</td>
+  </tr>
+  <tr>
+    <td>所有者权益(或股东权益)合计</td>
+    <td *ngFor="let item of balance.F143_THS013">{{item | xnText }}</td>
+  </tr>
+  <tr>
+    <td>负债和所有者权益(或股东权益)总计</td>
+    <td *ngFor="let item of balance.F144_THS013">{{item | xnText }}</td>
+  </tr>
+  </tbody>
+</table>

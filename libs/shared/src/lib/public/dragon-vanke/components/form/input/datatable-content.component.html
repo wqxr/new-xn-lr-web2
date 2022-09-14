@@ -1,0 +1,50 @@
+<div class="input-group" style="width: 100%; display: block" [formGroup]="form">
+  <div class="height">
+    <table class="table table-bordered  text-center table-striped">
+      <thead>
+        <tr>
+          <ng-container *ngFor="let head of heads">
+            <th *ngIf="!head.hide">{{ head.label }}</th>
+          </ng-container>
+          <th>
+            <ng-container *ngIf="params?.multiple">
+              <input
+                type="checkbox"
+                [checked]="allCheckedStatus"
+                (change)="allPageChecked()"
+              />
+              全选/取消
+            </ng-container>
+          </th>
+        </tr>
+      </thead>
+    </table>
+    <div class="scroll-height">
+      <table class="table table-bordered  text-center table-striped">
+        <tbody>
+          <tr *ngFor="let item of data; let i = index">
+            <ng-container *ngFor="let head of heads">
+              <td *ngIf="!head.hide">{{ item[head.value] }}</td>
+            </ng-container>
+            <th>
+              <input
+                *ngIf="params?.multiple"
+                type="checkbox"
+                [checked]="item?.checked"
+                (change)="checkedSingle(item, i)"
+              />
+              <a
+                class="xn-click-a"
+                *ngIf="!params?.multiple"
+                href="javaScript:void (0)"
+                (click)="selected(item)"
+                >选择</a
+              >
+            </th>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+<span class="xn-input-alert">{{ alert }}</span>

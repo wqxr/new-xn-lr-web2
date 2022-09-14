@@ -1,0 +1,369 @@
+<section class="content-header">
+  <h1>注册公司详细资料</h1>
+</section>
+<section class="content">
+  <!-- 注册信息 -->
+  <nz-card nzTitle="注册信息" [nzLoading]="loading" [nzExtra]="rigisterTemplate" class="card-box">
+    <nz-descriptions nzLayout="vertical">
+      <nz-descriptions-item nzTitle="注册状态">
+        {{detailInfo?.status | xnSelectTransform: registerStateOptions}}
+      </nz-descriptions-item>
+      <nz-descriptions-item nzTitle="注册渠道">
+        {{detailInfo?.channel | xnSelectTransform: channelOptions}}
+      </nz-descriptions-item>
+      <nz-descriptions-item nzTitle="注册申请时间">
+        <ng-container *ngIf="detailInfo?.createTime">
+          {{detailInfo?.createTime | xnDate:'datetime'}}
+        </ng-container>
+      </nz-descriptions-item>
+      <nz-descriptions-item nzTitle="更新时间">
+        <ng-container *ngIf="detailInfo?.updateTime">
+          {{detailInfo?.updateTime | xnDate:'datetime'}}
+        </ng-container>
+      </nz-descriptions-item>
+    </nz-descriptions>
+  </nz-card>
+  <ng-template #rigisterTemplate>
+    <button *ngIf="detailInfo?.status !==2" nz-button nzType="primary" nz-popconfirm nzPopconfirmTitle="确定要终止申请吗?"
+      (nzOnConfirm)="delRigister(detailInfo?.appId)">终止申请</button>
+  </ng-template>
+
+  <!-- 工商信息 -->
+  <nz-card nzTitle="工商信息" [nzLoading]="loading" class="card-box">
+    <nz-descriptions nzLayout="vertical">
+      <nz-descriptions-item nzTitle="企业名称">{{detailInfo?.orgName | xnNA}}</nz-descriptions-item>
+      <nz-descriptions-item nzTitle="企业ID">{{detailInfo?.appId | xnNA}}</nz-descriptions-item>
+      <nz-descriptions-item nzTitle="法定代表人">{{detailInfo?.orgLegalPerson | xnNA}}</nz-descriptions-item>
+      <nz-descriptions-item nzTitle="统一社会信用代码">{{detailInfo?.orgCodeNo | xnNA}}</nz-descriptions-item>
+    </nz-descriptions>
+    <nz-descriptions nzLayout="vertical">
+      <nz-descriptions-item [nzSpan]="2" nzTitle="注册地址">{{detailInfo?.orgRegisterAddress | xnNA}}</nz-descriptions-item>
+      <nz-descriptions-item [nzSpan]="2" nzTitle="实际经营地址">{{detailInfo?.orgAddress | xnNA}}</nz-descriptions-item>
+    </nz-descriptions>
+  </nz-card>
+
+  <!-- 企业曾用名 -->
+  <nz-card nzTitle="企业曾用名" [nzLoading]="loading" class="card-box">
+    <xn-table [data]="originalNameList" [columns]="originalNameColumn" [size]="'middle'" [loading]="loading"
+      [scroll]="{ y: '400px' }" [widthMode]="{type: 'strict',strictBehavior: 'truncate'}">
+      <!-- 时间具体到秒 -->
+      <ng-template xn-table-row="dateTimeTpl" let-item let-index="index" let-column="column">
+        <ng-container *ngIf="item[column.index]">
+          {{ item[column.index] | xnDate:'datetime'}}
+        </ng-container>
+      </ng-template>
+    </xn-table>
+  </nz-card>
+
+  <!-- 产品信息 -->
+  <nz-card nzTitle="产品信息" [nzLoading]="loading" class="card-box">
+    <xn-table [data]="productInfo" [columns]="productInfoColumn" [size]="'middle'" [loading]="loading"
+      [scroll]="{ y: '400px' }" [widthMode]="{type: 'strict',strictBehavior: 'truncate'}">
+      <!-- 企业角色 -->
+      <ng-template xn-table-row="orgTypeTpl" let-item let-index="index" let-column="column">
+        {{ item[column.index] | xnSelectTransform:'orgTypeCompany'}}
+      </ng-template>
+      <!-- 时间具体到秒 -->
+      <ng-template xn-table-row="dateTimeTpl" let-item let-index="index" let-column="column">
+        <ng-container *ngIf="item[column.index]">
+          {{ item[column.index] | xnDate:'datetime'}}
+        </ng-container>
+      </ng-template>
+    </xn-table>
+  </nz-card>
+
+  <!-- 数字证书信息 -->
+  <nz-card nzTitle="数字证书信息" [nzLoading]="loading" [nzExtra]="caTemplate" class="card-box">
+    <nz-descriptions>
+      <nz-descriptions-item nzTitle="当前数字证书类型 :">{{caType | xnSelectTransform:'caType'}}</nz-descriptions-item>
+    </nz-descriptions>
+    <xn-table [data]="caInfo" [columns]="caInfoColumn" [size]="'middle'" [loading]="loading" [scroll]="{ y: '400px' }"
+      [widthMode]="{type: 'strict',strictBehavior: 'truncate'}">
+      <!-- 证件类型 -->
+      <ng-template xn-table-row="certTypeTpl" let-item let-index="index" let-column="column">
+        {{ item[column.index] | xnSelectTransform:'caType'}}
+      </ng-template>
+    </xn-table>
+  </nz-card>
+  <ng-template #caTemplate>
+    <button *ngIf="caInfo?.length>1" nz-button nzType="primary" (click)="switchCa()">切换</button>
+  </ng-template>
+
+  <!-- 开票信息 -->
+  <nz-card nzTitle="开票信息" [nzLoading]="loading" class="card-box">
+    <nz-descriptions [nzColumn]="4" nzLayout="vertical">
+      <nz-descriptions-item nzTitle="企业名称">{{detailInfo?.orgName | xnNA}}</nz-descriptions-item>
+      <nz-descriptions-item nzTitle="纳税识别号">{{detailInfo?.taxInfo?.orgTaxpayerId | xnNA}}</nz-descriptions-item>
+      <nz-descriptions-item nzTitle="开票类型">
+        {{detailInfo?.taxInfo?.taxingType | xnSelectTransform : 'taxingType'}}
+      </nz-descriptions-item>
+      <nz-descriptions-item nzTitle="邮箱">{{detailInfo?.taxInfo?.email | xnNA}}</nz-descriptions-item>
+    </nz-descriptions>
+    <nz-descriptions [nzColumn]="4" nzLayout="vertical">
+      <nz-descriptions-item nzTitle="开户银行名称">{{detailInfo?.taxInfo?.taxBankName | xnNA}}</nz-descriptions-item>
+      <nz-descriptions-item nzTitle="开户银行账号">{{detailInfo?.taxInfo?.taxBankAccount | xnNA}}</nz-descriptions-item>
+      <nz-descriptions-item [nzSpan]="2" nzTitle=""></nz-descriptions-item>
+    </nz-descriptions>
+    <nz-descriptions nzLayout="vertical">
+      <nz-descriptions-item [nzSpan]="2" nzTitle="税务信息地址">{{detailInfo?.taxInfo?.taxAddress | xnNA}}
+      </nz-descriptions-item>
+      <nz-descriptions-item [nzSpan]="2" nzTitle="税务信息电话">{{detailInfo?.taxInfo?.taxTelephone | xnNA}}
+      </nz-descriptions-item>
+    </nz-descriptions>
+    <nz-descriptions nzLayout="vertical">
+      <nz-descriptions-item [nzSpan]="2" nzTitle="收件人">{{detailInfo?.taxInfo?.receiver | xnNA}}</nz-descriptions-item>
+      <nz-descriptions-item [nzSpan]="2" nzTitle="收件人电话">{{detailInfo?.taxInfo?.receiverPhoneNum | xnNA}}
+      </nz-descriptions-item>
+    </nz-descriptions>
+  </nz-card>
+
+  <!-- 资质文件信息 -->
+  <nz-card nzTitle="资质文件" [nzLoading]="loading" class="card-box">
+    <xn-table [data]="certifyInfo" [columns]="certifyInfoColumn" [size]="'middle'" [loading]="loading"
+      [scroll]="{ y: '400px' }" [widthMode]="{type: 'strict',strictBehavior: 'truncate'}">
+      <!-- 用户角色 -->
+      <ng-template xn-table-row="files" let-item let-index="index" let-column="column">
+        <ng-container *ngIf="item?.certify_file">
+          <div *ngFor="let file of item?.certify_file | xnJson">
+            <a class="xn-click-a" (click)="viewFile(file,'dragon')">{{file.fileName}}</a>
+          </div>
+        </ng-container>
+      </ng-template>
+      <ng-template xn-table-row="dateTimeTpl" let-item let-index="index" let-column="column">
+        <ng-container *ngIf="item[column.index]">
+          {{ item[column.index] | xnDate:'date'}}
+        </ng-container>
+      </ng-template>
+      <ng-template xn-table-row="certifyList" let-item let-index="index" let-column="column">
+        <ng-container>
+          <div *ngFor="let value of item?.certifyClasseList">
+            <span>{{value.certify_classes}}</span>--<span>{{value.certify_grade}}</span>
+          </div>
+        </ng-container>
+      </ng-template>
+      <ng-template xn-table-row="operate" let-item let-index="index" let-column="column">
+            <a class="xn-click-a" (click)="deleteCertifyFile(item.id,'dragon')">删除</a>
+      </ng-template>
+    </xn-table>
+  </nz-card>
+
+  <!-- 用户信息 -->
+  <nz-card nzTitle="用户信息" [nzLoading]="loading" class="card-box" [nzExtra]="changeAdminTemplate">
+    <xn-table [data]="detailInfo?.userList" [columns]="userInfoColumn" [size]="'middle'" [loading]="loading"
+      [scroll]="{ y: '400px' }" [widthMode]="{type: 'strict',strictBehavior: 'truncate'}">
+      <!-- 用户角色 -->
+      <ng-template xn-table-row="userRoleTpl" let-item let-index="index" let-column="column">
+        <ng-container *ngIf="item?.userRoleList?.length">
+          <span *ngFor="let role of item?.userRoleList; let i = index">{{role.roleName}}
+            <span *ngIf="i!==item?.userRoleList?.length-1"> / </span>
+          </span>
+        </ng-container>
+      </ng-template>
+    </xn-table>
+  </nz-card>
+
+  <!-- 准入资料 -->
+  <nz-card nzTitle="准入资料" [nzLoading]="loading" [nzExtra]="accessTemplate" class="card-box">
+    <nz-table [nzData]="[1,2]" [nzShowPagination]="false">
+      <thead>
+        <tr>
+          <th>文件名</th>
+          <th>文件内容</th>
+          <th>文件状态</th>
+          <th>更新日期</th>
+          <th>失效日期</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngIf="getOrgFileShow('businessLicenseFile') && !getOrgFileShow('status')">
+          <td>营业执照</td>
+          <td>
+            <ng-container *ngIf="orgFileData?.businessLicenseFile">
+              <a class="xn-click-a" (click)="viewFile(orgFileData?.businessLicenseFile, 'api')">
+                {{orgFileData?.businessLicenseFile?.fileName}}</a>
+            </ng-container>
+          </td>
+          <td>{{orgFileData?.businessStatus}}</td>
+          <td>{{orgFileData?.fileUpdateTime | xnDate :'longdatetime'}}</td>
+          <td>{{orgFileData?.businessLicenseFileDate}}</td>
+        </tr>
+        <tr *ngIf="getOrgFileShow('orgLegalCard')">
+          <td>法定代表人身份证</td>
+          <td>
+            <ng-container *ngIf="orgFileData?.orgLegalCard && orgFileData?.orgLegalCard.length">
+              <div *ngFor="let file of orgFileData?.orgLegalCard">
+                <a class="xn-click-a" (click)="viewFile(file, 'api')">{{file?.fileName}}</a>
+              </div>
+            </ng-container>
+          </td>
+          <td>{{orgFileData?.orgLegalCardStatus}}</td>
+          <td>{{orgFileData?.fileUpdateTime | xnDate :'longdatetime'}}</td>
+          <td>{{orgFileData?.orgLegalCardDate}}</td>
+        </tr>
+        <tr *ngIf="getOrgFileShow('orgLegalCert')">
+          <td>法定代表人证明书</td>
+          <td>
+            <ng-container *ngIf="orgFileData?.orgLegalCert && orgFileData?.orgLegalCert.length">
+              <div *ngFor="let file of orgFileData?.orgLegalCert">
+                <a class="xn-click-a" (click)="viewFile(file, 'api')">{{file?.fileName}}</a>
+              </div>
+            </ng-container>
+          </td>
+          <td>{{orgFileData?.orgLegalCertStatus}}</td>
+          <td>{{orgFileData?.fileUpdateTime | xnDate :'longdatetime'}}</td>
+          <td>{{orgFileData?.orgLegalCertDate}}</td>
+        </tr>
+        <tr *ngIf="getOrgFileShow('certUserCard')">
+          <td>数字证书使用人身份证</td>
+          <td>
+            <ng-container *ngIf="orgFileData?.certUserCard && orgFileData?.certUserCard.length">
+              <div *ngFor="let file of orgFileData?.certUserCard">
+                <a class="xn-click-a" (click)="viewFile(file, 'api')">{{file?.fileName}}</a>
+              </div>
+            </ng-container>
+          </td>
+          <td>{{orgFileData?.certUserCardStatus }}</td>
+          <td>{{orgFileData?.fileUpdateTime | xnDate :'longdatetime'}}</td>
+          <td>{{orgFileData?.certUserCardDate}}</td>
+        </tr>
+        <tr *ngIf="getOrgFileShow('certUserAuthorize')">
+          <td>数字证书使用人授权书</td>
+          <td>
+            <ng-container *ngIf="orgFileData?.certUserAuthorize && orgFileData?.certUserAuthorize.length">
+              <div *ngFor="let file of orgFileData?.certUserAuthorize">
+                <a class="xn-click-a" (click)="viewFile(file, 'api')">{{file?.fileName}}</a>
+              </div>
+            </ng-container>
+          </td>
+          <td>{{orgFileData?.certUserAuthorizeStatus}}</td>
+          <td>{{orgFileData?.fileUpdateTime | xnDate :'longdatetime'}}</td>
+          <td>{{orgFileData?.certUserAuthorizeDate}}</td>
+        </tr>
+        <tr *ngIf="getOrgFileShow('companyDecision')">
+          <td>公司章程/股东会/董事会决议</td>
+          <td>
+            <ng-container *ngIf="orgFileData?.companyDecision && orgFileData?.companyDecision.length">
+              <div *ngFor="let file of orgFileData?.companyDecision">
+                <a class="xn-click-a" (click)="viewFile(file, 'api')">{{file?.fileName}}</a>
+              </div>
+            </ng-container>
+          </td>
+          <td>{{orgFileData?.companyDecisionStatus}}</td>
+          <td>{{orgFileData?.fileUpdateTime | xnDate :'longdatetime'}}</td>
+          <td>{{orgFileData?.companyDecisionDate}}</td>
+        </tr>
+        <tr *ngIf="getOrgFileShow('authorizationFile')">
+          <td>授权文件</td>
+          <td>
+            <ng-container *ngIf="orgFileData?.authorizationFile && orgFileData?.authorizationFile.length">
+              <div *ngFor="let file of orgFileData?.authorizationFile">
+                <a class="xn-click-a" (click)="viewFile(file, 'api')">{{file?.fileName}}</a>
+              </div>
+            </ng-container>
+          </td>
+          <td>{{orgFileData?.authorizationFileStatus}}</td>
+          <td>{{orgFileData?.fileUpdateTime | xnDate :'longdatetime'}}</td>
+          <td>{{orgFileData?.authorizeLetterFileDate}}</td>
+        </tr>
+        <!-- 上海银行新增 -->
+        <tr *ngIf="getOrgFileShow('businessLicenseFile') && getOrgFileShow('status')">
+          <td>营业执照</td>
+          <td>
+            <ng-container *ngIf="orgFileData?.businessLicenseFile && orgFileData?.businessLicenseFile.length">
+              <div *ngFor="let file of orgFileData?.businessLicenseFile | xnJson">
+                <a class="xn-click-a" (click)="viewFile(file, 'dragon')">{{file?.fileName}}</a>
+                <br />
+              </div>
+            </ng-container>
+          </td>
+          <td>{{!!orgFileData?.status ? '已生效' : [0, '0'].includes(orgFileData?.status) ? '待审核' : ''}}</td>
+          <td>{{(orgFileData?.updateTime || 0) | xnDate :'longdatetime'}}</td>
+          <td>{{(orgFileData?.businessLicenseEndDate || 0) | xnDate :'longdatetime'}}</td>
+        </tr>
+        <tr *ngIf="getOrgFileShow('orgLegalCardFile')">
+          <td>法定代表人身份证</td>
+          <td>
+            <ng-container *ngIf="orgFileData?.orgLegalCardFile && orgFileData?.orgLegalCardFile.length">
+              <div *ngFor="let file of orgFileData?.orgLegalCardFile | xnJson">
+                <a class="xn-click-a" (click)="viewFile(file, 'dragon')">{{file?.fileName}}</a>
+                <br />
+              </div>
+            </ng-container>
+          </td>
+          <td>{{!!orgFileData?.status ? '已生效' : [0, '0'].includes(orgFileData?.status) ? '待审核' : ''}}</td>
+          <td>{{(orgFileData?.updateTime || 0) | xnDate :'longdatetime'}}</td>
+          <td>{{(orgFileData?.orgLegalCardEndDate || 0) | xnDate :'longdatetime'}}</td>
+        </tr>
+        <tr *ngIf="getOrgFileShow('authorizeLetterFile')">
+          <td>征信授权书</td>
+          <td>
+            <ng-container *ngIf="orgFileData?.authorizeLetterFile && orgFileData?.authorizeLetterFile.length">
+              <div *ngFor="let file of orgFileData?.authorizeLetterFile | xnJson">
+                <a class="xn-click-a" (click)="viewFile(file, 'dragon')">{{file?.fileName}}</a>
+                <br />
+              </div>
+            </ng-container>
+          </td>
+          <td>{{!!orgFileData?.status ? '已生效' : [0, '0'].includes(orgFileData?.status) ? '待审核' : ''}}</td>
+          <td>{{(orgFileData?.updateTime || 0) | xnDate :'longdatetime'}}</td>
+          <td>/</td>
+        </tr>
+        <tr *ngIf="getOrgFileShow('profitsRecognitionFile')">
+          <td>受益所有人识别表</td>
+          <td>
+            <ng-container *ngIf="orgFileData?.profitsRecognitionFile && orgFileData?.profitsRecognitionFile.length">
+              <div *ngFor="let file of orgFileData?.profitsRecognitionFile | xnJson">
+                <a class="xn-click-a" (click)="viewFile(file, 'dragon')">{{file?.fileName}}</a>
+                <br />
+              </div>
+            </ng-container>
+          </td>
+          <td>{{!!orgFileData?.status ? '已生效' : [0, '0'].includes(orgFileData?.status) ? '待审核' : ''}}</td>
+          <td>{{(orgFileData?.updateTime || 0) | xnDate :'longdatetime'}}</td>
+          <td>/</td>
+        </tr>
+        <tr *ngIf="getOrgFileShow('profitsCardFile')">
+          <td>受益所有人身份证</td>
+          <td>
+            <ng-container *ngIf="orgFileData?.profitsCardFile && orgFileData?.profitsCardFile.length">
+              <div *ngFor="let file of orgFileData?.profitsCardFile | xnJson">
+                <a class="xn-click-a" (click)="viewFile(file, 'dragon')">{{file?.fileName}}</a>
+                <br />
+              </div>
+            </ng-container>
+          </td>
+          <td>{{!!orgFileData?.status ? '已生效' : [0, '0'].includes(orgFileData?.status) ? '待审核' : ''}}</td>
+          <td>{{(orgFileData?.updateTime || 0)| xnDate :'longdatetime'}}</td>
+          <td>/</td>
+        </tr>
+        <tr *ngIf="getOrgFileShow('financeFile')">
+          <td>财务报表</td>
+          <td>
+            <ng-container *ngIf="orgFileData?.financeFile && orgFileData?.financeFile.length">
+              <div *ngFor="let file of orgFileData?.financeFile | xnJson">
+                <a class="xn-click-a" (click)="viewFile(file, 'dragon')">{{file?.fileName}}</a>
+                <br />
+              </div>
+            </ng-container>
+          </td>
+          <td>{{!!orgFileData?.status ? '已生效' : [0, '0'].includes(orgFileData?.status) ? '待审核' : ''}}</td>
+          <td>{{(orgFileData?.updateTime || 0) | xnDate :'longdatetime'}}</td>
+          <td>/</td>
+        </tr>
+      </tbody>
+    </nz-table>
+  </nz-card>
+  <ng-template #accessTemplate>
+    <button *ngIf="isAdministrator || xn.user.roles.includes('hotline')" nz-button nzType="primary"
+      (click)="handleOrgFileView()">查看其他产品资料</button>
+  </ng-template>
+  <ng-template #changeAdminTemplate>
+    <button *ngIf="isAdministrator" nz-button nzType="primary" (click)="changeAdmin()">更换管理员</button>
+  </ng-template>
+
+
+  <nz-card class="card-box" style="text-align: right;">
+    <button nz-button nzType="primary" (click)="goBack()">返回</button>
+  </nz-card>
+
+</section>

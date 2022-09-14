@@ -1,0 +1,215 @@
+@import '~viewerjs/dist/viewer.css';
+@import "theme.less";
+@import "./utils.less";
+
+body, #root {
+  font-size: 14px;
+}
+html,
+body,
+#root {
+  height: auto;
+  min-height: 100%;
+  font-family: PingFangSC-Regular, PingFang SC, 'Microsoft soft';
+  width: 100vw;
+}
+// 门户面板-pc
+.portal-panel {
+  width: 1200px;
+  min-width: 1200px;
+  margin: 0 auto;
+  background-color: transparent !important;
+}
+.h5-portal-panel {
+  width: 100vw;
+  .px2rem(padding-left, 20);
+  .px2rem(padding-right, 20);
+}
+.flex-center {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+//除去百度logo
+.anchorBL {
+  display: none;
+}
+label {
+  max-width: none!important;
+}
+//悬浮阴影样式
+.float-shadow {
+  box-shadow: 1px 1px 3px #e6e6e6;
+  transition: transform 0.3s;
+  position: relative;
+  &:hover {
+    transform: translateY(-10px);
+    border-bottom: 2px solid #E62129;
+    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.2);
+  }
+}
+.h5-float-shadow {
+  transform: translateY(-10/75rem);
+  border-bottom: 2px solid #E62129;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2)!important;
+}
+a {
+  color: #1D67C7;
+}
+.colorWeak {
+  filter: invert(80%);
+}
+
+.ant-layout {
+  min-height: 100vh;
+
+  .ant-xn-sider-menu-logo {
+    border-bottom: 1px #404A55 solid;
+
+    h1 {
+      color: white;
+    }
+  }
+}
+
+canvas {
+  display: block;
+  margin: auto;
+}
+
+body {
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+ul,
+ol {
+  list-style: none;
+}
+
+@media (max-width: @screen-xs) {
+  .ant-table {
+    width: 100%;
+    overflow-x: auto;
+    &-thead > tr,
+    &-tbody > tr {
+      > th,
+      > td {
+        white-space: pre;
+        > span {
+          display: block;
+        }
+      }
+    }
+  }
+}
+
+/** 回到顶部 */
+.ant-back-top {
+  bottom: 60px;
+  right: 80px;
+}
+
+/** 表格 */
+table {
+  display: table !important;
+}
+
+/* 滚动槽 */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+::-webkit-scrollbar-track {
+  border-radius: 3px;
+  background: rgba(0,0,0,0.06);
+  -webkit-box-shadow: inset 0 0 5px rgba(0,0,0,0.08);
+}
+/* 滚动条滑块 */
+::-webkit-scrollbar-thumb {
+  border-radius: 3px;
+  background: rgba(0,0,0,0.12);
+  -webkit-box-shadow: inset 0 0 10px rgba(0,0,0,0.2);
+}
+/* 表格滚动条 */
+.ant-table-cell-fix-left, .ant-table-cell-fix-right {
+  z-index: 9;
+}
+/** 调整分页器快速跳转至某页的位置 */
+.ant-pagination-options {
+  &-quick-jumper {
+    float: left;
+    margin-right: 14px;
+  }
+  &-size-changer.ant-select {
+    margin-right: 0;
+  }
+}
+/** 表单底部自定内容 */
+.xn-table-footer-extra {
+  position: relative;
+  top: -28px;
+  width: 50%;
+  min-width: 200px;
+}
+/** 表格表单 */
+xn-cell-editor {
+  .ant-form-item {
+    margin-bottom: 0;
+  }
+}
+/** 页头 */
+.ant-page-header-heading-extra {
+  margin-top: 12px;
+}
+
+/** 必填项错误边框 */
+.required-error {
+  border: 1px solid red;
+  border-radius: 2px;
+}
+
+/** 必填项错误提示 */
+.required-error::after {
+  content: '必填项不能为空';
+  color: red;
+  position: absolute;
+  bottom: 0;
+}
+
+/** 卡片 */
+.card-content {
+  nz-card {
+    margin-top: 20px;
+    width: 100%;
+  }
+}
+
+/** 链接类型按钮 */
+button[nztype="link"] {
+  width: 120px;
+  .textOverflow();
+}
+
+/** 工具按钮 */
+.btn-tools {
+  border-top: solid 1px #eaeaea;
+  height: 65px;
+  padding: 15px 0;
+
+  button {
+    margin-right: 8px;
+  }
+}
+
+.modal-none-border {
+  .ant-modal-header, .ant-modal-footer {
+    border: none;
+  }
+}
+// 文件上传框 删除按钮颜色变化
+.specialclose{
+  color:#ff5500;
+  opacity:1;
+}

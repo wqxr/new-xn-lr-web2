@@ -1,0 +1,69 @@
+<div class="block-chain-browser">
+
+  <div class="top">
+    <div class="portal-panel">
+      <div class="logo">
+        <a title="区块链浏览器" routerLink="/block-chain-info/index"><img src="assets/images/bg/logo-white.png"/></a>
+
+        <nz-select [(ngModel)]="appType" nzBorderless (ngModelChange)="onSelect($event)">
+          <nz-option *ngFor="let i of appList" [nzValue]="i.value" [nzLabel]="i.label"></nz-option>
+        </nz-select>
+      </div>
+      <div class="title">链融区块链平台浏览器</div>
+      <div class="search">
+        <nz-input-group [nzSuffix]="suffixIconSearch" *ngIf="appType==='wanke'">
+          <input type="text" nz-input placeholder="基础资产ID/审批流ID/Hash" [(ngModel)]="searchVal" (keyup.enter)="onEnter()"/>
+        </nz-input-group>
+        <nz-input-group [nzSuffix]="suffixIconSearch" *ngIf="appType==='guarantee'">
+          <input type="text" nz-input placeholder="基础资产ID/Hash" [(ngModel)]="searchVal" (keyup.enter)="onEnter()"/>
+        </nz-input-group>
+        <ng-template #suffixIconSearch>
+          <i nz-icon nzType="search" style="cursor: pointer;" (click)="onEnter()" title="点击搜索"></i>
+        </ng-template>
+      </div>
+    </div>
+  </div>
+  <div class="middle">
+    <div class="portal-panel">
+      <div class="middle-box">
+        <div class="left">
+          <div class="number">{{ statistics.blockHeight | transformNum }}</div>
+          <div class="label">区块高度</div>
+        </div>
+        <div class="line"></div>
+        <div class="center">
+          <div class="number">{{ statistics.nodes | transformNum }}</div>
+          <div class="label">节点数量</div>
+        </div>
+        <div class="line"></div>
+        <div class="right">
+          <div class="number">{{ statistics.evCount | transformNum }}</div>
+          <div class="label">存证数量</div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="bottom">
+    <div class="portal-panel">
+      <div class="bottom-box">
+        <nz-table #columnTable [nzData]="tableData" [nzShowPagination]="false">
+          <thead>
+          <tr>
+            <th nzWidth="180px">区块高度</th>
+            <th>存证Hash</th>
+            <th nzWidth="240px">上链时间</th>
+          </tr>
+          </thead>
+          <tbody>
+          <tr *ngFor="let data of columnTable.data;let key = index;">
+            <td [ngClass]="{'zebra': key % 2 === 0}">{{ data.blockHeight | transformNum }}</td>
+            <td [ngClass]="{'zebra': key % 2 === 0}">{{ data.evHash }}</td>
+            <td [ngClass]="{'zebra': key % 2 === 0}">{{ data.createTime }}</td>
+          </tr>
+          </tbody>
+        </nz-table>
+      </div>
+    </div>
+  </div>
+</div>
+<portal-bar type="black" isBlockChain="true"></portal-bar>

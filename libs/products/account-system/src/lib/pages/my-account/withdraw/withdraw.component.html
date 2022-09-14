@@ -1,0 +1,14 @@
+<xn-page-header-wrapper>
+  <form nz-form nzLayout="horizontal" [formGroup]="form" *ngIf="loading; else loadingTemplate">
+    <xn-formly [form]="form" [options]="options" [model]="model" [fields]="showFields">
+    </xn-formly>
+  </form>
+  <xn-footer-toolbar style="align-items: center;">
+    <button nz-button nzType="default" (click)="goBack()">返回</button>
+    <button nz-button nzType="primary" [disabled]="!form.valid" (click)="submitFrom()">提交</button>
+  </xn-footer-toolbar>
+</xn-page-header-wrapper>
+
+<ng-template #loadingTemplate>
+  <nz-skeleton [nzActive]="true"></nz-skeleton>
+</ng-template>

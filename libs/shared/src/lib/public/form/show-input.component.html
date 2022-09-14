@@ -1,0 +1,1982 @@
+<div [ngSwitch]="type">
+  <xn-org-right-show *ngSwitchCase="'orgright'" [row]="row" [form]="form" [svrConfig]="svrConfig" [canEdit]="false"></xn-org-right-show>
+  <xn-quantum-show *ngSwitchCase="'quantum'" [row]="row" [form]="form" [svrConfig]="svrConfig"></xn-quantum-show>
+
+  <span *ngSwitchCase="'file'" class="form-control xn-input-font xn-input-border-radius" style="display: inline-table">
+    <div *ngFor="let item of items" style="line-height: 24px">
+      <a class="xn-click-a" (click)="onView(item)">{{item.label}}</a>
+    </div>
+  </span>
+  <div *ngSwitchCase="'mfile'">
+    <span class="form-control xn-input-font xn-input-border-radius" style="display: inline-table">
+      <div *ngFor="let item of items" style="line-height: 24px;">
+        <ng-container *ngIf="!!item.url">
+          <a class="xn-click-a" (click)="onView(item)">{{item.label}}</a>
+        </ng-container>
+        <ng-container *ngIf="!!item.secret">
+          <a class="xn-click-a" (click)="showContract(item.id, item.secret, item.label)">{{item.label}}</a>
+        </ng-container>
+      </div>
+    </span>
+    <div class="text-right"
+      *ngIf="orgType===3 && svrConfig.record.flowId==='factoring_invoice_replace13'&& items.length">
+      <a href="javaScript:void(0)" class="fa fa-download" (click)="downLoadReceivableFiles(items)">下载</a>
+    </div>
+  </div>
+  <span *ngSwitchCase="'excel'" class="form-control xn-input-font xn-input-border-radius" style="display: inline-table">
+    <div *ngFor="let item of items" style="line-height: 24px;">
+      <a class="xn-click-a" (click)="onExcelView(item)">{{item.label}}</a>
+      <a class="xn-click-a load-btn" (click)="downLoad(item)">点击下载</a>
+    </div>
+  </span>
+  <span *ngSwitchCase="'file-edit'" class="form-control xn-input-font xn-input-border-radius"
+    style="display: inline-table">
+    <div *ngFor="let item of items" style="line-height: 24px;">
+      <!-- <a href="{{item.url}}"
+       >{{item.label}}</a> -->
+      <a class="xn-click-a" (click)="onView(item)">{{item.label}}</a>
+    </div>
+  </span>
+  <span *ngSwitchCase="'multiple-picker'" class="form-control xn-input-font xn-input-border-radius"
+    style="display: inline-table">
+    <div *ngFor="let item of items" style="line-height: 24px;">
+      <a class="xn-click-a">{{item.orgName}}</a>
+    </div>
+    <div *ngFor="let item of items" style="line-height: 24px;">
+      <a class="xn-click-a" (click)="showContract(item.id,item.secret,item.label)">{{item.label}}</a>
+    </div>
+  </span>
+  <span *ngSwitchCase="'file-edit1'" class="form-control xn-input-font xn-input-border-radius"
+    style="display: inline-table">
+    <div *ngFor="let item1 of item.files" style="line-height: 24px;">
+      <!-- <a href="{{item.url}}"
+       >{{item.label}}</a> -->
+      <a class="xn-click-a" (click)="onApplyView(item)">{{item1.fileName}}</a>
+    </div>
+  </span>
+
+  <span *ngSwitchCase="'mViewfile'" class="form-control xn-input-font xn-input-border-radius"
+    style="display: inline-table">
+    <div *ngFor="let item of items" style="line-height: 24px;">
+      <!-- <a href="{{item.url}}"
+       >{{item.label}}</a> -->
+      <a class="xn-click-a" (click)="onView(item)">{{item.label}}</a>
+    </div>
+  </span>
+  <span *ngSwitchCase="'mul-select'" class="form-control xn-input-font xn-input-border-radius"
+    style="display: inline-table">
+    <div *ngFor="let item of items" style="line-height: 24px;">
+      <!-- <a href="{{item.url}}"
+       >{{item.label}}</a> -->
+      <a class="xn-click-a" (click)="onView(item)">{{item.label}}</a>
+    </div>
+  </span>
+
+  <span *ngSwitchCase="'backfile'" class="form-control xn-input-font xn-input-border-radius"
+    style="display: inline-table">
+    <div *ngFor="let item of items" style="line-height: 24px;">
+      <!-- <a href="{{item.url}}"
+         >{{item.label}}</a> -->
+      <a class="xn-click-a" (click)="onView(item)">{{item.label}}</a>
+    </div>
+  </span>
+  <ng-container *ngSwitchCase="'linkage'">
+    <span class="form-control xn-input-font xn-input-border-radius" [style.margin-bottom.px]="item.has?15:0"
+      style="display: inline-table">
+      {{item?.has?'有':'无'}}
+    </span>
+    <span *ngIf="item.has" class="form-control xn-input-font xn-input-border-radius" style="display: inline-table">
+      {{item?.momName}}
+    </span>
+
+  </ng-container>
+  <ng-container *ngSwitchCase="'text-id'">
+    <div class="form-control xn-input-font xn-input-border-radius">
+      <div class="xn-click-a" (click)="viewProcess(item)">
+        {{item}}
+      </div>
+    </div>
+  </ng-container>
+
+  <ng-container *ngSwitchCase="'linkage1'">
+    <span class="form-control xn-input-font xn-input-border-radius" [style.margin-bottom.px]="item.type==='固定比例'?15:0"
+      style="display: inline-table">
+      {{item?.type}}
+    </span>
+    <ng-container *ngIf="item.type==='固定比例'">
+      <span class="form-control xn-input-font xn-input-border-radius" style="display: inline-table;margin-bottom: 15px">
+        {{item?.enterpriseName}}
+      </span>
+      <span class="form-control xn-input-font xn-input-border-radius" style="display: inline-table">
+        {{item?.rate}}
+      </span>
+    </ng-container>
+  </ng-container>
+
+  <textarea *ngSwitchCase="'textarea'" rows="5"
+    class="form-control xn-show-input-textarea xn-input-font xn-input-border-radius" readonly>{{label}}</textarea>
+
+  <span *ngSwitchCase="'show'" class="form-control xn-input-font xn-input-border-radius">
+    {{row.data | xnInputShow: row}}
+  </span>
+  <div *ngSwitchCase="'item-change'">
+    <table class="table-hover table table-bordered change-table file-row-table">
+      <thead style="background-color: #f4f4f4">
+        <tr>
+          <th colspan="2">{{item?.typeChange}}</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngIf="item.itemChange.changeType">
+          <td>业务变更</td>
+          <td>{{item?.itemChange?.changeType}}</td>
+        </tr>
+        <tr *ngIf="item.itemChange.changeBeforeInfo">
+          <td>变更前信息</td>
+          <td>{{item?.itemChange?.changeBeforeInfo}}</td>
+        </tr>
+        <tr *ngIf="item.itemChange.changeAfterInfo">
+          <td>变更后信息</td>
+          <td>{{item?.itemChange?.changeAfterInfo}}</td>
+        </tr>
+        <tr *ngIf="item.itemChange.changeReason">
+          <td>变更原因</td>
+          <td>{{item?.itemChange?.changeReason}}</td>
+        </tr>
+        <tr *ngIf="item.itemChange.reservedAccount">
+          <td>申请人预留收款/ 付款账号</td>
+          <td>{{item?.itemChange?.reservedAccount}}</td>
+        </tr>
+        <tr *ngIf="item.itemChange.applyReason">
+          <td>申请原因</td>
+          <td>{{item?.itemChange?.applyReason}}</td>
+        </tr>
+        <tr *ngIf="item.itemChange.logoutAccount">
+          <td>注销账户</td>
+          <td>{{item?.itemChange?.logoutAccount}}</td>
+        </tr>
+        <tr *ngIf="item.itemChange.agreementNumber">
+          <td>托管协议编号</td>
+          <td>{{item?.itemChange?.agreementNumber}}</td>
+        </tr>
+        <tr *ngIf="item.itemChange.subBalance">
+          <td>子账户余额</td>
+          <td>{{item?.itemChange?.subBalance | xnMoney}}</td>
+        </tr>
+        <tr *ngIf="item.itemChange.other">
+          <td>其他</td>
+          <td>{{item?.itemChange?.other}}</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+  <div *ngSwitchCase="'bank-single'">
+    <table class="table-hover table table-bordered file-row-table">
+      <tr>
+        <th style="width: 60px">户名
+        <td>{{item.accountName}}</td>
+      </tr>
+      <tr>
+        <th style="width: 60px;">账号</th>
+        <td>{{item.accountNumber | xnCard}}</td>
+      </tr>
+      <tr>
+        <th style="width: 60px">开户行</th>
+        <td>{{item.bankName}}</td>
+      </tr>
+    </table>
+  </div>
+  <div *ngSwitchCase="'bank-single1'">
+    <table class="table-hover table table-bordered file-row-table">
+      <tr>
+        <th style="width: 60px">户名
+        <td>{{item.accountName}}</td>
+      </tr>
+      <tr>
+        <th style="width: 60px;">账号</th>
+        <td>{{item.accountNumber | xnCard}}</td>
+      </tr>
+      <tr>
+        <th style="width: 60px">开户行</th>
+        <td>{{item.bankName}}</td>
+      </tr>
+    </table>
+  </div>
+  <div *ngSwitchCase="'vanke-select'">
+    <div>
+      <span class="form-control xn-input-font xn-input-border-radius" style="display: inline-table">{{businessType}}
+      </span>
+    </div>
+    <div style='margin-top:10px' *ngIf="vankeType!==''">
+      <div class="col-sm-2 xn-control-label required-star" style="padding-left: 0px;text-align: left;width: 15%;">
+        万科类型
+      </div>
+      <div class='col-sm-10' style='padding: 0px;width: 85%;'>
+        <span class="form-control xn-input-font xn-input-border-radius"
+          style="display: inline-table;">{{vankeType}}
+        </span>
+      </div>
+    </div>
+  </div>
+  <span *ngSwitchDefault [ngStyle]="{'color':row.name==='registerSource'?'red':'black'}" class="form-control xn-input-font xn-input-border-radius" style="display: inline-table">
+    {{label}}
+  </span>
+
+  <table *ngSwitchCase="'invoice'" class="table table-bordered table-hover file-row-table" width="100%">
+    <thead>
+      <tr>
+        <th>发票扫描件</th>
+        <th>发票号码</th>
+        <th>发票金额</th>
+        <!-- <th>发票代码</th> -->
+        <th>开票日期</th>
+        <th>状态</th>
+        <th style="width: 80px;">操作</th>
+        <th
+          *ngIf="svrConfig.record.flowId === 'financing_factoring' || svrConfig.record.flowId === 'financing_factoring1' || svrConfig.record.flowId === 'financing_factoring2' || svrConfig.record.flowId === 'financing_factoring13'">
+          历史交易id
+        </th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let item of items">
+        <td>
+          <a class="xn-click-a" (click)="onViewInvoice(item)">{{item.fileName}}</a>
+        </td>
+        <td>{{item.invoiceNum || ''}}</td>
+        <td>{{item.invoiceAmount || '' | xnMoney}}</td>
+        <!-- <td>{{ item.invoiceCode }}</td> -->
+        <td>{{ item.invoiceDate }}</td>
+        <td>
+          <ng-container
+            *ngIf="(item?.tag&&item?.tag==='artificial') || (item?.away && item?.away==='edit');else block2">
+            <span class="tag-color">人工验证</span>
+          </ng-container>
+          <ng-template #block2>
+            <span [ngClass]="{'tag-color':item.status===4 || item.status===2 || item.status===6 ||item.status===7 || item.status===8}">{{item.status | xnInvoiceStatus}}</span>
+          </ng-template>
+        </td>
+        <td>
+          <a class="xn-click-a" (click)="onViewInvoice(item)">查看</a>
+        </td>
+        <td
+          *ngIf="svrConfig.record.flowId === 'financing_factoring' || svrConfig.record.flowId === 'financing_factoring1' || svrConfig.record.flowId === 'financing_factoring2' || svrConfig.record.flowId === 'financing_factoring13'">
+          <ng-container *ngIf="item?.mainFlowIds && item?.mainFlowIds.length ; else block">
+            <div *ngFor="let sub of item.mainFlowIds">
+              <ng-container *ngIf="sub.mainFlowId.indexOf('cloud') === -1;else cloud">
+                <a href="javaScript:void (0)" (click)="viewProcess(sub)">{{sub.mainFlowId}}</a>
+              </ng-container>
+              <ng-template #cloud>
+                <span>{{sub.mainFlowId}}</span>
+              </ng-template>
+            </div>
+          </ng-container>
+          <ng-template #block>
+            <div>/</div>
+          </ng-template>
+        </td>
+      </tr>
+      <tr *ngIf="amountAll > 0">
+        <td colspan="2">发票金额合计</td>
+        <td colspan="4">{{amountAll}}</td>
+        <td
+          *ngIf="svrConfig.record.flowId === 'financing_factoring' || svrConfig.record.flowId === 'financing_factoring1' || svrConfig.record.flowId === 'financing_factoring2' || svrConfig.record.flowId === 'financing_factoring13'">
+          /
+        </td>
+      </tr>
+    </tbody>
+  </table>
+
+  <table *ngSwitchCase="'bank-invoice'" class="table table-bordered table-hover file-row-table" width="100%">
+    <thead>
+      <tr>
+        <th>发票扫描件</th>
+        <th>发票号码</th>
+        <th>发票金额</th>
+        <!-- <th>发票代码</th> -->
+        <th>开票日期</th>
+        <th>状态</th>
+        <th style="width: 80px;">操作</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let item of items">
+        <td>
+          <a class="xn-click-a" (click)="onViewBankInvoice(item)">{{item.fileName}}</a>
+        </td>
+        <td>{{item.invoiceNum || ''}}</td>
+        <td>{{item.invoiceAmount || '' | xnMoney}}</td>
+        <!-- <td>{{ item.invoiceCode }}</td> -->
+        <td>{{ item.invoiceDate }}</td>
+        <td>
+          <ng-container
+            *ngIf="(item?.tag&&item?.tag==='artificial') || (item?.away && item?.away==='edit');else block3">
+            <span class="tag-color">人工验证</span>
+          </ng-container>
+          <ng-template #block3>
+            <span>{{item.status | xnInvoiceStatus}}</span>
+          </ng-template>
+        </td>
+        <td>
+          <a class="xn-click-a" (click)="onViewBankInvoice(item)">查看</a>
+          <span *ngIf="item.consistent !== undefined">
+            <i class="fa"
+              [ngClass]="{'text-success fa-check-circle-o': item.consistent, 'text-danger fa-times-circle-o': !item.consistent}"></i>
+          </span>
+        </td>
+      </tr>
+      <tr *ngIf="amountAll > 0">
+        <td colspan="2">发票金额合计</td>
+        <td colspan="4">{{amountAll}}</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <table *ngSwitchCase="'order'" class="table table-bordered table-hover file-row-table" width="100%">
+    <thead>
+      <tr>
+        <th>应付账款序号</th>
+        <th>基础交易合同编号</th>
+        <th>发票号码</th>
+        <th>发票总金额</th>
+        <th>应收账款金额</th>
+        <th>应收账款到期日</th>
+        <th>债权单位名称</th>
+        <th>债权单位联系人</th>
+        <th>债权单位联系人手机号</th>
+        <th>债权单位银行账户</th>
+        <th>债权单位银行开户行</th>
+        <th>债务单位名称</th>
+        <th>注册状态</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let item of items">
+        <td>{{item.num }}</td>
+        <td>{{item.contractId }}</td>
+        <td>{{item.invoiceNum }}</td>
+        <td>{{item.invoiceAmount }}</td>
+        <td>{{item.receivable }}</td>
+        <td>{{item.expiryTime }}</td>
+        <td>{{item.debtUnit }}</td>
+        <td>{{item.debtUser }}</td>
+        <td>{{item.mobile }}</td>
+        <td>{{item.debtAccount }}</td>
+        <td>{{item.debtBank }}</td>
+        <td>{{item.projectCompany }}</td>
+
+
+        <td>{{item.registered === true ? '已注册' : '未注册'}}</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <table *ngSwitchCase="'order5'" class="table table-bordered table-hover file-row-table" width="100%">
+    <thead>
+      <tr>
+        <th>应付账款序号</th>
+        <th>基础交易合同编号</th>
+        <th>发票号码</th>
+        <th style="width:70px;">真实交易发票号</th>
+        <th>发票总金额</th>
+        <th>应收账款金额</th>
+        <th>债权单位名称</th>
+        <th>债权单位联系人</th>
+        <th>债权单位联系人手机号</th>
+        <th>债权单位银行账户</th>
+        <th>债权单位银行开户行</th>
+        <th>债务单位名称</th>
+        <th>付款确认书编号</th>
+        <th>应收账款到期日</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let item of items; let i = index">
+        <td>{{ i+1 }}</td>
+        <td>{{item.contractId }}</td>
+        <td>{{item.invoiceNum }}</td>
+        <td style="max-width:70px;word-wrap:break-word">{{item.invoiceNumReal }}</td>
+        <td>{{item.invoiceAmount }}</td>
+        <td>{{item.receivable }}</td>
+        <td>{{item.debtUnit }}</td>
+        <td>{{item.debtUser }}</td>
+        <td>{{item.mobile }}</td>
+        <td style="max-width:70px;word-wrap:break-word">{{item.debtAccount }}</td>
+        <td>{{item.debtBank }}</td>
+        <td>{{item.projectCompany }}</td>
+        <td>{{item.originalSingleEencoding }}</td>
+        <td>{{item.expiryTime}}</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <table *ngSwitchCase="'honour'" class="table table-bordered table-hover file-row-table" width="100%">
+    <thead>
+      <tr>
+        <th>商票扫描件</th>
+        <th>商票号码</th>
+        <th>商票金额</th>
+        <th style="width: 80px;"></th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let item of items">
+        <td>
+          <a class="xn-click-a" (click)="onViewHonour(item)">{{item.fileName}}</a>
+        </td>
+        <td>{{item.honourNum || ''}}</td>
+        <td>{{item.honourAmount || '' | xnMoney}}</td>
+        <td>
+          <a class="xn-click-a" (click)="onViewHonour(item)">查看</a>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+
+  <table *ngSwitchCase="'bank-honour'" class="table table-bordered table-hover file-row-table" width="100%">
+    <thead>
+      <tr>
+        <th>商票扫描件</th>
+        <th>商票号码</th>
+        <th>商票金额</th>
+        <th style="width: 80px;"></th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let item of items">
+        <td>
+          <a class="xn-click-a" (click)="onViewBankHonour(item)">{{item.fileName}}</a>
+        </td>
+        <td>{{item.honourNum || ''}}</td>
+        <td>{{item.honourAmount || '' | xnMoney}}</td>
+        <td>
+          <a class="xn-click-a" (click)="onViewBankHonour(item)">查看</a>
+          <span *ngIf="item.consistent !== undefined">
+            <i class="fa"
+              [ngClass]="{'text-success fa-check-circle-o': item.consistent, 'text-danger fa-times-circle-o': !item.consistent}"></i>
+          </span>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+
+  <table *ngSwitchCase="'contract'" class="table table-bordered table-hover file-row-table" width="100%">
+    <thead>
+      <tr>
+        <th>合同扫描件</th>
+        <th>合同名称</th>
+        <th>合同编号</th>
+        <th style="width: 80px;"></th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let item of items">
+        <td>
+          <a class="xn-click-a" (click)="onViewContract(item)">文件</a>
+        </td>
+        <td>{{item.contractTitle}}</td>
+        <td>{{item.contractNum}}</td>
+        <td>
+          <a class="xn-click-a" (click)="onViewContract(item)">查看</a>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+
+  <table *ngSwitchCase="'bank-contract'" class="table table-bordered table-hover file-row-table" width="100%">
+    <thead>
+      <tr>
+        <th>合同扫描件</th>
+        <th>合同名称</th>
+        <th>合同编号</th>
+        <th style="width: 80px;"></th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let item of items">
+        <td>
+          <a class="xn-click-a" (click)="onViewBankContract(item)">文件</a>
+        </td>
+        <td>{{item.contractTitle}}</td>
+        <td>{{item.contractNum}}</td>
+        <td>
+          <a class="xn-click-a" (click)="onViewBankContract(item)">查看</a>
+          <span *ngIf="item.consistent !== undefined">
+            <i class="fa"
+              [ngClass]="{'text-success fa-check-circle-o': item.consistent, 'text-danger fa-times-circle-o': !item.consistent}"></i>
+          </span>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+
+  <table *ngSwitchCase="'group'" class="table table-bordered table-hover file-row-table" width="100%">
+    <thead>
+      <tr>
+        <th>
+          <span style="line-height: 20px;">扫描件</span>
+        </th>
+        <th>
+          <span style="line-height: 20px;">金额</span>
+        </th>
+        <th>
+          <span style="line-height: 20px;">保理到期日</span>
+        </th>
+        <th>
+          <span style="line-height: 20px;">集团付款确认书编号</span>
+        </th>
+        <th style="width: 80px;"></th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let item of items">
+        <td>
+          <a class="xn-click-a" (click)="onViewGroup(item)">文件</a>
+        </td>
+        <td>{{item.amount}}</td>
+        <td>{{item.factoryDate}}</td>
+        <td>{{item.num}}</td>
+        <td>
+          <a class="xn-click-a" (click)="onViewGroup(item)">查看</a>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+
+  <table *ngSwitchCase="'group5'" class="table table-bordered table-hover file-row-table" width="100%">
+    <thead>
+      <tr>
+        <th>
+          <span style="line-height: 20px;">付款确认书</span>
+        </th>
+        <th>
+          <span style="line-height: 20px;">金额</span>
+        </th>
+        <th>
+          <span style="line-height: 20px;">保理到期日</span>
+        </th>
+        <th>
+          <span style="line-height: 20px;">项目公司付款确认书编号</span>
+        </th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let item of items">
+        <td>
+          <div *ngFor="let payFile of item.payFiles">
+            <a class="xn-click-a" style="margin-right: 10px;" (click)="showContract(payFile['id'], payFile['secret'])">
+              《{{payFile['label']}}》
+            </a>
+          </div>
+        </td>
+        <td>{{item.amount}}</td>
+        <td>{{item.factoryDate}}</td>
+        <td>{{item.num}}</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <table *ngSwitchCase="'supervisor'" class="table table-bordered table-hover file-row-table" width="100%">
+    <thead>
+      <tr>
+        <th>扫描件</th>
+        <th>金额</th>
+        <th style="width: 80px;"></th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let item of items">
+        <td>
+          <a class="xn-click-a" (click)="onViewSupervior(item)">文件</a>
+        </td>
+        <td>{{item.amount}}</td>
+        <td>
+          <a class="xn-click-a" (click)="onViewSupervior(item)">查看</a>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+
+  <table *ngSwitchCase="'check'" class="table table-bordered table-hover file-row-table" width="100%">
+    <thead>
+      <tr>
+        <th>扫描件</th>
+        <th>金额</th>
+        <th style="width: 80px;"></th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let item of items">
+        <td>
+          <a class="xn-click-a" (click)="onViewSupervior(item)">文件</a>
+        </td>
+        <td>{{item.amount}}</td>
+        <td>
+          <a class="xn-click-a" (click)="onViewSupervior(item)">查看</a>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+
+  <table *ngSwitchCase="'number'" class="table table-bordered table-hover file-row-table" width="100%">
+    <thead>
+      <tr>
+        <th>资产名称</th>
+        <th>商品归类</th>
+        <th>单位</th>
+        <th>数量</th>
+        <th>最小交易单位</th>
+        <th>规格型号</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let item of items; let i = index">
+        <td>{{item.property}}</td>
+        <td>{{item.sort | xnClassify}}</td>
+        <td>{{item.unit}}</td>
+        <td>{{item.member}}</td>
+        <td>
+          <span *ngIf="item.sort === 'transaction'">{{item.dealunit + item.unit}}</span>
+        </td>
+        <td>{{item.specifications}}</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <table *ngSwitchCase="'bill'" class="table table-bordered table-hover file-row-table" width="100%">
+    <thead>
+      <tr>
+        <th>企业名称</th>
+        <th>纳税人识别号</th>
+        <th>纳税人地址</th>
+        <th style="width: 80px;"></th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>
+          <span *ngIf="item">{{item.companyName}}</span>
+        </td>
+        <td>
+          <span *ngIf="item">{{item.taxpayerSegistrationNumber}}</span>
+        </td>
+        <td>
+          <span *ngIf="item">{{item.taxpayerAddress}}</span>
+        </td>
+        <td>
+          <a class="xn-click-a" (click)="onViewBill(item)">查看</a>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+
+  <table *ngSwitchCase="'conditions'" class="table table-bordered table-hover file-row-table" width="100%">
+    <thead>
+      <tr>
+        <th>核心企业: {{enterprise}}</th>
+      </tr>
+    </thead>
+    <tbody *ngIf="showCondition">
+      <tr *ngFor="let item of items; let i = index">
+        <td>
+          <div class="check-value">{{i+1}}.{{item.content}}</div>
+          <a class="xn-click-a v-top" (click)="onViewRead(item)">查看</a>
+        </td>
+      </tr>
+    </tbody>
+    <tbody *ngIf="!showCondition">
+      <tr>
+        <td>无</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <table *ngSwitchCase="'date1'" class="table table-bordered table-hover file-row-table" width="100%">
+    <thead>
+      <tr>
+        <th>{{label}}</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>
+          <span class="xn-holiday-alert">{{holidayAlert}}</span>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+
+  <table *ngSwitchCase="'wselect'" class="table table-bordered table-hover file-row-table" width="100%">
+    <tbody>
+      <tr *ngIf="label.first">
+        <td>
+          {{label.first}}
+        </td>
+      </tr>
+      <tr *ngIf="label.second">
+        <td>
+          {{label.second}}
+        </td>
+      </tr>
+      <tr *ngIf="label.third">
+        <td>
+          {{label.third}}
+        </td>
+      </tr>
+    </tbody>
+  </table>
+
+  <span *ngSwitchCase="'xnMainFlowStatus'" class="form-control xn-input-font xn-input-border-radius">
+    {{row.data | xnMainFlowStatus}}
+  </span>
+
+  <span *ngSwitchCase="'xnZhiya'" class="form-control xn-input-font xn-input-border-radius">
+    {{row.data | xnZhiya}}
+  </span>
+  <!-- 放款申请书 -->
+  <table *ngSwitchCase="'fixedfile'" class="table table-bordered table-hover file-row-table" width="100%">
+    <tbody>
+      <tr>
+        <td>
+          <a class="xn-click-a" (click)="showContract(item.id, item.secret)">
+            《{{item.label}}》
+          </a>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+  <!-- 金地abs 上传付款凭证 付款确认书复合 -->
+  <table *ngSwitchCase="'fixedfile1'" class="table table-bordered table-hover file-row-table" width="100%">
+    <tbody>
+      <ng-container *ngIf="items.length">
+        <tr *ngFor="let item of items">
+          <td>
+            <a class="xn-click-a" (click)="showContract(item.id, item.secret)">
+              《{{item.label}}》
+            </a>
+          </td>
+        </tr>
+      </ng-container>
+    </tbody>
+  </table>
+  <div *ngSwitchCase="'toarray'" class=" xn-input-font clearfix">
+    <div *ngFor="let item of items" class="border col-sm-3 text-center">
+      <div>{{item}}</div>
+    </div>
+  </div>
+  <div *ngSwitchCase="'switch'" class="border xn-input-font clearfix">
+    <div class="form-control" style="border: none">
+      {{row.data==='1'?'是':'否'}}
+    </div>
+  </div>
+  <!--万科模式提单-->
+  <div *ngSwitchCase="'data-content'">
+    <div class="height">
+      <div class="head-height">
+        <table class="table table-data-content table-bordered table-hover text-center table-display relative"
+          [style.left.px]="headLeft">
+          <thead>
+            <tr>
+              <ng-container *ngFor="let item of heads[enterpriseName.vankeMode]">
+                <td>
+                  <span style="word-wrap: break-word;">{{item.label}}</span>
+                </td>
+              </ng-container>
+            </tr>
+          </thead>
+        </table>
+      </div>
+      <div class="table-height" (scroll)="onScroll($event)">
+        <table class="table table-data-content table-bordered table-hover text-center table-display">
+          <tbody>
+            <ng-container *ngFor="let item of items">
+              <tr>
+                <td *ngFor="let head of heads[enterpriseName.vankeMode]">
+                  <ng-container *ngIf="head?.options">
+                    <span *ngIf="head.options.type==='money'" [ngClass]="head.options.style">{{item[head.value] |
+                      number:'1.2-3'}}</span>
+                    <span *ngIf="head.options.type==='def'" [ngClass]="head.options.style">{{item[head.value]}}</span>
+                    <span *ngIf="head.options.type==='boolean'"
+                      [ngClass]="head.options.style">{{item[head.value]===true?'是':'否'}}</span>
+                    <!--当有多张内容时-->
+                    <div *ngIf="head.options.type==='multiple'">
+                      <ng-container *ngIf="hwModeService.arrayLength(item[head.value]);else block2">
+                        <a class="xn-click-a" href="javaScript:void(0)" (click)="viewMoreDetailInfo(item[head.value])"
+                          [innerHtml]="(item[head.value] | xnStringToArray:2:'等;')">
+                        </a>
+                      </ng-container>
+                      <ng-template #block2>
+                        <div [innerHtml]="(item[head.value] | xnStringToArray:2:'等;')"></div>
+                      </ng-template>
+                    </div>
+
+                  </ng-container>
+                  <span *ngIf="!head.options">{{item[head.value]}}</span>
+                </td>
+              </tr>
+            </ng-container>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+  <!--金地模式提单-->
+  <div *ngSwitchCase="'data-content3'">
+    <div class="height">
+      <div class="head-height">
+        <table class="table table-data-content table-bordered table-hover text-center table-display relative"
+          [style.left.px]="headLeft">
+          <thead>
+            <tr>
+              <ng-container *ngFor="let item of heads[enterpriseName.gemdaleMode]">
+                <td>
+                  <span>{{item.label}}</span>
+                </td>
+              </ng-container>
+            </tr>
+          </thead>
+        </table>
+      </div>
+      <div class="table-height" (scroll)="onScroll($event)">
+        <table class="table table-data-content table-bordered table-hover text-center table-display">
+          <tbody>
+            <ng-container *ngFor="let item of items">
+              <tr>
+                <td *ngFor="let head of heads[enterpriseName.gemdaleMode]">
+                  <ng-container *ngIf="head?.options">
+                    <span *ngIf="head.options.type==='money'" [ngClass]="head.options.style">{{item[head.value] |
+                      number:'1.2-3'}}</span>
+                    <span *ngIf="head.options.type==='def'" [ngClass]="head.options.style">{{item[head.value]}}</span>
+                    <span *ngIf="head.options.type==='boolean'"
+                      [ngClass]="head.options.style">{{item[head.value]===true?'是':'否'}}</span>
+                    <!--当有多张内容时-->
+                    <div *ngIf="head.options.type==='multiple'">
+                      <ng-container *ngIf="hwModeService.arrayLength(item[head.value]);else block2">
+                        <a class="xn-click-a" href="javaScript:void(0)" (click)="viewMoreDetailInfo(item[head.value])"
+                          [innerHtml]="(item[head.value] | xnStringToArray:2:'等;')">
+                        </a>
+                      </ng-container>
+                      <ng-template #block2>
+                        <div [innerHtml]="(item[head.value] | xnStringToArray:2:'等;')"></div>
+                      </ng-template>
+                    </div>
+                  </ng-container>
+                  <span *ngIf="!head.options">{{item[head.value]}}</span>
+                </td>
+              </tr>
+            </ng-container>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+  <!--定向保理提单-->
+  <div *ngSwitchCase="'data-content1'">
+    <div class="height">
+      <div class="head-height">
+        <table class="table table-data-content table-bordered table-hover text-center table-display relative"
+          [style.left.px]="headLeft">
+          <thead>
+            <tr>
+              <ng-container *ngFor="let item of heads[row.checkerId]">
+                <td>
+                  <span>{{item.label}}</span>
+                </td>
+              </ng-container>
+            </tr>
+          </thead>
+        </table>
+      </div>
+      <div class="table-height" (scroll)="onScroll($event)">
+        <table class="table table-data-content table-bordered table-hover text-center table-display">
+          <tbody>
+            <ng-container *ngFor="let item of items">
+              <tr>
+                <td *ngFor="let head of heads[row.checkerId]">
+                  <ng-container *ngIf="head?.options">
+                    <span *ngIf="head.options.type==='money'" [ngClass]="head.options.style">{{item[head.value] |
+                      number:'1.2-3'}}</span>
+                    <span *ngIf="head.options.type==='def'" [ngClass]="head.options.style">{{item[head.value]}}</span>
+                    <span *ngIf="head.options.type==='boolean'"
+                      [ngClass]="head.options.style">{{item[head.value]===true?'是':'否'}}</span>
+                    <!--当有多张内容时-->
+                    <div *ngIf="head.options.type==='multiple'">
+                      <ng-container *ngIf="hwModeService.arrayLength(item[head.value]);else block2">
+                        <a class="xn-click-a" href="javaScript:void(0)" (click)="viewMoreDetailInfo(item[head.value])"
+                          [innerHtml]="(item[head.value] | xnStringToArray:2:'等;')">
+                        </a>
+                      </ng-container>
+                      <ng-template #block2>
+                        <div [innerHtml]="(item[head.value] | xnStringToArray:2:'等;')"></div>
+                      </ng-template>
+                    </div>
+                  </ng-container>
+                  <span *ngIf="!head.options">{{item[head.value]}}</span>
+                </td>
+              </tr>
+            </ng-container>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <div *ngSwitchCase="'upload-payment'">
+    <table class="table table-bordered table-hover text-center table-striped">
+      <thead>
+        <tr>
+          <th *ngFor="let head of  heads[row.checkerId]" style="border: 1px solid #f4f4f4">
+            <span>{{head.label}}</span>
+          </th>
+        </tr>
+      </thead>
+      <tbody>
+        <ng-container *ngIf="items.length">
+          <tr *ngFor="let item of items; let i = index;">
+            <td *ngFor="let head of heads[row.checkerId]">
+              <span *ngIf="head.type==='order'">{{i+1}}</span>
+              <span *ngIf="head.type==='default'">{{item[head.value]}}</span>
+              <span *ngIf="head.type==='money'">{{item[head.value] | number:'1.2-3'}}</span>
+              <span *ngIf="head.type==='view'">
+                <div *ngFor="let sub of item[head.value]">
+                  <a href="javaScript:void(0)" class="xn-click-a" (click)="onViewFile(sub)">{{sub?.fileName}}</a>
+                </div>
+              </span>
+            </td>
+          </tr>
+        </ng-container>
+      </tbody>
+    </table>
+  </div>
+  <!--预录入发票-->
+  <div *ngSwitchCase="'pre-invoice'">
+    <table class="table table-bordered table-hover text-center file-row-table pre-table">
+      <thead>
+        <tr>
+          <th>发票号码</th>
+          <th>是否已上传</th>
+        </tr>
+      </thead>
+    </table>
+    <div class="scroll-height">
+      <table class="table table-bordered table-hover text-center file-row-table pre-table">
+        <tr *ngFor="let x of item?.list">
+          <td>{{x.invoiceNum}}</td>
+          <td [ngClass]="{'red':x.status !== 1}">{{x.status===1?'√':'X'}}</td>
+        </tr>
+      </table>
+    </div>
+    <table class="table table-bordered table-hover text-center file-row-table pre-table">
+      <tr>
+        <td>合计</td>
+        <td>{{item?.amountAll | xnMoney}}</td>
+      </tr>
+    </table>
+  </div>
+  <div *ngSwitchCase="'contract-vanke'">
+    <table class="table table-bordered table-hover text-center file-row-table">
+      <thead>
+        <tr>
+          <th>合同编号</th>
+          <th>合同金额</th>
+          <th>图片名称</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let item of items">
+          <td>{{item?.files?.contractNum ||''}}</td>
+          <td>{{item?.files?.contractAmount|| ''}}</td>
+          <td>
+            <a class="xn-click-a" (click)="contractOnView(item,'gemdale')">文件</a>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+  <div *ngSwitchCase="'contract-vanke1'">
+    <table class="table table-bordered table-hover text-center file-row-table">
+      <thead>
+        <tr>
+          <th>合同编号</th>
+          <th>合同名称</th>
+          <th>合同金额</th>
+          <th>图片名称</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let item of items">
+          <td>{{item?.files?.contractNum || ''}}</td>
+          <td>{{item?.files?.contractName || ''}}</td>
+          <td>{{item?.files?.contractAmount || ''}}</td>
+          <td>
+            <a class="xn-click-a" (click)="contractOnView(item,'vanke')">文件</a>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+  <div *ngSwitchCase="'invoice-vanke'">
+    <table class="table table-bordered table-hover file-row-table text-center" width="100%">
+      <thead>
+        <tr>
+          <th>图片名称</th>
+          <th>发票号码</th>
+          <th>发票代码</th>
+          <th>开票日期</th>
+          <th>含税金额</th>
+          <th>状态</th>
+          <th *ngIf="orgType===3">历史交易id</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let item of items">
+          <td>
+            <a class="xn-click-a" (click)="onViewInvoice(item)">{{item.fileName}}</a>
+          </td>
+          <td>{{item.invoiceNum || ''}}</td>
+          <td>{{item.invoiceCode || ''}}</td>
+          <td>{{ item.invoiceDate }}</td>
+          <td>{{item.invoiceAmount || '' | xnMoney}}</td>
+          <td>
+            <ng-container
+              *ngIf="(item?.tag&&item?.tag==='artificial') || (item?.away && item?.away==='edit');else block1">
+              <span class="tag-color">人工验证</span>
+            </ng-container>
+            <ng-template #block1>
+              <span [ngClass]="{'tag-color':item.status===4 || item.status===2 || item.status===6 ||item.status===7 || item.status===8}">{{item.status | xnInvoiceStatus}}</span>
+            </ng-template>
+          </td>
+          <td *ngIf="orgType===3">
+            <ng-container *ngIf="item?.mainFlowIds && item?.mainFlowIds.length ; else mianflows">
+              <div *ngFor="let sub of item.mainFlowIds">
+                <ng-container *ngIf="sub.mainFlowId.indexOf('cloud') === -1;else cloud">
+                  <a href="javaScript:void (0)" (click)="viewProcess(sub)">{{sub.mainFlowId}}</a>
+                </ng-container>
+                <ng-template #cloud>
+                  <span>{{sub.mainFlowId}}</span>
+                </ng-template>
+              </div>
+            </ng-container>
+            <ng-template #mianflows>
+              <div>/</div>
+            </ng-template>
+          </td>
+        </tr>
+        <tr *ngIf="amountAll > 0 ||preAmount>0 ">
+          <td>合计</td>
+          <td>/</td>
+          <td>/</td>
+          <td>/</td>
+          <td>{{amountAll}}</td>
+          <td>/</td>
+          <td *ngIf="orgType===3">/</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+  <div *ngSwitchCase="'invoice-transfer'">
+    <table class="table table-bordered table-hover file-row-table text-center" width="100%">
+      <thead>
+        <tr>
+          <th>图片名称</th>
+          <th>发票号码</th>
+          <th>发票代码</th>
+          <th>开票日期</th>
+          <th>含税金额</th>
+          <th>发票转让金额</th>
+          <th>状态</th>
+          <th *ngIf="orgType===3">历史交易id</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let item of items">
+          <td>
+            <a class="xn-click-a" (click)="onViewInvoice(item)">{{item.fileName}}</a>
+          </td>
+          <td>{{item.invoiceNum || ''}}</td>
+          <td>{{item.invoiceCode || ''}}</td>
+          <td>{{ item.invoiceDate }}</td>
+          <td>{{ item.invoiceAmount | xnMoney}}</td>
+          <td>{{item.transferMoney | xnMoney }}</td>
+          <td>
+            <ng-container
+              *ngIf="(item?.tag&&item?.tag==='artificial') || (item?.away && item?.away==='edit');else block1">
+              <span class="tag-color">人工验证</span>
+            </ng-container>
+            <ng-template #block1>
+              <span [ngClass]="{'tag-color':item.status===4 || item.status===2 || item.status===6 ||item.status===7 || item.status===8}">{{item.status | xnInvoiceStatus}}</span>
+            </ng-template>
+          </td>
+          <td *ngIf="orgType===3">
+            <ng-container *ngIf="item?.mainFlowIds && item?.mainFlowIds.length ; else mianflows">
+              <div *ngFor="let sub of item.mainFlowIds">
+                <ng-container *ngIf="sub.mainFlowId.indexOf('cloud') === -1;else cloud">
+                  <a href="javaScript:void (0)" (click)="viewProcess(sub)">{{sub.mainFlowId}}</a>
+                </ng-container>
+                <ng-template #cloud>
+                  <span>{{sub.mainFlowId}}</span>
+                </ng-template>
+              </div>
+            </ng-container>
+            <ng-template #mianflows>
+              <div>/</div>
+            </ng-template>
+          </td>
+        </tr>
+        <tr *ngIf="amountAll > 0 ||preAmount>0 ">
+          <td>合计</td>
+          <td>/</td>
+          <td>/</td>
+          <td>/</td>
+          <td>{{amountAll}}</td>
+          <td>{{transferAll}}</td>
+          <td *ngIf="orgType===3">/</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+
+
+  <div *ngSwitchCase="'invoice-replace-info'">
+    <table class="table table-bordered table-hover file-row-table text-center" width="100%">
+      <thead>
+        <tr>
+          <th>序号</th>
+          <th>发票号码</th>
+          <th>发票代码</th>
+          <th>开票日期</th>
+          <th>含税金额</th>
+          <th>发票回款日</th>
+          <th>状态</th>
+          <th>操作</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let item of items;let i = index;">
+          <td>{{i + 1}}</td>
+          <td>{{item.invoiceNum || ''}}</td>
+          <td>{{item.invoiceCode || ''}}</td>
+          <td>{{ item.invoiceDate }}</td>
+          <td class="red">{{item.invoiceAmount || '' | xnMoney}}</td>
+          <td>{{ item.invoiceRepaymentDate }}</td>
+          <td>
+            <span [class.red]="item.status!==1">{{item.status | xnInvoiceStatus}}</span>
+          </td>
+          <td><a class="xn-click-a" (click)="viewInvoicesDetail(item)">查看</a></td>
+        </tr>
+        <tr *ngIf="amountAll > 0 || preAmount>0 ">
+          <td>合计</td>
+          <td>/</td>
+          <td>/</td>
+          <td>/</td>
+          <td>/</td>
+          <td>{{amountAll}}</td>
+          <td>/</td>
+          <td>/</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div *ngSwitchCase="'assignor-info'">
+    <div class="height">
+      <div class="head-height">
+        <table class="table table-data-content table-bordered table-hover text-center table-display relative"
+          [style.left.px]="headLeft">
+          <thead>
+            <tr>
+              <th>收款单位</th>
+              <th>组织机构代码</th>
+              <th>工商注册号</th>
+              <th>法定代表人</th>
+              <th>所属行业</th>
+              <th>注册地址</th>
+              <th>文件名</th>
+              <th>验证一致性</th>
+            </tr>
+          </thead>
+        </table>
+      </div>
+      <div class="table-height" (scroll)="onScroll($event)">
+        <table class="table table-data-content table-bordered table-hover text-center table-display">
+          <tbody>
+            <ng-container *ngFor="let item of items; let i = index;">
+              <tr>
+                <td>{{item['收款单位']}}</td>
+                <td>{{item['组织机构代码']}}</td>
+                <td>{{item['工商注册号']}}</td>
+                <td>{{item['法定代表人']}}</td>
+                <td>{{item['所属行业']}}</td>
+                <td>{{item['注册地址']}}</td>
+                <td>
+                  <a class="xn-click-a" (click)="onViewFile(item.file)"
+                    *ngIf="item['file'] && item['file']['fileName']">{{item['file']['fileName']}}</a>
+                </td>
+                <td>
+                  <p [ngClass]="{'red': item.status === false}"
+                    *ngIf="item.status !== '' && item.status !== undefiled ">
+                    {{item.status === false ? '主体信息不一致': '主体信息一致'}}
+                  </p>
+                </td>
+              </tr>
+            </ng-container>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+  <table *ngSwitchCase="'contract-office'" class="table table-bordered table-hover text-center file-row-table">
+    <thead>
+      <tr>
+        <th>合同编号</th>
+        <th>合同金额</th>
+        <th>合同名称</th>
+        <th>合同类型</th>
+        <th>图片文件</th>
+        <th>合同签署时间</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let item of items">
+        <td>{{item?.files?.contractNum}}</td>
+        <td>{{item?.files?.contractAmount | number :'1.2-3'}}</td>
+        <td>{{item?.files?.contractName}}</td>
+        <td>{{item?.files?.contractType}}</td>
+        <td>
+          <a href="javaScript:void (0)" (click)="viewFileCon(item)">文件</a>
+        </td>
+        <td>{{item?.files?.contractSignTime}}</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <!--履约证明文件-->
+
+  <table *ngSwitchCase="'performance'" class="table table-bordered table-hover text-center file-row-table">
+    <thead>
+      <tr>
+        <th>文件</th>
+        <th>累计确认产值</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let item of items">
+        <td>
+          <a href="javaScript:void (0)" (click)="viewPerformance(item)">文件</a>
+        </td>
+        <td>{{item?.files?.cumulativelyOutputValue}}</td>
+      </tr>
+    </tbody>
+  </table>
+  <table *ngSwitchCase="'contract-hw'" class="table table-bordered table-hover text-center file-row-table">
+    <thead>
+      <tr>
+        <th>合同编号</th>
+        <th>合同金额</th>
+        <th>合同类型</th>
+        <th>图片文件</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let item of items">
+        <td>{{item?.files?.contractNum}}</td>
+        <td>{{item?.files?.contractAmount}}</td>
+        <td>{{item?.files?.contractType}}</td>
+        <td>
+          <a href="javaScript:void (0)" (click)="viewContract(item)">文件</a>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+  <div *ngSwitchCase="'receivable'">
+    <table class="table table-bordered table-hover text-center file-row-table">
+      <thead>
+        <tr>
+          <th>文件名</th>
+          <th>本批次金额</th>
+          <th>委托付款日</th>
+          <th>保理融资到期日</th>
+          <th>宽限期</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let item of items">
+          <td *ngIf="item.files">
+            <div *ngFor="let file of item.files">
+              <a href="javaScript:void (0)" (click)="onViewReceivable(item,'view')">{{file?.fileName}}
+              </a>
+            </div>
+          </td>
+          <td>{{item.currentAmount | xnMoney}}</td>
+          <td>{{item.factoringDueDate}}</td>
+          <td>{{item.factoringEndDate}}</td>
+          <td>{{item.graceDate}}</td>
+        </tr>
+      </tbody>
+    </table>
+    <div class="text-right" *ngIf="orgType===3 && svrConfig.record.flowId==='financing_factoring13'">
+      <a href="javaScript:void(0)" class="fa fa-download" (click)="downLoadReceivable()">下载</a>
+    </div>
+  </div>
+
+  <table *ngSwitchCase="'receivable1'" class="table table-bordered table-hover text-center file-row-table">
+    <thead>
+      <tr>
+        <th>文件名</th>
+        <th>本批次金额</th>
+        <th>委托付款日</th>
+        <th> 保理融资到期日</th>
+        <th>宽限期</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let item of items">
+        <td *ngIf="item.files">
+          <div *ngFor="let file of item.files">
+            <a href="javaScript:void (0)" (click)="onViewReceivable(item,'view')">{{file?.fileName}}
+            </a>
+          </div>
+        </td>
+        <td>{{item.currentAmount | xnMoney}}</td>
+        <td>{{item.factoringDueDate}}</td>
+        <td>{{item.factoringEndDate}}</td>
+        <td>{{item.graceDate}}</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <table *ngSwitchCase="'depositHonour'" class="table table-bordered table-hover file-row-table" width="100%">
+    <thead>
+      <tr>
+        <th>电票扫描件</th>
+        <th>商票号码</th>
+        <th>商票金额</th>
+        <th>保证金</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let item of items; let i = index">
+        <td>
+          <a class="xn-click-a" (click)="onView(item)">{{item.label}}</a>
+        </td>
+        <td>{{item.honourNum}}</td>
+        <td>{{item.honourAmount}}</td>
+        <td>{{item.deposit}}</td>
+      </tr>
+    </tbody>
+  </table>
+  <xn-check-form-input *ngSwitchCase="'checkForm'" [row]="row" [form]="form"></xn-check-form-input>
+  <xn-fee *ngSwitchCase="'service-fee'" [row]="row" [form]="form"></xn-fee>
+  <xn-fee-promise-pay *ngSwitchCase="'promise-pay'" [row]="row" [form]="form"></xn-fee-promise-pay>
+  <xn-fee-bank-discount *ngSwitchCase="'bank-discount'" [row]="row" [form]="form"></xn-fee-bank-discount>
+  <xn-fee-bank-financing *ngSwitchCase="'bank-financing'" [row]="row" [form]="form"></xn-fee-bank-financing>
+  <xn-bank-list *ngSwitchCase="'bank-list'" [row]="row" [form]="form"></xn-bank-list>
+  <xn-factoring-list *ngSwitchCase="'factoring-list'" [row]="row" [form]="form"></xn-factoring-list>
+
+  <xn-file-consistency *ngSwitchCase="'file-consistency'" [row]="row" [form]="form"></xn-file-consistency>
+  <xn-file-logical *ngSwitchCase="'file-logical'" [row]="row" [form]="form"></xn-file-logical>
+  <xn-sign-contracts *ngSwitchCase="'sign-contracts'" [row]="row" [form]="form"></xn-sign-contracts>
+  <xn-bank-scan-file *ngSwitchCase="'scan-file'" [row]="row" [form]="form"></xn-bank-scan-file>
+  <app-calculate-service-fee *ngSwitchCase="'calc-fee'" [row]="row" [form]="form"></app-calculate-service-fee>
+  <app-xn-mflow-input *ngSwitchCase="'mFlows'" [row]="row" [form]="form"></app-xn-mflow-input>
+
+  <!--财报上传复核-->
+  <div class="table-height" *ngSwitchCase="'assets'">
+    <table class="table table-bordered table-hover file-row-table table-width">
+      <thead>
+        <tr>
+          <th>文件序号</th>
+          <th>项目</th>
+          <th>日期</th>
+          <th>资产合计</th>
+          <th>股东权益合计</th>
+          <th>负债合计</th>
+          <th>文件</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>1</td>
+          <td>
+            <p>期初值</p>
+            <p>期末值</p>
+          </td>
+          <td>
+            <div *ngIf='item.initDates!==undefined && item.finalDates!==undefined'>
+              <p>{{item.initDates}}</p>
+              <p>{{item.finalDates}}</p>
+            </div>
+          </td>
+          <td align='right'>
+            <div *ngIf='checkBalanceData(item,0)'>
+              <p>{{item.data[0].initValue | xnCurrencyValue}}</p>
+              <p>{{item.data[0].finalValue | xnCurrencyValue}}</p>
+            </div>
+          </td>
+          <td align='right'>
+            <div *ngIf='checkBalanceData(item,1)'>
+              <p>{{item.data[1].initValue | xnCurrencyValue}}</p>
+              <p>{{item.data[1].finalValue | xnCurrencyValue}}</p>
+            </div>
+          </td>
+          <td align='right'>
+            <div *ngIf='checkBalanceData(item,2)'>
+              <p>{{item.data[2].initValue | xnCurrencyValue}}</p>
+              <p>{{item.data[2].finalValue | xnCurrencyValue}}</p>
+            </div>
+          </td>
+          <td>
+            <div *ngIf='item!==undefined && item.excel!==undefined'><a href='javascript:void(0)'
+                (click)='downFile(item.excel)'>{{(item.excel | xnJson).fileName}}</a></div>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="table-height" *ngSwitchCase="'profit'">
+    <table class="table table-bordered table-hover file-row-table table-width">
+      <thead>
+        <tr>
+          <th>文件序号</th>
+          <th>数值序号</th>
+          <th>日期范围</th>
+          <th>营业总收入</th>
+          <th>营业成本</th>
+          <th>净利润</th>
+          <th>文件</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>1</td>
+          <td>
+            <div *ngIf='item.startDates!==undefined'>
+              <p *ngFor="let sub of item.startDates ;let j=index">{{j+1}}</p>
+            </div>
+          </td>
+          <td>
+            <div *ngIf='item.startDates!==undefined'>
+              <p *ngFor="let sub of item.startDates ;let j=index">{{item.startDates[j]}}-{{item.endDates[j]}}</p>
+            </div>
+          </td>
+          <td align='right'>
+            <div *ngIf="checkData(item,0)">
+              <p *ngFor="let sub of item.startDates;let j=index">{{item.data[0].values[j]}}</p>
+            </div>
+          </td>
+          <td align='right'>
+            <div *ngIf="checkData(item,1)">
+              <p *ngFor="let sub of item.startDates;let j=index">{{item.data[1].values[j] | xnCurrencyValue}}</p>
+            </div>
+          </td>
+          <td align='right'>
+            <div *ngIf="checkData(item,2)">
+              <p *ngFor="let sub of item.startDates;let j=index">{{item.data[2].values[j] | xnCurrencyValue}}</p>
+            </div>
+          </td>
+          <td>
+            <div *ngIf='item!==undefined && item.excel!==undefined'>
+              <a href='javascript:void(0)' (click)='downFile(item.excel)'>{{(item.excel | xnJson).fileName}}</a>
+            </div>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+  <div class="table-height" *ngSwitchCase="'cash'">
+    <table class="table table-bordered table-hover file-row-table table-width">
+      <thead>
+        <tr>
+          <th>文件序号</th>
+          <th>数值序号</th>
+          <th>日期范围</th>
+          <th>经营活动产生的现金流量净额</th>
+          <th>投资活动产生的现金流量净额</th>
+          <th>筹资活动产生的现金净流量</th>
+          <th>文件</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>1</td>
+          <td>
+            <div *ngIf='item!==undefined && item.startDates!==undefined'>
+              <p *ngFor="let sub of item.startDates ;let j=index">{{j+1}}</p>
+            </div>
+          </td>
+          <td>
+            <div *ngIf='item!==undefined && item.startDates!==undefined && item.endDates!==undefined'>
+              <p *ngFor="let sub of item.startDates ;let j=index">{{item.startDates[j]}}-{{item.endDates[j]}}</p>
+            </div>
+          </td>
+          <td align='right'>
+            <div *ngIf='checkData(item,1)'>
+              <p *ngFor="let sub of item.startDates;let j=index">{{item.data[1].values[j] | xnCurrencyValue}}</p>
+            </div>
+          </td>
+          <td align='right'>
+            <div *ngIf='checkData(item,0)'>
+              <p *ngFor="let sub of item.startDates;let j=index">{{item.data[0].values[j] | xnCurrencyValue}}</p>
+            </div>
+          </td>
+
+          <td align='right'>
+            <div *ngIf='checkData(item,2)'>
+              <p *ngFor="let sub of item.startDates;let j=index">{{item.data[2].values[j] | xnCurrencyValue}}</p>
+            </div>
+          </td>
+          <td>
+            <div *ngIf='item!==undefined && item.excel!==undefined'><a href='javascript:void(0)'
+                (click)='downFile(item.excel)'>{{(item.excel | xnJson).fileName}}</a></div>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+
+  <!--付款管理出纳下载财务表-->
+  <div class="table-height" *ngSwitchCase="'file-table'">
+    <table class="table table-bordered table-hover file-row-table table-width">
+      <thead>
+        <tr>
+          <th>交易ID</th>
+          <th>收款账号开户行</th>
+          <th>收款账号省份</th>
+          <th>收款账号地市</th>
+          <th>收款账号地区码</th>
+          <th>收款账号</th>
+          <th>金额</th>
+          <th>汇款用途</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let item of items; let i = index">
+          <td><a href="JavaScript:void (0)" (click)="viewProcess(item)">{{item.mainFlowId}}</a></td>
+          <td>{{item.debtBank}}</td>
+          <td>{{item.province}}</td>
+          <td>{{item.city}}</td>
+          <td>{{item.addressNO}}</td>
+          <td>{{item.debtAccount}}</td>
+          <td>{{item.receivable | number:'1.2-3'}}</td>
+          <td>{{item.use}}</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+  <div class="table-height" *ngSwitchCase="'orgList'">
+    <table class="table table-bordered table-hover file-row-table table-width">
+      <thead>
+        <tr>
+          <th>企业ID</th>
+          <th>企业名称</th>
+          <th>白名单状态</th>
+          <th>确权凭证</th>
+          <th>还款方</th>
+          <th>过会情况</th>
+          <th>供应商类型</th>
+          <th>保证金比例</th>
+          <th>系统保理使用费率%</th>
+          <th>系统保理服务率%</th>
+          <th>系统平台服务费率%</th>
+          <th>系统期限</th>
+          <th>系统最大额度</th>
+          <th>人工保理使用费率%</th>
+          <th>人工保理服务率%</th>
+          <th>人工平台服务费率%</th>
+          <th>人工期限</th>
+          <th>人工最大额度</th>
+          <th>管户客户经理</th>
+          <th>过会备注</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let item of items; let i = index">
+          <td>{{item.appId}}</td>
+          <td>{{item.orgName}}</td>
+          <td>{{item.whiteStatus | xnSelectTransform:'whiteNameStatus'}}</td>
+          <td>{{item.certification | xnSelectTransform:'evidence'}}</td>
+          <td>{{item.payBackPoint | xnSelectTransform:'payBackPoint'}}</td>
+          <td *ngIf='item.oldpastStatus===3'>{{item.pastStatus | xnSelectTransform:'goMeetingQuestion'}}</td>
+          <td style='color:red' *ngIf='item.oldpastStatus!==3'>
+            {{item.oldpastStatus | xnSelectTransform:'goMeetingQuestion'}}->{{item.pastStatus | xnSelectTransform:'goMeetingQuestion'}}
+          </td>
+          <td *ngIf='item.oldsupplierType===2'>{{item.supplierType | xnSelectTransform:'companyType'}}</td>
+          <td style='color:red' *ngIf='item.oldsupplierType!==2'>
+            {{item.oldsupplierType | xnSelectTransform:'companyType'}}->{{item.supplierType | xnSelectTransform:'companyType'}}
+          </td>
+          <td>{{item.depositRate}}</td>
+          <td>{{item.sysfactoringUseFLV}}</td>
+          <td>{{item.sysfactoringServiceFLV}}</td>
+          <td>{{item.sysplatformServiceFLV}}</td>
+          <td>{{item.sysnowlimit}}</td>
+          <td>{{item.sysmaxAmount}}</td>
+          <td>{{item.subFactoringUseFLV}}</td>
+          <td>{{item.subFactoringServiceFLV}}</td>
+          <td>{{item.subPlatformServiceFLV}}</td>
+          <td>{{item.subNowlimit}}</td>
+          <td>{{item.subMaxAmount}}</td>
+          <td>{{item.customerManager}}</td>
+          <td>{{item.pastMemo}}</td>
+
+
+        </tr>
+      </tbody>
+    </table>
+  </div>
+  <div class="table-height" *ngSwitchCase="'upload-pay-order'">
+    <table class="table table-bordered table-hover file-row-table table-width" style="width:1600px;overflow:scroll;">
+      <thead>
+        <tr>
+          <th>交易 ID</th>
+          <th>申请付款单位</th>
+          <th>收款单位</th>
+          <th>总部公司</th>
+          <th>合同编号</th>
+          <th>发票号</th>
+          <th>发票金额</th>
+          <th>应收账款金额</th>
+          <th>付款确认书编号</th>
+          <th>付款确认书</th>
+          <th>资金渠道</th>
+          <th>起息时间</th>
+          <th>保理到期日</th>
+          <th>实际放款日</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let item of items; let i = index">
+          <!--交易 ID-->
+          <td>{{item.mainFlowId}}</td>
+          <!--申请付款单位-->
+          <td>{{item.projectCompany}}</td>
+          <!--收款单位-->
+          <td>{{item.debtUnit}}</td>
+          <!--总部公司-->
+          <td>{{item.headquarters}}</td>
+          <!--合同编号-->
+          <td>{{item.contractId}}</td>
+          <!--发票号-->
+          <td style="word-wrap:break-word;word-break: break-all;">
+            <span *ngIf="item.invoiceLength <= 2">{{item.invoiceNumLocal}}</span>
+            <a *ngIf="item.invoiceLength > 2" class="xn-click-a"
+              (click)="viewAllInvoice(item)">{{item.invoiceNumLocal}}</a>
+          </td>
+          <!--发票金额-->
+          <td>{{item.realInvoiceAmount}}</td>
+          <!--应收账款金额-->
+          <td>{{item.receivable}}</td>
+          <!--付款确认书编号-->
+          <td>{{item.payConfirmId}}</td>
+          <!-- 付款确认书 -->
+          <td>
+            <div *ngFor="let sub of item.pdfProjectFiles | xnJson">
+              <a href="javaScript:void(0)" (click)="showContract(sub.id,sub.secret)">{{sub.label}}</a>
+            </div>
+          </td>
+          <!--资金渠道-->
+          <td>
+            {{item?.moneyChannel | xnSelectTransform: moneyChannelOptions}}
+          </td>
+          <!--起息时间-->
+          <td>
+            <span *ngIf="item.payDate == null || item.payDate === 0 || item.payDate === ''">/</span>
+            <span
+              *ngIf="item.payDate && item.payDate !== 0 || item.payDate !== ''">{{item.payDate | xnDate: 'date'}}</span>
+          </td>
+          <!--保理到期日-->
+          <td>
+            <span
+              *ngIf="item.factoringEndDate == null || item.factoringEndDate === 0 || item.factoringEndDate === ''">/</span>
+            <span *ngIf="item.factoringEndDate && item.factoringEndDate !== 0 || item.factoringEndDate !== ''">{{item.factoringEndDate
+              | xnDate: 'date'}}</span>
+          </td>
+          <!--实际放款日-->
+          <td>
+            <span *ngIf="item.payTime == null || item.payTime === 0 || item.payTime === ''">/</span>
+            <span
+              *ngIf="item.payTime && item.payTime !== 0 || item.payTime !== ''">{{item.payTime | xnDate: 'date'}}</span>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+  <table class="table table-bordered table-striped text-center" *ngSwitchCase="'opponentForm'">
+    <thead>
+      <tr class="table-head">
+        <th>
+          <span>序号</span>
+        </th>
+        <th><span>交易对手名称</span></th>
+        <th><span>业务模式</span></th>
+        <th><span>业务余额</span></th>
+        <th><span>交易场景分析</span></th>
+      </tr>
+    </thead>
+    <tbody>
+      <ng-container *ngIf="items.length ;else block">
+        <tr *ngFor="let item of items;let i=index">
+          <td>{{i+1}}</td>
+          <td>{{item.nameofCounterparty}}</td>
+          <td>{{item.flag}}</td>
+          <td>{{item.balance }}</td>
+          <td>{{item.analysis }}</td>
+        </tr>
+      </ng-container>
+    </tbody>
+  </table>
+  <ng-container *ngSwitchCase="'earningForm'">
+    <div>
+      <table class="table table-bordered table-striped text-center" style='width: 50%;float: left;'>
+        <caption style='text-align: right'>资产负值</caption>
+        <thead>
+          <tr class="table-head">
+            <th><span>项目</span></th>
+            <th><span>年初数</span></th>
+            <th><span>本期数</span></th>
+
+          </tr>
+        </thead>
+        <tbody>
+          <ng-container *ngIf="items.length ;else block">
+            <tr *ngFor="let item of items;let i=index">
+              <td></td>
+              <td></td>
+              <td></td>
+
+            </tr>
+          </ng-container>
+        </tbody>
+      </table>
+      <table class="table table-bordered table-striped text-center guaranttable">
+        <thead>
+          <tr class="table-head">
+            <th><span>项目</span></th>
+            <th><span>年初数</span></th>
+            <th><span>本期数</span></th>
+          </tr>
+        </thead>
+        <tbody>
+          <ng-container *ngIf="items.length ;else block">
+            <tr *ngFor="let item of items;let i=index">
+              <td></td>
+              <td></td>
+              <td></td>
+            </tr>
+          </ng-container>
+        </tbody>
+      </table>
+    </div>
+    <div>
+      <table class="table table-bordered table-striped text-center" style='clear:both;width: 50%;float: left;'>
+        <caption style='text-align:right'>现金流</caption>
+        <thead>
+          <tr class="table-head">
+            <th><span>项目</span></th>
+            <th><span>年初数</span></th>
+            <th><span>本年累计</span></th>
+          </tr>
+        </thead>
+        <tbody>
+          <ng-container *ngIf="items.length ;else block">
+            <tr *ngFor="let item of items;let i=index">
+              <td></td>
+              <td></td>
+              <td></td>
+
+            </tr>
+          </ng-container>
+        </tbody>
+      </table>
+      <table class="table table-bordered table-striped text-center guaranttable">
+        <thead>
+          <tr class="table-head">
+            <th><span>项目</span></th>
+            <th><span>年初数</span></th>
+            <th><span>本期数</span></th>
+          </tr>
+        </thead>
+        <tbody>
+          <ng-container *ngIf="items.length ;else block">
+            <tr *ngFor="let item of items;let i=index">
+              <td></td>
+              <td></td>
+              <td></td>
+            </tr>
+          </ng-container>
+        </tbody>
+      </table>
+    </div>
+  </ng-container>
+  <ng-container *ngSwitchCase="'companyUpload'">
+    <table class="table-hover table table-bordered file-row-table">
+      <tr>
+        <td class="input-check">
+          <input type="checkbox" name="single"
+            [checked]="items.businessLicenseFile && items.businessLicenseFile !==''" disabled /><span>营业执照</span>
+        </td>
+        <td class="input-check">
+          <input type="checkbox" name="single"
+            [checked]="items.companyDecision && items.companyDecision !==''"  disabled/><span>公司章程/股东会/董事会决议</span>
+        </td>
+      </tr>
+      <tr>
+        <td class="input-check">
+          <input type="checkbox" name="single"
+            [checked]="items.orgLegalCard && items.orgLegalCard !==''" disabled/><span>法定代表人身份证</span>
+        </td>
+        <td class="input-check">
+          <input type="checkbox" name="single"
+            [checked]="items.certUserCard && items.certUserCard !==''" disabled/><span>数字证书使用人身份证</span>
+        </td>
+      </tr>
+      <tr>
+        <td class="input-check">
+          <input type="checkbox" name="single"
+            [checked]="items.orgLegalCert && items.orgLegalCert !==''" disabled/><span>法定代表人证明书</span>
+        </td>
+        <td class="input-check">
+          <input type="checkbox" name="single"
+            [checked]="items.certUserAuthorize && items.certUserAuthorize !==''"  disabled/><span>数字证书使用人授权书</span>
+        </td>
+        <td class="input-check">
+          <input type="checkbox" name="single"
+            [checked]="items.authorizationFile && items.authorizationFile !==''"  disabled/><span>授权文件</span>
+        </td>
+      </tr>
+    </table>
+    <div class="panel-body" #fileGroup>
+      <div class="form-group" *ngIf="items.businessLicenseFile && items.businessLicenseFile!==''">
+        <div class="col-sm-3 xn-control-label">
+          营业执照
+        </div>
+        <div class="col-sm-9">
+
+            <div *ngFor="let item of items.businessLicenseFile | xnJson" class="filetable">
+                  <a class="xn-click-a" (click)="onViewFile(items)">{{item.fileName}}</a>
+              </div>
+        </div>
+      </div>
+      <div class="form-group" *ngIf="(items.businessLicenseFileDate && items.businessLicenseFileDate!=='') || items.businessLicenseFile!==''">
+        <div class="col-sm-3 xn-control-label">
+          营业执照失效日期
+        </div>
+        <div class="col-sm-9">
+          <input type='text' class="form-control xn-input-font xn-input-border-radius" readonly  [value]='items.businessLicenseFileDate'>
+        </div>
+      </div>
+      <div class="form-group" *ngIf="items.orgLegalCard && items.orgLegalCard!==''">
+        <div class="col-sm-3 xn-control-label">
+          法定代表人身份证
+        </div>
+        <div class="col-sm-9">
+            <div *ngFor="let item of items.orgLegalCard | xnJson" class="filetable">
+                <a class="xn-click-a" (click)="onViewFile(item)">{{item.fileName}}</a>
+            </div>
+        </div>
+      </div>
+      <div class="form-group" *ngIf="(items.orgLegalCardDate && items.orgLegalCardDate!=='')|| items.orgLegalCard!==''">
+        <div class="col-sm-3 xn-control-label">
+          法定代表人身份证失效日期
+        </div>
+        <div class="col-sm-9">
+          <input type='text' class="form-control xn-input-font xn-input-border-radius" readonly [value]='items.orgLegalCardDate'>
+        </div>
+      </div>
+      <div class="form-group" *ngIf="items.orgLegalCert && items.orgLegalCert!==''">
+          <div class="col-sm-3 xn-control-label">
+          法定代表人证明书
+          </div>
+          <div class="col-sm-9">
+              <div *ngFor="let item of items.orgLegalCert | xnJson" class="filetable">
+                  <a class="xn-click-a" (click)="onViewFile(item)">{{item.fileName}}</a>
+              </div>
+          </div>
+        </div>
+        <div class="form-group" *ngIf="(items.orgLegalCertDate && items.orgLegalCertDate!=='') || items.orgLegalCert!=='' ">
+          <div class="col-sm-3 xn-control-label">
+              法定代表人证明书失效日期
+          </div>
+          <div class="col-sm-9">
+            <input type='text' class="form-control xn-input-font xn-input-border-radius" readonly [value]='items.orgLegalCertDate'>
+          </div>
+        </div>
+      <div class="form-group" *ngIf="items.certUserCard && items.certUserCard!==''">
+        <div class="col-sm-3 xn-control-label">
+          数字证书使用人身份证
+        </div>
+        <div class="col-sm-9">
+            <div *ngFor="let item of items.certUserCard | xnJson" class="filetable">
+                <a class="xn-click-a" (click)="onViewFile(item)">{{item.fileName}}</a>
+            </div>
+        </div>
+      </div>
+      <div class="form-group" *ngIf="(items.certUserCardDate && items.certUserCardDate!=='')||  items.certUserCard!==''">
+        <div class="col-sm-3 xn-control-label">
+          数字证书使用人身份证失效日期
+        </div>
+        <div class="col-sm-9">
+          <input type='text' class="form-control xn-input-font xn-input-border-radius" readonly [value]='items.certUserCardDate'>
+        </div>
+      </div>
+      <div class="form-group" *ngIf="items.certUserAuthorize && items.certUserAuthorize!==''">
+        <div class="col-sm-3 xn-control-label">
+          数字证书使用人授权书
+        </div>
+        <div class="col-sm-9">
+            <div *ngFor="let item of items.certUserAuthorize | xnJson" class="filetable">
+                <a class="xn-click-a" (click)="onViewFile(item)">{{item.fileName}}</a>
+            </div>
+        </div>
+      </div>
+      <div class="form-group" *ngIf="(items.certUserAuthorizeDate && items.certUserAuthorizeDate!=='')||items.certUserAuthorize!==''">
+        <div class="col-sm-3 xn-control-label">
+          数字证书使用人授权书失效日期
+        </div>
+        <div class="col-sm-9">
+          <input type='text' class="form-control xn-input-font xn-input-border-radius"  readonly [value]='items.certUserAuthorizeDate'>
+        </div>
+      </div>
+      <div class="form-group" *ngIf="items.companyDecision && items.companyDecision!==''" >
+        <div class="col-sm-3 xn-control-label">
+          公司章程/股东会/董事会决议
+        </div>
+        <div class="col-sm-9">
+            <div *ngFor="let item of items.companyDecision | xnJson" class="filetable">
+                <a class="xn-click-a" (click)="onViewFile(item)">{{item.fileName}}</a>
+            </div>
+        </div>
+      </div>
+      <div class="form-group" *ngIf="(items.companyDecisionDate && items.companyDecisionDate!=='') || items.companyDecision!==''">
+        <div class="col-sm-3 xn-control-label">
+          公司章程/股东会/董事会决议失效日期
+        </div>
+        <div class="col-sm-9">
+          <input type='text' class="form-control xn-input-font xn-input-border-radius" readonly [value]='items.companyDecisionDate'>
+        </div>
+      </div>
+      <div class="form-group" *ngIf="items.authorizationFile && items.authorizationFile!==''" >
+        <div class="col-sm-3 xn-control-label">
+          授权文件
+        </div>
+        <div class="col-sm-9">
+            <div *ngFor="let item of items.authorizationFile | xnJson" class="filetable">
+                <a class="xn-click-a" (click)="onViewFile(item)">{{item.fileName}}</a>
+            </div>
+        </div>
+      </div>
+      <div class="form-group" *ngIf="items.authorizationFileDate && items.authorizationFileDate!==''">
+        <div class="col-sm-3 xn-control-label">
+          授权文件失效日期
+        </div>
+        <div class="col-sm-9">
+          <input type='text' class="form-control xn-input-font xn-input-border-radius" readonly [value]='items.authorizationFileDate'>
+        </div>
+      </div>
+    </div>
+
+  </ng-container>
+
+</div>

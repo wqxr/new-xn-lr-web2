@@ -1,0 +1,148 @@
+<!-- 项目公司批量签署回执 -->
+<section class="content">
+  <div class="box">
+    <div class="box-header">
+      <h3 class="box-title">应收账款转让回执列表</h3>
+    </div>
+    <!-- /.box-header -->
+
+    <div class="box-body">
+      <ul class="nav nav-tabs">
+        <li class="active">
+          <a class="xn-click-a" data-toggle="tab" (click)="getList(ListType.FirstWait)">一次回执待签署</a>
+        </li>
+        <li>
+          <a class="xn-click-a" data-toggle="tab" (click)="getList(ListType.FirstDone)">一次回执已签署</a>
+        </li>
+        <li>
+          <a class="xn-click-a" data-toggle="tab" (click)="getList(ListType.SecondWait)">二次回执待签署</a>
+        </li>
+        <li>
+          <a class="xn-click-a" data-toggle="tab" (click)="getList(ListType.SecondDone)">二次回执已签署</a>
+        </li>
+        <li>
+          <a class="xn-click-a" data-toggle="tab" (click)="getList(ListType.ChangeWait)">债权转让及账户变更通知的补充说明待签署</a>
+        </li>
+        <li>
+          <a class="xn-click-a" data-toggle="tab" (click)="getList(ListType.ChangeDone)">债权转让及账户变更通知的补充说明已签署</a>
+        </li>
+
+      </ul>
+      <div class="tab-content">
+        <div class="tab-pane active" style="padding: 15px 0 6px">
+
+          <!-- 表头搜索项 -->
+          <xn-search-form
+            [model]="searchModel"
+            [fields]="showFields"
+            (search)="onSearch($event)"
+            (reset)="onReset()"
+          ></xn-search-form>
+
+          <!--按钮组项-->
+          <div class="col-sm-12 btn-label">
+            <span class="fr">
+              <button type="button" *ngIf="inWaitTab" (click)="audit()"
+                      class="btn btn-primary">
+                审核通过
+              </button>
+              <button type="button" *ngIf="inWaitTab && isReviewer"
+                      (click)="signContracts()" class="btn btn-primary">
+                签署
+              </button>
+            </span>
+          </div>
+          <!--table内容项-->
+          <table class="table table-bordered table-striped text-center">
+            <thead>
+            <tr class="table-head">
+              <ng-container *ngIf="inWaitTab">
+                <th>
+                  <input type="checkbox" class="ml" (change)="handleAllSelect()" [checked]="allChecked"/>全选/取消
+                </th>
+              </ng-container>
+              <ng-container *ngFor="let head of heads">
+                <th *ngIf="head.sort" [ngClass]="onSortClass(head.checkerId)" (click)="onSort(head.checkerId)">
+                  {{ head.title }}
+                </th>
+                <th *ngIf="!head.sort">{{ head.title }}</th>
+              </ng-container>
+              <th style="min-width: 80px" *ngIf="inWaitTab">操作</th>
+              <!--执行移除或添加-->
+
+            </tr>
+            </thead>
+            <tbody>
+            <ng-container *ngIf="rows && rows.length; else block">
+              <tr *ngFor="let row of rows; let i = index">
+                <ng-container *ngIf="inWaitTab">
+                  <td>
+                    <input class="capital-pool-check" type="checkbox" [checked]="row.checked"
+                           (change)="inputChange(row)"/>
+                  </td>
+                </ng-container>
+                <td *ngFor="let head of heads" [ngClass]="onTextClass(head['type'])"
+                    style="max-width: 70px;word-wrap:break-word">
+                  <ng-container [ngSwitch]="true">
+                    <ng-container *ngSwitchCase="head.checkerId === 'mainFlowId'">
+                      <!-- 交易ID -->
+                      <a [innerHTML]="row[head.checkerId]" href="javaScript:void (0)"
+                         (click)="viewProcess(row[head.checkerId])"></a>
+                    </ng-container>
+                    <ng-container *ngSwitchCase="
+                          head.checkerId === 'projectNotice2' ||
+                          head.checkerId === 'projectReceipt1' ||
+                          head.checkerId === 'changeNoticeAdd'
+                        ">
+                      <a [innerHTML]="getLabel(row[head.checkerId])" (click)="viewContracts(row[head.checkerId])"
+                         href="javaScript:void (0)"></a>
+                    </ng-container>
+                    <ng-container *ngSwitchCase="head.checkerId === 'projectReceipt2'">
+                      <a [innerHTML]="getLabel(row[head.checkerId])" (click)="viewContracts(row[head.checkerId])"
+                         href="javaScript:void (0)"></a>
+                    </ng-container>
+                    <ng-container *ngSwitchDefault>
+                      <div *ngIf="
+                            head.checkerId !== 'mainFlowId' &&
+                            head.checkerId !== 'projectNotice2' &&
+                            head.checkerId !== 'projectReceipt2' &&
+                            head.checkerId !== 'projectReceipt1' &&
+                            head.checkerId !== 'changeNoticeAdd'
+                          " [innerHTML]="
+                            row[head.checkerId]
+                              | xnGatherType: { head: head, row: row }
+                          "></div>
+                    </ng-container>
+                  </ng-container>
+                </td>
+                <td *ngIf="inWaitTab">
+                  <a *ngIf="!isAudited(row)" (click)="audit(row)" class="xn-click-a small-font">审核通过</a>
+                  <a (click)="signReturn(row)" class="xn-click-a small-font">退回</a>
+                </td>
+
+              </tr>
+            </ng-container>
+            <ng-template #block>
+              <tr>
+                <td colspan="25">
+                  <div class="empty-message"></div>
+                </td>
+              </tr>
+            </ng-template>
+            </tbody>
+          </table>
+
+          <xn-pagination
+            [rows]="pageConfig.pageSize"
+            [first]="pageConfig.first"
+            [totalRecords]="pageConfig.total"
+            [pageSizeOptions]="[10, 20, 50, 100]"
+            (pageChange)="onPage($event)"
+          ></xn-pagination>
+        </div>
+      </div>
+    </div>
+    <!-- /.box-body -->
+  </div>
+  <!-- /.box -->
+</section>

@@ -1,0 +1,61 @@
+<section class="content-header">
+  <h1>
+    交易详情
+    <small></small>
+  </h1>
+</section>
+
+<section class="content" *ngIf="params">
+  <div class="box">
+    <div class="box-body">
+      <!-- 第一行 -->
+      <div class="flex-row this-title-color">
+        <div class="this-flex-1">交易ID: {{params.mainFlowId}}</div>
+        <div class="this-flex-2 text-right">区块链订单ID: {{params.bcOrderId}}</div>
+      </div>
+
+      <!-- 第二行 -->
+      <div class="flex-row">
+        <div class="this-flex-status">
+          <span class="this-title-color">当前步骤</span><br>
+          <span class="detail-status">{{currentStatus}}</span>
+        </div>
+
+        <div class="this-flex-1">
+          <p>供应商：{{params.debtUnit}}</p>
+          <p>保理商：{{params.factoringOrgName}}</p>
+          <p>核心企业：{{params.projectCompany}}</p>
+        </div>
+
+        <div class="this-flex-1">
+          <p>融资金额: {{params.receive | xnMoney}} 元人民币</p>
+          <!-- <p>保理合同签署时间：{{params.signContractTime | xnDate}}</p>
+          <p>折让价格: {{params.price}} 年化利率%</p> -->
+        </div>
+      </div>
+    </div>
+  </div>
+  <!-- /.box -->
+
+  <ul class="nav">
+    <li role="presentation" [ngClass]="onCssClass(0)" (click)="onItemClick(0)">流程记录</li>
+    <li role="presentation" [ngClass]="onCssClass(1)" (click)="onItemClick(1)" *ngIf="showTab">贸易动图</li>
+    <li role="presentation" [ngClass]="onCssClass(2)" (click)="onItemClick(2)" *ngIf="showTab">数字资产记录</li>
+    <li role="presentation" [ngClass]="onCssClass(3)" (click)="onItemClick(3)" *ngIf="showData">数字仓库</li>
+    <li role="presentation" [ngClass]="onCssClass(4)" (click)="onItemClick(4)">业务相关流程</li>
+    <li role="presentation" [ngClass]="onCssClass(5)" (click)="onItemClick(5)" >相关文件</li>
+    <!-- <li role="presentation" [ngClass]="onCssClass(4)" (click)="onItemClick(4)">查询结果（仓库）</li> -->
+  </ul>
+
+  <ul class="con">
+    <xn-dragon-flow-detail-record-component [params]="params" [mainFlowId]="mainFlowId" *ngIf='setItem === 0'>
+    </xn-dragon-flow-detail-record-component>
+    <div style='background-color: #fff;'>
+      <vanke-business-related *ngIf='setItem === 4'  [mainFlowId]="mainFlowId"></vanke-business-related>
+      <vanke-file-related *ngIf='setItem === 5' [params]="params" [mainFlowId]="mainFlowId"></vanke-file-related>
+
+    </div>
+  </ul>
+
+</section>
+<!-- /.content -->

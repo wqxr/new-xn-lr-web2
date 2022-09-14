@@ -1,0 +1,200 @@
+<section class="content">
+  <div class="box">
+    <div class="box-header">
+      <h3 class="box-title">{{title}}列表</h3>
+    </div>
+    <!-- /.box-header -->
+
+    <div class="box-body">
+      <!--搜索项-->
+      <div>
+        <div class="item-box col-md-6" *ngFor="let row of shows">
+          <div class="item-label">
+            <label>{{row.title}}:</label>
+          </div>
+          <div class="item-control">
+            <ng-container>
+              <xn-input [row]="row" [form]="mainForm"></xn-input>
+            </ng-container>
+          </div>
+        </div>
+      </div>
+      <!--按钮组项-->
+      <div class="form-group clearfix" *ngIf="base?.superConfig.list?.headButtons">
+        <div class="col-sm-12 btn-label btn-cus">
+          <div class="col-sm-6 text-left btn-cus">
+            <ng-container *ngIf="isShowTradingBtn">
+              <button type="button" *ngIf="isShowPbtn && !isAgencyUser" (click)="downloadCapitalPoolExcel()"
+                class="btn btn-primary">下载Excel
+              </button>
+            </ng-container>
+          </div>
+          <div class="col-sm-6 text-right btn-cus">
+            <ng-container *ngIf="!isCapitalPool && !isAgencyUser">
+              <!--系在应收账款通知书附件、只在保理商系在-->
+              <ng-container *ngIf="!isShowPbtn&&showSign">
+                <button class="btn btn-primary" (click)="downAnnex()">下载本页附件</button>
+              </ng-container>
+            </ng-container>
+            <ng-container *ngIf="isShowTradingBtn">
+              <ng-container *ngIf="!isAgencyUser">
+                <button type="button" (click)="exportCapital()" class="btn btn-primary">导出清单</button>
+              </ng-container>
+              <button type="button" (click)="downloadSelectedAttach()" class="btn btn-primary">下载附件</button>
+            </ng-container>
+            <!--添加、移除按钮-->
+            <ng-container *ngIf="isCapitalPool && !isAgencyUser">
+              <button class="btn  btn-primary" [disabled]="!formCapitalPool.capitalId" (click)="returnBackCapital()">返回资产池
+              </button>
+              <button class="btn  btn-primary" [disabled]="!btnStatusBool" (click)="handleCapital()">
+                {{enumOperating[formCapitalPool.type]}}
+              </button>
+            </ng-container>
+            <ng-container *ngFor="let btn of base?.superConfig.list?.headButtons">
+              <a *ngIf="btn.type === 'a' && btn.search" (click)="onSearch()" class="{{btn.class}}">{{btn.title}}</a>
+              <a *ngIf="btn.type === 'a' && btn.clearSearch" (click)="clearSearch()"
+                class="{{btn.class}}">{{btn.title}}</a>
+            </ng-container>
+          </div>
+        </div>
+      </div>
+      <!--table内容项-->
+      <table class="table table-bordered table-striped text-center">
+        <thead>
+          <tr class="table-head">
+            <ng-container *ngFor="let head of heads">
+              <th *ngIf="head.sort" [ngClass]="onSortClass(head.checkerId)" (click)="onSort(head.checkerId)">
+                {{head.title}}
+              </th>
+              <th *ngIf="!head.sort">{{head.title}}</th>
+            </ng-container>
+            <th colspan="2">
+              <input type="checkbox" class="ml" [disabled]="rows.length===0" (change)="handleAllSelect()"
+                [checked]="allChecked">全选/取消
+            </th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let row of rows;let i=index">
+            <td *ngFor="let head of heads" [ngClass]="onTextClass(head['type'])"
+              style="max-width: 70px;word-wrap:break-word">
+              <ng-container [ngSwitch]="true">
+                <ng-container *ngSwitchCase="head.checkerId === 'mainFlowId'">
+                  <!-- 交易ID -->
+                  <a [innerHTML]="row[head.checkerId]" href="javaScript:void (0)"
+                    (click)="viewProcess(row[head.checkerId])"></a>
+                </ng-container>
+                <!-- 总部公司 -->
+                <ng-container *ngSwitchCase="head.type === 'headquarters'">
+                  <div [innerHTML]="row[head.checkerId] | xnSelectTransform : enterpriserSelectItems"></div>
+                </ng-container>
+                <!--通知书-->
+                <ng-container
+                  *ngSwitchCase="head.checkerId === 'capitalPoolContract01' || head.checkerId === 'capitalPoolContract02'">
+                  <a *ngIf="row[head.checkerId] && row[head.checkerId] !== ''" href="javaScript:void (0)"
+                    (click)="viewContract(row[head.checkerId])">{{(row[head.checkerId] | xnJson)[0].label}}</a>
+                </ng-container>
+                <!--总部公司回执（二次转让）-->
+                <ng-container *ngSwitchCase="head.checkerId === 'capitalPoolContract03'">
+                  <a *ngIf="row[head.checkerId] && row[head.checkerId] !== ''" href="javaScript:void (0)"
+                    class="a-block"
+                    (click)="viewContract(row[head.checkerId])">{{(row[head.checkerId] | xnJson)[0].label}}</a>
+                </ng-container>
+                <ng-container *ngSwitchCase="head.checkerId === 'wkType'">
+                  <div>{{row[head.checkerId] | xnTransfer:'wkType'}}</div>
+                </ng-container>
+                <!--项目公司回执（二次转让）-->
+                <ng-container *ngSwitchCase="head.checkerId === 'capitalPoolContract04'">
+                  <a *ngIf="row[head.checkerId] && row[head.checkerId] !== ''" href="javaScript:void (0)"
+                    class="a-block"
+                    (click)="viewContract(row[head.checkerId])">{{(row[head.checkerId] | xnJson)[0].label}}</a>
+                </ng-container>
+                <!--总部公司回执（一次转让）-->
+                <ng-container *ngSwitchCase="head.checkerId === 'headquartersReceipt'">
+                  <a *ngIf="row[head.checkerId] && row[head.checkerId] !== ''" href="javaScript:void (0)"
+                    class="a-block"
+                    (click)="viewContract(row[head.checkerId])">{{(row[head.checkerId] | xnJson)[0].label}}</a>
+                  <a (click)="fileView(row.photoCopy03)" *ngIf="row.photoCopy03 && row.photoCopy03 !== ''"
+                    class="a-block" href="javaScript:void (0)">企业回传文件</a>
+                  <p *ngIf="row.photoCopy03 && row.photoCopy03 === ''">未回传文件</p>
+                  <a *ngIf="row[head.checkerId] != null" (click)="uploadContract(row, head)" style="margin-top: 5px;"
+                    class="a-block" href="javaScript:void (0)">上传文件</a>
+                  <p *ngIf="row[head.checkerId] == null">无</p>
+                </ng-container>
+                <!--项目公司回执（一次转让）-->
+                <ng-container *ngSwitchCase="head.checkerId === 'projectReceipt'">
+                  <a *ngIf="row[head.checkerId] && row[head.checkerId] !== ''" href="javaScript:void (0)"
+                    class="a-block"
+                    (click)="viewContract(row[head.checkerId])">{{(row[head.checkerId] | xnJson)[0].label}}</a>
+                  <a (click)="fileView(row.photoCopy04)" *ngIf="row.photoCopy04 && row.photoCopy04 !== ''"
+                    class="a-block" href="javaScript:void (0)">企业回传文件</a>
+                  <p *ngIf="row.photoCopy04 && row.photoCopy04 === ''">未回传文件</p>
+                  <a *ngIf="row[head.checkerId] != null" (click)="uploadContract(row, head)" style="margin-top: 5px;"
+                    class="a-block" href="javaScript:void (0)">上传文件</a>
+                  <p *ngIf="row[head.checkerId] == null">无</p>
+                </ng-container>
+                <!--付款确认书（总部致保理商）-->
+                <ng-container *ngSwitchCase="head.checkerId === 'pdfProjectFile'">
+                  <a *ngIf="row[head.checkerId] && row[head.checkerId] !== ''" href="javaScript:void (0)"
+                    class="a-block"
+                    (click)="viewContract(row[head.checkerId])">{{(row[head.checkerId] | xnJson)[0].label}}</a>
+                  <a (click)="fileView(row.photoCopy05)" *ngIf="row.photoCopy05 && row.photoCopy05 !== ''"
+                    class="a-block" href="javaScript:void (0)">企业回传文件</a>
+                  <p *ngIf="row.photoCopy05 && row.photoCopy05 === ''">未回传文件</p>
+                  <a *ngIf="row[head.checkerId] != null" (click)="uploadContract(row, head)" style="margin-top: 5px;"
+                    class="a-block" href="javaScript:void (0)">上传文件</a>
+                  <p *ngIf="row[head.checkerId] == null">无</p>
+                </ng-container>
+                <!--付款确认书（项目公司致保理商）-->
+                <ng-container *ngSwitchCase="head.checkerId === 'projectQrs'">
+                  <a *ngIf="row[head.checkerId] && row[head.checkerId] !== ''" href="javaScript:void (0)"
+                    class="a-block"
+                    (click)="viewContract(row[head.checkerId])">{{(row[head.checkerId] | xnJson)[0].label}}</a>
+                  <a (click)="fileView(row.photoCopy06)" *ngIf="row.photoCopy06 && row.photoCopy06 !== ''"
+                    class="a-block" href="javaScript:void (0)">企业回传文件</a>
+                  <p *ngIf="row.photoCopy06 && row.photoCopy06 === ''">未回传文件</p>
+                  <a *ngIf="row[head.checkerId] != null" (click)="uploadContract(row, head)" style="margin-top: 5px;"
+                    class="a-block" href="javaScript:void (0)">上传文件</a>
+                  <p *ngIf="row[head.checkerId] == null">无</p>
+                </ng-container>
+                <!--付款确认书（总部致券商）-->
+                <ng-container *ngSwitchCase="head.checkerId === 'tradersQrs'">
+                  <a *ngIf="row[head.checkerId] && row[head.checkerId] !== ''" href="javaScript:void (0)"
+                    class="a-block"
+                    (click)="viewContract(row[head.checkerId])">{{(row[head.checkerId] | xnJson)[0].label}}</a>
+                  <a (click)="fileView(row.photoCopy07)" *ngIf="row.photoCopy07 && row.photoCopy07 !== ''"
+                    class="a-block" href="javaScript:void (0)">企业回传文件</a>
+                  <p *ngIf="row.photoCopy07 && row.photoCopy07 === ''">未回传文件</p>
+                  <a *ngIf="row[head.checkerId] != null" (click)="uploadContract(row, head)" style="margin-top: 5px;"
+                    class="a-block" href="javaScript:void (0)">上传文件</a>
+                  <p *ngIf="row[head.checkerId] == null">无</p>
+                </ng-container>
+                <ng-container *ngSwitchDefault>
+                  <div *ngIf="head.checkerId!=='mainFlowId'
+                && head.checkerId !=='constractsToDc'
+                && head.checkerId !== 'constractsToSo'
+                && head.checkerId !== 'constractsToBa'"
+                    [innerHTML]="row[head.checkerId] | xnGatherType: {head:head,row:row}"></div>
+                </ng-container>
+              </ng-container>
+            </td>
+            <td style="display: flex">
+              <input *ngIf="isCapitalPool||showSign&&row.capitalPoolContract===''&&!isShowPbtn||isShowTradingBtn"
+                style="justify-content: center;align-content: center;" class="capital-pool-check" type="checkbox"
+                [checked]="row.checked" (change)="inputChange(row,i)">
+            </td>
+          </tr>
+        </tbody>
+      </table>
+      <xn-pagination [rows]="pageSize" [first]="first" [totalRecords]="total" [pageSizeOptions]="[10,20,50,100]"
+        (pageChange)="onPage($event)"></xn-pagination>
+    </div>
+    <!-- /.box-body -->
+    <div class="text-right box-footer">
+      <button class="btn btn-default" type="button" (click)="goback()">返回</button>
+    </div>
+  </div>
+  <!-- /.box -->
+
+</section>
+<!-- /.content -->

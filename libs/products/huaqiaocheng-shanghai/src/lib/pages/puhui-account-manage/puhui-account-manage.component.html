@@ -1,0 +1,111 @@
+<section class="content-header">
+  <h1>普惠记账簿管理</h1>
+</section>
+<section class="content">
+  <div class="box">
+    <div class="box-body">
+      <!-- 骨架屏 -->
+      <nz-skeleton [nzLoading]="loading" [nzActive]="true">
+        <!-- 未开户 -->
+        <ng-container *ngIf="isUnOpen()">
+          <nz-result nzStatus="info" nzTitle="贵司暂未申请开通普惠记账簿，点击下面按钮即可申请">
+            <div nz-result-extra>
+              <button nz-button nzType="primary" (click)="newAccountFlow()">申请开通普惠通记账簿</button>
+            </div>
+          </nz-result>
+        </ng-container>
+        <!-- 已开户,未通过审核 -->
+        <ng-container *ngIf="!eAccountStatus && !isUnOpen()">
+          <nz-result nzStatus="info" nzTitle="">
+            <div nz-result-extra>
+              <h4>{{ checkStatus | xnSelectTransform: 'ShPuhuiCheckTypes' }}</h4>
+            </div>
+          </nz-result>
+        </ng-container>
+        <!-- 已开户,未激活/已激活 -->
+        <ng-container *ngIf="!isUnOpen() && eAccountStatus">
+          <div class="tab-content">
+            <div class="tab-pane active" style="padding: 15px 0">
+              <!-- tab标签页,展示开户信息审核状态 -->
+              <ng-container>
+                <nz-tabset nzTabPosition="left" nzSize="small" (nzSelectChange)="onTabChange($event)">
+                  <ng-container *ngFor="let item of titleModel; let i = index">
+                    <nz-tab *ngIf="item.needCheck" [nzTitle]="titleTemplate">
+                      <ng-template #titleTemplate>
+                        <div class="checkerTitle">
+                          <span>{{ item.title }}</span>
+                          <ng-container *ngIf="i === titleModel.length-1; else passStatus">
+                            <button type="button" class="btn btn-xs btn-warning">
+                              {{ eAccountStatus | xnSelectTransform:'accountActiveStatus'}}
+                            </button>
+                          </ng-container>
+                        </div>
+                      </ng-template>
+                      <ng-content *ngTemplateOutlet="formTemplate"></ng-content>
+                    </nz-tab>
+                  </ng-container>
+                </nz-tabset>
+              </ng-container>
+            </div>
+          </div>
+        </ng-container>
+      </nz-skeleton>
+    </div>
+  </div>
+</section>
+
+<!-- 开户详情表单 -->
+<ng-template #formTemplate>
+  <nz-skeleton [nzActive]="true" [nzLoading]="!checkShows.length">
+    <ng-container *ngIf="checkShows.length">
+      <div class="form-group" *ngFor="let row of checkShows">
+        <!--  && row.value -->
+        <ng-container *ngIf="row.options.readonly">
+          <!-- 分步表单组标题 -->
+          <ng-container *ngFor="let item of titleModel">
+            <div *ngIf="row.checkerId === item.checkerId" class="rowTitle">
+              <h3>{{item.title}}</h3>
+              <button *ngIf="item.checkerId === 'bankAccountNo'" type="button" class="btn btn-primary"
+                (click)="editAccountNo()">修改绑定对公账号</button>
+            </div>
+          </ng-container>
+          <ng-container>
+            <div *ngIf="row.checkerId === 'socieBankAccountNo'" style="padding: 5px 20px;">
+              <!-- 打款激活提示 -->
+              <div *ngIf="showPamentTip()">
+                <h4 style="color: #f59a23;text-align: center;padding: 15px;">请于
+                  <span style="font-weight: bold;"> {{ paymentDate }} </span>通过以下绑定银行对公账户向普惠记账簿电子账户打入验证金额
+                </h4>
+              </div>
+              <h4>绑定对公账号信息</h4>
+            </div>
+            <div *ngIf="row.checkerId === 'acctNo'" style="padding: 5px 20px;">
+              <h4>普惠记账簿电子账户</h4>
+            </div>
+          </ng-container>
+          <div class="col-sm-12" style="margin-bottom: 10px;">
+            <div class="col-sm-2 xn-control-label" *ngIf="!showMaxRow(row)">
+              {{ row.title }}
+            </div>
+            <div [ngClass]="[showMaxRow(row)?'':'col-sm-8']">
+              <app-dynamic-input [row]="row" [form]="mainForm" [svrConfig]="svrConfig" formModule="dragon-input">
+              </app-dynamic-input>
+            </div>
+            <div *ngIf="!showMaxRow(row)" class="col-sm-2 xn-control-desc"></div>
+          </div>
+          <div class="col-sm-12" *ngIf="row.checkerId === 'actiDeadline' && needReActive">
+            <div class="col-sm-3"></div>
+            <div class="col-sm-8" style="text-align: right;">
+              <a href="javascript: void(0)" (click)="reActiveAct()">已过打款激活日期，申请重新激活</a>
+            </div>
+            <div class="col-sm-2"></div>
+          </div>
+        </ng-container>
+      </div>
+    </ng-container>
+  </nz-skeleton>
+</ng-template>
+
+<ng-template #passStatus>
+  <button type="button" class="btn btn-xs btn-success">已通过</button>
+</ng-template>

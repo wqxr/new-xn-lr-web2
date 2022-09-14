@@ -1,0 +1,100 @@
+<modal #modal [backdrop]="'static'" [keyboard]="false" [animation]="false">
+  <modal-header [showClose]="false">
+    <h4 class="modal-title">{{tabConfig.title}}</h4>
+  </modal-header>
+  <modal-body>
+    <div style="clear: both;height:calc(100vh - 300px);overflow:auto">
+      <div class="flex-row">
+        <!-- 左侧 -->
+        <div class="this-left">
+          <span>已选：{{selectedItems.length}}</span><span style="float: right;margin-right: 50px;"><a
+              href='javascript:void(0)' class='editor_view' (click)="clearcompany()">清空所有已选</a></span>
+          <div style="height: 250px;border: 1px solid #ccc;margin-left: 10px;margin-top: 20px;overflow:auto;">
+            <p *ngFor="let head of selectedItems"><a>{{head.templateName}}</a> &nbsp;&nbsp;&nbsp;&nbsp;<span
+                (click)="clearData(head)" style="cursor: pointer;"> x </span></p>
+          </div>
+        </div>
+      </div>
+      <div class="this-left" style="margin-top:40px">
+        <div class="form-group col-sm-12 flex">
+          <!-- <span>请选择：</span> -->
+          <div style='display: inline-flex;float: right;'>
+            <input #input class="xn-input-font xn-input-border-radius" type="text" placeholder="搜索合同模板"
+              style='border:1px solid #ccc;height: 28px;' [(ngModel)]='templateName' autocomplete="off" (blur)="onInput()"/>
+              <select class="xn-input-font" style='height:28px' (change)='changeSignType($event)'>
+                <option value="" >选择签署方式
+                </option>
+                <option *ngFor="let option of signTypeList" value="{{option.value}}">{{option.label}}</option>
+              </select>
+            <select class="xn-input-font" style='height:28px' (change)='changeStyle($event)'>
+              <option value="" >选择生成逻辑</option>
+              <option *ngFor="let option of styleList" value="{{option.value}}">{{option.label}}</option>
+            </select>
+            <select class="xn-input-font" style='height:28px' (change)='generateStyle($event)'>
+              <option value="" >选择生成方式</option>
+              <option *ngFor="let option of generateList" value="{{option.value}}">{{option.label}}</option>
+            </select>
+          </div>
+        </div>
+      </div>
+      <div>
+        <table class="table table-bordered table-striped text-center">
+          <thead>
+            <tr class="table-head">
+              <!-- 全选按钮 -->
+
+              <!-- title -->
+              <th>序号</th>
+              <th *ngFor="let head of tabConfig.heads">
+                <ng-container *ngIf="head.sort;else normal">
+                  <span [ngClass]="onSortClass(head?.value)" (click)="onSort(head?.value)">{{head.label}}</span>
+                </ng-container>
+                <ng-template #normal>{{head.label}}</ng-template>
+              </th>
+              <th class="input-check">全选/取消
+                <input type="checkbox" name="all" [checked]="isAllChecked()" [disabled]="!data.length"
+                  (change)="checkAll($event)" />
+              </th>
+              <!-- 行操作 -->
+            </tr>
+          </thead>
+          <tbody>
+            <ng-container *ngIf="data.length;else block">
+              <tr *ngFor="let item of data;let i=index">
+                <!-- 行选则 -->
+                <td>{{i+1}}</td>
+                <!-- 列内容 -->
+                <td>
+                  <a href="javaScript:void(0)" (click)="showContract(item.id)">{{item.templateName}}</a></td>
+                <td><a>{{item.signType | xnSelectTransform:'signType'}}</a></td>
+                <td>{{item.style | xnSelectTransform:'generateLogicNumber' }}</td>
+                <td>{{item.id}}</td>
+                <td>{{item.createType | xnSelectTransform:'concreateType'}}</td>
+                <td>
+                  <input type="checkbox" name="single" [checked]="item['checked']"
+                    (change)="singelChecked($event,item,i)" />
+                </td>
+              </tr>
+            </ng-container>
+          </tbody>
+        </table>
+      </div>
+      <xn-pagination [rows]="pageConfig.pageSize" [first]="pageConfig.first" [totalRecords]="pageConfig.total"
+        [pageSizeOptions]="[5,10,20,30,50,100]" (pageChange)="onPage($event)"></xn-pagination>
+    </div>
+    <ng-template #block>
+      <td colspan="11">
+        <div class="empty-message"></div>
+      </td>
+    </ng-template>
+  </modal-body>
+  <div class="modal-footer">
+    <button type="button" class="btn btn-default" (click)="oncancel()"
+      style="clear: both;margin-right: 10px;">取消</button>
+    <button type="submit" class="btn btn-primary"
+      (click)="SureAddComp();$event.stopPropagation();">确定</button>
+
+  </div>
+
+
+</modal>

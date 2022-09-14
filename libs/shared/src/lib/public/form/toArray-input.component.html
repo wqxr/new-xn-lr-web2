@@ -1,0 +1,8 @@
+<div class="inMemo" *ngIf="inMemo !== ''">{{inMemo}}</div>
+<div class="input-group" style="width: 100%" [formGroup]="form">
+  <div class="xn-input-font clearfix">
+    <div *ngFor="let item of items" class="border col-sm-3 text-center">
+      <div>{{item}}</div>
+    </div>
+  </div>
+</div>

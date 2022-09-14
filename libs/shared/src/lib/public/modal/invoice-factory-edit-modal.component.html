@@ -1,0 +1,54 @@
+<modal #modal [backdrop]="'static'" [keyboard]="false" [animation]="false" (onDismiss)="onOk()">
+  <form class="form-horizontal" (ngSubmit)="onSubmit()">
+    <modal-header [showClose]="true">
+      <h4 class="modal-title">补充发票</h4>
+    </modal-header>
+    <modal-body>
+      <div class="panel panel-default">
+        <div class="panel xn-panel-sm">
+          <div class="panel-body">
+            <div class="row">
+              <div class="form-group col-sm-6" *ngFor="let row of shows2">
+                <div class="col-sm-3 xn-control-label">
+                  {{row.title}} <span *ngIf="row.required !== false && row.required !== 0"
+                                      class="required-label">*</span>
+                </div>
+                <div class="col-sm-9">
+                  <xn-input [row]="row" [form]="mainForm"></xn-input>
+                </div>
+              </div>
+            </div>
+            <div class="form-group " *ngFor="let row of shows">
+              <div class="col-sm-2 xn-control-label">
+                {{row.title}} <span *ngIf="row.required !== false && row.required !== 0" class="required-label">*</span>
+              </div>
+              <div class="col-sm-8 table-box">
+                <xn-input [row]="row" [form]="mainForm"></xn-input>
+              </div>
+              <div class="col-sm-2 xn-control-desc">
+                <p>{{row.memo}}</p>
+                <a href="/assets/szca/发票审核模板.xlsx"  class="xn-click-a xn-block"
+                   *ngIf="row.name === 'invoiceInfo'">下载批量发票模板</a>
+              </div>
+            </div>
+            <div class="form-group" *ngFor="let row of shows">
+              <div class="col-sm-3 xn-control-label">
+                发票总金额
+              </div>
+              <div class="col-sm-6">
+                <div class="form-control xn-input-font xn-input-border-radius ng-untouched ng-pristine amounts-all">
+                  {{ amountsAll | xnMoney }}
+                </div>
+              </div>
+            </div>
+          </div>
+          <!-- /.panel-body -->
+        </div>
+        <!-- /.panel -->
+      </div>
+    </modal-body>
+    <modal-footer>
+      <button type="button" class="btn btn-danger" [disabled]="!formValid" (click)="onSubmit()">确定新增</button>
+    </modal-footer>
+  </form>
+</modal>

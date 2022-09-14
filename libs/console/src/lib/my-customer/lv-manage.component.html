@@ -1,0 +1,55 @@
+<section class="content-header" [hidden]="hiddenTitle">
+  <h1>
+    {{pageTitle}}
+    <small>{{pageDesc}}</small>
+  </h1>
+</section>
+
+<section class="content">
+  <div class="box">
+    <div class="box-header">
+      <h3 class="box-title">{{tableTitle}}</h3>
+      <a class="btn btn-danger" *ngIf="showEditOperator&&!hiddenTitle"
+         routerLink="/console/manage/lv-manage/financing_enterprise_lv" style="float: right;">额度变更申请</a>
+    </div>
+    <!-- /.box-header -->
+    <div class="box-body">
+
+      <table class="table table-bordered table-striped">
+        <thead>
+        <tr class="label-text">
+          <th>核心企业</th>
+          <th>非回购模式使用费率（%）</th>
+          <th>非回购模式服务费率（%）</th>
+          <th>非回购模式平台服务费</th>
+          <th>回购模式使用费率（%）</th>
+          <th>回购模式服务费率（%）</th>
+          <th>回购模式平台服务费</th>
+          <th>回购模式特殊利率</th>
+          <th>委托模式使用费率（%）</th>
+          <th>委托模式服务费率（%）</th>
+          <th>委托模式平台服务费</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr *ngFor="let item of items">
+          <td>{{item.enterpriseName}}</td>
+          <td>{{item.factoringSYF}}</td>
+          <td>{{item.factoringFWF}}</td>
+          <td>{{item.platformCost}}</td>
+          <td>{{item.factoringSYF1}}</td>
+          <td>{{item.factoringFWF1}}</td>
+          <td>{{item.platformCost1}}</td>
+          <td>{{item.factoringHG}}</td>
+          <td>{{item.factoringSYF2}}</td>
+          <td>{{item.factoringFWF2}}</td>
+          <td>{{item.platformCost2}}</td>
+        </tr>
+        </tbody>
+      </table>
+
+      <xn-page [total]="total" [size]="pageSize" (change)="onPage($event)"></xn-page>
+    </div>
+  </div>
+
+</section>

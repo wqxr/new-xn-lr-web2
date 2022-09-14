@@ -1,0 +1,15 @@
+<ul class="nav nav-tabs" style='margin-top: 20px;'>
+    <ng-container>
+        <li class="active">
+            <a class="xn-click-a" data-toggle="tab" (click)="initData('D')">
+              <span class="pull-right-container" *ngIf="!!countXinshun">
+                <span class="label label-primary pull-right">{{countXinshun}}</span>
+              </span>
+              待办列表-保理通-星顺-雅居乐</a>
+        </li>
+    </ng-container>
+</ul>
+<ng-container>
+    <xn-new-agile-home-comm-list-component [supers]="{label:newAgileTodo, value:'todo'}"></xn-new-agile-home-comm-list-component>
+</ng-container>
+

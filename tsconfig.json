@@ -1,0 +1,169 @@
+/*
+  This is a "Solution Style" tsconfig.json file, and is used by editors and TypeScript’s language server to improve development experience.
+  It is not intended to be used to perform a compilation.
+
+  To learn more about this file see: https://angular.io/config/solution-tsconfig.
+*/
+{
+  "files": [],
+  "references": [
+    {
+      "path": "./apps/xn-lr-web/tsconfig.app.json"
+    },
+    {
+      "path": "./libs/products/bank-puhuitong/tsconfig.lib.json"
+    },
+    {
+      "path": "./libs/products/bank-puhuitong/tsconfig.spec.json"
+    },
+    {
+      "path": "./libs/console/tsconfig.lib.json"
+    },
+    {
+      "path": "./libs/console/tsconfig.spec.json"
+    },
+    {
+      "path": "./libs/products/dragon/tsconfig.lib.json"
+    },
+    {
+      "path": "./libs/products/dragon/tsconfig.spec.json"
+    },
+    {
+      "path": "./libs/products/machine-account/tsconfig.lib.json"
+    },
+    {
+      "path": "./libs/products/machine-account/tsconfig.spec.json"
+    },
+    {
+      "path": "./libs/products/new-agile/tsconfig.lib.json"
+    },
+    {
+      "path": "./libs/products/new-agile/tsconfig.spec.json"
+    },
+    {
+      "path": "./libs/products/vanke/tsconfig.lib.json"
+    },
+    {
+      "path": "./libs/products/vanke/tsconfig.spec.json"
+    },
+    {
+      "path": "./libs/products/old-agile/tsconfig.lib.json"
+    },
+    {
+      "path": "./libs/products/old-agile/tsconfig.spec.json"
+    },
+    {
+      "path": "./libs/products/gemdale/tsconfig.lib.json"
+    },
+    {
+      "path": "./libs/products/gemdale/tsconfig.spec.json"
+    },
+    {
+      "path": "./libs/products/invoice-contract/tsconfig.lib.json"
+    },
+    {
+      "path": "./libs/products/invoice-contract/tsconfig.spec.json"
+    },
+    {
+      "path": "./libs/products/targete/tsconfig.lib.json"
+    },
+    {
+      "path": "./libs/products/targete/tsconfig.spec.json"
+    },
+    {
+      "path": "./libs/products/home/tsconfig.lib.json"
+    },
+    {
+      "path": "./libs/products/home/tsconfig.spec.json"
+    },
+    {
+      "path": "./libs/products/bank-shanghai/tsconfig.lib.json"
+    },
+    {
+      "path": "./libs/products/bank-shanghai/tsconfig.spec.json"
+    },
+    {
+      "path": "./libs/products/xn-dragon/tsconfig.lib.json"
+    },
+    {
+      "path": "./libs/products/xn-dragon/tsconfig.spec.json"
+    },
+    {
+      "path": "./libs/products/country-graden/tsconfig.lib.json"
+    },
+    {
+      "path": "./libs/products/country-graden/tsconfig.spec.json"
+    },
+    {
+      "path": "./libs/products/huaqiao-city/tsconfig.lib.json"
+    },
+    {
+      "path": "./libs/products/huaqiao-city/tsconfig.spec.json"
+    },
+    {
+      "path": "./libs/products/new-gemdale/tsconfig.lib.json"
+    },
+    {
+      "path": "./libs/products/new-gemdale/tsconfig.spec.json"
+    },
+    {
+      "path": "./libs/products/agile-xingshun/tsconfig.lib.json"
+    },
+    {
+      "path": "./libs/products/agile-xingshun/tsconfig.spec.json"
+    },
+    {
+      "path": "./libs/products/agile-hz/tsconfig.lib.json"
+    },
+    {
+      "path": "./libs/products/agile-hz/tsconfig.spec.json"
+    },
+    {
+      "path": "./libs/products/xn-gemdale/tsconfig.lib.json"
+    },
+    {
+      "path": "./libs/products/xn-gemdale/tsconfig.spec.json"
+    },
+    {
+      "path": "./libs/products/zs-gemdale/tsconfig.lib.json"
+    },
+    {
+      "path": "./libs/products/zs-gemdale/tsconfig.spec.json"
+    },
+    {
+      "path": "./apps/xn-blh-web/tsconfig.app.json"
+    },
+    {
+      "path": "./apps/xn-blh-web/tsconfig.spec.json"
+    },
+    {
+      "path": "./libs/products/ps-logan/tsconfig.lib.json"
+    },
+    {
+      "path": "./libs/products/ps-logan/tsconfig.spec.json"
+    },
+    {
+      "path": "./libs/products/xn-vanke/tsconfig.lib.json"
+    },
+    {
+      "path": "./libs/products/xn-vanke/tsconfig.spec.json"
+    },
+    {
+      "path": "./libs/products/huaqiaocheng-shanghai/tsconfig.lib.json"
+    },
+    {
+      "path": "./libs/products/huaqiaocheng-shanghai/tsconfig.spec.json"
+    },
+    {
+      "path": "./libs/products/abs-gj/tsconfig.lib.json"
+    },
+    {
+      "path": "./libs/products/abs-gj/tsconfig.spec.json"
+    },
+      "path": "./libs/products/account-system/tsconfig.lib.json"
+    },
+    {
+      "path": "./libs/products/account-system/tsconfig.spec.json"
+    }
+  ]
+}

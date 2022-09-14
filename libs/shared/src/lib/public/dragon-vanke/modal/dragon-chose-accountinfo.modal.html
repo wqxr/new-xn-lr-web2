@@ -1,0 +1,53 @@
+<modal #modal [backdrop]="'static'" [keyboard]="false" [animation]="false" (onDismiss)="onOk()">
+  <modal-header [showClose]="true" style='text-align:left'>
+
+    <h4 class="modal-title">账号选择</h4>
+  </modal-header>
+  <modal-body>
+    <div style="padding: 5px 60px">
+      <table class="table table-bordered text-center">
+        <thead>
+          <tr>
+            <th>序号</th>
+            <th>账号备注</th>
+            <th>银行卡卡号</th>
+            <th>开户行名称</th>
+            <th>开户行行号</th>
+            <th>户名</th>
+            <th>选择</th>
+          </tr>
+        </thead>
+        <tbody *ngIf="datalist01.length;else empty">
+          <tr *ngFor='let item of datalist01;let i=index'>
+            <td>{{i+1}}</td>
+            <td>{{item.desc}}</td>
+            <td>{{item.cardCode}}</td>
+            <td>{{item.bankName}}</td>
+            <td>{{item.bankCode}}</td>
+            <td>{{item.accountName}}</td>
+            <td>
+              <input type="radio" name="single" [checked]="item['checked']" (change)="singleChecked(item,i)" />
+            </td>
+          </tr>
+        </tbody>
+        <ng-template #empty>
+          <tr>
+            <td colspan="7">
+              <nz-empty></nz-empty>
+            </td>
+          </tr>
+        </ng-template>
+      </table>
+      <div style='height:50px'>
+      <xn-pagination [rows]="pageSize" [first]="first" [totalRecords]="total" [pageSizeOptions]="[10,20,30,50,100]"
+      (pageChange)="onPage($event)"></xn-pagination>
+      </div>
+    </div>
+
+  </modal-body>
+  <modal-footer>
+    <button type="button" class="btn  btn-default pull-left" (click)='addCard()'>新增账号</button>
+    <button type="button" class="btn btn-default" (click)="oncancel()">取消</button>
+    <button type="button" class="btn btn-success" (click)="onOk()">确定</button>
+  </modal-footer>
+</modal>

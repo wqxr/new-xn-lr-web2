@@ -1,0 +1,228 @@
+<div>
+  <form class="form-horizontal" (ngSubmit)="onSubmit()" [formGroup]="mainForm">
+    <div class="panel panel-default">
+      <div class="panel-heading">
+        <span class="panel-title"
+          >{{ svrConfig.flow.flowName }}: {{ svrConfig.record.title }}
+        </span>
+      </div>
+      <div class="panel-body">
+        <div class="panel panel-info xn-panel-sm">
+          <div class="panel-heading">
+            <span class="panel-title"> 流程基本信息 </span>
+          </div>
+          <div class="panel-body">
+            <div class="form-group" *ngFor="let info of baseInfo">
+              <ng-container *ngIf="showRow(info)">
+                <div class="col-sm-3 xn-control-label">{{ info.title }}</div>
+                <div class="col-sm-6">
+                  <app-dynamic-show
+                    [row]="info"
+                    [form]="mainForm"
+                    [svrConfig]="svrConfig"
+                    formModule="dragon-show"
+                  >
+                  </app-dynamic-show>
+                </div>
+                <div class="col-sm-3 xn-control-desc"></div>
+              </ng-container>
+            </div>
+          </div>
+        </div>
+        <!-- 流程基本信息 -->
+
+        <ng-container *ngIf="hasActions">
+          <ng-container *ngFor="let action of newSvrConfig.actions">
+            <div class="{{ panelCssClass(action) }}">
+              <ng-container *ngIf="action.operator !== 0">
+                <div
+                  class="panel-heading"
+                  style="cursor: pointer"
+                  (click)="collapse(action)"
+                >
+                  <div class="panel-title clearfix">
+                    <!--面板折叠提示-->
+                    <div class="col-sm-6 clear-padding">
+                      <span
+                        *ngIf="
+                            action['collapse'] && action['collapse'] === true;
+                            else block
+                          "
+                        class="fa fa-minus-square"
+                      ></span>
+                      <ng-template #block
+                        ><span class="fa fa-plus-square"></span
+                      ></ng-template>
+                      <span
+                        >第{{ action.recordSeq }}步: {{ action.procedureName }}
+                        ({{ action.operator | xnOperator: action.procedureId
+                        }})</span
+                      >
+                    </div>
+                    <div class="col-sm-2 clear-padding">
+                      <small
+                        ><span class="red"
+                          >{{ action['collapse'] && action['collapse'] === true
+                          ? '点击隐藏' : '点击显示' }}</span
+                        >
+                      </small>
+                    </div>
+                    <div class="col-sm-4 clear-padding text-right">
+                      <small>
+                        <{{ action.operatorName }}>在{{ action.operatorTime |
+                        xnDate }}处理
+                      </small>
+                    </div>
+                  </div>
+                </div>
+                <div
+                  class="panel-body bgcolor"
+                  *ngIf="action['collapse'] && action['collapse'] === true"
+                >
+                  <ng-container *ngIf="action.operator === 1">
+                    <div *ngFor="let step of action.stepList" class="stepDiv">
+                      <h4>{{step.name}}</h4>
+                      <div
+                        class="form-group step"
+                        *ngFor="let checker of step.checkerIdList"
+                      >
+                        <ng-container *ngIf="showRow(row)">
+                          <div
+                            class="xn-control-label"
+                            [ngClass]="{
+                            'required-label-strong': hwModeService.checkRequiredAndReadonly(
+                              checker
+                            ).bold,
+                            'required-star': hwModeService.checkRequiredAndReadonly(
+                              checker
+                            ).star,
+                            'col-sm-3':checker.stepId!=='checkStandardStep',
+                            'col-sm-1':checker.stepId==='checkStandardStep'
+                          }"
+                          >
+                            {{ checker.title }}
+                          </div>
+                          <div
+                            [ngClass]="{'col-sm-10':checker.stepId==='checkStandardStep','col-sm-6':checker.stepId!=='checkStandardStep'}"
+                          >
+                            <app-dynamic-show
+                              [step]="step"
+                              [row]="checker"
+                              [form]="mainForm"
+                              [svrConfig]="svrConfig"
+                              formModule="dragon-show"
+                            ></app-dynamic-show>
+                          </div>
+                          <div
+                            class="xn-control-desc"
+                            [ngClass]="{'col-sm-1':checker.stepId==='checkStandardStep','col-sm-3':checker.stepId!=='checkStandardStep'}"
+                          >
+                            {{ checker.memo }}
+                          </div>
+                        </ng-container>
+                      </div>
+                    </div>
+                  </ng-container>
+                  <!-- 审核意见 -->
+                  <div class="stepDiv" *ngIf="showActionMemo(action)">
+                    <xn-dragon-memo-component [memo]="action.memo">
+                    </xn-dragon-memo-component>
+                    <xn-dragon-contract
+                      [contracts]="
+                          action.contracts
+                            | xnContractFilter: newSvrConfig.flow.flowId
+                        "
+                    >
+                    </xn-dragon-contract>
+                  </div>
+                  <!-- /驳回 -->
+                  <div class="text-right">
+                    <a
+                      class="a-handle"
+                      href="javaScript:void (0)"
+                      (click)="collapse(action)"
+                    >
+                      <span class="fa fa-angle-double-up"></span>
+                    </a>
+                  </div>
+                </div>
+              </ng-container>
+            </div>
+          </ng-container>
+          <!-- /.panel -->
+        </ng-container>
+        <!--当前需要处理的项-->
+        <div class="panel panel-primary xn-panel-sm">
+          <div class="panel-heading">
+            <span class="panel-title"
+              >当前: {{ svrConfig.procedure.procedureName }}
+              <small class="pull-right">需要您处理</small>
+            </span>
+          </div>
+          <div class="panel-body bgcolor" style="position: relative">
+            <flow-commom-edit
+              [svrConfig]="svrConfig"
+              [mainForm]="mainForm"
+              [shows]="shows"
+            ></flow-commom-edit>
+            <div
+              *ngIf="showVankeChangesIcon()"
+              (click)="showVankeChangesInfo(true)"
+              class="changesClass"
+            >
+              <a
+                *ngIf="showIconVankeChanges"
+                style="color: red"
+                class="btn btn-app"
+                href="javaScript:void(0)"
+              >
+                <i class="fa fa-bullhorn text-red"></i> 数据变动
+              </a>
+              <a
+                *ngIf="!showIconVankeChanges"
+                class="btn btn-app"
+                href="javaScript:void(0)"
+              >
+                <i class="fa fa-bullhorn"></i> 数据未变动
+              </a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <xn-footer-toolbar [extra]="leftButtons" style="align-items: center">
+      <ng-container *ngIf="buttonList?.rightButtons">
+        <button
+          *ngFor="let btn of buttonList.rightButtons"
+          [nzDanger]="btn.danger"
+          nz-button
+          [nzType]="btn.color"
+          type="button"
+          (click)="handleHeadClick(btn)"
+        >
+          {{btn.label}}
+        </button>
+      </ng-container>
+      <button nz-button nzType="primary" type="submit" [disabled]="valid()">
+        提交
+      </button>
+    </xn-footer-toolbar>
+    <ng-template #leftButtons>
+      <button nz-button nzType="default" type="button" (click)="onCancel()">
+        返回
+      </button>
+      <ng-container *ngIf="buttonList?.leftButtons">
+        <button
+          *ngFor="let btn of buttonList.leftButtons"
+          nz-button
+          [nzDanger]="btn.danger"
+          [nzType]="btn.color"
+          type="button"
+          (click)="handleHeadClick(btn)"
+        >
+          {{btn.label}}
+        </button>
+      </ng-container>
+    </ng-template>
+  </form>
+</div>

@@ -1,0 +1,72 @@
+<section>
+  <div *ngFor="let standardInfo of standardErrorList; let stand_index = index">
+    <p class="rule-index">
+      <span>{{ standardInfo.file_type_name }}</span>
+    </p>
+    <xn-table
+      [data]="standardInfo.standardList"
+      [columns]="headsColumns"
+      [size]="'middle'"
+      [scroll]="{ y: '400px' }"
+      [size]="'middle'"
+      [page]="{ show: false }"
+      [widthMode]="{ type: 'strict', strictBehavior: 'truncate' }"
+    >
+      <!-- 人工审核标准 -->
+      <ng-template
+        xn-table-row="StandardTpl"
+        let-item
+        let-index="index"
+        let-column="column"
+      >
+        <ng-container *ngFor="let tip of item['standardNameList']">
+          <tr>
+            <span>
+              <i
+                style="color: #40BD78;"
+                nz-icon
+                nzType="check-circle"
+                nzTheme="outline"
+              ></i>
+              <span style="margin-left: 5px">{{ tip.standard_name }}</span>
+            </span>
+          </tr>
+        </ng-container>
+      </ng-template>
+      <!-- 操作 -->
+      <ng-template
+        xn-table-row="ActionTpl"
+        let-item
+        let-index="index"
+        let-column="column"
+      >
+        <ng-container
+          *ngFor="let standard of item['standardNameList']; let i = index"
+        >
+          <tr>
+            <ng-container *ngIf="standard.file">
+              <p>
+                <a href="javaScript:void(0)" (click)="onView(file)">查看文件</a>
+              </p>
+              <p>
+                <a
+                *ngIf="!readonly"
+                href="javaScript:void(0)"
+                (click)="delFile(standard, stand_index, index, i)"
+                >删除文件</a
+              >
+              </p>
+            </ng-container>
+            <p *ngIf="standard.user_remark">
+              <a
+                nz-tooltip
+                [nzTooltipTitle]="standard.user_remark"
+                >查看备注</a
+              >
+            </p>
+          </tr>
+        </ng-container>
+      </ng-template>
+    </xn-table>
+  </div>
+</section>

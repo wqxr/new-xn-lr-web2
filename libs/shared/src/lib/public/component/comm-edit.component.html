@@ -1,0 +1,37 @@
+<section class="content">
+  <form class="form-horizontal" *ngIf="mainForm" (ngSubmit)="base.onSubmitEdit()" [formGroup]="mainForm" novalidate>
+    <div class="box">
+      <div class="box-header">
+        <h3 class="box-title">编辑{{base.superConfig.showName}}</h3>
+      </div>
+      <!-- /.box-header -->
+
+      <div class="box-body">
+        <div class="form-group" *ngFor="let row of rows">
+          <div class="col-sm-3 xn-control-label">
+            {{row.title}}
+            <span *ngIf="row.required !== false && row.required !== 0" class="required-label">*</span>
+          </div>
+          <div class="col-sm-6">
+            <xn-input [row]="row" [form]="mainForm"></xn-input>
+          </div>
+          <div class="col-sm-3 xn-control-desc">
+            {{row.memo}}
+          </div>
+        </div>
+      </div>
+      <!-- /.box-body -->
+    </div>
+    <!-- /.box -->
+
+    <div class="row" style="padding-top: 20px">
+      <div class="col-md-4 col-md-offset-2">
+        <button type="button" class="btn btn-default btn-lg btn-block" (click)="base.onCancel()">返回</button>
+      </div>
+      <div class="col-md-4">
+        <button type="submit" [disabled]="!mainForm.valid" class="btn btn-primary btn-lg btn-block">提交</button>
+      </div>
+    </div>
+  </form>
+</section>
+<!-- /.content -->

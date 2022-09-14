@@ -1,0 +1,31 @@
+<modal #modal [backdrop]="'static'" [keyboard]="false" [animation]="false">
+  <modal-header [showClose]="true">
+    <h4 class="modal-title">请确认是否已上传以下证明材料清单</h4>
+  </modal-header>
+  <modal-body>
+
+    <div class="panel-body">
+      <ul *ngIf="invoiceType==='1'">
+        <ol>1、链融科技供应链服务平台数字证书申请表（一式三联）</ol>
+        <ol>2、电子认证服务协议</ol>
+        <ol>3、法定代表人授权委托书</ol>
+        <ol>4、汇款回执</ol>
+        <ol>5、身份证复印件</ol>
+        <ol>6、营业执照复印件</ol>
+      </ul>
+      <ul *ngIf="invoiceType==='2'">
+        <ol>1、链融科技供应链服务平台数字证书申请表（一式三联）</ol>
+        <ol>2、电子认证服务协议</ol>
+        <ol>3、法定代表人授权委托书</ol>
+        <ol>4、汇款回执</ol>
+        <ol>5、身份证复印件</ol>
+        <ol>6、营业执照复印件</ol>
+        <ol>7、增值税信息采集表</ol>
+      </ul>
+    </div>
+  </modal-body>
+  <modal-footer>
+    <button type="button" class="btn btn-default" (click)="onCancel()">取消</button>
+    <button type="button" class="btn btn-danger" (click)="onOk()">确定</button>
+  </modal-footer>
+</modal>

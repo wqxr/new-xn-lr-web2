@@ -1,0 +1,203 @@
+<section class="content-header">
+  <h1>{{ tabConfig?.title }}</h1>
+</section>
+<section class="content">
+  <div class="box">
+    <div class="box-body">
+      <nz-tabset nzType="card">
+        <nz-tab
+          *ngFor="let tab of tabConfig?.tabList"
+          [nzTitle]="tab.label"
+          (nzClick)="initData(tab.value)"
+        ></nz-tab>
+      </nz-tabset>
+      <div class="tab-content">
+        <div class="tab-pane active">
+
+          <xn-search-form
+            #searchForm
+            [fields]="showFields"
+            (search)="onSearch($event)"
+            (reset)="onReset(searchForm)"
+          ></xn-search-form>
+          <nz-divider nzDashed></nz-divider>
+          <div class="col-sm-12 text-right" style="margin-top: 15px">
+            <div class="btn-group">
+              <!-- 头按钮 -->
+              <ng-container
+                *ngIf="
+                  currentSubTab?.edit &&
+                  currentSubTab?.edit?.headButtons &&
+                  currentSubTab?.edit?.headButtons.length
+                "
+              >
+                <button
+                  nz-button
+                  nz-dropdown
+                  [disabled]="!listInfo?.length"
+                  [nzDropdownMenu]="menu"
+                >
+                  批量操作<i nz-icon nzType="down"></i>
+                </button>
+                <nz-dropdown-menu #menu="nzDropdownMenu">
+                  <ul nz-menu>
+                    <ng-container
+                      *ngFor="let btn of currentSubTab.edit.headButtons"
+                    >
+                      <ng-container [ngSwitch]="btn.operate">
+                        <li nz-menu-item *ngSwitchDefault>
+                          <a
+                            href="javaScript:void (0)"
+                            (click)="handleHeadClick(btn)"
+                            >{{ btn.label }}</a
+                          >
+                        </li>
+                      </ng-container>
+                    </ng-container>
+                  </ul>
+                </nz-dropdown-menu>
+              </ng-container>
+            </div>
+          </div>
+
+          <!--子列表-->
+          <div></div>
+          <xn-table
+            #reviewTable
+            [data]="listInfo"
+            [columns]="columns"
+            [size]="'middle'"
+            [loading]="loading"
+            [scroll]="{ y: '400px' }"
+            [page]="{
+              front: false,
+              total: '共' + pageConfig.total + '条记录',
+              showQuickJumper: true,
+              showSize: true,
+              pageSizes: [5, 10, 20, 30, 50, 100]
+            }"
+            [size]="'middle'"
+            [widthMode]="{
+              type: 'strict',
+              strictBehavior: 'truncate'
+            }"
+            [footer]="footerSumTpl"
+            [total]="pageConfig.total"
+            [pageIndex]="pageConfig.pageIndex"
+            [pageSize]="pageConfig.pageSize"
+            (change)="handleTableChange($event, searchForm)"
+          >
+            <!-- 查看流程 -->
+            <ng-template
+              xn-table-row="mainFlowIdTpl"
+              let-item
+              let-index="index"
+              let-column="column"
+            >
+              <a
+                href="javaScript:void(0)"
+                (click)="
+                  hwModeService.NewGemdaleViewProcess(item[column.index])
+                "
+                >{{ item[column.index] }}</a
+              >
+            </ng-template>
+            <!-- 百分比 -->
+            <ng-template
+              xn-table-row="percentTpl"
+              let-item
+              let-index="index"
+              let-column="column"
+            >
+              {{ item[column.index] | number: "1.2-2" | xnPercentage: "0.00%" }}
+            </ng-template>
+            <!-- 日期 -->
+            <ng-template
+              xn-table-row="dateTpl"
+              let-item
+              let-index="index"
+              let-column="column"
+            >
+              {{ item[column.index] | xnDate: "date" }}
+            </ng-template>
+            <!-- 时间具体到秒 -->
+            <ng-template
+              xn-table-row="dateTimeTpl"
+              let-item
+              let-index="index"
+              let-column="column"
+            >
+              {{ item[column.index] | xnDate: "datetime" }}
+            </ng-template>
+            <!-- 利率 -->
+            <ng-template
+              xn-table-row="rateTpl"
+              let-item
+              let-index="index"
+              let-column="column"
+            >
+              <ng-container
+                *ngIf="!!item[column.index] || [0].includes(item[column.index])"
+              >
+                {{ item[column.index] | number: "1.2-2" }}%
+              </ng-container>
+            </ng-template>
+            <!-- 金额 -->
+            <ng-template
+              xn-table-row="moneyTpl"
+              let-item
+              let-index="index"
+              let-column="column"
+            >
+              {{ item[column.index] | number: "1.2-2" | xnMoney: "true" }}
+            </ng-template>
+            <!-- 合同类型 -->
+            <ng-template
+              xn-table-row="contractTypeTpl"
+              let-item
+              let-index="index"
+              let-column="column"
+            >
+              {{ item[column.index] | xnSelectTransform: "repayContactType" }}
+            </ng-template>
+            <!-- 打款备注 -->
+            <ng-template
+              xn-table-row="TooltipTpl"
+              let-item
+              let-index="index"
+              let-column="column"
+            >
+              <ng-container *ngIf="item[column.index]?.length > 15">
+                <a nz-tooltip [nzTooltipTitle]="item[column.index]"
+                  >{{ item[column.index].substr(0, 15) }}...</a
+                >
+              </ng-container>
+              <ng-container *ngIf="item[column.index]?.length <= 15">
+                {{ item[column.index] }}
+              </ng-container>
+            </ng-template>
+          </xn-table>
+          <ng-template #footerSumTpl>
+            <span>
+              <i
+                nz-icon
+                [nzType]="
+                  !!selectedItems.length ? 'check-circle' : 'exclamation-circle'
+                "
+                nzTheme="fill"
+                [ngStyle]="{
+                  color: !!selectedItems.length ? '#1D67C7' : '#b0aaaa9c'
+                }"
+              ></i>
+              已选{{ selectedItems.length }}项
+              <nz-divider nzType="vertical"></nz-divider>
+              所选交易的应收账款金额：{{ selectedReceivables | xnMoney }}
+              <nz-divider nzType="vertical"></nz-divider>
+              所有交易的应收账款金额：{{ allReceivables | xnMoney }}
+            </span>
+          </ng-template>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>

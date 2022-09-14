@@ -1,0 +1,40 @@
+
+<div class="input-group" [formGroup]="form">
+  <button type="button" class="btn newbutton" (click)="onDownload()">下载模板</button>
+    <div class=" btn newbuttons btn-file" [ngClass]="myClass" >
+      <span class="hidden-xs xn-input-font">上传</span>
+      <input type="hidden" [formControlName]="row.name">
+      <input  type="file" (change)="onSelect($event)" [disabled]="delButtonStatus" (click)="onBeforeSelectone($event)">
+    </div>
+    <div style='padding-top:10px'>
+      <span class='payspan'>
+      <img src='assets/lr/img/warning.png' />&nbsp;&nbsp;请将信息填写完整后上传一份加盖公章的PDF扫描件（每页加盖公章+尾页法定代表人签字或加盖私章）
+    </span>
+  </div>
+</div>
+<span class="xn-input-alert">{{alert}}</span>
+<ng-container *ngIf="files.length > 0 && !row.show ">
+  <div class="table-box">
+    <table class="table table-hover file-row-table">
+      <tbody>
+      <tr *ngFor="let file of files">
+        <ng-container *ngIf="!!file.fileName">
+          <td>
+            <a class="xn-click-a" (click)="onView(file)">{{file?.fileName}}</a>
+          </td>
+          <td *ngIf="row.value!==''" (click)="onRemove(file.fileId)" style=' cursor: pointer'>
+            <i nz-icon [nzType]="'delete'"></i>
+            <!-- <button type="button" [disabled]="delButtonStatus" class='close'  (click)="onRemove(file.fileId)">
+              <span>&times;</span></button> -->
+          </td>
+        </ng-container>
+        <ng-container *ngIf="!!file.label">
+          <td>
+            <a class="xn-click-a" (click)="showContract(file.id, file.secret,file.label)">{{file.label}}</a>
+          </td>
+        </ng-container>
+      </tr>
+      </tbody>
+    </table>
+  </div>
+</ng-container>

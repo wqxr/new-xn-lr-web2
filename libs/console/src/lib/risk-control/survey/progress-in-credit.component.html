@@ -1,0 +1,183 @@
+<div class="credit">
+  <!--银行授信调查-->
+  <div class="title">
+    <div class="col-lg-4" style="padding: 0">
+      银行授信调查
+      <span class="red">{{bankCreditTotal}}</span>
+    </div>
+    <div class="form-inline text-right col-lg-8" style="padding: 10px 0">
+      <div class="form-group">
+        <label>年份：</label>
+        <select class="form-control" [(ngModel)]="year" (change)="handleYearChange(year)">
+          <option *ngFor="let item of yearItems" [value]="item.value">{{item.label}}</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <app-edit-button-component [items]="{value:bankCreditList,label:'bank'}"
+                                   (change)="handleBankCredit($event)"></app-edit-button-component>
+      </div>
+    </div>
+  </div>
+  <table class="table table-bordered table-striped table-max text-center table-select">
+    <thead>
+    <tr class="label-text">
+      <th>序号</th>
+      <th>授信行</th>
+      <th>评级</th>
+      <th>授信种类</th>
+      <th>授信额度（万元）</th>
+      <th>使用额度（万元）</th>
+      <th>使用额度/授信额度</th>
+    </tr>
+    </thead>
+    <tbody>
+    <ng-container *ngIf="bankCreditList.length;else blockDeal">
+      <tr *ngFor="let item of bankCreditList;let i=index" (click)="handleSelect(i)" [class.selected]="item['selected']">
+        <td>{{(bankCurrentPage-1)*size+i+1}}</td>
+        <td>{{item.creditBank}}</td>
+        <td>{{item.grade}}</td>
+        <td>{{item.creditType}}</td>
+        <td>{{item.creditLimit | number:'1.2-3'}}</td>
+        <td>{{item.creditUsed | number:'1.2-3'}}</td>
+        <td>{{(item.creditUsed / item.creditLimit) | xnPercent}}</td>
+      </tr>
+      <tr class="label-text">
+        <th colspan="4">合计：</th>
+        <th>{{bankLimitAmount | number:'1.2-3'}}</th>
+        <th>{{bankUsedAmount | number:'1.2-3'}}</th>
+        <th>{{(bankUsedAmount / bankLimitAmount) | xnPercent}}</th>
+      </tr>
+    </ng-container>
+    </tbody>
+  </table>
+  <ng-template #blockDeal>
+    <tr>
+      <td colspan="9">
+        <div class="empty-message"></div>
+      </td>
+    </tr>
+  </ng-template>
+  <app-simple-page-component [size]="size" [total]="bankCreditTotal"
+                             (change)="bankCreditPage($event,year)"></app-simple-page-component>
+  <!--法人机构-->
+  <div class="line clearfix">
+    <div class="line-text">法人机构</div>
+    <div class="line-split"></div>
+  </div>
+  <!--裁判文书-->
+  <div class="title">裁判文书
+    <span class="red">{{info.refereeTotal}}</span>
+  </div>
+  <table class="table table-bordered table-striped table-max text-center table-referee">
+    <thead>
+    <tr class="label-text">
+      <th>序号</th>
+      <th>案件名称</th>
+      <th>发布时间</th>
+      <th>案件编号</th>
+      <th>案件身份</th>
+      <th>执行法院</th>
+    </tr>
+    </thead>
+    <tbody>
+    <ng-container *ngIf="info.referee && info.referee.length;else blockJudge">
+      <tr *ngFor="let item of info.referee;let i=index">
+        <td>{{(info.refereeCurrentPage-1)*size+i+1}}</td>
+        <td style="width: 15%"><a href="JavaScript:void (0)" (click)="viewDetail(item,'referee')">{{item.CaseName}}</a>
+        </td>
+        <td>{{item.SubmitDate | xnText :'date'}}</td>
+        <td>{{item.CaseNo}}</td>
+        <td>
+          <div *ngFor="let case of item.CaseRole | xnJson">
+            {{case.R}} - <span class="text-credit-color">{{case.P}}</span>
+          </div>
+        </td>
+        <td>{{item.Court}}</td>
+      </tr>
+    </ng-container>
+    </tbody>
+  </table>
+  <ng-template #blockJudge>
+    <tr>
+      <td colspan="6">
+        <div class="empty-message"></div>
+      </td>
+    </tr>
+  </ng-template>
+  <app-simple-page-component [size]="size" [total]="info.refereeTotal"
+                             (change)="infoPage($event,'referee')"></app-simple-page-component>
+  <!--法院公告-->
+  <div class="title">法院公告
+    <span class="red">{{info.courtNoticeTotal}}</span>
+  </div>
+  <table class="table table-bordered table-striped table-max text-center">
+    <thead>
+    <tr class="label-text">
+      <th>序号</th>
+      <th>当事人</th>
+      <th>公告类型</th>
+      <th>公告人</th>
+      <th>刊登时间</th>
+      <th>内容</th>
+    </tr>
+    </thead>
+    <tbody>
+    <ng-container *ngIf="info.courtNotice && info.courtNotice.length;else blockNotice">
+      <tr *ngFor="let item of info.courtNotice;let i=index">
+        <td>{{(info.courtNoticeCurrentPage-1)*size+i+1}}</td>
+        <td>{{item.Party | xnText}}</td>
+        <td>{{item.Category | xnText}}</td>
+        <td>{{item.Court | xnText}}</td>
+        <td>{{item.PublishedDate | xnText :'date'}}</td>
+        <td><a href="javaScript:void (0)" (click)="viewDetail(item,'courtNotice')">查看详情</a></td>
+      </tr>
+    </ng-container>
+    </tbody>
+  </table>
+  <ng-template #blockNotice>
+    <tr>
+      <td colspan="6">
+        <div class="empty-message"></div>
+      </td>
+    </tr>
+  </ng-template>
+  <app-simple-page-component [size]="size" [total]="info.courtNoticeTotal"
+                             (change)="infoPage($event,'courtNotice')"></app-simple-page-component>
+  <!--开庭公告-->
+  <div class="title">开庭公告
+    <span class="red">{{info.openingTotal}}</span>
+  </div>
+  <table class="table table-bordered table-striped table-max text-center">
+    <thead>
+    <tr class="label-text">
+      <th>序号</th>
+      <th>案号</th>
+      <th>开庭日期</th>
+      <th>案由</th>
+      <th>公诉人/原告/上诉人/申请人</th>
+      <th>被告人/被告/被上诉/被申请人</th>
+    </tr>
+    </thead>
+    <tbody>
+    <ng-container *ngIf="info.opening && info.opening.length;else blockOpen">
+      <tr *ngFor="let item of info.opening;let i=index">
+        <td>{{(info.openingCurrentPage-1)*size+i+1}}</td>
+        <td><a href="javaScript:void (0)" (click)="viewDetail(item,'opening')">{{item.CaseNo}}</a></td>
+        <td>{{item.LianDate | xnText :'date'}}</td>
+        <td>{{item.CaseReason | xnText}}</td>
+        <td>{{item.Prosecutorlist | xnText}}</td>
+        <td>{{item.Defendantlist | xnText}}</td>
+      </tr>
+    </ng-container>
+    </tbody>
+  </table>
+  <ng-template #blockOpen>
+    <tr>
+      <td colspan="6">
+        <div class="empty-message"></div>
+      </td>
+    </tr>
+  </ng-template>
+  <app-simple-page-component [size]="size" [total]="info.openingTotal"
+                             (change)="infoPage($event,'opening')"></app-simple-page-component>
+</div>

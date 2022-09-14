@@ -1,0 +1,81 @@
+.height {
+  overflow-x: hidden;
+}
+
+.table-data-content {
+  table-layout: fixed;
+  width: 3000px;
+}
+
+.table-height {
+  max-height: 600px;
+  overflow: auto;
+}
+
+.table-display tr td,
+.table-display tr th {
+  width: 250px;
+  vertical-align: middle;
+}
+
+.table-width {
+  width: 1000px;
+  overflow: auto;
+}
+
+.head-height {
+  position: relative;
+  overflow: hidden;
+}
+.height .head-height table tr td {
+  border: 1px solid #f4f4f4;
+}
+.table-display {
+  margin: 0;
+}
+
+.relative {
+  position: relative;
+}
+
+.red {
+  color: #f20000;
+}
+
+.title {
+  display: block;
+  padding: 5px;
+  font-weight: bold;
+}
+
+.load-btn {
+  margin-left: 50px;
+}
+
+.pre-table {
+  table-layout: fixed;
+  margin: 0;
+}
+
+.pre-table tr td:first-child,
+.pre-table tr th:first-child {
+  width: 300px;
+}
+
+.scroll-height {
+  max-height: 300px;
+  overflow-y: auto;
+}
+
+.scroll-height > table {
+  border-bottom: none;
+  border-top: none;
+}
+
+.scroll-height > table tr:first-child td {
+  border-top: 0;
+}
+
+.scroll-height > table tr:last-child td {
+  border-bottom: 0;
+}

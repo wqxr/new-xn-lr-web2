@@ -1,0 +1,124 @@
+<section class="content-header">
+    <h1>{{tabConfig.title}}</h1>
+  </section>
+  <section class="content">
+    <div class="box">
+      <div class="box-body">
+        <ul class="nav nav-tabs">
+          <ng-container *ngFor="let tab of tabConfig.tabList;let i=index">
+            <li [ngClass]="{'active': tab.value===label}">
+              <a class="xn-click-a" data-toggle="tab" (click)="initData(tab.value)">{{tab.label}}</a>
+            </li>
+          </ng-container>
+        </ul>
+        <div class="tab-content">
+          <div class="tab-pane active" style="padding: 15px 0">
+            <div class="form-group col-sm-6 flex" *ngFor="let row of shows">
+              <div class="title xn-control-label">
+                {{row.title}}
+                <span *ngIf="row.required !== false" class="required-label">*</span>
+              </div>
+              <div class="label">
+                <xn-input [row]="row" [form]="form"></xn-input>
+              </div>
+            </div>
+            <div class="col-sm-12 form-group text-right">
+              <!-- 头按钮 -->
+              <ng-container *ngIf="currentTab.edit && currentTab.edit.headButtons">
+                <span *ngFor="let btn of currentTab.edit.headButtons">
+                  <button type="button" class="btn btn-primary"
+                          [disabled]="!selectedItems.length && btn.disabled&&btn.disabled===true"
+                          (click)="handleHeadClick(btn)">{{btn.label}}</button>
+                </span>
+              </ng-container>
+              <ng-container *ngIf="currentTab.canSearch">
+                <button class="btn btn-primary" (click)="searchMsg()">查询</button>
+                <button class="btn btn-danger" (click)="reset()">重置</button>
+              </ng-container>
+            </div>
+            <div>
+              <table class="table table-bordered table-striped text-center">
+                <thead>
+                <tr>
+                  <!-- 全选按钮 -->
+                  <th *ngIf="currentTab.canChecked" class="input-check">全选/取消
+                    <input type="checkbox" name="all" [checked]="isAllChecked()" [disabled]="!data.length"
+                           (change)="checkAll($event)"/>
+                  </th>
+                  <!-- title -->
+                  <th *ngFor="let head of currentTab.headText">{{head.label}}</th>
+                  <!-- 行操作 -->
+                  <th *ngIf="currentTab.edit && currentTab.edit.rowButtons && currentTab.edit.rowButtons.length">操作</th>
+                </tr>
+                </thead>
+                <tbody>
+                <ng-container *ngIf="data.length;else block">
+                  <tr *ngFor="let item of data;let i=index">
+                    <!-- 行选则 -->
+                    <td *ngIf="currentTab.canChecked">
+                      <input type="checkbox" name="single" [checked]="item['checked']"
+                             (change)="singelChecked($event,item,i)"/>
+                    </td>
+                    <!-- 列内容 -->
+                    <td *ngFor="let head of currentTab.headText">
+                      <!-- 根据head type 类型配置显示方式 -->
+                      <ng-container [ngSwitch]="head.type">
+                        <ng-container *ngSwitchCase="'mainFlowId'">
+                          <a href="javaScript:void(0)" (click)="bankManagementService.viewProcess(item[head.value])">{{item[head.value]}}</a>
+                        </ng-container>
+                        <ng-container *ngSwitchCase="'invoiceNum'">
+                          <ng-container *ngIf="arrayLength(item[head.value]);else block2">
+                            <a class="xn-click-a" href="javaScript:void(0)" (click)="viewMore(item[head.value])"
+                               [innerHtml]="(item[head.value] | xnArrayTruncate:2:'等;')">
+                            </a>
+                          </ng-container>
+                          <ng-template #block2>
+                            <div [innerHtml]="(item[head.value] | xnArrayTruncate:2:'等;')"></div>
+                          </ng-template>
+  
+                        </ng-container>
+                        <ng-container *ngSwitchCase="'contract'">
+                          <ng-container *ngIf=" item[head.value]&& item[head.value]!==''">
+                            <ng-container *ngIf="judgeDataType(jsonTransForm(item[head.value])); else block3">
+                              <div *ngFor="let sub of item[head.value] | xnJson; let i=index">
+                                <a href="javaScript:void(0)" (click)="showContract(sub)">{{sub.label}}</a>
+                              </div>
+                            </ng-container>
+                            <ng-template #block3>
+                              <a href="javaScript:void(0)" (click)="showContract(jsonTransForm(item[head.value]))">
+                                {{jsonTransForm(item[head.value]).label}}</a>
+                            </ng-template>
+                          </ng-container>
+                        </ng-container>
+                        <ng-container *ngSwitchDefault>
+                          <div [innerHTML]="item[head.value] | xnGatherType: {head:head,row:item}"></div>
+                        </ng-container>
+                      </ng-container>
+                    </td>
+                    <!-- 行按钮 签署合同-->
+
+                    <td *ngIf="currentTab.edit &&currentTab.edit.rowButtons && currentTab.edit.rowButtons.length">
+                      <a *ngFor="let btn of currentTab.edit.rowButtons" href="javaScript:void(0)"
+                         (click)="handleRowClick(item,btn)">{{btn.label}}</a>
+                    </td>
+                  </tr>
+                </ng-container>
+                </tbody>
+              </table>
+            </div>
+            <xn-pagination [rows]="pageConfig.pageSize" [first]="pageConfig.first" [totalRecords]="pageConfig.total"
+                           [pageSizeOptions]="[10,20,30,50,100]" (pageChange)="onPage($event)"></xn-pagination>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+  
+  <ng-template #block>
+    <tr>
+      <td [attr.colspan]=" currentTab.headText.length+2">
+        <div class="empty-message"></div>
+      </td>
+    </tr>
+  </ng-template>
+  

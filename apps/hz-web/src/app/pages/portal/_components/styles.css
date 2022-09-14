@@ -1,0 +1,549 @@
+.home-title {
+  height: 165px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.home-title .title-box {
+  display: flex;
+  margin: 0 30px;
+  height: 45px;
+  font-size: 32px;
+  font-weight: 600;
+  color: #1F2B38;
+  line-height: 45px;
+  align-items: baseline;
+}
+.home-title .title-box .title {
+  margin: 0 30px;
+}
+.home-title .title-box > .line-left {
+  width: 110px;
+  height: 3px;
+  background: linear-gradient(to right, rgba(230, 33, 41, 0), #e62129);
+}
+.home-title .title-box > .line-right {
+  width: 110px;
+  height: 3px;
+  background: linear-gradient(to left, rgba(230, 33, 41, 0), #e62129);
+}
+.h5-home-title {
+  height: 95 / 75 * 1rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.h5-home-title .title-box {
+  font-size: 18 / 75 * 1rem;
+  line-height: 25 / 75 * 1rem;
+  display: flex;
+  font-weight: 600;
+  color: #1F2B38;
+  align-items: baseline;
+}
+.h5-home-title .title-box .title {
+  margin-right: 15 / 75 * 1rem;
+  margin-left: 15 / 75 * 1rem;
+}
+.h5-home-title .title-box > .line-left {
+  width: 60 / 75 * 1rem;
+  height: 2 / 75 * 1rem;
+  background: linear-gradient(to right, rgba(230, 33, 41, 0), #e62129);
+}
+.h5-home-title .title-box > .line-right {
+  width: 60 / 75 * 1rem;
+  height: 2 / 75 * 1rem;
+  background: linear-gradient(to left, rgba(230, 33, 41, 0), #e62129);
+}
+.carousel {
+  position: relative;
+  width: 100%;
+}
+.carousel > .item {
+  position: absolute;
+  left: 50%;
+  width: 920px;
+  height: 503px;
+  background: #FFFFFF;
+  box-shadow: 0 4px 14px 0 rgba(31, 43, 56, 0.08);
+  transition: all 0.5s;
+  padding: 0 25px;
+  border: 1px solid rgba(200, 200, 200, 0.1);
+}
+.carousel > .item > .title {
+  height: 33px;
+  font-size: 24px;
+  font-weight: 600;
+  color: #1F2B38;
+  line-height: 33px;
+  margin: 30px 0;
+  text-align: center;
+}
+.carousel > .item > .tip {
+  height: 20px;
+  font-size: 14px;
+  font-weight: 400;
+  color: rgba(31, 43, 56, 0.4);
+  line-height: 20px;
+  margin: 20px 0;
+  text-align: center;
+}
+.carousel > .item img {
+  display: inline-block;
+}
+.h5-carousel {
+  position: relative;
+  width: 100vw;
+  height: 502 / 75 * 1rem;
+}
+.h5-carousel > .item {
+  width: 305 / 75 * 1rem;
+  height: 502 / 75 * 1rem;
+  padding-left: 15 / 75 * 1rem;
+  padding-right: 15 / 75 * 1rem;
+  position: absolute;
+  left: 50%;
+  background: #FFFFFF;
+  box-shadow: 0 4px 14px 0 rgba(31, 43, 56, 0.08);
+  transition: all 0.5s;
+  border: 1px solid rgba(200, 200, 200, 0.1);
+}
+.h5-carousel > .item > .title {
+  height: 25 / 75 * 1rem;
+  line-height: 25 / 75 * 1rem;
+  font-size: 18 / 75 * 1rem;
+  margin-top: 30 / 75 * 1rem;
+  margin-bottom: 20 / 75 * 1rem;
+  font-weight: 600;
+  color: #1F2B38;
+  text-align: center;
+}
+.h5-carousel > .item > .tip {
+  height: 17 / 75 * 1rem;
+  line-height: 17 / 75 * 1rem;
+  margin-top: 10 / 75 * 1rem;
+  margin-bottom: 10 / 75 * 1rem;
+  font-size: 12 / 75 * 1rem;
+  font-weight: 400;
+  color: rgba(31, 43, 56, 0.4);
+  text-align: center;
+}
+.h5-carousel > .item img {
+  width: 274 / 75 * 1rem;
+  height: 390 / 75 * 1rem;
+  display: inline-block;
+}
+.step-tip .border {
+  border: 2px dashed rgba(230, 33, 41, 0.75);
+  position: absolute;
+  cursor: pointer;
+  transition: all 0.3s;
+}
+.step-tip .border:hover {
+  border: 2px dashed #e62129;
+}
+.step-tip .border:hover > .serial {
+  background-color: #e62129;
+}
+.step-tip .border > .serial {
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  color: #fff;
+  text-align: center;
+  background-color: rgba(230, 33, 41, 0.75);
+  position: absolute;
+  left: -10px;
+  top: -10px;
+  font-size: 14px;
+}
+.step-tip-popover-content {
+  display: flex;
+  width: auto;
+  max-width: 480px;
+}
+.step-tip-popover-content .serial {
+  width: 18px;
+  min-width: 18px;
+  height: 18px;
+  min-height: 18px;
+  line-height: 18px;
+  text-align: center;
+  background: #E62129;
+  border-radius: 50%;
+  color: #fff;
+  margin: 2px 12px 0 0;
+}
+.step-tip-popover-content .desc {
+  font-size: 14px;
+  font-weight: 400;
+  color: rgba(31, 43, 56, 0.8);
+  line-height: 26px;
+  display: inline-block;
+}
+nav {
+  width: 100%;
+  transition: all 0.5s;
+  z-index: 1000;
+  position: fixed;
+  top: 0;
+}
+nav.isFixed {
+  background-color: #fff;
+  border-bottom: 1px solid #ccc;
+  box-shadow: 0 2px 4px 0 rgba(31, 43, 56, 0.16);
+}
+nav.isFixed .nav ::ng-deep.ant-menu {
+  flex: 1;
+  background-color: transparent;
+}
+nav.isFixed .nav ::ng-deep.ant-menu.ant-menu-horizontal .ant-menu-item a {
+  color: rgba(31, 43, 56, 0.8);
+}
+nav.isFixed .nav ::ng-deep.ant-menu.ant-menu-horizontal .ant-menu-item:hover a {
+  color: #1f2b38;
+  border-bottom: 2px solid #E62129;
+}
+nav.isFixed .nav ::ng-deep.ant-menu.ant-menu-horizontal .ant-menu-item-selected a {
+  color: #1f2b38;
+  border-bottom: 2px solid #E62129;
+}
+nav.isFixed .nav .button-group ::ng-deep.ant-btn {
+  color: rgba(31, 43, 56, 0.8);
+  border: 1px solid rgba(31, 43, 56, 0.2);
+}
+nav.isFixed .nav .button-group ::ng-deep.ant-btn:hover {
+  color: #1f2b38;
+  border: 1px solid rgba(31, 43, 56, 0.4);
+}
+nav.isFixed .nav .user-info {
+  cursor: pointer;
+  opacity: 0.8;
+}
+nav.isFixed .nav .user-info:hover {
+  opacity: 1;
+}
+nav.isFixed .nav .user-info:hover > .user-info-dropdown {
+  display: block;
+}
+nav.isFixed .nav .user-info > span {
+  font-size: 14px;
+  color: #1F2B38;
+}
+nav .nav {
+  position: relative;
+  height: 60px;
+  display: flex;
+  align-items: center;
+}
+nav .nav .logo {
+  height: 26px;
+  cursor: pointer;
+}
+nav .nav ::ng-deep.ant-menu {
+  flex: 1;
+  background-color: transparent;
+}
+nav .nav ::ng-deep.ant-menu.ant-menu-horizontal {
+  border-bottom: none;
+}
+nav .nav ::ng-deep.ant-menu.ant-menu-horizontal .ant-menu-item {
+  border-bottom: none;
+}
+nav .nav ::ng-deep.ant-menu.ant-menu-horizontal .ant-menu-item a {
+  color: rgba(255, 255, 255, 0.8);
+}
+nav .nav ::ng-deep.ant-menu.ant-menu-horizontal .ant-menu-item:hover {
+  border-bottom: none;
+}
+nav .nav ::ng-deep.ant-menu.ant-menu-horizontal .ant-menu-item:hover a {
+  color: #ffffff;
+  border-bottom: 2px solid #ffffff;
+}
+nav .nav ::ng-deep.ant-menu.ant-menu-horizontal .ant-menu-item-selected {
+  border-bottom: none;
+}
+nav .nav ::ng-deep.ant-menu.ant-menu-horizontal .ant-menu-item-selected a {
+  color: #ffffff;
+  border-bottom: 2px solid #ffffff;
+}
+nav .nav ::ng-deep.ant-menu.ant-menu-horizontal .menu {
+  height: 60px;
+  line-height: 60px;
+}
+nav .nav ::ng-deep.ant-menu.ant-menu-horizontal .menu a {
+  display: inline-block;
+  height: 100%;
+  font-size: 16px;
+  font-weight: 600;
+}
+nav .nav .button-group {
+  position: absolute;
+  right: 0;
+}
+nav .nav .button-group ::ng-deep.ant-btn {
+  width: 70px;
+  color: rgba(255, 255, 255, 0.6);
+  background-color: transparent;
+  border: 1px solid rgba(255, 255, 255, 0.6);
+}
+nav .nav .button-group ::ng-deep.ant-btn:first-child {
+  margin-right: 10px;
+}
+nav .nav .button-group ::ng-deep.ant-btn:hover {
+  color: rgba(255, 255, 255, 0.8);
+  border: 1px solid rgba(255, 255, 255, 0.8);
+}
+nav .nav .user-info {
+  cursor: pointer;
+  opacity: 0.8;
+  position: relative;
+  height: 60px;
+  line-height: 60px;
+}
+nav .nav .user-info:hover {
+  opacity: 1;
+}
+nav .nav .user-info:hover > .user-info-dropdown {
+  display: block;
+}
+nav .nav .user-info > .user-icon {
+  width: 20px;
+  height: 20px;
+  vertical-align: middle;
+}
+nav .nav .user-info > .arrow-icon {
+  width: 10px;
+  height: 10px;
+  vertical-align: middle;
+}
+nav .nav .user-info > span {
+  font-size: 14px;
+  color: #fff;
+  margin: 0 10px;
+}
+nav .nav .user-info > .user-info-dropdown {
+  width: 100px;
+  position: absolute;
+  top: 58px;
+  left: 50%;
+  margin-left: -50px;
+  background-color: #fff;
+  padding: 5px 0;
+  display: none;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.12);
+}
+nav .nav .user-info > .user-info-dropdown > a {
+  display: inline-block;
+  width: 100%;
+  height: 30px;
+  font-size: 14px;
+  font-weight: 400;
+  line-height: 30px;
+  transition: all 0.3s;
+  text-align: center;
+  margin-bottom: 5px;
+  background: #fff;
+  color: #1F2B38;
+  cursor: pointer;
+  text-decoration: none;
+}
+nav .nav .user-info > .user-info-dropdown > a:hover {
+  color: #fff;
+  background-color: #E62129;
+}
+nav .nav .user-info > .user-info-dropdown > a:last-child {
+  margin-bottom: 0;
+}
+.menu {
+  position: relative;
+}
+.menu:hover .dropdown {
+  display: block;
+}
+.menu .dropdown {
+  width: 86px;
+  border-radius: unset;
+  background-color: #fff;
+  position: absolute;
+  top: 58px;
+  left: -12px;
+  display: none;
+  padding: 5px 0 0 0;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.12);
+}
+.menu .dropdown .dropdown-item {
+  width: 100%;
+  height: 30px;
+  font-size: 14px;
+  font-weight: 400;
+  line-height: 30px;
+  transition: all 0.3s;
+  text-align: center;
+  margin-bottom: 5px;
+}
+.menu .dropdown .dropdown-item > div {
+  display: inline-block;
+  width: 100%;
+  background: #fff;
+  color: #1F2B38;
+  cursor: pointer;
+}
+.menu .dropdown .dropdown-item > div:hover,
+.menu .dropdown .dropdown-item > div.active {
+  color: #fff;
+  background: #E62129;
+}
+.h5-nav {
+  height: 50 / 75 * 1rem;
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  position: relative;
+  top: 0;
+  left: 0;
+}
+.h5-nav.isFixed {
+  background-color: #fff;
+}
+.h5-nav > img:last-child {
+  width: 75 / 75 * 1rem;
+  height: 20 / 75 * 1rem;
+}
+.h5-nav > img:first-child {
+  width: 15 / 75 * 1rem;
+  height: 15 / 75 * 1rem;
+}
+.mask {
+  position: fixed;
+  left: 0;
+  right: 0;
+  top: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.5);
+  z-index: 9999;
+  display: none;
+}
+.mask > .h5-menu {
+  width: 290 / 75 * 1rem;
+  height: 100vh;
+  background-color: #fff;
+  position: fixed;
+  top: 0;
+  z-index: 10000;
+}
+.mask > .h5-menu > span {
+  height: 50 / 75 * 1rem;
+  line-height: 50 / 75 * 1rem;
+  padding-right: 20 / 75 * 1rem;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+}
+.mask > .h5-menu > span > img {
+  width: 12 / 75 * 1rem;
+  height: 12 / 75 * 1rem;
+}
+.mask > .h5-menu a {
+  font-size: 16 / 75 * 1rem;
+}
+.mask > .h5-menu .nav-item {
+  width: 100%;
+  line-height: 50 / 75 * 1rem;
+  padding-left: 30 / 75 * 1rem;
+  padding-right: 30 / 75 * 1rem;
+  display: inline-block;
+  color: #1F2B38;
+  transition: all 0.3s;
+}
+.mask > .h5-menu .nav-item.active {
+  color: #fff;
+  background-color: #E62129;
+}
+.mask > .h5-menu .nav-child-item {
+  width: 100%;
+  line-height: 50 / 75 * 1rem;
+  padding-left: 60 / 75 * 1rem;
+  display: inline-block;
+  color: #1F2B38;
+  transition: all 0.3s;
+}
+.mask > .h5-menu .nav-child-item > span {
+  width: 4 / 75 * 1rem;
+  height: 4 / 75 * 1rem;
+  margin-right: 6 / 75 * 1rem;
+  border-radius: 50%;
+  background-color: #D8D8D8;
+  display: inline-block;
+  vertical-align: middle;
+}
+.mask > .h5-menu .nav-child-item.nav-child-active {
+  color: #fff;
+  background-color: rgba(230, 33, 41, 0.2);
+}
+.mask > .h5-menu .nav-child-item.nav-child-active > span {
+  background-color: #fff;
+}
+.portal-bar-black {
+  width: 100%;
+  min-width: 1200px;
+  height: 50px;
+  line-height: 50px;
+  border-top: 1px solid rgba(255, 255, 255, 0.2);
+  color: rgba(255, 255, 255, 0.56);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 14px;
+  background: #242632;
+}
+.portal-bar-black > img {
+  margin: 0 10px;
+}
+.portal-bar-black > a {
+  font-size: 14px;
+  color: rgba(255, 255, 255, 0.56);
+}
+.portal-bar-black > a:hover {
+  color: rgba(255, 255, 255, 0.8);
+}
+.portal-bar-blue {
+  width: 100%;
+  min-width: 1200px;
+  height: 50px;
+  line-height: 50px;
+  color: rgba(255, 255, 255, 0.6);
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 14px;
+  background: rgba(3, 0, 76, 0.3);
+}
+.portal-bar-blue > img {
+  margin: 0 10px;
+}
+.portal-bar-blue > a {
+  font-size: 14px;
+  color: rgba(255, 255, 255, 0.6);
+}
+.portal-bar-blue > a:hover {
+  color: #ffffff;
+}
+.h5-portal-bar {
+  color: rgba(255, 255, 255, 0.56);
+  font-size: 14 / 75 * 1rem;
+  line-height: 22 / 75 * 1rem;
+  padding-top: 15 / 75 * 1rem;
+  padding-bottom: 15 / 75 * 1rem;
+  padding-left: 20 / 75 * 1rem;
+  border-top: 1px solid rgba(255, 255, 255, 0.2);
+}
+.h5-portal-bar > a {
+  font-size: 14 / 75 * 1rem;
+  color: rgba(255, 255, 255, 0.56);
+}

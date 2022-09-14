@@ -1,0 +1,15 @@
+<ul class="nav nav-tabs" style='margin-top: 10px;'>
+    <ng-container>
+        <li class="active">
+            <a class="xn-click-a" data-toggle="tab">
+              <span class="pull-right-container" *ngIf="!!countLg">
+                <span class="label label-primary pull-right">{{countLg}}</span>
+              </span>
+              待办列表-保理通-龙光</a>
+        </li>
+    </ng-container>
+</ul>
+<!--龙光业务列表-->
+<ng-container>
+    <xn-home-comm-list-component [supers]="{label:dragonTodo,value:'dragonTodo'}"></xn-home-comm-list-component>
+</ng-container>

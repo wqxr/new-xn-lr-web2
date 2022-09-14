@@ -1,0 +1,144 @@
+{
+  "compileOnSave": false,
+  "compilerOptions": {
+    "baseUrl": "./",
+    "outDir": "./dist/out-tsc",
+    "sourceMap": true,
+    "declaration": false,
+    "downlevelIteration": true,
+    "experimentalDecorators": true,
+    "moduleResolution": "node",
+    "importHelpers": true,
+    "forceConsistentCasingInFileNames": true,
+    "target": "es5",
+    "module": "esnext",
+    "typeRoots": [
+      "node_modules/@types"
+    ],
+    "lib": [
+      "es2018",
+      "dom"
+    ],
+    "paths": {
+      "~/*": [
+        "apps/src/app"
+      ],
+      "avenger": [
+        "dist/avenger/avenger",
+        "dist/avenger"
+      ],
+      "shared": [
+        "dist/shared/shared",
+        "dist/shared"
+      ],
+      "bank-puhuitong": [
+        "dist/bank-puhuitong/bank-puhuitong",
+        "dist/bank-puhuitong"
+      ],
+      "console": [
+        "dist/console/console",
+        "dist/console"
+      ],
+      "dragon": [
+        "dist/dragon/dragon",
+        "dist/dragon"
+      ],
+      "machine-account": [
+        "dist/machine-account/machine-account",
+        "dist/machine-account"
+      ],
+      "new-agile": [
+        "dist/new-agile/new-agile",
+        "dist/new-agile"
+      ],
+      "vanke": [
+        "dist/vanke/vanke",
+        "dist/vanke"
+      ],
+      "old-agile": [
+        "dist/old-agile/old-agile",
+        "dist/old-agile"
+      ],
+      "gemdale": [
+        "dist/gemdale/gemdale",
+        "dist/gemdale"
+      ],
+      "invoice-contract": [
+        "dist/invoice-contract/invoice-contract",
+        "dist/invoice-contract"
+      ],
+      "targete": [
+        "dist/targete/targete",
+        "dist/targete"
+      ],
+      "home": [
+        "dist/home/home",
+        "dist/home"
+      ],
+      "bank-shanghai": [
+        "dist/bank-shanghai/bank-shanghai",
+        "dist/bank-shanghai"
+      ],
+      "xn-dragon": [
+        "dist/xn-dragon/xn-dragon",
+        "dist/xn-dragon"
+      ],
+      "country-graden": [
+        "dist/country-graden/country-graden",
+        "dist/country-graden"
+      ],
+      "huaqiao-city": [
+        "dist/huaqiao-city/huaqiao-city",
+        "dist/huaqiao-city"
+      ],
+      "new-gemdale": [
+        "dist/new-gemdale/new-gemdale",
+        "dist/new-gemdale"
+      ],
+      "agile-xingshun": [
+        "dist/agile-xingshun/agile-xingshun",
+        "dist/agile-xingshun"
+      ],
+      "agile-hz": [
+        "dist/agile-hz/agile-hz",
+        "dist/agile-hz"
+      ],
+      "xn-gemdale": [
+        "dist/xn-gemdale/xn-gemdale",
+        "dist/xn-gemdale"
+      ],
+      "zs-gemdale": [
+        "dist/zs-gemdale/zs-gemdale",
+        "dist/zs-gemdale"
+      ],
+      "ps-logan": [
+        "dist/ps-logan/ps-logan",
+        "dist/ps-logan"
+      ],
+      "xn-vanke": [
+        "dist/xn-vanke/xn-vanke",
+        "dist/xn-vanke"
+      ],
+      "huaqiaocheng-shanghai": [
+        "dist/huaqiaocheng-shanghai/huaqiaocheng-shanghai",
+        "dist/huaqiaocheng-shanghai"
+      ],
+      "abs-gj": [
+        "dist/abs-gj/abs-gj",
+        "dist/abs-gj"
+      ],
+      "account-system": [
+        "dist/account-system/account-system",
+        "dist/account-system"
+      ],
+    }
+  },
+  "exclude": [
+    "node_modules",
+    "**/*.spec.ts"
+  ],
+  "angularCompilerOptions": {
+    "fullTemplateTypeCheck": false,
+    "disableTypeScriptVersionCheck": true
+  }
+}

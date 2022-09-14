@@ -1,0 +1,116 @@
+<div style="width:100%;">
+  <div class="table-head">
+    <table class="table">
+      <thead>
+        <tr>
+          <!-- 全选按钮 -->
+          <th style='width:3%'>序号</th>
+          <th *ngFor="let head of currentTab.heads" [ngStyle]="{'width':head.width}">
+            <ng-container *ngIf="head._inList?.sort;else normal">
+              <span [ngClass]="onSortClass(head?.value)" (click)="onSort(head?.value)">{{head.label}}</span>
+            </ng-container>
+            <ng-template #normal>{{head.label}}</ng-template>
+          </th>
+          <!-- 行操作 -->
+          <th style='width:10%'>操作</th>
+        </tr>
+      </thead>
+    </table>
+  </div>
+  <div class="table-body">
+    <table class="table">
+      <tbody>
+        <ng-container *ngIf="items.length>0;">
+          <tr *ngFor="let item of items;let i=index">
+            <td style='width:3%'>{{i+1}}</td>
+            <td *ngFor="let head of currentTab.heads" [ngStyle]="{'width':head.width}"
+              style="max-width: 70px;word-wrap:break-word">
+              <ng-container [ngSwitch]="head.type">
+                <!-- 交易Id -->
+                <ng-container *ngSwitchCase="'mainFlowId'">
+                  <div (click)='viewProgress(item[head.value])' [tooltip]='tradeDetail' content-type="template"
+                    show-delay='800' hide-delay='800' placement='right' max-width='900px'
+                    (mouseover)='viewDetail(item.mainFlowId)'>
+                    <a class="xn-click-a">{{item[head.value]}}</a>
+                  </div>
+                </ng-container>
+                <!--图片文件file-->
+                <ng-container *ngSwitchCase="'file'">
+                  <ng-container *ngIf="item[head.value] && item[head.value]!==''">
+                    <a href="javaScript:void(0)" (click)="viewFiles(item[head.value])">{{item[head.value]}}
+                    </a>
+                  </ng-container>
+                </ng-container>
+                <!-- 日期 -->
+                <ng-container *ngSwitchCase="'date'">
+                  <ng-container *ngIf="item[head.value] && item[head.value]!==''">
+                    <div>{{item[head.value] | xnDate: 'date'}}</div>
+                  </ng-container>
+                </ng-container>
+                <!-- 交易步骤 flowId-->
+                <ng-container *ngSwitchCase="'flowId'">
+                  <ng-container *ngIf="!!item[head.value]">
+                    <div [innerHTML]="item[head.value] | xnSelectTransform:'currentStep'"></div>
+                  </ng-container>
+                </ng-container>
+                <!-- 合同类型 -->
+                <ng-container *ngSwitchCase="'contractType'">
+                  <ng-container>
+                    <div [innerHTML]="item[head.value] | xnSelectTransform:'vankeContracttype'">
+                    </div>
+                  </ng-container>
+                </ng-container>
+                <!-- 业务类型 -->
+                <ng-container *ngSwitchCase="'channel'">
+                  <ng-container *ngIf='item[head.value]'>
+                    <div [innerHTML]="item[head.value] | xnSelectTransform:'productType_vk'"></div>
+                  </ng-container>
+                </ng-container>
+                <!-- 应收账款金额 -->
+                <ng-container *ngSwitchCase="'receive'">
+                  <ng-container *ngIf="item[head.value] !==0 && item[head.value]">
+                    <div>{{item[head.value] | xnMoney}}</div>
+                  </ng-container>
+                </ng-container>
+                <ng-container *ngSwitchDefault>
+                  <div [innerHTML]="item[head.value] | xnGatherType: {head:head,row:item}"></div>
+                </ng-container>
+              </ng-container>
+            </td>
+            <td style='width:10%'>
+              <a class="xn-click-a" href="javascript:void(0)" (click)='handleRowClick(item,i)'>取消抽样</a>
+            </td>
+          </tr>
+        </ng-container>
+      </tbody>
+    </table>
+  </div>
+</div>
+<span>共{{items.length}}笔业务</span>
+<!-- 业务详情 -->
+<ng-template #tradeDetail>
+  <div style='height:300px' *ngIf='params.checker && params.checker.length'>
+    <h4>{{ params.title }}</h4>
+    <ng-container *ngFor="let row of params.checker">
+      <div class="item-box col-sm-6" style='margin-left:-30px'>
+        <div class="item-label">
+          <label>{{row.label}}:</label>
+        </div>
+        <div class="item-control">
+          <div style='width:100%'>
+            <div class="form-control xn-input-font xn-input-border-radius text-left">
+              <ng-container [ngSwitch]="row.type">
+                <ng-container *ngSwitchCase="'contractType'">
+                  <div class="label-line" [innerHTML]="row.data | xnSelectTransform:'vankeContracttype'"></div>
+                </ng-container>
+                <ng-container *ngSwitchDefault>
+                  <div [innerHTML]="row.data"></div>
+                </ng-container>
+              </ng-container>
+            </div>
+          </div>
+        </div>
+      </div>
+    </ng-container>
+  </div>
+</ng-template>

@@ -1,0 +1,29 @@
+<div class="deal">
+  <div class="title">流动性资产变动</div>
+  <table class="table table-bordered table-striped table-max">
+    <thead>
+      <tr>
+        <th></th>
+        <th colspan="2">经营活动产生的现金流量</th>
+        <th colspan="2">投资活动产生的现金流量</th>
+        <th colspan="2">筹资活动产生的现金流量</th>
+      </tr>
+      <tr>
+        <th></th>
+        <th>流入小计</th>
+        <th>流出小计</th>
+        <th>流入小计</th>
+        <th>流出小计</th>
+        <th>流入小计</th>
+        <th>流出小计</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let lists of dealList">
+        <td *ngFor="let item of lists">{{item}}</td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+
+<!-- /.content -->

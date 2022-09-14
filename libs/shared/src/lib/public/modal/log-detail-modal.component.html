@@ -1,0 +1,50 @@
+<modal #modal [backdrop]="'static'" [keyboard]="false" [animation]="false" (onDismiss)="onOk()">
+  <modal-header [showClose]="true">
+    <h4 class="modal-title">查看详情</h4>
+  </modal-header>
+  <modal-body>
+
+    <div class="panel-body">
+      <table class="table table-bordered table-striped table-max">
+        <thead>
+          <tr>
+            <th>主流程ID</th>
+            <th>机构名称</th>
+            <th>商票号码</th>
+            <th>商票金额</th>
+            <th class="time">付款时间</th>
+            <th class="time">保理到期日</th>
+            <th>天数</th>
+            <th>收入</th>
+            <th>利率</th>
+            <th>服务费率</th>
+            <th>回购利率</th>
+            <th>平台收费</th>
+            <th>是否回款</th>
+          </tr>
+        </thead>
+        <tbody *ngIf="params && params.length > 0">
+          <tr *ngFor="let item of params">
+            <td>{{item.mainFlowId}}</td>
+            <td>{{item.enterpriseOrgName}}</td>
+            <td>{{item.honourNum}}</td>
+            <td>{{item.honourAmount | xnMoney}}</td>
+            <td>{{item.payTime * 1000 | date: 'yyyy-MM-dd'}}</td>
+            <td>{{item.factoringTime * 1000 | date: 'yyyy-MM-dd'}}</td>
+            <td>{{item.day}}</td>
+            <td>{{item.income | xnMoney}}</td>
+            <td>{{item.factoringSYF}}</td>
+            <td>{{item.factoringFWF}}</td>
+            <td>{{item.factoringHG}}</td>
+            <td>{{item.platformCost}}</td>
+            <td>{{item.isRepayment}}</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+  </modal-body>
+  <modal-footer>
+    <button type="button" class="btn btn-danger" (click)="onOk()">确定</button>
+  </modal-footer>
+</modal>

@@ -1,0 +1,87 @@
+<section class="content">
+  <div class="box">
+    <div class="box-header">
+      <h3 class="box-title">供应商待签署合同交易列表</h3>
+    </div>
+    <div class="box-body">
+      <div class="tab-content">
+        <div class="tab-pane active"
+             style="padding: 5px 0">
+          <div>
+            <div class="item-box col-md-6"
+                 *ngFor="let row of shows">
+              <div class="item-label">
+                <label>{{row.title}}:</label>
+              </div>
+              <div class="item-control">
+                <ng-container>
+                  <xn-input [row]="row"
+                            [form]="mainForm"></xn-input>
+                </ng-container>
+              </div>
+            </div>
+          </div>
+          <!--按钮组项-->
+          <div class=""
+               *ngIf="base?.superConfig.list?.headButtons">
+            <div class="col-sm-12 btn-label">
+              <span class="fr">
+                <button type="button"
+                        (click)="onSearch()"
+                        class="btn btn-primary">查询</button>
+                <button type="button"
+                        (click)="clearSearch()"
+                        class="btn btn-danger">重置</button>
+              </span>
+            </div>
+          </div>
+          <!--table内容项-->
+          <table class="table table-bordered table-striped text-center">
+            <thead>
+            <tr class="table-head">
+              <ng-container *ngFor="let head of heads">
+                <th *ngIf="head.sort"
+                    [ngClass]="onSortClass(head.checkerId)"
+                    (click)="onSort(head.checkerId)">
+                  {{head.title}}
+                </th>
+                <th *ngIf="!head.sort">{{head.title}}</th>
+              </ng-container>
+              <th style="min-width: 80px">操作</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr *ngFor="let row of rows;let i=index">
+              <td *ngFor="let head of heads"
+                  style="max-width: 70px;word-wrap:break-word">
+                <ng-container [ngSwitch]="true">
+                  <ng-container *ngSwitchCase="head.checkerId === 'mainFlowId'">
+                    <!-- 交易ID -->
+                    <a [innerHTML]="row[head.checkerId]"
+                       href="javaScript:void (0)"
+                       (click)="viewProcess(row[head.checkerId])"></a>
+                  </ng-container>
+                  <ng-container *ngSwitchCase="head.checkerId !== 'mainFlowId'">
+                    <a *ngIf="head.checkerId === 'realInvoiceNum'"
+                       href="javascript:void(0)" (click)="viewAllInvoice(row)">{{row.invoiceNumLocal}}</a>
+                    <div *ngIf="head.checkerId !== 'realInvoiceNum'"
+                         [innerHTML]="row[head.checkerId] | xnGatherType: {head:head,row:row}"></div>
+                  </ng-container>
+                </ng-container>
+              </td>
+              <td>
+                <a class="ml" (click)="sign(row)" href="javaScript:void(0)">签署合同</a>
+              </td>
+            </tr>
+            </tbody>
+          </table>
+          <xn-pagination [rows]="pageSize"
+                         [first]="first"
+                         [totalRecords]="total"
+                         [pageSizeOptions]="[10,20,50,100]"
+                         (pageChange)="onPage($event)"></xn-pagination>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>

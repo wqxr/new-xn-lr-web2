@@ -1,0 +1,20 @@
+<table class="table table-bordered table-hover text-center file-row-table">
+  <thead>
+    <tr>
+      <th>合同编号</th>
+      <th>合同名称</th>
+      <th>合同金额</th>
+      <th>图片名称</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr *ngFor="let item of items">
+      <td>{{ item?.files?.contractNum || "" }}</td>
+      <td>{{ item?.files?.contractName || "" }}</td>
+      <td>{{ item?.files?.contractAmount || "" }}</td>
+      <td>
+        <a class="xn-click-a" (click)="contractOnView(item, 'vanke')">文件</a>
+      </td>
+    </tr>
+  </tbody>
+</table>

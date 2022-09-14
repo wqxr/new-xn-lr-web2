@@ -1,0 +1,124 @@
+:host ::ng-deep.ant-form-item-label > label {
+  font-weight: normal;
+}
+
+:host ::ng-deep.ant-picker {
+  width: 100%;
+}
+
+.table {
+  font-size: 13px;
+}
+
+.table-head .sorting, .table-head .sorting_asc, .table-head .sorting_desc {
+  cursor: pointer
+}
+
+.table-head .sorting:after, .table-head .sorting_asc:after, .table-head .sorting_desc:after {
+  font-family: 'Glyphicons Halflings';
+  opacity: 0.5;
+}
+
+.table-head .sorting:after {
+  content: "\e150";
+  opacity: 0.2
+}
+
+.table-head .sorting_asc:after {
+  content: "\e155"
+}
+
+.table-head .sorting_desc:after {
+  content: "\e156"
+}
+
+.tab-heads {
+  margin-bottom: 10px;
+  display: flex
+}
+
+.tab-buttons {
+  flex: 1;
+}
+
+.btn {
+  vertical-align: top
+}
+
+.small-font {
+  font-size: 12px
+}
+
+.item-box {
+  position: relative;
+  display: flex;
+  margin-bottom: 10px;
+}
+
+.item-box i {
+  position: absolute;
+  top: 11px;
+  right: 23px;
+  opacity: 0.5;
+  cursor: pointer;
+}
+
+tbody tr:hover {
+  background-color: #e6f7ff;
+  transition: all 0.1s linear
+}
+
+.fr {
+  float: right
+}
+
+.money-control {
+  display: flex;
+  line-height: 35px;
+}
+
+.text-right {
+  text-align: right
+}
+
+.list-title {
+  max-width: 280px !important;
+}
+
+.long-title {
+  min-width: 280px !important;
+}
+
+ul li {
+  list-style-type: none;
+}
+
+.btn-label {
+  margin-bottom: 10px;
+}
+
+.btn-more {
+  margin-top: 10px;
+}
+
+.btn-more-a {
+  position: relative;
+  left: 50%;
+  transform: translateX(-50%)
+}
+
+.btn-cus {
+  border: 0;
+  margin: 0;
+  padding: 0
+}
+
+.home-comm-list-table tbody tr td {
+  word-break: break-all;
+}
+
+.home-comm-list-table tbody tr td a {
+  display: block;
+  width: 100%;
+  word-break: break-all;
+}

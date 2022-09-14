@@ -1,0 +1,74 @@
+<modal #modal [backdrop]="'static'" [keyboard]="false" [animation]="false">
+  <modal-header [showClose]="true" style='text-align:left'>
+
+    <h4 class="modal-title">{{params}}</h4>
+  </modal-header>
+  <modal-body>
+    <div style="padding: 5px 60px" style='height:250px;overflow-y:scroll'>
+      <table class="table table-bordered text-center" *ngIf="params==='查看账号变更记录'">
+        <thead>
+          <tr>
+            <th>序号</th>
+            <th>交易ID</th>
+            <th>变更原因</th>
+            <th>新收款信息</th>
+            <th>原收款信息</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor='let item of datalist01;let i=index'>
+            <td>{{i+1}}</td>
+            <td><a href="javaScript:void(0)"
+                (click)="hwModeService.DragonviewProcess(item.mainFlowId)">{{item.mainFlowId}}</a></td>
+            <td>{{item.changeReason | xnSelectTransform:'changeReason'}}</td>
+            <td>
+              <p>{{item.receiveAccount}}</p>
+              <p>{{item.receiveBank}}</p>
+              <p>{{item.receiveBankNo}}</p>
+
+            </td>
+            <td>
+              <p>{{item.oldReceiveAccount}}</p>
+              <p>{{item.oldReceiveBank}}</p>
+              <p>{{item.oldReceiveBankNo}}</p>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+      <table class="table table-bordered text-center" *ngIf="params==='查看账号使用记录'">
+        <thead>
+          <tr>
+            <th>序号</th>
+            <th>交易ID</th>
+            <th>交易状态</th>
+            <th>应收账款金额</th>
+            <th>保理融资到期日</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor='let item of datalist01;let i=index'>
+            <td>{{i+1}}</td>
+            <td><a href="javaScript:void(0)"
+                (click)="hwModeService.DragonviewProcess(item.mainFlowId)">{{item.mainFlowId}}</a></td>
+            <td>
+              {{item.tradeStatus}}
+
+                    <!-- <ng-container *ngIf="item.mainFlowId.endsWith('lg')">
+                      <div [innerHTML]="item.tradeStatus | xnSelectTransform:'tradeStatus'"></div>
+                    </ng-container>
+                    <ng-container *ngIf="item.mainFlowId.endsWith('wk')">
+                        <div [innerHTML]="item.tradeStatus | xnSelectTransform:'newVankeType'"></div>
+                      </ng-container> -->
+             </td>
+            <td>{{item.receive}}</td>
+            <td>{{item.factoringEndDate | xnDate :'date'}}</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+  </modal-body>
+  <modal-footer>
+    <button type="button" class="btn btn-default" (click)="oncancel()">取消</button>
+  </modal-footer>
+</modal>

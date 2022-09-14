@@ -1,0 +1,139 @@
+<div class="input-group" style="width: 100%" [formGroup]="form">
+  <table class="table table-bordered table-hover file-row-table text-center" width="100%">
+    <thead>
+      <tr>
+        <th>
+          <span style="line-height: 20px;"> 序号</span>
+        </th>
+        <ng-container>
+          <th>
+            <span style="line-height: 20px;">图片名称</span>
+          </th>
+        </ng-container>
+        <th>
+          <span style="line-height: 20px;" (click)="onSort('invoiceNum')">发票号码</span>
+        </th>
+        <th>
+          <span style="line-height: 20px;">发票代码</span>
+        </th>
+        <th [ngClass]="sortClass().invoiceDate" (click)="onSort('invoiceDate')">
+          <span style="line-height: 20px;">开票日期</span>
+        </th>
+        <th [ngClass]="sortClass().invoiceAmount" (click)="onSort('invoiceAmount')">
+          <span style="line-height: 20px;">含税金额</span>
+        </th>
+        <th>
+          <span style="line-height: 20px;">发票转让金额</span>
+        </th>
+        <th>
+          <span style="line-height: 20px;">状态</span>
+        </th>
+        <th *ngIf="orgType===3">
+          <span style="line-height: 20px;">历史交易id</span>
+        </th>
+        <th *ngIf="orgType===3">
+          <span style="line-height: 20px;">操作</span>
+        </th>
+        <!--是否可编辑-->
+        <ng-container *ngIf="orgType!==3">
+          <th>
+            <div style="padding: 2px 5px" class="btn btn-default btn-file xn-table-upload block">
+              <span class="hidden-xs xn-input-font">上传发票</span>
+              <input type="file" (change)="onUpload($event)" multiple>
+            </div>
+            <!--批量验证excel上传的发票-->
+            <div style="padding: 2px 5px" class="btn btn-default btn-file xn-table-upload block"
+              [class.disabled]="!btnStatus" (click)="handleVerification(btnStatus)">
+              <span class="hidden-xs xn-input-font">查验</span>
+            </div>
+            <div style="padding: 2px 5px" class="btn btn-default btn-file xn-table-upload block"
+              (click)="deleteAll(btnStatus)" [class.disabled]="!btnStatus">
+              <span class="hidden-xs xn-input-font">删除</span>
+            </div>
+          </th>
+          <th>
+            <span style="line-height:20px"></span>
+            <input type="checkbox" (change)="handleAllSelect()" [disabled]="!SelectedBtnStatus"
+              [checked]="checkedAllStatus">全选/取消&nbsp;&nbsp;
+          </th>
+        </ng-container>
+
+      </tr>
+    </thead>
+    <tbody>
+      <ng-container *ngFor="let item of items; let i = index;">
+        <tr>
+          <td>
+            <span>{{i+1}}</span>
+          </td>
+          <td>
+            <a class="xn-click-a" (click)="onOpenImage(item)">{{item.fileName}}</a>
+          </td>
+          <td>{{ item.invoiceNum || ''}}</td>
+          <td>{{ item.invoiceCode || ''}}</td>
+          <td>{{ item.invoiceDate }}</td>
+          <td class="money-color">{{ item.invoiceAmount | xnMoney}}</td>
+          <td class="money-color">{{item.transferMoney | xnMoney}}</td>
+          <td>
+            <ng-container
+              *ngIf="(item?.tag&&item?.tag==='artificial') || (item?.away && item?.away==='edit');else block1">
+              <span class="tag-color">人工验证</span>
+            </ng-container>
+            <ng-template #block1>
+              <span
+                [ngClass]="{'tag-color':item.status===4 || item.status===2 || item.status===6 ||item.status===7 || item.status===8}">{{item.status
+                | xnInvoiceStatus}}</span>
+            </ng-template>
+          </td>
+          <td *ngIf="orgType===3">
+            <ng-container *ngIf="item?.mainFlowIds && item?.mainFlowIds.length ; else block">
+              <div *ngFor="let sub of item.mainFlowIds">
+                <ng-container *ngIf="sub.mainFlowId.indexOf('cloud') === -1;else cloud">
+                  <a href="javaScript:void (0)" (click)="viewProcess(sub.mainFlowId)">{{sub.mainFlowId}}</a>
+                </ng-container>
+                <ng-template #cloud>
+                  <span>{{sub.mainFlowId}}</span>
+                </ng-template>
+              </div>
+            </ng-container>
+            <ng-template #block>
+              <div>/</div>
+            </ng-template>
+          </td>
+          <td><a href="javaScript:void (0)" (click)='changeTransferMoney(item)'>修改转让金额</a></td>
+          <!--可编辑状态-->
+          <ng-container *ngIf="orgType!==3">
+            <td>
+              <a class="xn-click-a tag-color a-btn" [hidden]="item?.tag&&item?.tag==='artificial'"
+                (click)="onEdit(item, i,item.tag&&item?.tag==='artificial')" *ngIf="item.status===2">手工查验</a>
+              <a class="xn-click-a a-btn" (click)="inspection(item)"
+                [hidden]="item.status===1||item.status===2|| item.status===3 || item.status===4||item.status===6||item.status===7||item.status===8">查验</a>
+              <a class="xn-click-a a-btn" (click)="onRemove(item)" *ngIf="item.fileId">删除</a>
+            </td>
+            <td>
+              <input type="checkbox" (change)="handleSelect(i)" [checked]="item && item.clicked">
+            </td>
+          </ng-container>
+        </tr>
+      </ng-container>
+
+      <tr *ngIf="amountAll > 0 || preAmountAll>0">
+        <td>合计</td>
+        <td>/</td>
+        <td>/</td>
+        <td>/</td>
+        <td>/</td>
+        <td class="money-color">{{amountAll | xnMoney}}</td>
+        <td class="money-color">{{transferAmount | xnMoney}}</td>
+        <td>/</td>
+        <td>/</td>
+        <td *ngIf="orgType===3">/</td>
+        <ng-container *ngIf="orgType!==3">
+          <td>/</td>
+          <td>/</td>
+        </ng-container>
+      </tr>
+    </tbody>
+  </table>
+</div>
+<span class="xn-input-alert">{{alert}}</span>

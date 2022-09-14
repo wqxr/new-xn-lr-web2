@@ -1,0 +1,191 @@
+<section class="content">
+  <div class="box">
+    <div class="box-body">
+      <div class="col-sm-6  form-group clearfix">
+        <div class=" form-group"
+             *ngFor="let item of shows">
+          <div class="col-sm-2 title">
+            <span>{{item.title}}</span>
+          </div>
+          <div class="col-sm-10">
+            <xn-input [form]="mainForm"
+                      [row]="item"></xn-input>
+          </div>
+        </div>
+      </div>
+      <div class="col-sm-6 text-right">
+        <button class="btn btn-primary"
+                (click)="onPage(1)">查询
+        </button>
+        <button class="btn btn-danger"
+                (click)="reset()">重置
+        </button>
+
+        <ng-container *ngIf="showButtonBool">
+          <button type="button"
+                  (click)="downloadExcel()"
+                  class="btn btn-primary">下载Excel
+          </button>
+          <button type="button"
+                  (click)="capitalItemForm()"
+                  class="btn btn-primary">添加资产池
+          </button>
+        </ng-container>
+      </div>
+
+      <table class="table table-bordered text-center table-hover">
+        <thead class="table-herder-bg">
+        <tr>
+          <th>资产池编号</th>
+          <th>资产池名称</th>
+          <th>总部公司</th>
+          <th>储架</th>
+          <th>交易模式</th>
+          <th>供应商融资人数量</th>
+          <th>项目公司融资人数量</th>
+          <th>最大供应商融资所占比例%</th>
+          <th>最大项目公司融资所占比列%</th>
+          <th>供应商警戒比例%</th>
+          <th>项目公司警戒比例%</th>
+          <th>最大供应商融资人名称</th>
+          <th>最大项目公司融资人名称</th>
+          <th>中介机构</th>
+          <th>工程交易个数</th>
+          <th>服务交易个数</th>
+          <th>交易个数</th>
+          <th class="operating">操作</th>
+        </tr>
+        </thead>
+        <tbody>
+        <ng-container *ngIf="capitalPoolLists && capitalPoolLists.length;else blcok">
+          <tr *ngFor="let item of capitalPoolLists">
+            <td>{{item.capitalPoolId}}</td>
+            <td>{{item.capitalPoolName}}</td>
+            <td>{{item.headquarters | xnSelectTransform : enterpriserSelectItems}}</td>
+            <td>{{item.storageRack | xnSelectTransform : storageRack}}</td>
+            <td>{{item.isProxy | xnSelectTransform:proxyTypeOptions}}</td>
+            <td>{{item.financiersNumber}}</td>
+            <td>{{item.enterprisersNumber}}</td>
+            <td><span [ngClass]="{'text-danger font-weight-bold': +item.maxFinancingRatio > +item.supplierRatio}">{{item.maxFinancingRatio}}</span>
+            </td>
+            <td><span [ngClass]="{'text-danger font-weight-bold': +item.maxEnterpriseRatio > +item.enterpriseRatio}">{{item.maxEnterpriseRatio}}</span>
+            </td>
+            <td>{{item.supplierRatio}}</td>
+            <td>{{item.enterpriseRatio}}</td>
+            <td>{{item.maxFinancingName}}</td>
+            <td>{{item.maxEnterpriseName}}</td>
+            <td>{{item.agencyInfo | xnLabel:'appName'}}</td>
+            <td>{{item.commodityTradNumber}}</td>
+            <td>{{item.serviceTradNumber}}</td>
+            <td>{{item.tradNumber}}</td>
+            <td>
+              <!--调整按钮组 下拉按钮组 todo 暂时注释，等待业务确认-->
+              <!--<div class="btn-group">-->
+              <!--&lt;!&ndash;默认查看按钮&ndash;&gt;-->
+              <!--<button type="button" class="btn btn-primary"-->
+              <!--(click)="handleView({id:item.capitalPoolId,value:1,name:item.capitalPoolName,isLocking:item.isLocking,headquarters:item.headquarters,isProxy:item.isProxy})">-->
+              <!--查看-->
+              <!--</button>-->
+              <!--<button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown"-->
+              <!--aria-haspopup="true" aria-expanded="false">-->
+              <!--<span class="caret"></span>-->
+              <!--<span class="sr-only">Toggle Dropdown</span>-->
+              <!--</button>-->
+              <!--<ul class="dropdown-menu">-->
+              <!--<ng-container *ngIf="showButtonBool && !isAgencyUser">-->
+              <!--&lt;!&ndash;资产池锁定时，不可在添加交易&ndash;&gt;-->
+              <!--<ng-container *ngIf=" item.isLocking!==1">-->
+              <!--<li>-->
+              <!--<a href="javaScript:void (0)"-->
+              <!--(click)="handleAdd({id:item.capitalPoolId,value:2,headquarters:item.headquarters,isProxy:item.isProxy})">添加交易</a>-->
+              <!--</li>-->
+              <!--</ng-container>-->
+              <!--<li><a href="javaScript:void (0)" (click)="bankCardAdd(item)">绑定信息</a></li>-->
+              <!--</ng-container>-->
+              <!--&lt;!&ndash;关于锁定资产池&ndash;&gt;-->
+              <!--<ng-container *ngIf="showButtonBool && isHwBusiness(item.headquarters) && !isAgencyUser">-->
+
+              <!--<li *ngIf=" item.isLocking!==1"><a href="javaScript:void (0)" (click)="handleLock(item)">锁定</a></li>-->
+              <!--<li *ngIf=" item.isLocking===1" class="disabled-bg">已锁定</li>-->
+              <!--</ng-container>-->
+              <!--<ng-container *ngIf="showButtonBool2 && !isAgencyUser">-->
+              <!--<li class="btn btn-sm btn-default" [class.disabled-bg]="item.isLocking===1">-->
+              <!--{{item.isLocking===1?'已锁定':'未锁定'}}-->
+              <!--</li>-->
+              <!--</ng-container>-->
+              <!--&lt;!&ndash;保理商角色时&ndash;&gt;-->
+              <!--<ng-container *ngIf="!isAgencyUser">-->
+              <!--<li>-->
+              <!--<a href="javaScript:void (0)" (click)="alertRatioForm({id:item.capitalPoolId, value: item})">设置境界比例</a>-->
+              <!--</li>-->
+              <!--<li>-->
+              <!--<a href="javaScript:void (0)"-->
+              <!--(click)="capitalItemForm({id:item.capitalPoolId, name: item.capitalPoolName})">重命名</a>-->
+              <!--</li>-->
+              <!--<li>-->
+              <!--<a href="javaScript:void (0)"-->
+              <!--(click)="intermediaryAgencyForm({id:item.capitalPoolId, value: item.agencyInfo})">中介机构</a>-->
+              <!--</li>-->
+              <!--</ng-container>-->
+              <!--</ul>-->
+              <!--</div>-->
+
+
+              <!---->
+              <!--多按钮组-->
+              <button
+                (click)="handleView({id:item.capitalPoolId,value:1,name:item.capitalPoolName,isLocking:item.isLocking,headquarters:item.headquarters,isProxy:item.isProxy})"
+                class="btn btn-sm btn-default">查看
+              </button>
+              <ng-container *ngIf="showButtonBool && !isAgencyUser">
+                <button
+                  (click)="handleAdd({id:item.capitalPoolId,value:2,name:item.capitalPoolName,headquarters:item.headquarters,isProxy:item.isProxy})"
+                  class="btn btn-sm btn-primary"
+                  *ngIf=" item.isLocking!==1">添加交易
+                </button>
+                <button class="btn btn-sm btn-primary"
+                        (click)="bankCardAdd(item)">绑定信息
+                </button>
+              </ng-container>
+              <ng-container *ngIf="showButtonBool && isHwBusiness(item.headquarters) && !isAgencyUser">
+                <button (click)="handleLock(item)" class="btn btn-sm btn-default"
+                        *ngIf=" item.isLocking!==1">锁定
+                </button>
+                <button class="btn btn-sm btn-default"
+                        *ngIf=" item.isLocking===1" disabled>已锁定
+                </button>
+              </ng-container>
+              <ng-container *ngIf="showButtonBool2 && !isAgencyUser">
+                <button class="btn btn-sm btn-default" [class.btn-primary]="item.isLocking===1" disabled>
+                  {{item.isLocking===1?'已锁定':'未锁定'}}
+                </button>
+              </ng-container>
+              <ng-container *ngIf="!isAgencyUser">
+                <button (click)="alertRatioForm({id:item.capitalPoolId, value: item})"
+                        class="btn btn-sm btn-primary">设置警戒比例
+                </button>
+                <button (click)="capitalItemForm({id:item.capitalPoolId, name: item.capitalPoolName})"
+                        class="btn btn-sm btn-default">重命名
+                </button>
+                <button (click)="intermediaryAgencyForm({id:item.capitalPoolId, value: item.agencyInfo})"
+                        class="btn btn-sm btn-default">中介机构
+                </button>
+              </ng-container>
+            </td>
+          </tr>
+        </ng-container>
+        <ng-template #blcok>
+          <td colspan="18">
+            <div class="empty-message">
+            </div>
+          </td>
+        </ng-template>
+        </tbody>
+      </table>
+      <xn-page [total]="total"
+               [size]="pageSize"
+               [currentPage]="currentPage"
+               (change)="onPage($event)"></xn-page>
+    </div>
+  </div>
+</section>

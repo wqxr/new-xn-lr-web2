@@ -1,0 +1,102 @@
+<form [formGroup]="formGroups">
+  <nz-tabset>
+    <nz-tab nzTitle="发票信息">
+      <div>
+        <div *ngIf="isReadonly()===false">
+          <button  type="button" class="btn btn-success" (click)="downTemplate('invoice')">下载模板</button>
+
+          <!-- <button  type="button" class="btn btn-success" (click)="downTemplate('invoice')">下载模板</button> -->
+          <div class="btn btn-success btn-file">
+            <span class="hidden-xs xn-input-font">批量上传</span>
+            <input type="hidden">
+            <input type="file" (change)="onUploadExcel($event,'invoice')">
+          </div><span>10条以上信息请使用批量上传功能</span>
+        </div>
+      </div>
+      <div>
+        <table class="table table-bordered table-striped text-center">
+          <thead>
+            <tr align="center" class="table-head">
+              <th>发票号码</th>
+              <th>发票金额</th>
+              <th>转让金额</th>
+            </tr>
+          </thead>
+          <tbody class='tbody_css'>
+            <tr align="center" *ngFor='let item of invoiceList;let i=index' formControlName="invoiceList"
+              ngDefaultControl>
+              <td><input type='text' class='form-control xn-input-font xn-input-border-radius' [readonly]="isReadonly()"
+                  [(ngModel)]='item.invoiceCode' (input)="OnInput ($event,i)" [ngModelOptions]="{standalone: true}">
+                <p *ngIf="!isInvoice[i] && !!item.invoiceCode" style='color:red'>发票号输入格式有误</p>
+              </td>
+              <td><input type='text' class='form-control xn-input-font xn-input-border-radius' [readonly]="isReadonly()"
+                  [(ngModel)]='item.invoiceMoney' (input)="inputMoney($event,i)" [ngModelOptions]="{standalone: true}">
+                  <p *ngIf="!isInvoiceMoney[i]&& !!item.invoiceMoney" style='color:red'>金额输入有误</p>
+                </td>
+              <td><input type='text' class='form-control xn-input-font xn-input-border-radius' [readonly]="isReadonly()"
+                  [(ngModel)]='item.invoicechangePrice' (input)="inputchangePrice($event,i)" [ngModelOptions]="{standalone: true}">
+                  <p *ngIf="!changePrice[i] && !!item.invoicechangePrice" style='color:red'>金额输入有误</p>
+                </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </nz-tab>
+    <nz-tab nzTitle="合同信息">
+      <div>
+        <div  *ngIf="isReadonly()===false">
+          <button  type="button" class="btn btn-success" (click)="downTemplate('contract')">下载模板</button>
+          <div class="btn btn-success btn-file">
+            <span class="hidden-xs xn-input-font">批量上传</span>
+            <input type="hidden">
+            <input type="file" (change)="onUploadExcel($event,'contract')">
+          </div><span>10条以上信息请使用批量上传功能</span>&nbsp;&nbsp;<span class="xn-input-alert">(每项最多可录入200字)</span>
+        </div>
+      </div>
+      <table class="table table-bordered table-striped text-center table1">
+        <thead>
+          <tr align="center" class="table-head">
+            <th>合同名称</th>
+            <th>合同编号</th>
+          </tr>
+        </thead>
+        <tbody class='tbody_css1'>
+          <tr align="center" *ngFor='let item of contractList;' formControlName="contractList" ngDefaultControl>
+            <td><input type='text' class='form-control xn-input-font xn-input-border-radius' [readonly]="isReadonly()"
+                [(ngModel)]='item.contractName' [ngModelOptions]="{standalone: true}"></td>
+            <td><input type='text' class='form-control xn-input-font xn-input-border-radius' [readonly]="isReadonly()"
+                [(ngModel)]='item.contractId' [ngModelOptions]="{standalone: true}"></td>
+          </tr>
+
+        </tbody>
+      </table>
+    </nz-tab>
+    <nz-tab nzTitle="债务人信息">
+      <div>
+        <div  *ngIf="isReadonly()===false">
+          <button  type="button" class="btn btn-success" (click)="downTemplate('debtor')">下载模板</button>
+          <div class="btn btn-success btn-file">
+            <span class="hidden-xs xn-input-font">批量上传</span>
+            <input type="hidden">
+            <input type="file" (change)="onUploadExcel($event,'debtor')">
+          </div><span>10条以上信息请使用批量上传功能</span>&nbsp;&nbsp;<span class="xn-input-alert">(每项最多可录入200字)</span>
+        </div>
+      </div>
+
+      <table class="table table-bordered table-striped text-center table2">
+        <thead>
+          <tr align="center" class="table-head">
+            <th>债务人企业名称</th>
+          </tr>
+        </thead>
+        <tbody class='tbody_css2'>
+          <tr align="center" *ngFor='let item of debtorList;' formControlName="debtorList" ngDefaultControl>
+            <td><input type='text' class='form-control xn-input-font xn-input-border-radius' [readonly]="isReadonly()"
+                [(ngModel)]='item.debtor' [ngModelOptions]="{standalone: true}"></td>
+          </tr>
+
+        </tbody>
+      </table>
+    </nz-tab>
+  </nz-tabset>
+</form>

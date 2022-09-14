@@ -1,0 +1,150 @@
+<section class="content">
+  <div class="panel panel-default">
+    <div class="panel-heading">
+        <span class="panel-title">订单的所有区块
+        </span>
+    </div>
+    <!-- /.box-header -->
+
+    <div class="panel-body">
+
+
+      <div class="panel panel-info xn-panel-sm" *ngIf="!!blocks">
+        <div class="panel-heading">
+          <span class="panel-title">订单的所有区块</span>
+        </div>
+        <!-- /.box-header -->
+        <div class="panel-body">
+          <div class="block-chain-container">
+            <ng-container *ngFor="let block of blocks.data">
+              <div class="block-chain-link" *ngIf="block.blockNumber !== maxBlockHeight"></div>
+              <div class="block-chain-item">
+                <ul class="list-group xn-click-a" (click)="onView(block.channelId, block.blockId)">
+                  <li class="list-group-item active">区块高度 {{block.blockNumber}}</li>
+                  <li class="list-group-item">区块哈希值 {{block.blockHash}}</li>
+                  <li class="list-group-item">前块哈希值 {{block.previousBlockHash}}</li>
+                  <li class="list-group-item">包含{{block.blockTransactionNumber}}条记录</li>
+                </ul>
+              </div>
+            </ng-container>
+          </div>
+
+          <!-- 分页 -->
+          <nav aria-label="Page navigation" class="text-center">
+            <ul class="pagination">
+              <li [ngClass]="onCssClass('head')">
+                <a (click)="onPageHead()" aria-label="Previous" class="xn-click-a">
+                  <span aria-hidden="true">&laquo;</span>
+                </a>
+              </li>
+              <ng-container *ngFor="let page of pages">
+                <li [ngClass]="onCssClass(page)"><a (click)="onPage(page)" class="xn-click-a">{{page}}</a></li>
+              </ng-container>
+              <li [ngClass]="onCssClass('tail')">
+                <a (click)="onPageTail()" aria-label="Next" class="xn-click-a">
+                  <span aria-hidden="true">&raquo;</span>
+                </a>
+              </li>
+            </ul>
+          </nav>
+        </div>
+        <!-- /.box-body -->
+      </div>
+      <!-- /.box -->
+
+      <div class="panel panel-info xn-panel-sm" *ngIf="!!blockId">
+        <div class="panel-heading">
+          <span class="panel-title">区块详情</span>
+        </div>
+        <!-- /.box-header -->
+        <div class="panel-body">
+          <div class="sub-title">该区块信息</div>
+          <div>
+            <table class="table table-bordered table-striped table-max">
+              <tbody>
+              <tr>
+                <td>区块高度</td>
+                <td>{{blockInfo.blockNumber}}</td>
+              </tr>
+              <tr>
+                <td>区块哈希值</td>
+                <td>{{blockInfo.blockHash}}</td>
+              </tr>
+              <tr>
+                <td>前一区块哈希值</td>
+                <td class="td-max">{{blockInfo.previousBlockHash}}</td>
+              </tr>
+              <tr>
+                <td>区块ID</td>
+                <td>{{blockInfo.blockId}}</td>
+              </tr>
+              <tr>
+                <td>区块数据哈希值</td>
+                <td>{{blockInfo.blockDataHash}}</td>
+              </tr>
+              </tbody>
+            </table>
+          </div>
+          <div class="sub-title">该区块所在节点</div>
+          <div>
+            <table class="table table-bordered table-striped table-max">
+              <thead>
+              <tr>
+                <th>节点名称</th>
+                <th>位置</th>
+                <th>该区块所在高度</th>
+                <th>该区块创建时间</th>
+              </tr>
+              </thead>
+              <tbody>
+              <tr *ngFor="let peer of blockPeers">
+                <td>{{peer.peerName}}</td>
+                <td>{{peer.peerIP}}</td>
+                <td>{{peer.blockNumber}}</td>
+                <td>{{peer.createTime | date:'yyyy-MM-dd HH:mm:ss'}}</td>
+              </tr>
+              </tbody>
+            </table>
+          </div>
+          <div class="sub-title">该区块所含记录</div>
+          <div *ngFor="let block of blockTransactions.data">
+            <table class="table table-bordered table-striped table-max">
+              <tbody>
+              <tr>
+                <td>交易ID</td>
+                <td>{{block.transactionID}}</td>
+              </tr>
+              <tr>
+                <td>交易时间</td>
+                <td>{{block.transactionTime | date:'yyyy-MM-dd HH:mm:ss'}}</td>
+              </tr>
+              <tr>
+                <td>记录类型</td>
+                <td>
+                  {{block.dataType | xnBcDataType}}
+                </td>
+              </tr>
+              <tr>
+                <td>数据ID</td>
+                <td class="td-max">
+                  {{block.dataKey}}
+                </td>
+              </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+        <!-- /.panel-body -->
+      </div>
+
+    </div>
+
+    <div class="panel-footer text-right">
+      <button type="button" class="btn btn-default" (click)="onBack()">返回</button>
+    </div>
+    <!-- /.panel-footer -->
+  </div>
+  <!-- /.panel -->
+
+</section>
+<!-- /.content -->

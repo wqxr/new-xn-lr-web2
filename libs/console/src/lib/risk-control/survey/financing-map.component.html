@@ -1,0 +1,21 @@
+<section class="financing-map">
+  <h3 class="box-title">{{tableTitle1}}</h3>
+  <div class="form-group" *ngFor="let row of shows">
+    <div class="col-sm-4 xn-control-label">
+      {{row.title}}
+      <span *ngIf="row.required !== false" class="required-label">*</span>
+    </div>
+    <div class="col-sm-4">
+      <xn-input [row]="row" [form]="mainForm"></xn-input>
+    </div>
+  </div>
+  <!--图表-->
+  <div class="form-group">
+    <div class="col-sm-12">
+      <app-risk-map-card [stockId]="stockId"></app-risk-map-card>
+    </div>
+    <div class="col-sm-12">
+      <app-risk-map-dd [stockId]="stockId"></app-risk-map-dd>
+    </div>
+  </div>
+</section>

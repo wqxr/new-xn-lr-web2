@@ -1,0 +1,63 @@
+<section class="content-header">
+  <h1>
+    {{pageTitle}}
+    <small>{{pageDesc}}</small>
+  </h1>
+</section>
+
+<section class="content">
+  <div class="box">
+    <div class="box-header">
+      <h3 class="box-title">{{tableTitle}}</h3>
+      <button class=" btn btn-primary" (click)="onViewAdd(items)" style="float: right;" *ngIf="!showBtn">增加计划</button>
+    </div>
+    <!-- /.box-header -->
+    <div class="box-body">
+
+      <table class="table table-bordered table-striped">
+        <thead>
+          <tr>
+            <th>供应商</th>
+            <th *ngIf="!showBtn">保理商</th>
+            <th *ngIf="!enterprise">核心企业</th>
+            <th>保理日期</th>
+            <th>保理金额</th>
+            <th>保理到期日</th>
+            <th>交易类型</th>
+            <th>要素</th>
+            <th>是否补齐</th>
+            <th>何时提供发票</th>
+            <th>描述</th>
+            <th>操作</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let item of items">
+            <td>{{item.supplierName}}</td>
+            <td *ngIf="!showBtn">{{item.factoringAppName || (item.factoring | xnLabel)}}</td>
+            <td *ngIf="!enterprise">{{item.appName}}</td>
+            <td>{{item.factoringBeginDate}}</td>
+            <td>{{item.factoringAmount | xnMoney}}</td>
+            <td>{{item.factoringEndDate}}</td>
+            <td>{{item.type | xnType}}</td>
+            <td>{{item.element}}</td>
+            <td>{{item.complete}}</td>
+            <td>{{item.invoice}}</td>
+            <td>{{item.desc}}</td>
+            <td>
+              <div *ngIf="!showBtn">
+                <a class="xn-click-a" (click)="onViewEdit(item)" *ngIf="!showBtn">修改</a>
+                <a class="xn-click-a" (click)="onViewDelete(item)" *ngIf="!showBtn">删除</a>
+              </div>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+
+      <xn-page [total]="total" [size]="pageSize" (change)="onPage($event)"></xn-page>
+    </div>
+    <!-- /.box-body -->
+  </div>
+
+</section>
+<!-- /.content -->

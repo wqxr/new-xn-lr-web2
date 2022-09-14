@@ -1,0 +1,46 @@
+<section>
+  <div class="page-title">汇融文件问题反馈</div>
+  <!-- 搜索项 -->
+  <nz-card class="search-content">
+    <xn-search-form
+      #searchForm
+      [fields]="searchFields"
+      [model]="searchModel"
+      (search)="onSearch()"
+      (reset)="onReset()"
+    ></xn-search-form>
+  </nz-card>
+  <!-- 反馈内容 -->
+  <nz-card *ngIf="showFeedback" class="feedback-content">
+    <div>
+      <nz-descriptions nzTitle="反馈信息">
+        <nz-descriptions-item nzTitle="数据更新人">{{ feedbackData?.userName }}</nz-descriptions-item>
+        <nz-descriptions-item nzTitle="数据更新时间"
+          >{{ feedbackData?.updateTime | xnDate: "longdatetime" }}</nz-descriptions-item
+        >
+      </nz-descriptions>
+    </div>
+    <div class="feedback-form">
+        <form
+          style="position: relative"
+          nz-form
+        >
+          <xn-formly
+            [form]="form"
+            [options]="formOptions"
+            [model]="formModel"
+            [fields]="formFields"
+          >
+          </xn-formly>
+        </form>
+    </div>
+  </nz-card>
+
+  <!-- footer -->
+  <xn-footer-toolbar style="align-items: center">
+    <!-- 提交信息 -->
+    <ng-container>
+      <button nz-button nzType="primary" [disabled]="!showFeedback" (click)="submitForm()">提交</button>
+    </ng-container>
+  </xn-footer-toolbar>
+</section>

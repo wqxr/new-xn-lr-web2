@@ -1,0 +1,103 @@
+<modal #modal [backdrop]="'static'" [keyboard]="false" [animation]="false">
+  <modal-header [showClose]="false">
+    <h4 class="modal-title">查看合同信息</h4>
+    <a class="button-rotate rotate-left" title="点击旋转图片" (click)="rotateImg('left')" *ngIf="!!fileImg">
+      <i class="fa fa-undo fa-3x"></i>
+    </a>
+    <a class="button-rotate rotate-right" title="点击旋转图片" (click)="rotateImg('right')" *ngIf="!!fileImg">
+      <i class="fa fa-repeat fa-3x"></i>
+    </a>
+  </modal-header>
+
+  <modal-body>
+    <div class="flex-row">
+      <!-- 左侧 -->
+      <div class="this-left">
+        <div class="contract-info">
+          <div class="this-title">
+            <div class="this-text">
+              合同名称
+              <span class="required-label">*</span>
+            </div>
+            <div class="this-control">
+              <input class="form-control xn-input-border-radius" value="{{params?.contractTitle}}" type="text" readonly>
+            </div>
+          </div>
+
+          <div class="this-title">
+            <div class="this-text">
+              合同编号
+              <span class="required-label">*</span>
+            </div>
+            <div class="this-control">
+              <input class="form-control xn-input-border-radius" value="{{params?.contractNum}}" type="text" readonly>
+            </div>
+          </div>
+
+          <div class="this-title">
+            <div class="this-text">
+              合同金额
+              <span class="required-label">*</span>
+            </div>
+            <div class="this-control">
+              <input class="form-control xn-input-border-radius" value="{{params?.contractAmount | xnMoney}}" required type="text" placeholder="单位: 元人民币"
+                readonly>
+            </div>
+          </div>
+
+          <div class="this-title">
+            <div class="this-text">
+              签订日期
+              <span class="required-label">*</span>
+            </div>
+            <div class="this-control">
+              <input class="form-control xn-input-border-radius" value="{{params?.contractDate}}" type="text" placeholder="格式: 20170731"
+                readonly>
+            </div>
+          </div>
+
+          <div class="this-title">
+            <div class="this-text">
+              合同买方
+              <span class="required-label">*</span>
+            </div>
+            <div class="this-control">
+              <input class="form-control xn-input-border-radius" value="{{params?.contractBuyer}}" type="text" readonly>
+            </div>
+          </div>
+
+          <div class="this-title">
+            <div class="this-text">
+              合同卖方(保理商)
+              <span class="required-label">*</span>
+            </div>
+            <div class="this-control">
+              <input class="form-control xn-input-border-radius" value="{{params?.supplier}}" type="text" readonly>
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- 右侧 -->
+      <div class="this-right">
+        <div class="img-container" #imgContainer>
+          <div class="img-wrapper" #outerImg>
+            <img #innerImg class="this-img" src="{{fileImg}}" *ngIf="!!fileImg">
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+  </modal-body>
+  <modal-footer>
+    <div class="page">
+      <xn-page [total]="total" [size]="pageSize" [showTotal]="false" (change)="onPage($event)"></xn-page>
+    </div>
+
+    <button type="button" *ngIf="params && !!params.preview" class="btn btn-danger" (click)="onOk()">关闭</button>
+    <button type="button" *ngIf="params && !params.preview" class="btn btn-danger" (click)="onConsistent(false)">信息不一致</button>
+    <button type="button" *ngIf="params && !params.preview" class="btn btn-info" (click)="onConsistent(true)">信息一致</button>
+  </modal-footer>
+</modal>

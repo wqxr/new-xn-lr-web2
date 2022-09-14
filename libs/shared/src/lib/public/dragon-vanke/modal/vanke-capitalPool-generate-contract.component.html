@@ -1,0 +1,30 @@
+<modal #modal [backdrop]="'static'" [keyboard]="false" [animation]="false">
+  <form class="form-horizontal" (ngSubmit)="onSubmit()">
+    <modal-header [showClose]="false">
+      <h4 class="modal-title">生成合同</h4>
+    </modal-header>
+    <modal-body>
+      <div class="form-group">
+        <div class="col-sm-2 xn-control-label">
+          合同名称
+          <span class="required-label">*</span>
+        </div>
+        <div class="col-sm-8">
+          <label class="xn-input-font" style='font-weight:400;margin-right: 20px;' *ngFor="let option of params">
+            <ng-container >
+              <input  (change)='getContrctFile($event)' type="radio" value="{{option.id}}" name='contractFile' class="flat-red">&nbsp;&nbsp;{{option.templateName}}
+            </ng-container>
+          </label>
+        </div>
+      </div>
+    </modal-body>
+    <modal-footer>
+      <button type="button" class="btn btn-default" (click)="onCancel()">
+        取消
+      </button>
+      <button type="submit" class="btn btn-success" [disabled]="!isOk">
+        提交
+      </button>
+    </modal-footer>
+  </form>
+</modal>

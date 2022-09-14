@@ -1,0 +1,48 @@
+<modal #modal [backdrop]="'static'" [keyboard]="false" [animation]="false">
+  <form class="form-horizontal" (ngSubmit)="handleSubmit()" [formGroup]="mainForm" *ngIf="!!mainForm">
+    <modal-header [showClose]="false">
+      <h4 class="modal-title">新增商票</h4>
+    </modal-header>
+    <modal-body>
+      <div class="edit-content">
+        <div class="form-group" *ngFor="let row of rows">
+          <div class="col-sm-3 xn-control-label">
+            {{row.title}} <span *ngIf="row.required !== false && row.required !== 0" class="required-label">*</span>
+          </div>
+          <div class="col-sm-6">
+            <xn-input [row]="row" [form]="mainForm"></xn-input>
+          </div>
+          <div class="col-sm-3 xn-control-desc">
+            {{row.memo}}
+          </div>
+        </div>
+        <!-- 商票图片 -->
+        <ng-container *ngIf="!!fileImg">
+          <div class="edit-content-flex text-center">
+            <div class="img-container" #imgContainer>
+              <div class="img-wrapper" #outerImg>
+                <img #innerImg class="this-img" src="{{fileImg}}">
+              </div>
+            </div>
+          </div>
+        </ng-container>
+      </div>
+    </modal-body>
+    <modal-footer>
+      <div class="clearfix">
+        <div class="button-group">
+          <button id="left" type="button" class="btn btn-sm btn-default" (click)="rotateImg('left')">左旋
+            <i class="fa  fa-undo"></i></button>
+          <button id="right" type="button" class="btn btn-sm btn-default" (click)="rotateImg('right')">右旋
+            <i class="fa fa-repeat"></i></button>
+          <button id="large" type="button" class="btn btn-sm btn-default" (click)="scaleImg('large')">放大<i
+            class="fa fa-search-plus"></i></button>
+          <button id="small" type="button" class="btn btn-sm btn-default" (click)="scaleImg('small')">缩小<i
+            class="fa fa-search-minus"></i></button>
+          <button type="button" class="btn btn-default" (click)="onCancel()">取消</button>
+          <button type="submit" class="btn btn-success" [disabled]="!mainForm.valid">提交</button>
+        </div>
+      </div>
+    </modal-footer>
+  </form>
+</modal>

@@ -1,0 +1,15 @@
+<div class="help">
+  <div class="tab">
+    <div #tabNav class="tab-nav portal-panel">
+      <div (click)="onSelectChange(tab)" [ngClass]="['tab-nav-item', tab.id === currentTab.id ? 'active' : '']" *ngFor="let tab of tabList;">{{tab.name}}</div>
+    </div>
+  </div>
+  <ng-container [ngSwitch]="currentTab.id">
+    <ng-container *ngSwitchCase="1">
+      <registry-help></registry-help>
+    </ng-container>
+    <ng-container *ngSwitchCase="2">
+      <problem-help></problem-help>
+    </ng-container>
+  </ng-container>
+</div>

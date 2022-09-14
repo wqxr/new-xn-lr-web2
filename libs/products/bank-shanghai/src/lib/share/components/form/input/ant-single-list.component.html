@@ -1,0 +1,133 @@
+<div nz-row nzAlign="middle">
+  <!-- 表头按钮组 -->
+  <div nz-row class="table-head-btn">
+    <ng-container *ngFor="let key of tableHeadBtnConfig">
+      <div nz-col nzSm="12" nzMd="12" nzSpan="12" [ngClass]="{'text-right': key === 'right'}">
+        <ng-container *ngFor="let btn of tableHeadBtn[key]">
+          <nz-space nzDirection="horizontal">
+            <nz-space-item class="no-margin">
+              <ng-container [ngSwitch]="btn.type">
+                <ng-container *ngSwitchCase="'dropdown'">
+                  <button nz-button nzType="primary" nz-dropdown [nzDropdownMenu]="menu">
+                    {{btn.label}}<i nz-icon nzType="down"></i>
+                  </button>
+                  <nz-dropdown-menu #menu="nzDropdownMenu">
+                    <ul nz-menu *ngIf="btn.children && btn.children.length">
+                      <ng-container *ngFor="let childBtn of btn.children">
+                        <li nz-menu-item style="text-align: left;">
+                          <!-- <ng-container *ngIf="childBtn.btnKey === '';else normalBtnTpl">
+                          </ng-container> -->
+                          <!-- <ng-template #normalBtnTpl> -->
+                            <a href="javaScript:void(0)" (click)='handleHeadClick(childBtn)'>
+                              {{childBtn.label}}
+                            </a>
+                          <!-- </ng-template> -->
+                        </li>
+                      </ng-container>
+                    </ul>
+                  </nz-dropdown-menu>
+                </ng-container>
+                <ng-container *ngSwitchCase="'normal'">
+                  <ng-container *ngIf="btn.btnKey === '';else normalBtnTpl">
+                  </ng-container>
+                  <ng-template #normalBtnTpl>
+                    <button nz-button nzType="primary" type="button" (click)="handleHeadClick(btn)">
+                      <i nz-icon [nzType]="btn.icon || ''" nzTheme="outline"></i>{{btn.label}}
+                    </button>
+                  </ng-template>
+                </ng-container>
+                <ng-container *ngSwitchCase="'text'">
+                  <ng-container *ngIf="btn.btnKey === 'basicUpdateInfo';else normalBtnTpl">
+                    <span style="margin-right: 5px;line-height: 32px;">{{ headTip.isUpdate }}，</span>
+                    <span style="margin-right: 5px;line-height: 32px;">更新时间: {{ (headTip.updateTime | xnDate: 'longdatetime') || '无'}}</span>
+                  </ng-container>
+                </ng-container>
+              </ng-container>
+            </nz-space-item>
+          </nz-space>
+        </ng-container>
+      </div>
+    </ng-container>
+  </div>
+  <xn-table
+    #table
+    [data]="lists"
+    [columns]="columns"
+    [size]="'middle'"
+    [loading]="loading"
+    [scroll]="{y: '380px' }"
+    [page]="{show: false }"
+    [size]="'middle'"
+    [widthMode] = "{
+      type: 'strict', 
+      strictBehavior: 'truncate'
+    }"
+    [body]="bodyStatistic"
+    (change)="handleTableChange($event)"
+  >
+  <ng-template xn-table-row="percentTpl" let-item let-index="index" let-column="column">
+    {{ item[column.index] | number:'1.2-2' | xnPercentage:'0.00%'}}
+  </ng-template>
+  <ng-template xn-table-row="moneyTpl" let-item let-index="index" let-column="column">
+    {{ item[column.index] | number:'1.2-2' | xnMoney: 'true'}}
+  </ng-template>
+  <ng-template xn-table-row="dateTpl" let-item let-index="index" let-column="column">
+    {{ (item[column.index] || 0) | xnDate:'date'}}
+  </ng-template>
+  <ng-template xn-table-row="singleDateTpl" let-item let-index="index" let-column="column">
+    {{ (item[column.index] || '').toString() | xnDate:'stringtodate'}}
+  </ng-template>
+  <ng-template xn-table-row="dateTimeTpl" let-item let-index="index" let-column="column">
+    {{ (item[column.index] || 0) | xnDate:'longdatetime'}}
+  </ng-template>
+  <ng-template xn-table-row="filesTpl" let-item let-index="index" let-column="column">
+    <ng-container *ngIf="!!item[column.index]">
+      <div *ngFor="let sub of item[column.index] | xnJson">
+        <a href="javaScript:void(0)" (click)="viewFiles(sub)">{{sub.fileName}}</a>
+        <nz-divider nzType="horizontal"></nz-divider>
+      </div>
+    </ng-container>
+  </ng-template>
+  <ng-template xn-table-row="baseFileTpl" let-item let-index="index" let-column="column">
+    <ng-container *ngIf="!!item[column.index]">
+      <span>{{!!item['fileType'] ? getFielsName(item['fileType']) : '文件'}}</span>
+    </ng-container>
+  </ng-template>
+  <ng-template xn-table-row="flowIdTpl" let-item let-index="index" let-column="column">
+    <ng-container *ngIf="!!item[column.index]">
+      <div [innerHTML]="item[column.index] | xnMainFlowStatus: 55"></div>
+    </ng-container>
+  </ng-template>
+  <ng-template xn-table-row="contractTypeTpl" let-item let-index="index" let-column="column">
+    <ng-container *ngIf="!!item[column.index]">
+      <div [innerHTML]="item[column.index] | xnSelectTransform: 'vankeContracttype'"></div>
+    </ng-container>
+  </ng-template>
+  <ng-template xn-table-row="multipleMatchTpl" let-item let-index="index" let-column="column">
+    {{ item[column.index] | xnSelectTransform: column.index.toString()}}
+  </ng-template>
+  <ng-template xn-table-row="factoringEndDateTpl" let-item let-index="index" let-column="column">
+    {{ item[column.index] | xnSelectTransform: 'defaultRadio'}}
+  </ng-template>
+  <ng-template xn-table-row="factoringEndDateTpl" let-item let-index="index" let-column="column">
+    {{ item[column.index] | xnSelectTransform: 'defaultRadio'}}
+  </ng-template>
+  </xn-table>
+  <ng-template #bodyStatistic let-statistical>
+    <ng-container  *ngIf="statisticColumn && statisticColumn.length">
+      <tr>
+        <ng-container *ngFor="let statisticCol of statisticColumn">
+          <ng-container [ngSwitch]="statisticCol">
+            <ng-container *ngSwitchCase="'no'">
+              <th class="ant-table-cell th-padding">合计</th>
+            </ng-container>
+            <ng-container *ngSwitchDefault>
+              <th class="ant-table-cell th-padding">{{(statistical | xnJson)[statisticCol]?.value | number:'1.2-2' | xnMoney: 'true'}}</th>
+            </ng-container>
+          </ng-container>
+        </ng-container>
+      </tr>
+    </ng-container>
+  </ng-template>
+</div>
+<span class="xn-input-alert" *ngIf="alert">{{alert}}</span>

@@ -1,0 +1,89 @@
+<modal #modal [backdrop]="'static'" [keyboard]="false" [animation]="false">
+  <modal-header [showClose]="false">
+    <h4 class="modal-title">{{tabConfig.title}}</h4>
+  </modal-header>
+  <modal-body>
+    <div style="clear: both;height:calc(100vh - 300px);overflow:auto">
+      <div class="flex-row">
+        <!-- 左侧 -->
+        <div class="this-left">
+          <span>已选企业：{{selectedItems.length}}</span><span style="float: right;margin-right: 50px;"><a
+              href='javascript:void(0)' class='editor_view' (click)="clearcompany()">清空所有已选企业</a></span>
+          <div
+            style="width:calc(100vh - 150px);height: 250px;border: 1px solid #ccc;margin-left: 10px;margin-top: 20px;overflow:auto;">
+            <p *ngFor="let head of selectedItems"><a>{{head.orgName}}</a> &nbsp;&nbsp;&nbsp;&nbsp;<span
+                (click)="clearData(head)"> x </span></p>
+          </div>
+        </div>
+      </div>
+      <div class="this-left" style="margin-top:40px">
+        <div class="form-group col-sm-6 flex" *ngFor="let row of shows">
+          <span>请选择企业： {{row.title}}</span>
+          <div class="title xn-control-label" style="text-align: left !important;display:inline-block">
+            <ng-container>
+              <xn-input [row]="row" [form]="form"></xn-input>
+            </ng-container>
+          </div>
+        </div>
+      </div>
+      <div class="col-sm-12 form-group text-right">
+        <ng-container>
+          <button class="btn btn-primary" (click)="searchMsg()">查询</button>
+        </ng-container>
+      </div>
+      <div>
+        <table class="table table-bordered table-striped text-center">
+          <thead>
+            <tr class="table-head">
+              <!-- 全选按钮 -->
+              <th class="input-check">全选/取消
+                <input type="checkbox" name="all" [checked]="isAllChecked()" [disabled]="!data.length"
+                  (change)="checkAll($event)" />
+              </th>
+              <!-- title -->
+              <th *ngFor="let head of tabConfig.heads">
+                <ng-container *ngIf="head.sort;else normal">
+                  <span [ngClass]="onSortClass(head?.value)" (click)="onSort(head?.value)">{{head.label}}</span>
+                </ng-container>
+                <ng-template #normal>{{head.label}}</ng-template>
+              </th>
+              <!-- 行操作 -->
+            </tr>
+          </thead>
+          <tbody>
+            <ng-container *ngIf="data.length;else block">
+              <tr *ngFor="let item of data;let i=index">
+                <!-- 行选则 -->
+                <td>
+                  <input type="checkbox" name="single" [checked]="item['checked']"
+                    (change)="singelChecked($event,item,i)" />
+                </td>
+                <!-- 列内容 -->
+                <td>{{item.appId}}</td>
+                <td><a>{{item.orgName}}</a></td>
+                <td *ngIf='type===2'>{{item.orgType}}</td>
+                <td *ngIf='type===2'>{{item.createTime | xnDate: 'datetime' }}</td>
+              </tr>
+            </ng-container>
+          </tbody>
+        </table>
+      </div>
+      <xn-pagination [rows]="pageConfig.pageSize" [first]="pageConfig.first" [totalRecords]="pageConfig.total"
+        [pageSizeOptions]="[5,10,20,30,50,100]" (pageChange)="onPage($event)"></xn-pagination>
+    </div>
+    <ng-template #block>
+        <td colspan="11">
+          <div class="empty-message"></div>
+        </td>
+      </ng-template>
+  </modal-body>
+  <div class="modal-footer">
+    <button type="button" class="btn btn-default" (click)="oncancel()"
+      style="clear: both;float: right;margin-left: 30px; margin-right: 40px;">取消</button>
+    <button type="submit" class="btn btn-primary" style="float:right"
+      (click)="SureAddComp();$event.stopPropagation();">确定</button>
+
+  </div>
+
+
+</modal>

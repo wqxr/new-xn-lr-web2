@@ -1,0 +1,102 @@
+<modal #modal [backdrop]="'static'" [keyboard]="false" [animation]="false">
+  <modal-header [showClose]="false">
+    <h4 class="modal-title">{{pageTitle}}</h4>
+  </modal-header>
+  <modal-body style='padding:0px'>
+    <div>
+      <ul class="nav nav-tabs">
+        <li [ngClass]="{'active': calist[0]===true}" *ngIf='contractCALists?.length>0'>
+          <a class="xn-click-a" data-toggle="tab" (click)="handleClick(1)">SZCA签章列表</a>
+        </li>
+        <li [ngClass]="{'active': calist[1]===true}" *ngIf='contractCFCALists?.length>0'>
+          <a class="xn-click-a" data-toggle="tab" (click)="handleClick(2)">CFCA签章列表</a>
+        </li>
+      </ul>
+    </div>
+    <div class="form-group clearfix" [ngStyle]="{'display':calist[1]===true?'none':''}">
+      <!--左侧合同选择-->
+      <div class="col-sm-3 text-padding">
+        <div class="list-group list-group-position" *ngIf='contractCALists.length>0'>
+          <ng-container *ngFor="let item of contractCALists;let i=index">
+            <button type="button" href="javaScript:void (0)" class="list-group-item" (click)="switchView([item,i])"
+              [class.active]="activecaCode===i" [disabled]="activecaCode===i">
+              <i class="fa  fa-check-circle-o fa-2x" [class.fa-color]="item?.status===1"></i>
+              {{item?.label}}
+            </button>
+          </ng-container>
+        </div>
+        <div class="text-center">
+          <!--当所有合同都签署，即状态为1时-->
+          <button type="button" class="btn btn-default btn-block" (click)="contractSign()" [disabled]="invalid()">完成
+          </button>
+        </div>
+      </div>
+      <!--右侧合同签署-->
+      <div class="col-sm-9 text-padding" style="overflow: auto">
+        <h4 class="modal-title">PDF文件数字签章</h4>
+        <div #szca class="pdf-container">
+        </div>
+        <div>
+          <a href="https://www.lrscft.com/exe/lrscft-setup-1.0.2.exe">下载链融科技供应链服务平台桌面应用程序</a>
+        </div>
+        <!--查看合同-->
+        <button type="button" class="btn btn-default" (click)="onCancel()">{{cancelTitle}}</button>
+        <button type="button" *ngIf="isReadonly && isNoSignTitle" class="btn btn-success" (click)="contractSign()">
+          确定
+        </button>
+        <button type="button" class="btn btn-primary" (click)="onSave()">下载</button>
+        <ng-container *ngIf="!isReadonly">
+          <button type="button" class="btn btn-success" (click)="onOk()" *ngIf="!isProduction">同意签署（测试模式）</button>
+          <button type="button" class="btn btn-success" (click)="readContract()" [disabled]="ableClick">阅读并盖章
+          </button>
+        </ng-container>
+      </div>
+    </div>
+    <div class="form-group clearfix" [ngStyle]="{'display':calist[0]===true?'none':''}">
+      <!--左侧合同选择-->
+      <div class="col-sm-3 text-padding">
+        <div class="list-group list-group-position">
+          <ng-container *ngFor="let item of contractCFCALists;let i=index">
+            <button type="button" href="javaScript:void (0)" class="list-group-item" (click)="cfcaswitchView([item,i])"
+              [class.active]="activecfcaCode===i" [disabled]="activecfcaCode===i">
+              <i class="fa  fa-check-circle-o fa-2x" [class.fa-color]="item?.status===1"></i>
+              {{item?.label}}
+            </button>
+          </ng-container>
+        </div>
+        <div class="text-center">
+          <!--当所有合同都签署，即状态为1时-->
+          <button type="button" class="btn btn-default btn-block" (click)="contractSign()" [disabled]="cfcainvalid()">完成
+          </button>
+        </div>
+      </div>
+      <!--右侧合同签署-->
+      <div class="col-sm-9 text-padding" style="overflow: auto">
+        <h4 class="modal-title">PDF文件数字签章</h4>
+        <div class="display-content">
+
+        <div class="pdf-container" style='overflow-y: scroll;' id="thisCanvas1">
+          <!-- <canvas class="this-pdf" id="thisCanvas"></canvas> -->
+        </div>
+        </div>
+
+        <div>
+          <a href="https://www.lrscft.com/exe/lrscft-setup-1.0.2.exe">下载链融科技供应链服务平台桌面应用程序</a>
+        </div>
+        <!--查看合同-->
+        <button type="button" class="btn btn-default" (click)="onCancel()">{{cancelTitle}}</button>
+        <button type="button" *ngIf="isReadonly && isNoSignTitle" class="btn btn-success" (click)="contractSign()">
+          确定
+        </button>
+        <button type="button" class="btn btn-primary" (click)="onSave()">下载</button>
+        <ng-container *ngIf="!isReadonly">
+          <button type="button" class="btn btn-success" (click)="onOk()" *ngIf="!isProduction">同意签署（测试模式）</button>
+          <button type="button" class="btn btn-success" (click)="cfcareadContract()" [disabled]="ableClick">阅读并盖章
+          </button>
+        </ng-container>
+      </div>
+
+
+    </div>
+  </modal-body>
+</modal>

@@ -1,0 +1,38 @@
+<ng-container *ngIf="type===1">
+  <div class="form-group">
+    <div class="col-sm-3 xn-control-label">
+      备注
+    </div>
+    <div class="col-sm-6">
+      <xn-show-input [memo]="data"></xn-show-input>
+    </div>
+    <div class="col-sm-3 xn-control-desc">
+    </div>
+  </div>
+</ng-container>
+<ng-container *ngIf="type===2">
+  <div class="form-group">
+    <div class="col-sm-3 xn-control-label">
+      经办意见
+    </div>
+    <div class="col-sm-6">
+      <textarea rows="5" class="form-control xn-show-input-textarea xn-input-font xn-input-border-radius" readonly>
+        {{data.operatorName}}在{{data.operatorTime | xnDate}}经办{{data.operatorMemo}}
+      </textarea>
+    </div>
+    <div class="col-sm-3 xn-control-desc">
+    </div>
+  </div>
+  <div class="form-group">
+    <div class="col-sm-3 xn-control-label">
+      复核意见
+    </div>
+    <div class="col-sm-6">
+      <textarea rows="5" class="form-control xn-show-input-textarea xn-input-font xn-input-border-radius" readonly>
+        {{data.reviewerName}}在{{data.reviewerTime | xnDate}}复核 {{data.reviewerMemo}}
+      </textarea>
+    </div>
+    <div class="col-sm-3 xn-control-desc">
+    </div>
+  </div>
+</ng-container>

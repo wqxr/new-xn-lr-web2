@@ -1,0 +1,101 @@
+<div class="box no-top box-zichan">
+  <div class="number-money-record" *ngIf="!showRecord">
+    <div class="record-box">
+      <div class="arrow arrow-left" [ngClass]="onArrowCss('left')" (click)="prevPage()"></div>
+      <div class="record-ul">
+        <div class="record-li" *ngFor="let asset of pageAssets; let i = index">
+          <div class="asset-wrap" [ngClass]="onCss(i)" (click)="onClick(i)">
+            <div class="asset-name" (click)="onSearch(asset.contractNumber);$event.stopPropagation();">{{asset.contractNumber}}（查询）</div>
+            <div class="asset-code-wrap">
+              <div class="asset-code-tit-wrap clear">
+                <h1 class="asset-code-tit">产品名</h1>
+                <div class="asset-code-time">{{asset.name}}</div>
+              </div>
+              <div class="asset-code-tit-wrap clear">
+                <h1 class="asset-code-tit">订单总金额</h1>
+                <div class="asset-code-time">{{asset.amount}}</div>
+              </div>
+              <!-- <div class="asset-code-tit-wrap clear">
+                <h1 class="asset-code-tit">订单总金额</h1>
+                <div class="asset-code-time">{{asset.specification}}</div>
+              </div> -->
+              <div class="asset-code">
+                <h1 class="asset-code-tit">规格型号</h1>
+                <div class="asset-code-time">{{asset.specification}}</div>
+              </div>
+            </div>
+            <div class="asset-info-wrap">
+              <div class="asset-info-group">
+                <h2 class="asset-info-tit">数量
+                  <span class="assetUnit">({{asset.unit}})</span>
+                </h2>
+                <div class="asset-info-content">{{asset.quantity}}</div>
+              </div>
+              <div class="asset-info-group asset-info-group-trade">
+                <h2 class="asset-info-tit">金额</h2>
+                <div class="asset-info-content asset-info-trade">
+                  {{asset.price}}
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="arrow arrow-right" [ngClass]="onArrowCss('right')" (click)="nextPage()"></div>
+    </div>
+
+    <div class="record-line" *ngFor="let log of nowAsset.stockObjs">
+      <div *ngIf="log.comType === 'stockIn'">
+        <div class="record-title">
+          <span class="number">{{log.comType | xnStock}}</span>
+        </div>
+        <div class="record-message">
+          <p class="change-text">入仓ID：{{log.nowStorehouse.stockInID}}</p>
+          <p class="change-text">入仓人：{{log.nowStorehouse.stockInUser}}</p>
+          <p class="change-text">入仓人联系方式：{{log.nowStorehouse.stockInUserContact}}</p>
+          <p class="change-text">仓库名称：{{log.nowStorehouse.storageName}}</p>
+          <p class="change-text">仓库地址：{{log.nowStorehouse.storageAddress}}</p>
+          <p class="change-text">仓库类型：{{log.nowStorehouse.storageType | xnStorageType}}</p>
+          <p class="change-time">入仓时间: {{log.nowStorehouse.stockInTime | xnDate: 'date'}}</p>
+        </div>
+      </div>
+      <div *ngIf="log.comType === 'stockMove'">
+        <div class="record-title">
+          <span class="number">{{log.comType | xnStock}}</span>
+        </div>
+        <div class="record-message">
+          <p class="change-text">出仓ID：{{log.nowStorehouse.stockOutID}}</p>
+          <p class="change-text">出仓人：{{log.nowStorehouse.stockOutUser}}</p>
+          <p class="change-text">出仓人联系方式：{{log.nowStorehouse.stockOutUserContact}}</p>
+          <p class="change-text">仓库名称：{{log.nowStorehouse.storageName}}</p>
+          <p class="change-text">仓库地址：{{log.nowStorehouse.storageAddress}}</p>
+          <p class="change-text">仓库类型：{{log.nowStorehouse.storageType | xnStorageType}}</p>
+          <p class="change-time">出仓时间: {{log.nowStorehouse.stockOutTime | xnDate: 'date'}}</p>
+
+          <p class="change-text">入仓ID：{{log.nextStorehouse.stockInID}}</p>
+          <p class="change-text">入仓人：{{log.nextStorehouse.stockInUser}}</p>
+          <p class="change-text">入仓人联系方式：{{log.nextStorehouse.stockInUserContact}}</p>
+          <p class="change-text">仓库名称：{{log.nextStorehouse.storageName}}</p>
+          <p class="change-text">仓库地址：{{log.nextStorehouse.storageAddress}}</p>
+          <p class="change-text">仓库类型：{{log.nextStorehouse.storageType | xnStorageType}}</p>
+          <p class="change-time">入仓时间: {{log.nextStorehouse.stockInTime | xnDate: 'date'}}</p>
+        </div>
+      </div>
+      <div *ngIf="log.comType === 'stockOut'">
+        <div class="record-title">
+          <span class="number">{{log.comType | xnStock}}</span>
+        </div>
+        <div class="record-message">
+          <p class="change-text">出仓ID：{{log.nowStorehouse.stockOutID}}</p>
+          <p class="change-text">出仓人：{{log.nowStorehouse.stockOutUser}}</p>
+          <p class="change-text">出仓人联系方式：{{log.nowStorehouse.stockOutUserContact}}</p>
+          <p class="change-text">仓库名称：{{log.nowStorehouse.storageName}}</p>
+          <p class="change-text">仓库地址：{{log.nowStorehouse.storageAddress}}</p>
+          <p class="change-text">仓库类型：{{log.nowStorehouse.storageType | xnStorageType}}</p>
+          <p class="change-time">出仓时间: {{log.nowStorehouse.stockOutTime | xnDate: 'date'}}</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</div>

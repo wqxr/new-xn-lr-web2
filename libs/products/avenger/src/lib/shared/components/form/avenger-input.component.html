@@ -1,0 +1,63 @@
+<div *ngIf="isShowSwitchForm; else dynamic">
+  <ng-container [ngSwitch]="row['type']">
+    <!--沿用以前的-->
+    <xn-textarea-input
+      *ngSwitchCase="'textarea'"
+      [row]="row"
+      [form]="form"
+    ></xn-textarea-input>
+    <xn-quantum-input
+      *ngSwitchCase="'quantum'"
+      [row]="row"
+      [form]="form"
+    ></xn-quantum-input>
+    <xn-quantum1-input
+      *ngSwitchCase="'quantum1'"
+      [row]="row"
+      [form]="form"
+    ></xn-quantum1-input>
+    <!--new-->
+    <xn-avenger-text-input-component
+      *ngSwitchCase="'text'"
+      [row]="row"
+      [form]="form"
+    ></xn-avenger-text-input-component>
+
+    <xn-avenger-text-id-component *ngSwitchCase="'text-id'" [row]="row" [form]="form"></xn-avenger-text-id-component>
+    <xn-avenger-fee-info-component *ngSwitchCase="'fee-info'" [row]="row" [form]="form"></xn-avenger-fee-info-component>
+
+    <!--  资产负债表-->
+    <xn-assets-table-input-component
+      *ngSwitchCase="'assets'"
+      [row]="row"
+      [form]="form"
+    ></xn-assets-table-input-component>
+    <!--  现金流量/利润-->
+    <xn-cash-table-input-component
+      *ngSwitchCase="'cash'"
+      [row]="row"
+      [form]="form"
+    ></xn-cash-table-input-component>
+    <xn-profit-table-input-component
+      *ngSwitchCase="'profit'"
+      [row]="row"
+      [form]="form"
+    ></xn-profit-table-input-component>
+    <!--上传报表  -->
+    <xn-upload-table-input-component
+      *ngSwitchCase="'upload-table'"
+      [row]="row"
+      [form]="form"
+    >
+    </xn-upload-table-input-component>
+  </ng-container>
+</div>
+
+<ng-template #dynamic>
+  <app-dynamic-input
+    [row]="row"
+    [form]="form"
+    [svrConfig]="svrConfig"
+    formModule="avenger-input"
+  ></app-dynamic-input>
+</ng-template>

@@ -1,0 +1,109 @@
+<modal #modal [backdrop]="'static'" [keyboard]="false" [animation]="false" (onDismiss)="oncancel()">
+  <modal-header [showClose]="true" style='text-align:left'>
+    <div style="font-weight: bold;">选择</div>
+  </modal-header>
+  <modal-body style="padding-top: 5px;">
+    <div style='display: flex;'>
+      <!-- 待选择规则 -->
+      <div class="bd-left" style="margin-right: 5px;flex: 1;">
+        <div class="left-hd" style="display: flex;justify-content: space-between;padding: 5px;">
+          <div style="font-weight: bold;">请选择:</div>
+          <div><input class="form-control" type="text" placeholder="搜索 规则名称" [(ngModel)]="ruleName" (blur)='searchRouleName($event)'></div>
+        </div>
+        <!-- 待选择规则列表 -->
+        <div style="padding: 5px" class="row form-group">
+          <div class="col-sm-12">
+            <div class="height">
+              <div class="head-height table-head">
+                <table class="table table-bordered table-hover text-center table-display relative" style='width:100%'>
+                  <thead style='width:99%'>
+                    <tr>
+                      <th class="input-check" style="width: 50px;">
+                        <input type="checkbox" style="cursor: pointer;" name="all" [checked]="isAllChecked()" [disabled]="!moduleList.length"
+                          (change)="checkAll()" />
+                      </th>
+                      <th style="width: 200px;">规则编号</th>
+                      <th>规则名称</th>
+                    </tr>
+                  </thead>
+                </table>
+              </div>
+              <div class="table-height">
+                <table class="table table-bordered table-hover text-center table-display" style='width:100%'>
+                  <tbody style='width:100%'>
+                    <ng-container *ngIf="moduleList.length;else block1">
+                      <tr *ngFor='let item of moduleList;let i=index'>
+                        <td style="width: 50px;">
+                          <input type="checkbox" style="cursor: pointer;" name="single" [checked]="item['checked']"
+                            (change)="singleChecked(item,i)" />
+                        </td>
+                        <td style="width: 200px;">{{item.ruleNum}}</td>
+                        <td>{{item.ruleName}}</td>
+                      </tr>
+                    </ng-container>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 已选择规则 -->
+      <div class="bd-right" style="flex: 1;">
+        <div class="left-hd">
+          <div style="font-weight: bold;">已选:{{showRuleList.length}}个<span style="color: #ccc;">(拖动可对规则排序)</span></div>
+          <div style="color: #cc0000;cursor: pointer;" (click)="clearRuleList()">清空所有已选</div>
+        </div>
+        <div style="padding: 5px" class="row form-group">
+          <div class="col-sm-12">
+            <div class="height">
+              <div class="head-height table-head">
+                <table class="table table-bordered table-hover text-center table-display relative" style='width:100%'>
+                  <thead style='width:99%'>
+                    <tr>
+                      <th style="width: 200px;">规则编号</th>
+                      <th>规则名称</th>
+                    </tr>
+                  </thead>
+                </table>
+              </div>
+              <div class="table-height">
+                <table class="table table-bordered table-hover text-center table-display" style='width:100%' [sortablejs]='showRuleList'>
+                  <tbody style='width:100%' [sortablejs]='showRuleList' [sortablejsOptions]="{store:{get:getData(),set:setData()}}">
+                    <ng-container *ngIf="showRuleList.length;else block2">
+                      <tr *ngFor='let item of showRuleList;let i=index'>
+                        <td style="width: 200px;">{{item.ruleNum}}</td>
+                        <td>{{item.ruleName}}</td>
+                      </tr>
+                    </ng-container>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </modal-body>
+  <modal-footer style="border-top: none;">
+    <button type="button" class="btn btn-default" (click)="oncancel()">取消</button>
+    <button type="button" class="btn btn-primary" (click)="onOk()">确定</button>
+  </modal-footer>
+</modal>
+
+<ng-template #block1>
+  <tr>
+    <td [attr.colspan]="3">
+      <div class="empty-message"></div>
+    </td>
+  </tr>
+</ng-template>
+<ng-template #block2>
+  <tr>
+    <td [attr.colspan]="2">
+      <div class="empty-message"></div>
+    </td>
+  </tr>
+</ng-template>

@@ -1,0 +1,29 @@
+<modal #modal [backdrop]="'static'" [keyboard]="false" [animation]="false" (onDismiss)="onOk()">
+  <form class="form-horizontal">
+  <modal-header [showClose]="true">
+    <h4 class="modal-title">管理员转移</h4>
+  </modal-header>
+  <modal-body>
+          <!-- <div class="panel-body">
+            确定将管理员转移至该用户：{{ userName }}
+          </div> -->
+          <div class="form-group" *ngFor="let row of rows">
+            <div class="col-sm-3 xn-control-label"
+                 [class.required-star]="row.required !== false && row.required !== 0">
+                {{row.title}}
+            </div>
+            <div class="col-sm-6">
+                <xn-input [row]="row" [form]="mainForm"></xn-input>
+            </div>
+            <div class="col-sm-3 xn-control-desc">
+                {{row.memo}}
+            </div>
+          <!-- /.panel-body -->
+        </div>
+        <!-- /.panel -->
+  </modal-body>
+  <modal-footer>
+    <button type="button" class="btn btn-danger" (click)="onSubmit()">确定转移</button>
+  </modal-footer>
+  </form>
+</modal>

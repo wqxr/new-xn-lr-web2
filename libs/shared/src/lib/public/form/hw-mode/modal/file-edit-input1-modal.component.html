@@ -1,0 +1,104 @@
+<modal #modal [backdrop]="'static'" [keyboard]="false" [animation]="false">
+  <modal-body>
+    <div class="flex-row">
+      <!-- 左侧 -->
+      <div class="this-left">
+        <div class="contract-info">
+          <div class="this-title">
+            <div class="this-text">
+              {{params?.title.accountNameTitle}}<span *ngIf="params?.edit.required===1" class="required-label">*</span>
+            </div>
+            <div class="this-control">
+              <input class="form-control xn-input-border-radius" [(ngModel)]="entry.accountName" type="text"
+                     [disabled]="!params?.edit.accountNameBool">
+            </div>
+          </div>
+
+          <div class="this-title">
+            <div class="this-text">
+              {{params?.title.accountNumberTitle}}<span *ngIf="params?.edit.required===1" class="required-label">*</span>
+            </div>
+            <div class="this-control">
+              <!--可输入选项框-->
+              <div class="select-editable">
+                <select class="form-control xn-input-font" (change)="onChange($event)"
+                        [disabled]="!params?.edit.accountNumberBool">
+                  <option value="">请选择</option>
+                  <option *ngFor="let option of bankCardItem" value="{{option.value}}">{{option.label}}</option>
+                </select>
+                <input placeholder="请选择" type="text" (input)="handleInput($event)"
+                       class="form-control xn-input-font xn-input-border-radius"
+                       name="inputValue" [value]="entry.accountNumber" [disabled]="!params?.edit.accountNumberBool">
+              </div>
+            </div>
+          </div>
+          <div class="this-title">
+            <div class="this-text">
+              {{params?.title.bankNameTitle}}<span *ngIf="params?.edit.required===1" class="required-label">*</span>
+            </div>
+            <div class="this-control">
+              <input class="form-control xn-input-border-radius" [(ngModel)]="entry.bankName" type="text"
+                     [disabled]="!params?.edit.bankNameBool">
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 右侧 -->
+      <div class="this-right">
+        <ng-container  *ngIf="fileType === 'img'">
+          <div class="img-container" #imgContainer>
+            <div #outerImg>
+              <img #innerImg class="this-img" src="{{fileSrc}}" *ngIf="!!fileSrc">
+            </div>
+          </div>
+        </ng-container>
+
+        <ng-container *ngIf="fileType === 'pdf'">
+          <div class="pdf-container">
+            <canvas class="this-pdf"  id="thisCanvas"></canvas>
+          </div>
+        </ng-container>
+      </div>
+
+    </div>
+
+  </modal-body>
+  <div class="modal-footer">
+    <div class="clearfix">
+      <div class="button-group">
+        <ng-container *ngIf="params?.edit.operating==='edit'">
+          <button type="button" class="btn btn-default" (click)="onCancel()">取消</button>
+          <!--下载所有文件-->
+          <button type="button" class="btn btn-primary" *ngIf="params?.edit.canSave" (click)="download()">下载</button>
+          <!--保存所有图片-->
+          <button type="button" class="btn btn-primary" *ngIf="params?.edit.canSave" (click)="savePic()">保存图片</button>
+          <button type="button" class="btn btn-danger" (click)="onOk()" [disabled]="!isValid()">提交信息</button>
+        </ng-container>
+        <ng-container *ngIf="params?.edit.operating==='view'">
+          <button type="button" class="btn btn-primary">保存图片</button>
+          <button type="button" class="btn btn-danger" (click)="onCancel()">关闭</button>
+        </ng-container>
+      </div>
+      <div class="button-group">
+        <button id="left" type="button" class="btn btn-sm btn-default" (click)="rotateImg('left')">左旋
+          <i class="fa  fa-undo"></i></button>
+        <button id="right" type="button" class="btn btn-sm btn-default" (click)="rotateImg('right')">右旋
+          <i class="fa fa-repeat"></i></button>
+        <button id="large" type="button" class="btn btn-sm btn-default" (click)="scaleImg('large')">放大<i
+          class="fa fa-search-plus"></i></button>
+        <button id="small" type="button" class="btn btn-sm btn-default" (click)="scaleImg('small')">缩小<i
+          class="fa fa-search-minus"></i></button>
+        <!--文件为pdf时显示-->
+        <ng-container *ngIf="fileType === 'pdf'">
+          <button id="prev" type="button" class="btn btn-sm btn-primary">上一页</button>
+          <button id="next" type="button" class="btn btn-sm btn-primary">下一页</button>
+          <span>页码: <span id="page_num">加载中</span> / <span id="page_count">加载中</span></span>
+        </ng-container>
+      </div>
+      <div class="page">
+        <xn-page [total]="total" [size]="pageSize" [showTotal]="false" (change)="onPage($event)"></xn-page>
+      </div>
+    </div>
+  </div>
+</modal>

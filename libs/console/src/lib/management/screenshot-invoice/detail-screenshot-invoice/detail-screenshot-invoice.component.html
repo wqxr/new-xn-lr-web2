@@ -1,0 +1,73 @@
+<section class="content-header">
+  <h1 style="display: inline-block">批量获取发票截图</h1>
+</section>
+<section class="content">
+  <div class="box">
+    <div class="box-body">
+      <div class="tab-content">
+        <div class="tab-pane active" style="padding: 15px 0">
+          <!-- 搜索项 -->
+          <xn-search-form #searchForm [fields]="showFields" (search)="onSearch($event)" (reset)="onReset(searchForm)">
+          </xn-search-form>
+          <div>
+            <nz-divider nzDashed></nz-divider>
+          </div>
+          <div style="display: flex;margin-bottom: 10px;">
+            <div style='margin-right:10px'>
+              <button nz-button nzType="primary" (click)="exportDatalist()">导出</button>
+            </div>
+            <div>
+              <button nz-button nzType="primary" (click)="retryFail()">失败任务重试</button>
+            </div>
+          </div>
+
+          <xn-table #reviewTable [data]="listInfo" [columns]="columns" [size]="'middle'" [loading]="loading"
+            [scroll]="{ y: '400px' }" [page]="{
+              front: false,
+              total: '共'+pageConfig.total+'条记录',
+              showQuickJumper: true,
+              showSize: true,
+              pageSizes: [5, 10, 20, 30, 50, 100,200]
+            }" [size]="'middle'" [widthMode]="{
+              type: 'strict',
+              strictBehavior: 'truncate'
+            }" [total]="pageConfig.total" [pageIndex]="pageConfig.pageIndex" [pageSize]="pageConfig.pageSize"
+            (change)="handleTableChange($event, searchForm)">
+            <!-- 注册状态 -->
+            <ng-template xn-table-row="statusTpl" let-item let-column="column">
+              {{ item[column.index] | xnSelectTransform: 'screenshotStatus'}}
+            </ng-template>
+            <ng-template xn-table-row="checkStatus" let-item let-column="column">
+              {{ item[column.index] | xnSelectTransform: 'screenshotInvoiceCheck'}}
+            </ng-template>
+            <!--交易ID-->
+            <ng-template xn-table-row="mainFlowIdTpl" let-item let-index="index" let-column="column">
+              <a href="javaScript:void(0)" (click)="
+                  hwModeService.viewProcess(item[column.index])
+                ">{{ item[column.index] }}</a>
+            </ng-template>
+            <!-- 日期 -->
+            <ng-template xn-table-row="dateTpl" let-item let-column="column">
+              <ng-container *ngIf="item[column.index]">
+                {{ item[column.index] | xnDate:'date'}}
+              </ng-container>
+            </ng-template>
+            <ng-template xn-table-row="dateTimeTpl" let-item let-index="index" let-column="column">
+              {{ item[column.index] | xnDate: "datetime" }}
+            </ng-template>
+            <ng-template xn-table-row="file" let-item let-column="column">
+              <ng-container *ngIf="item[column.index]">
+                <a href="javaScript:void(0)" (click)="
+                  viewFiles(item.invoiceFile)
+                ">{{ item[column.index] }}</a>
+              </ng-container>
+            </ng-template>
+          </xn-table>
+          <div style='text-align: right;'>
+            <button nz-button nzType="primary" (click)="comeBack()">返回</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>

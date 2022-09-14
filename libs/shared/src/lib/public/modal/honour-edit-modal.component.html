@@ -1,0 +1,96 @@
+<modal #modal [backdrop]="'static'" [keyboard]="false" [animation]="false">
+  <modal-header [showClose]="false">
+    <h4 class="modal-title">补充商票信息</h4>
+  </modal-header>
+  <modal-body>
+    <!-- 商票号码 商票金额 -->
+    <div class="edit-content">
+      <div class="flex-row">
+        <div class="this-title"><span class="required-label">*</span>商票号码</div>
+        <div class="this-padding this-flex-1">
+          <input class="form-control xn-input-border-radius" [(ngModel)]="honourNum" type="text" readonly>
+        </div>
+        <div class="this-title"><span class="required-label">*</span>商票金额</div>
+        <div class="this-padding this-flex-1">
+          <input #moneyInput class="form-control xn-input-border-radius" required type="text" placeholder="单位: 元人民币" (input)="onInput()">
+          <div class="this-control">
+            <span class="xn-money-alert" #moneyAlertRef>{{moneyAlert}}</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- 出票日期 到期日期 -->
+      <div class="flex-row">
+        <div class="this-title"><span class="required-label">*</span>出票日期</div>
+        <div class="this-padding this-flex-1">
+          <input class="form-control xn-input-border-radius" #dateStartInput [(ngModel)]="honourDate" type="text" placeholder="格式: 20170731" (change)="onDateStartInput()">
+          <div class="this-control">
+            <span class="xn-input-alert">{{dateStartAlert}}</span>
+          </div>
+        </div>
+        <div class="this-title"><span class="required-label">*</span>到期日期</div>
+        <div class="this-padding this-flex-1">
+          <input class="form-control xn-input-border-radius" #dateEndInput [(ngModel)]="dueDate" type="text" placeholder="格式: 20170731" (change)="onDateEndInput()">
+          <div class="this-control">
+            <span class="xn-input-alert">{{dateEndAlert}}</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- 商票承兑人 承兑行行号 -->
+      <div class="flex-row">
+        <div class="this-title"><span class="required-label">*</span>商票承兑人</div>
+        <div class="this-padding this-flex-1">
+          <input class="form-control xn-input-border-radius" #honourMan [(ngModel)]="acceptorName" type="text">
+        </div>
+        <div class="this-title"><span class="required-label">*</span>承兑行行号</div>
+        <div class="this-padding this-flex-1">
+          <input class="form-control xn-input-border-radius" #honourNo [(ngModel)]="honourBankNum" type="text">
+        </div>
+      </div>
+
+      <!-- 保理到期日 -->
+      <div class="flex-row">
+        <div class="this-title"><span class="required-label">*</span>保理到期日</div>
+        <div class="this-padding this-flex-1">
+          <input class="form-control xn-input-border-radius col-sm-6" #factoringEndInput [(ngModel)]="factoringDate" type="text" placeholder="格式: 20170731" (change)="onFactoringEndInput()" (input)="computeDay()">
+          <div class="this-control">
+            <span class="xn-input-alert">{{factoringEndAlert}}</span>
+          </div>
+          <div class="this-control">
+            <span class="xn-holiday-alert">{{holidayAlert}}</span>
+          </div>
+        </div>
+        <div class="this-title"></div>
+        <div class="this-padding this-flex-1">
+          <!-- 保持对齐 -->
+        </div>
+      </div>
+      <!-- 商票图片 -->
+      <div class="edit-content-flex text-center">
+        <div class="img-container" #imgContainer>
+          <div class="img-wrapper" #outerImg>
+            <img #innerImg class="this-img" src="{{imgSrc}}" *ngIf="!!imgSrc">
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </modal-body>
+  <modal-footer>
+    <div class="clearfix">
+      <div class="button-group">
+        <button id="left" type="button" class="btn btn-sm btn-default" (click)="rotateImg('left')">左旋
+          <i class="fa  fa-undo"></i></button>
+        <button id="right" type="button" class="btn btn-sm btn-default" (click)="rotateImg('right')">右旋
+          <i class="fa fa-repeat"></i></button>
+        <button id="large" type="button" class="btn btn-sm btn-default" (click)="scaleImg('large')">放大<i
+          class="fa fa-search-plus"></i></button>
+        <button id="small" type="button" class="btn btn-sm btn-default" (click)="scaleImg('small')">缩小<i
+          class="fa fa-search-minus"></i></button>
+        <button type="button" class="btn  btn-default" (click)="onCancel()">取消</button>
+        <button type="submit" class="btn  btn-success" (click)="onOk()" [disabled]="!isValid()">提交信息</button>
+      </div>
+    </div>
+  </modal-footer>
+</modal>

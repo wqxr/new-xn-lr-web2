@@ -1,0 +1,45 @@
+<modal #modal [backdrop]="'static'" [keyboard]="false" [animation]="false">
+  <modal-header [showClose]="false">
+    <h4 class="modal-title">合同签署</h4>
+  </modal-header>
+  <modal-body>
+    <div class="row">
+      <!--左侧合同选择-->
+      <div class="col-sm-3 text-padding">
+        <div class="list-group">
+          <ng-container *ngFor="let item of contractLists;let i=index">
+            <button type="button" href="javaScript:void (0)" class="list-group-item" (click)="switchView(item,i)" [class.active]="acticeCode===i" [disabled]="ableClick">
+              <i class="fa  fa-check-circle-o fa-2x" [class.fa-color]="item?.status===1"></i>
+              {{item?.label}}
+            </button>
+          </ng-container>
+        </div>
+        <div class="text-center">
+          <!--当所有合同都签署，即状态为1时-->
+          <button type="button" class="btn btn-default" (click)="contractSign()" [disabled]="invalid()">完成</button>
+        </div>
+      </div>
+      <!--右侧合同签署-->
+      <div class="col-sm-9 text-padding" style="overflow-y: auto">
+        <h4 class="modal-title">PDF文件数字签章</h4>
+        <div>
+          <div #szca class="pdf-container">
+          </div>
+        </div>
+
+        <div>
+          <div>
+            <a href="https://www.lrscft.com/exe/lrscft-setup-1.0.2.exe">下载链融科技供应链服务平台桌面应用程序</a>            
+          </div>
+          <div>
+            <button type="button" class="btn btn-default" (click)="onCancel()">取消</button>
+            <ng-container *ngIf="isReadonly">
+              <button type="button" class="btn btn-success" (click)="offline()">线下签署</button>
+              <button type="button" class="btn btn-success" (click)="online()">线上签署</button>
+            </ng-container>
+          </div>
+        </div>
+      </div>
+    </div>
+  </modal-body>
+</modal>

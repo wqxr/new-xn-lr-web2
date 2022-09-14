@@ -1,0 +1,204 @@
+<!--工商信息-->
+<div class="deal">
+  <div class="title">工商信息</div>
+  <table class="table table-bordered table-striped table-max">
+    <tbody>
+    <tr>
+      <td class="label-text">法定代表人信息：</td>
+      <td colspan="3" class="label-value">{{customerInfo.OperName| xnText}}</td>
+    </tr>
+    <tr>
+      <td class="label-text">注册资本：</td>
+      <td class="label-value">{{customerInfo.RegistCapi| xnText}}</td>
+      <td class="label-text">实缴资本：</td>
+      <td class="label-value">{{customerInfo?.RelRegistCapi| xnText}}</td>
+    </tr>
+    <tr>
+      <td class="label-text">经营状态：</td>
+      <td class="label-value">{{customerInfo.Status| xnText}}</td>
+      <td class="label-text">成立日期：</td>
+      <td class="label-value">{{customerInfo.StartDate| xnText : 'date'}}</td>
+    </tr>
+    <tr>
+      <td class="label-text">注册号：</td>
+      <td class="label-value">{{customerInfo.No| xnText}}</td>
+      <td class="label-text">组织机构代码：</td>
+      <td class="label-value">{{customerInfo.OrgNo| xnText}}</td>
+    </tr>
+    <tr>
+      <td class="label-text">纳税人识别号：</td>
+      <td class="label-value">{{customerInfo?.CreditCode| xnText}}</td>
+      <td class="label-text">统一社会信用代码：</td>
+      <td class="label-value">{{customerInfo.CreditCode| xnText}}</td>
+    </tr>
+    <tr>
+      <td class="label-text">公司类型：</td>
+      <td class="label-value">{{customerInfo.EconKind| xnText}}</td>
+      <td class="label-text">所属行业：</td>
+      <td class="label-value">{{customerInfo?.industry| xnText}}</td>
+    </tr>
+    <tr>
+      <td class="label-text">核准日期：</td>
+      <td class="label-value">{{customerInfo?.UpdatedDate| xnText :'date'}}</td>
+      <td class="label-text">登记机关：</td>
+      <td class="label-value">{{customerInfo.BelongOrg| xnText}}</td>
+    </tr>
+    <tr>
+      <td class="label-text">所属地区：</td>
+      <td class="label-value">{{customerInfo?.area| xnText}}</td>
+      <td class="label-text">英文名：</td>
+      <td class="label-value">{{customerInfo?.enName| xnText}}</td>
+    </tr>
+    <tr>
+      <td class="label-text">曾用名：</td>
+      <td class="label-value">{{customerInfo?.onceName| xnText}}</td>
+      <td class="label-text">经营方式：</td>
+      <td class="label-value">{{customerInfo?.bussinessModes| xnText}}</td>
+    </tr>
+    <tr>
+      <td class="label-text">人员规模：</td>
+      <td class="label-value">{{customerInfo?.staffSize | xnText}}</td>
+      <td class="label-text">营业期限：</td>
+      <td class="label-value">
+        {{(customerInfo?.TermStart | xnText:'date') +' - '+ (customerInfo?.TeamEnd | xnText :'date')}}
+      </td>
+    </tr>
+    <tr>
+      <td class="label-text">企业地址</td>
+      <td colspan="3">{{customerInfo.Address | xnText}}</td>
+    </tr>
+    <tr>
+      <td class="label-text">经营规模</td>
+      <td colspan="3">{{customerInfo.Scope | xnText}}</td>
+    </tr>
+    </tbody>
+  </table>
+</div>
+<!--股东信息-->
+<div class="deal">
+  <div class="title">股东信息
+    <span *ngIf="customerInfo.Partners && customerInfo.Partners.length" class="number-color">{{customerInfo.Partners.length}}</span>
+  </div>
+  <table class="table table-bordered table-striped table-max text-center">
+    <thead>
+    <tr class="label-text">
+      <th>序号</th>
+      <th>股东</th>
+      <th>持股比例</th>
+      <th>认缴出资额（万元）</th>
+      <th>认缴出资日期</th>
+      <th>股东类型</th>
+    </tr>
+    </thead>
+    <tbody>
+    <ng-container *ngIf="customerInfo.Partners && customerInfo.Partners.length;else block1">
+      <tr *ngFor="let partner of customerInfo.Partners;let i=index">
+        <td>{{i+1}}</td>
+        <td>{{partner.StockName | xnText}}</td>
+        <td>{{partner.StockPercent | xnText}}</td>
+        <td>{{partner.ShouldCapi | xnText}}</td>
+        <td>{{partner.ShoudDate | xnText}}</td>
+        <td>{{partner.StockType | xnText}}</td>
+      </tr>
+    </ng-container>
+    <ng-template #block1>
+      <tr>
+        <td colspan="6">
+          <div class="empty-message"></div>
+        </td>
+      </tr>
+    </ng-template>
+    </tbody>
+  </table>
+</div>
+<!--股权结构-->
+<div class="deal">
+  <div class="title">关联企业列表</div>
+  <div>
+    自然人股东<span class="tip-box tip-bg1"></span>
+    企业股东<span class="tip-box tip-bg2"></span>
+  </div>
+  <div class="structure-list list-tip">
+    <a *ngIf="structureData.Count && structureData.Count>0" class="position-btn"
+       (click)="expand(structureData,'all')" [ngClass]="structureData.awesome" href="javaScript:void (0)"></a>
+    <div class="bold-title">{{structureData.Name}}</div>
+  </div>
+  <!--第一层-->
+  <div class="padding-box" *ngIf="structureData.expand">
+    <ng-container *ngIf="structureData.Children&& structureData.Children.length">
+      <ng-container *ngFor="let item of structureData.Children">
+        <div class="structure-list" [ngClass]="item.Category==='1'?'list-tip1':'list-tip2'">
+          <a *ngIf="item.Count && item.Count>0" class="position-btn" (click)="expand(item)" [ngClass]="item.awesome"
+             href="javaScript:void (0)"></a>
+          <div class="bold-title">{{item.Name}}</div>
+          <span>股权比例：<span class="text-color">{{item.FundedRatio}}</span></span>
+          <span>认缴金额：<span class="text-color">{{item.SubConAmt}}</span></span>
+        </div>
+        <!--第二层-->
+        <div class="padding-box" *ngIf="item.expand">
+          <ng-container *ngIf="item.Children&& item.Children.length">
+            <ng-container *ngFor="let sub of item.Children">
+              <div class="structure-list" [ngClass]="sub.Category==='1'?'list-tip1':'list-tip2'">
+                <a *ngIf="sub.Count && sub.Count>0" class="position-btn" (click)="expand(sub)" [ngClass]="sub.awesome"
+                   href="javaScript:void (0)"></a>
+                <div class="bold-title">{{sub.Name}}</div>
+                <span>股权比例：<span class="text-color">{{sub.FundedRatio}}</span></span>
+                <span>认缴金额：<span class="text-color">{{sub.SubConAmt}}</span></span>
+              </div>
+              <!--第三层-->
+              <div class="padding-box" *ngIf="sub.expand">
+                <ng-container *ngIf="sub.Children&& sub.Children.length">
+                  <ng-container *ngFor="let subItem of sub.Children">
+                    <div class="structure-list" [ngClass]="subItem.Category==='1'?'list-tip1':'list-tip2'">
+                      <a *ngIf="subItem.Count && subItem.Count>0" class="position-btn" (click)="expand(subItem)"
+                         [ngClass]="sub.awesome" href="javaScript:void (0)"></a>
+                      <div class="bold-title">{{subItem.Name}}</div>
+                      <span>股权比例：<span class="text-color">{{subItem.FundedRatio}}</span></span>
+                      <span>认缴金额：<span class="text-color">{{subItem.SubConAmt}}</span></span>
+                    </div>
+                    <!--第四层-->
+                    <div class="padding-box" *ngIf="subItem.expand">
+                      <ng-container *ngIf="subItem.Children&& subItem.Children.length">
+                        <ng-container *ngFor="let subChildrenItem of subItem.Children">
+                          <div class="structure-list"
+                               [ngClass]="subChildrenItem.Category==='1'?'list-tip1':'list-tip2'">
+                            <a *ngIf="subChildrenItem.Count && subChildrenItem.Count>0" class="position-btn"
+                               (click)="expand(subChildrenItem)" [ngClass]="sub.awesome" href="javaScript:void (0)"></a>
+                            <div class="bold-title">{{subChildrenItem.Name}}</div>
+                            <span>股权比例：<span class="text-color">{{subChildrenItem.FundedRatio}}</span></span>
+                            <span>认缴金额：<span class="text-color">{{subChildrenItem.SubConAmt}}</span></span>
+                          </div>
+                          <!--第五层-->
+                          <div class="padding-box" *ngIf="subChildrenItem.expand">
+                            <ng-container *ngIf="subChildrenItem.Children&& subChildrenItem.Children.length">
+                              <ng-container *ngFor="let minSubItem of subChildrenItem.Children">
+                                <div class="structure-list"
+                                     [ngClass]="subChildrenItem.Category==='1'?'list-tip1':'list-tip2'">
+                                  <a *ngIf="minSubItem.Count && minSubItem.Count>0" class="position-btn"
+                                     (click)="expand(minSubItem)" [ngClass]="minSubItem.awesome"
+                                     href="javaScript:void (0)"></a>
+                                  <div class="bold-title">{{minSubItem.Name}}</div>
+                                  <span>股权比例：<span class="text-color">{{minSubItem.FundedRatio}}</span></span>
+                                  <span>认缴金额：<span class="text-color">{{minSubItem.SubConAmt}}</span></span>
+                                </div>
+                              </ng-container>
+                            </ng-container>
+                          </div>
+                        </ng-container>
+                      </ng-container>
+                    </div>
+                  </ng-container>
+                </ng-container>
+              </div>
+            </ng-container>
+          </ng-container>
+        </div>
+      </ng-container>
+    </ng-container>
+  </div>
+</div>
+<!--企业族谱-->
+<div class="deal" [hidden]="true">
+  <div class="title">关联企业族谱</div>
+  <app-association-map-component></app-association-map-component>
+</div>

@@ -1,0 +1,595 @@
+<div class="text-right form-group">
+  <button type="button" class="btn btn-primary" (click)="saveInfo()">保存</button>
+</div>
+<table class="table table-bordered table-striped table-max text-center">
+  <thead>
+  <tr class="label-text">
+    <th>项目</th>
+    <th>编号</th>
+    <th>指标名称</th>
+    <th>指标内容</th>
+    <th>行业参考值</th>
+    <th>评分值</th>
+    <th>备注</th>
+  </tr>
+  </thead>
+  <tbody>
+  <tr>
+    <td rowspan="37">企业基本素质</td>
+    <td rowspan="2">1</td>
+    <td rowspan="2">股东</td>
+    <td rowspan="2">股东背景</td>
+    <td rowspan="2">
+      <input class="text-input form-control" type="text" name="stockHolderBackground"
+             [(ngModel)]="entry.stockHolderBackground">
+    </td>
+    <td rowspan="2">
+      <input class="text-input form-control" type="text" name="stockHolderBackgroundScore"
+             [(ngModel)]="entry.stockHolderBackgroundScore">
+    </td>
+    <td>股东的产业背景、经济实力、资信状况</td>
+  </tr>
+  <tr>
+    <td>控制与支持方式: 资金支持、人员委派等</td>
+  </tr>
+  <tr>
+    <td rowspan="4">2</td>
+    <td rowspan="4">人力资源素质</td>
+    <td>领导者素质</td>
+    <td>
+      <input class="text-input form-control" type="text" name="leadershipQuality" [(ngModel)]="entry.leadershipQuality">
+    </td>
+    <td>
+      <input class="text-input form-control" type="text" name="leadershipQualityScore"
+             [(ngModel)]="entry.leadershipQualityScore">
+    </td>
+    <td>行业经历，学识水平，决策能力，敬业精神，进取精神，信用意识及信用记录，社交背景，奖惩记录</td>
+  </tr>
+  <tr>
+    <td rowspan="2">高级经营管理人员素质</td>
+    <td rowspan="2">
+      <input class="text-input form-control" type="text" name="seniorManagementQuality" [(ngModel)]="entry.seniorManagementQuality">
+    </td>
+    <td rowspan="2">
+      <input class="text-input form-control" type="text" name="seniorManagementQuality"
+             [(ngModel)]="entry.seniorManagementQualityScore">
+    </td>
+    <td>专业经历，学识水平，敬业精神，进取精神，信用意识及信用记录</td>
+  </tr>
+  <tr>
+    <td>团队稳定性</td>
+  </tr>
+  <tr>
+    <td>从业人员素质</td>
+    <td>
+      <input class="text-input form-control" type="text" name="employeeQuality" [(ngModel)]="entry.employeeQuality">
+    </td>
+    <td>
+      <input class="text-input form-control" type="text" name="employeeQualityScore"
+             [(ngModel)]="entry.employeeQualityScore">
+    </td>
+    <td>文化素质，职业技能，队伍稳定性，职代会作用</td>
+  </tr>
+  <tr>
+    <td rowspan="22">3</td>
+    <td rowspan="22">经营管理素质</td>
+    <td rowspan="3">企业法人治理结构</td>
+    <td rowspan="3">
+      <input class="text-input form-control" type="text" name="corporateGovernanceStructure"
+             [(ngModel)]="entry.corporateGovernanceStructure">
+    </td>
+    <td rowspan="3">
+      <input class="text-input form-control" type="text" name="corporateGovernanceStructureScore"
+             [(ngModel)]="entry.corporateGovernanceStructureScore">
+    </td>
+    <td>股东大会、董事会、监事会、管理层的权责划分和约束与评价机制</td>
+  </tr>
+  <tr>
+    <td>企业组织结构合理性</td>
+  </tr>
+  <tr>
+    <td>关联关系分析</td>
+  </tr>
+  <tr>
+    <td rowspan="4">经营目标与目标管理</td>
+    <td rowspan="4">
+      <input class="text-input form-control" type="text" name="businessObjectives"
+             [(ngModel)]="entry.businessObjectives">
+    </td>
+    <td rowspan="4">
+      <input class="text-input form-control" type="text" name="businessObjectivesScore"
+             [(ngModel)]="entry.businessObjectivesScore">
+    </td>
+    <td>经营管理理念</td>
+  </tr>
+  <tr>
+    <td>历史经营业绩以及经营目标完成情况</td>
+  </tr>
+  <tr>
+    <td>经营总目标与实施保障措施</td>
+  </tr>
+  <tr>
+    <td>经营目标调整及应变机制</td>
+  </tr>
+  <tr>
+    <td rowspan="5">内部控制制度建设与实施</td>
+    <td rowspan="5">
+      <input class="text-input form-control" type="text" name="internalControlSystem"
+             [(ngModel)]="entry.internalControlSystem">
+    </td>
+    <td rowspan="5">
+      <input class="text-input form-control" type="text" name="internalControlSystemScore"
+             [(ngModel)]="entry.internalControlSystemScore">
+    </td>
+    <td>采购、生产、仓储物流、销售诸环节控制制度及实际运作效果评价</td>
+  </tr>
+  <tr>
+    <td>中高级经营管理人员的业绩考核与评价机制</td>
+  </tr>
+  <tr>
+    <td>有无重大法律诉讼</td>
+  </tr>
+  <tr>
+    <td>内控制度特别是重大决策事项的程序</td>
+  </tr>
+  <tr>
+    <td>管理信息系统运行状况</td>
+  </tr>
+  <tr>
+    <td rowspan="3">营销管理</td>
+    <td rowspan="3">
+      <input class="text-input form-control" type="text" name="salesManagement" [(ngModel)]="entry.salesManagement">
+    </td>
+    <td rowspan="3">
+      <input class="text-input form-control" type="text" name="salesManagementScore"
+             [(ngModel)]="entry.salesManagementScore">
+    </td>
+    <td>主要销售对象与方式</td>
+  </tr>
+  <tr>
+    <td>营销策略，重要销售活动的策划、运作和效果</td>
+  </tr>
+  <tr>
+    <td>主要原料（商品）来源稳定性及供应商的议价能力</td>
+  </tr>
+  <tr>
+    <td rowspan="2">融资管理</td>
+    <td rowspan="2">
+      <input class="text-input form-control" type="text" name="financingManagement"
+             [(ngModel)]="entry.financingManagement">
+    </td>
+    <td rowspan="2">
+      <input class="text-input form-control" type="text" name="financingManagementScore"
+             [(ngModel)]="entry.financingManagementScore">
+    </td>
+    <td>融资的策略、渠道和手段</td>
+  </tr>
+  <tr>
+    <td>融资风险的控制机制</td>
+  </tr>
+  <tr>
+    <td rowspan="2">投资管理</td>
+    <td rowspan="2">
+      <input class="text-input form-control" type="text" name="investmentManagement"
+             [(ngModel)]="entry.investmentManagement">
+    </td>
+    <td rowspan="2">
+      <input class="text-input form-control" type="text" name="investmentManagementScore"
+             [(ngModel)]="entry.investmentManagementScore">
+    </td>
+    <td>投资的策略、方向与收益情况</td>
+  </tr>
+  <tr>
+    <td>投资风险的控制机制</td>
+  </tr>
+  <tr>
+    <td rowspan="2">财务管理</td>
+    <td rowspan="2">
+      <input class="text-input form-control" type="text" name="financeManagement" [(ngModel)]="entry.financeManagement">
+    </td>
+    <td rowspan="2">
+      <input class="text-input form-control" type="text" name="financeManagementScore"
+             [(ngModel)]="entry.financeManagementScore">
+    </td>
+    <td>日常财务管理及会计核算</td>
+  </tr>
+  <tr>
+    <td>分支机构财务及资金管理与控制</td>
+  </tr>
+  <tr>
+    <td>企业信用记录</td>
+    <td>
+      <input class="text-input form-control" type="text" name="corporateCreditRecord"
+             [(ngModel)]="entry.corporateCreditRecord">
+    </td>
+    <td>
+      <input class="text-input form-control" type="text" name="corporateCreditRecordScore"
+             [(ngModel)]="entry.corporateCreditRecordScore">
+    </td>
+    <td>对企业信用记录情况的考察</td>
+  </tr>
+  <tr>
+    <td rowspan="9">4</td>
+    <td rowspan="9">竞争地位</td>
+    <td>品牌战略</td>
+    <td>
+      <input class="text-input form-control" type="text" name="brandStrategy" [(ngModel)]="entry.brandStrategy">
+    </td>
+    <td>
+      <input class="text-input form-control" type="text" name="brandStrategyScore"
+             [(ngModel)]="entry.brandStrategyScore">
+    </td>
+    <td>品牌知名度，知名品牌的权利维护</td>
+  </tr>
+  <tr>
+    <td rowspan="3">市场地位和份额</td>
+    <td rowspan="3">
+      <input class="text-input form-control" type="text" name="marketPosition" [(ngModel)]="entry.marketPosition">
+    </td>
+    <td rowspan="3">
+      <input class="text-input form-control" type="text" name="marketPositionScore"
+             [(ngModel)]="entry.marketPositionScore">
+    </td>
+    <td>市场效应、市场份额、价格影响力</td>
+  </tr>
+  <tr>
+    <td>对主要顾客的依赖程度</td>
+  </tr>
+  <tr>
+    <td>在对成本结构控制方面的能力</td>
+  </tr>
+  <tr>
+    <td rowspan="4">技术研发</td>
+    <td rowspan="4">
+      <input class="text-input form-control" type="text" name="technologyResearch"
+             [(ngModel)]="entry.technologyResearch">
+    </td>
+    <td rowspan="4">
+      <input class="text-input form-control" type="text" name="technologyResearchScore"
+             [(ngModel)]="entry.technologyResearchScore">
+    </td>
+    <td>生产工艺及设备技术含量、先进程度，利用情况产品生命周期的长短和产品组合</td>
+  </tr>
+  <tr>
+    <td>技术手段的运用及贡献</td>
+  </tr>
+  <tr>
+    <td>研发队伍与业绩考核评价</td>
+  </tr>
+  <tr>
+    <td>科技投入.重大技术成果，技术成果转化投入预期，未来一段时期的总体研发计划</td>
+  </tr>
+  <tr>
+    <td>客户和产品的多样性</td>
+    <td>
+      <input class="text-input form-control" type="text" name="customersProducts" [(ngModel)]="entry.customersProducts">
+    </td>
+    <td>
+      <input class="text-input form-control" type="text" name="customersProductsScore"
+             [(ngModel)]="entry.customersProductsScore">
+    </td>
+    <td>产品的多样性、销售区域的分布范围、主要客户和供应商的分散化以及相对成本优势</td>
+  </tr>
+  <tr>
+    <td rowspan="3">财务结构</td>
+    <td>5</td>
+    <td colspan="2">净资产与年末贷款余额比率</td>
+    <td>
+      <input class="text-input form-control" type="text" name="assetYearEndLoansRatio" [(ngModel)]="entry.assetYearEndLoansRatio">
+      <!--{{entry.assetYearEndLoansRatio}}-->
+    </td>
+    <td>
+      <input class="text-input form-control" type="text" name="assetYearEndLoansRatioScore" [(ngModel)]="entry.assetYearEndLoansRatioScore">
+      <!--{{entry.assetYearEndLoansRatioScore}}-->
+    </td>
+    <td>所有者权益/(期末银行贷款余额+期末票据贴现余额+期末已开立银行承兑汇票净额+期末贸易融资净额) *100%</td>
+  </tr>
+  <tr>
+    <td>6</td>
+    <td colspan="2">资产负债率</td>
+    <td>
+      <input class="text-input form-control" type="text" name="assetYearEndLoansRatio" [(ngModel)]="entry.assetLiabilityRatio">
+      <!--{{entry.assetLiabilityRatio}}-->
+    </td>
+    <td>
+      <input class="text-input form-control" type="text" name="assetLiabilityRatioScore" [(ngModel)]="entry.assetLiabilityRatioScore">
+      <!--{{entry.assetLiabilityRatioScore}}-->
+    </td>
+    <td>负债总额/资产总额*100%</td>
+  </tr>
+  <tr>
+    <td>7</td>
+    <td colspan="2">资产固定比率</td>
+    <td>
+      <input class="text-input form-control" type="text" name="assetFixedRatio" [(ngModel)]="entry.assetFixedRatio">
+      <!--{{entry.assetFixedRatio}}-->
+    </td>
+    <td>
+      <input class="text-input form-control" type="text" name="assetFixedRatioScore" [(ngModel)]="entry.assetFixedRatioScore">
+      <!--{{entry.assetFixedRatioScore}}-->
+    </td>
+    <td>非流动资产合计/所有者权益(或股东权益)合计*100%</td>
+  </tr>
+  <tr>
+    <td rowspan="6">偿债能力</td>
+    <td>8</td>
+    <td colspan="2">流动比率</td>
+    <td>
+      <input class="text-input form-control" type="text" name="liquidityRatio" [(ngModel)]="entry.liquidityRatio">
+      <!--{{entry.liquidityRatio}}-->
+    </td>
+    <td>
+      <input class="text-input form-control" type="text" name="liquidityRatioScore" [(ngModel)]="entry.liquidityRatioScore">
+      <!--{{entry.liquidityRatioScore}}-->
+    </td>
+    <td>流动资产总额/流动负债总额*100%</td>
+  </tr>
+  <tr>
+    <td>9</td>
+    <td colspan="2">速动比率</td>
+    <td>
+      <input class="text-input form-control" type="text" name="quickRatio" [(ngModel)]="entry.quickRatio">
+      <!--{{entry.quickRatio}}-->
+    </td>
+    <td>
+      <input class="text-input form-control" type="text" name="quickRatioScore" [(ngModel)]="entry.quickRatioScore">
+      <!--{{entry.quickRatioScore}}-->
+    </td>
+    <td>(流动资产合计-存货- 预付账款)/流动负债合计*100%</td>
+  </tr>
+  <tr>
+    <td>10</td>
+    <td colspan="2">非筹资性现金净流入与流动负债比率</td>
+    <td>
+      <input class="text-input form-control" type="text" name="cashNoLiquidityRatio" [(ngModel)]="entry.cashNoLiquidityRatio">
+      <!--{{entry.cashNoLiquidityRatio}}-->
+    </td>
+    <td>
+      <input class="text-input form-control" type="text" name="cashNoLiquidityRatioScore" [(ngModel)]="entry.cashNoLiquidityRatioScore">
+      <!--{{entry.cashNoLiquidityRatioScore}}-->
+    </td>
+    <td>非筹资性现金净流入/流动负债平均余额*100%</td>
+  </tr>
+  <tr>
+    <td>11</td>
+    <td colspan="2">经营性现金净流入与流动负债的比率</td>
+    <td>
+      <input class="text-input form-control" type="text" name="cashYesLiquidityRatio" [(ngModel)]="entry.cashYesLiquidityRatio">
+      <!--{{entry.cashYesLiquidityRatio}}-->
+    </td>
+    <td>
+      <input class="text-input form-control" type="text" name="cashYesLiquidityRatioScore" [(ngModel)]="entry.cashYesLiquidityRatioScore">
+      <!--{{entry.cashYesLiquidityRatioScore}}-->
+    </td>
+    <td>经营性现金净流入/流动负债平均余额*100%</td>
+  </tr>
+  <tr>
+    <td>12</td>
+    <td colspan="2">利息保障倍数</td>
+    <td>
+      <input class="text-input form-control" type="text" name="timesInterestEarned" [(ngModel)]="entry.timesInterestEarned">
+      <!--{{entry.timesInterestEarned}}-->
+    </td>
+    <td>
+      <input class="text-input form-control" type="text" name="timesInterestEarnedScore" [(ngModel)]="entry.timesInterestEarnedScore">
+      <!--{{entry.timesInterestEarnedScore}}-->
+    </td>
+    <td>(税前利润+列入财务费用的利息支出)/(列入财务费用的利息支出+资本化利息支出)</td>
+  </tr>
+  <tr>
+    <td>13</td>
+    <td colspan="2">担保比率</td>
+    <td>
+      <input class="text-input form-control" type="text" name="collateralRatio" [(ngModel)]="entry.collateralRatio">
+      <!--{{entry.collateralRatio}}-->
+    </td>
+    <td>
+      <input class="text-input form-control" type="text" name="collateralRatioScore" [(ngModel)]="entry.collateralRatioScore">
+      <!--{{entry.collateralRatioScore}}-->
+    </td>
+    <td>期末未清担保余额/所有者权益*100%</td>
+  </tr>
+  <tr>
+    <td rowspan="3">经营能力</td>
+    <td>14</td>
+    <td colspan="2">营业收入现金率</td>
+    <td>
+      <input class="text-input form-control" type="text" name="incomeCashRatio" [(ngModel)]="entry.incomeCashRatio">
+      <!--{{entry.incomeCashRatio}}-->
+    </td>
+    <td>
+      <input class="text-input form-control" type="text" name="incomeCashRatioScore" [(ngModel)]="entry.incomeCashRatioScore">
+      <!--{{entry.incomeCashRatioScore}}-->
+    </td>
+    <td>营业活动现金流入/营业收入*100%</td>
+  </tr>
+  <tr>
+    <td>15</td>
+    <td colspan="2">应收账款周转速度</td>
+    <td>
+      <input class="text-input form-control" type="text" name="receivablesTurnoverRatio" [(ngModel)]="entry.receivablesTurnoverRatio">
+      <!--{{entry.receivablesTurnoverRatio}}-->
+    </td>
+    <td>
+      <input class="text-input form-control" type="text" name="receivablesTurnoverRatioScore" [(ngModel)]="entry.receivablesTurnoverRatioScore">
+      <!--{{entry.receivablesTurnoverRatioScore}}-->
+    </td>
+    <td>主营业务收入/[(期初应收账款余额+期末应收账款余额)/2+(期初应收票据余额+期末应收票据余额)/2]</td>
+  </tr>
+  <tr>
+    <td>16</td>
+    <td colspan="2">存货周转速度</td>
+    <td>
+      <input class="text-input form-control" type="text" name="inventoryTurnoverRatio" [(ngModel)]="entry.inventoryTurnoverRatio">
+      <!--{{entry.inventoryTurnoverRatio}}-->
+    </td>
+    <td>
+      <input class="text-input form-control" type="text" name="inventoryTurnoverRatioScore" [(ngModel)]="entry.inventoryTurnoverRatioScore">
+      <!--{{entry.inventoryTurnoverRatioScore}}-->
+    </td>
+    <td>主营业务成本/[(期初存货+期末存货)/2]</td>
+  </tr>
+  <tr>
+    <td rowspan="4">经营效益</td>
+    <td>17</td>
+    <td colspan="2">毛利率</td>
+    <td>
+      <input class="text-input form-control" type="text" name="grossProfitRatio" [(ngModel)]="entry.grossProfitRatio">
+      <!--{{entry.grossProfitRatio}}-->
+    </td>
+    <td>
+      <input class="text-input form-control" type="text" name="grossProfitRatioScore" [(ngModel)]="entry.grossProfitRatioScore">
+      <!--{{entry.grossProfitRatioScore}}-->
+    </td>
+    <td>(主营业务收入-主营业务成本)/主营业务收入*100%</td>
+  </tr>
+  <tr>
+    <td>18</td>
+    <td colspan="2">营业利润率</td>
+    <td>
+      <input class="text-input form-control" type="text" name="operatingProfitRatio" [(ngModel)]="entry.operatingProfitRatio">
+      <!--{{entry.operatingProfitRatio}}-->
+    </td>
+    <td>
+      <input class="text-input form-control" type="text" name="operatingProfitRatioScore" [(ngModel)]="entry.operatingProfitRatioScore">
+      <!--{{entry.operatingProfitRatio}}-->
+    </td>
+    <td>(营业利润-投资收益-公允价值变动收益)/营业收入(或营业总收入)*100%</td>
+  </tr>
+  <tr>
+    <td>19</td>
+    <td colspan="2">净资产收益率</td>
+    <td>
+      <input class="text-input form-control" type="text" name="assetIncomeRatio" [(ngModel)]="entry.assetIncomeRatio">
+      <!--{{entry.assetIncomeRatio}}-->
+    </td>
+    <td>
+      <input class="text-input form-control" type="text" name="assetIncomeRatioScore" [(ngModel)]="entry.assetIncomeRatioScore">
+      <!--{{entry.assetIncomeRatioScore}}-->
+    </td>
+    <td>税后利润/[(期初净资产余额+期末净资产余额)/2]*100%</td>
+  </tr>
+  <tr>
+    <td>20</td>
+    <td colspan="2">总资产报酬率</td>
+    <td>
+      <input class="text-input form-control" type="text" name="assetTotalRatio" [(ngModel)]="entry.assetTotalRatio">
+      <!--{{entry.assetTotalRatio}}-->
+    </td>
+    <td>
+      <input class="text-input form-control" type="text" name="assetTotalRatioScore" [(ngModel)]="entry.assetTotalRatioScore">
+      <!--{{entry.assetTotalRatioScore}}-->
+    </td>
+    <td>(利润总额+利息支出)/[(期初总资产余额+期末总资产余额)/2]*100%</td>
+  </tr>
+  <tr>
+    <td rowspan="11">发展前景</td>
+    <td rowspan="5">21</td>
+    <td rowspan="5">宏观经济政策影响程度及其趋势</td>
+    <td>产业及相关宏观经济政策</td>
+    <td>
+      <input class="text-input form-control" type="text" name="industryRelatedPolicies"
+             [(ngModel)]="entry.industryRelatedPolicies">
+    </td>
+    <td>
+      <input class="text-input form-control" type="text" name="industryRelatedPoliciesScore"
+             [(ngModel)]="entry.industryRelatedPoliciesScore">
+    </td>
+    <td>产业及相关宏观经济政策运行态势对企业微观运营的影响程度，现状、后果及预期</td>
+  </tr>
+  <tr>
+    <td rowspan="3">经济环境</td>
+    <td rowspan="3">
+      <input class="text-input form-control" type="text" name="economicEnvironment"
+             [(ngModel)]="entry.economicEnvironment">
+    </td>
+    <td rowspan="3">
+      <input class="text-input form-control" type="text" name="economicEnvironmentScore"
+             [(ngModel)]="entry.economicEnvironmentScore">
+    </td>
+    <td>对公平竞争能力的影响</td>
+  </tr>
+  <tr>
+    <td>双边或多边经贸协定对企业跨国经营的影响</td>
+  </tr>
+  <tr>
+    <td>区域经济环境的变化趋势对企业经营的影响</td>
+  </tr>
+  <tr>
+    <td>法律环境</td>
+    <td>
+      <input class="text-input form-control" type="text" name="lawEnvironment" [(ngModel)]="entry.lawEnvironment">
+    </td>
+    <td>
+      <input class="text-input form-control" type="text" name="lawEnvironmentScore"
+             [(ngModel)]="entry.lawEnvironmentScore">
+    </td>
+    <td>法律环境变迁对企业生产经营活动的影响，尤其是参与市场对公平竞争能力的影响</td>
+  </tr>
+  <tr>
+    <td rowspan="3">22</td>
+    <td rowspan="3">行业背景</td>
+    <td>行业环境</td>
+    <td>
+      <input class="text-input form-control" type="text" name="industryEnvironment"
+             [(ngModel)]="entry.industryEnvironment">
+    </td>
+    <td>
+      <input class="text-input form-control" type="text" name="industryEnvironmentScore"
+             [(ngModel)]="entry.industryEnvironmentScore">
+    </td>
+    <td>政府监管或支持态度、力度及措施与手段</td>
+  </tr>
+  <tr>
+    <td>行业特性</td>
+    <td>
+      <input class="text-input form-control" type="text" name="industryCharacteristics"
+             [(ngModel)]="entry.industryCharacteristics">
+    </td>
+    <td>
+      <input class="text-input form-control" type="text" name="industryCharacteristicsScore"
+             [(ngModel)]="entry.industryCharacteristicsScore">
+    </td>
+    <td>行业的竞争状况，企业在行业中的竞争地位</td>
+  </tr>
+  <tr>
+    <td>发展前景</td>
+    <td>
+      <input class="text-input form-control" type="text" name="developmentProspect"
+             [(ngModel)]="entry.developmentProspect">
+    </td>
+    <td>
+      <input class="text-input form-control" type="text" name="developmentProspectScore"
+             [(ngModel)]="entry.developmentProspectScore">
+    </td>
+    <td>产品的市场需求前景和绿色环保状况、企业应对措施</td>
+  </tr>
+  <tr>
+    <td rowspan="3">23</td>
+    <td rowspan="3">成长性与抗风险能力</td>
+    <td>抗风险能力</td>
+    <td>
+      <input class="text-input form-control" type="text" name="antiRiskCapability"
+             [(ngModel)]="entry.antiRiskCapability">
+    </td>
+    <td>
+      <input class="text-input form-control" type="text" name="antiRiskCapabilityScore"
+             [(ngModel)]="entry.antiRiskCapabilityScore">
+    </td>
+    <td>主要经营风险的防范与控制机制</td>
+  </tr>
+  <tr>
+    <td rowspan="2">成长性</td>
+    <td rowspan="2">
+      <input class="text-input form-control" type="text" name="growth" [(ngModel)]="entry.growth">
+    </td>
+    <td rowspan="2">
+      <input class="text-input form-control" type="text" name="growthScore" [(ngModel)]="entry.growthScore">
+    </td>
+    <td>未来1年的发展趋势</td>
+  </tr>
+  <tr>
+    <td>公司未来的现金流量及偿债能力预测</td>
+  </tr>
+  </tbody>
+</table>

@@ -1,0 +1,15 @@
+<div [formGroup]="form">
+  <div [class.form-margin]="textBool">
+    <select class="form-control xn-input-font" (change)="handleSelect($event)" [value]="data.has" (blur)="blur()">
+      <option value="">请选择</option>
+      <option *ngFor="let option of selectOptions" value="{{option.value}}">{{option.label}}</option>
+    </select>
+    <span class="xn-input-alert">{{alert}}</span>
+  </div>
+  <ng-container *ngIf="textBool&&shows.length">
+    <div *ngFor="let item of shows" class="position">
+      <app-xn-input-wind [row]="item" [form]="mainForm"></app-xn-input-wind>
+      <div class="position-tip">{{item.memo}}</div>
+    </div>
+  </ng-container>
+</div>

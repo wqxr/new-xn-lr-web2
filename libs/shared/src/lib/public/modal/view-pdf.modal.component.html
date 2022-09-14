@@ -1,0 +1,29 @@
+<modal #modal [backdrop]="'static'" [keyboard]="false" [animation]="false">
+  <modal-header [showClose]="false">
+    <h4 class="modal-title">{{params.title}}</h4>
+  </modal-header>
+  <modal-body>
+    <div class="display-content" id='container'>
+      <div class="pdf-container" id='thisCanvas1'>
+        <!-- <canvas class="this-pdf" id="thisCanvas"></canvas> -->
+      </div>
+    </div>
+  </modal-body>
+  <modal-footer>
+    <div>
+      <div class="btn btn-primary" style='float:left' type="button" (click)="downLoad()">
+        <span style="font-size: 12px">下载附件</span>
+      </div>
+      <!-- <button class="btn btn-primary" style='float:left' (click)="downLoad()">下载附件</button> -->
+      <button class="btn btn-default" style='float:left' (click)="handleClose()">关闭</button>
+      <button  class="btn btn-primary"  style='float:right' id='isRead' (click)="onSubmit()">我已阅读并同意</button>
+      <div  class='footerCss'>
+         <span>请您仔细阅读至最后一页</span>
+      </div>
+    </div>
+    <span style="visibility:'hidden'">页码: <span id="page_num">加载中</span> / <span id="page_count">加载中</span></span>
+    <!-- <div class='form-group text-right'>
+      <button  class="btn btn-primary text-right" id='isRead' (click)="onSubmit()">我已阅读并同意</button>
+    </div> -->
+  </modal-footer>
+</modal>

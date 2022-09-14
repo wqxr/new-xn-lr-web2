@@ -1,0 +1,45 @@
+<modal #modal [backdrop]="'static'" [keyboard]="false" [animation]="false">
+  <form class="form-horizontal" (ngSubmit)="onSubmit()">
+    <modal-header [showClose]="false">
+      <h4 class="modal-title">退回交易</h4>
+    </modal-header>
+    <modal-body>
+      <div class="row form-group">
+        <div class="col-sm-3 xn-control-label">
+          退回原因：
+        </div>
+        <div class="col-sm-6">
+          <div class="checkbox">
+            <label *ngFor="let reason of reasons; let i = index" class="col-sm-12">
+              <ng-container *ngIf='params===reason.params &&reason.params!==4'>
+                <input type="checkbox" name="i" (change)="reasonChange(reason)" />
+                {{ reason.label }}
+              </ng-container>
+              <ng-container *ngIf='reason.params===4'>
+                <input type="checkbox" name="i" (change)="reasonChange(reason)" />
+                {{ reason.label }}
+              </ng-container>
+
+
+            </label>
+          </div>
+
+          <div class="other-reason" *ngIf="reasons[2].checked">
+            <textarea class="form-control xn-input-textarea xn-input-font xn-input-border-radius row" rows="6"
+              placeholder="请输入其他退回原因" autocomplete="off" name="otherReason" [(ngModel)]="reasons[2].value"></textarea>
+            <span class="xn-input-alert">{{ alert }}</span>
+          </div>
+        </div>
+        <div class="col-sm-3 xn-control-desc"></div>
+      </div>
+    </modal-body>
+    <modal-footer>
+      <button type="button" class="btn btn-default" (click)="onCancel()">
+        取消
+      </button>
+      <button type="submit" class="btn btn-success" [disabled]="isFormInvalid">
+        确定
+      </button>
+    </modal-footer>
+  </form>
+</modal>

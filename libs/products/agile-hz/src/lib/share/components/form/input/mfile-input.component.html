@@ -1,0 +1,39 @@
+<div class="input-group" [formGroup]="form">
+  <div class="input-group-btn">
+    <div class="btn btn-default btn-file" [ngClass]="{'disabled': delButtonStatus}"
+      style='float: left;width: 120px;border-radius: 3px;color:#3c8dbc;padding: 2px 5px !important;'>
+      <span class="hidden-xs xn-input-font">上传文件</span>
+      <input type="hidden" [formControlName]="row.name">
+      <input type="file" (change)="onSelect($event)" [disabled]="delButtonStatus" (click)="onBeforeSelect($event)"
+        multiple>
+    </div>
+    <p class='detailP' *ngIf="showP && !delButtonStatus">{{imgType}}</p>
+    <p class='helpMsg' *ngIf="row.options?.helpMsg">{{row.options?.helpMsg}}</p>
+  </div>
+</div>
+
+<span class="xn-input-alert">{{alert}}</span>
+<ng-container *ngIf="files.length > 0 && this.row.checkerId !== 'contractUpload'">
+  <div class="table-box">
+    <table class="table table-hover file-row-table">
+      <tbody>
+        <tr *ngFor="let file of files; let i=index">
+          <ng-container *ngIf="!!file.fileName">
+            <td>
+              <a class="xn-click-a" (click)="onView(file,i)">{{file?.fileName}}</a>
+            </td>
+            <td>
+              <button type="button" *ngIf="!delButtonStatus" class="specialclose close" (click)="onRemove(file)">
+                <span>&times;</span></button>
+            </td>
+          </ng-container>
+          <ng-container *ngIf="!!file.label">
+            <td>
+              <a class="xn-click-a" (click)="showContract(file.id, file.secret,file.label)">{{file.label}}</a>
+            </td>
+          </ng-container>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</ng-container>

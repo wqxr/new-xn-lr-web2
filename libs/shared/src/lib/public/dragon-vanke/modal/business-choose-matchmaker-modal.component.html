@@ -1,0 +1,64 @@
+<modal #modal [backdrop]="'static'" [keyboard]="false" [animation]="false" (onDismiss)="oncancel()">
+  <modal-header [showClose]="true" style='text-align:left'>
+    <div style="font-size: 15px;font-weight: bold;">选择对接人</div>
+  </modal-header>
+  <modal-body>
+    <div style="display: flex;justify-content: space-between;align-items: center; margin-bottom: 10px;">
+      <div>
+        请选择: <span style="color: #999;">(单选)</span>
+      </div>
+      <div style="display: flex;" *ngIf="params?.type!=='select-helpUserName'">
+        <select class="form-control xn-input-font" [(ngModel)]="roleId" (blur)="searchRoleId($event)">
+          <option value="">请选择</option>
+          <option *ngFor="let option of selectOptions" value="{{option.value}}">{{option.label}}</option>
+        </select>
+        <input style="margin-right: 5px;" class="form-control" [(ngModel)]="userName" (blur)='searchUserName($event)'
+          type="text" name="roleName" placeholder="搜索 用户姓名">
+      </div>
+    </div>
+    <div class="height">
+      <div class="head-height table-head">
+        <table class="table table-bordered table-hover text-center table-display relative" style='width:98%'
+          [style.left.px]="headLeft">
+          <thead>
+            <tr>
+              <th style="width: 60px;">序号</th>
+              <th>用户姓名</th>
+              <th *ngIf="params?.type!=='select-helpUserName'">用户角色</th>
+              <th style="width: 85px;"></th>
+            </tr>
+          </thead>
+        </table>
+      </div>
+      <div class="table-height" (scroll)="onScroll($event)">
+        <table class="table table-bordered table-hover text-center table-display" style='width:100%'>
+          <tbody style='width:100%'>
+            <ng-container *ngIf="datalist.length;else block">
+              <tr *ngFor='let item of datalist;let i=index;'>
+                <td style="width: 60px;">{{i+1}}</td>
+                <td>{{item.userName}}</td>
+                <td *ngIf="params?.type!=='select-helpUserName'" [innerHTML]="item.roleIdList | RoleTypeTransform"></td>
+                <td style="width: 80px;">
+                  <input style="cursor: pointer;" type="radio" name="single" [checked]="item['checked']"
+                    (change)="singleChecked(item,i)">
+                </td>
+              </tr>
+            </ng-container>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+  </modal-body>
+  <modal-footer>
+    <button type="button" class="btn btn-default" (click)="oncancel()">取消</button>
+    <button type="button" class="btn btn-primary" [disabled]='!selectedItems.length' (click)="onOk()">确定</button>
+  </modal-footer>
+</modal>
+<ng-template #block>
+  <tr>
+    <td [attr.colspan]="calcAttrColspan()">
+      <div class="empty-message"></div>
+    </td>
+  </tr>
+</ng-template>

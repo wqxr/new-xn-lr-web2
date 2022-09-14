@@ -1,0 +1,77 @@
+<modal #modal [backdrop]="'static'" [keyboard]="false" [animation]="false" (onDismiss)="onOk()">
+  <modal-header [showClose]="true">
+    <h4 class="modal-title">对账结果</h4>
+  </modal-header>
+  <modal-body>
+    <div style="max-height:600px;overflow: auto;">
+      <div class="box">
+        <!-- /.box-header -->
+        <div class="box-body">
+
+          <table class="table table-bordered table-striped">
+            <thead>
+              <tr>
+                <th>交易id</th>
+                <th>
+                  <div style='display:flex'>
+                    <p style='flex:1'><span>链融数据</span></p>
+                    <p style='flex:1'><span>金蝶数据</span></p>
+                  </div>
+                </th>
+                <!-- <th>金蝶数据</th> -->
+                <th>对账结果</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let item of items">
+                <td>{{item.mainFlowId}}</td>
+                <td>
+                  <div style='display:flex'>
+                    <div style='flex:1'>
+                      <p [ngStyle]="{'background':!isDiffer(item,'debtUnitAccount')?'rgba(255, 85, 0,0.3)':transparent}">
+                        <span>收款账号</span> &nbsp; &nbsp;<span>{{item.owner?.debtUnitAccount}}</span>
+                      </p>
+                      <p [ngStyle]="{'background':!isDiffer(item,'debtUnitBank')?'rgba(255, 85, 0,0.3)':transparent}">
+                        <span>收款银行</span> &nbsp; &nbsp;<span>{{item.owner?.debtUnitBank}}</span>
+                      </p>
+                      <p [ngStyle]="{'background':!isDiffer(item,'debtUnitName')?'rgba(255, 85, 0,0.3)':transparent}">
+                        <span>收款账户户名 </span> &nbsp; &nbsp;<span>{{item.owner?.debtUnitName}}</span>
+                      </p>
+                      <p [ngStyle]="{'background':!isDiffer(item,'payableAmount')?'rgba(255, 85, 0,0.3)':transparent}">
+                        <span>金额 </span> &nbsp; &nbsp;<span>{{item.owner?.payableAmount|xnMoney}}</span>
+                      </p>
+                    </div>
+                    <div style='flex:1'>
+                      <p [ngStyle]="{'background':!isDiffer(item,'debtUnitAccount')?'rgba(255, 85, 0,0.3)':transparent}">
+                        <span>收款账号</span> &nbsp; &nbsp;<span>{{item.jd?.debtUnitAccount}}</span>
+                      </p>
+                      <p [ngStyle]="{'background':!isDiffer(item,'debtUnitBank')?'rgba(255, 85, 0,0.3)':transparent}">
+                        <span>收款银行</span> &nbsp; &nbsp;<span>{{item.jd?.debtUnitBank}}</span>
+                      </p>
+                      <p [ngStyle]="{'background':!isDiffer(item,'debtUnitName')?'rgba(255, 85, 0,0.3)':transparent}">
+                        <span>收款账户户名 </span> &nbsp; &nbsp;<span>{{item.jd?.debtUnitName}}</span>
+                      </p>
+                      <p [ngStyle]="{'background':!isDiffer(item,'payableAmount')?'rgba(255, 85, 0,0.3)':transparent}">
+                        <span>金额 </span> &nbsp; &nbsp;<span>{{item.jd?.payableAmount| xnMoney}}</span>
+                      </p>
+                    </div>
+                  </div>
+
+                </td>
+
+                <td>
+                  {{item.status | xnSelectTransform:'reconciliationResult'}}
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <!-- /.box-body -->
+      </div>
+    </div>
+  </modal-body>
+  <modal-footer>
+    <button type="button" class="btn btn-danger" (click)="onOk()">确定</button>
+  </modal-footer>
+</modal>
+<!-- /.content -->

@@ -1,0 +1,14 @@
+<div class="input-group" [formGroup]="form">
+  <div class="input-group date" data-provide="datepicker">
+    <input class="form-control xn-input-font xn-input-border-radius" [ngClass]="myClass" type="text"
+           [placeholder]="row.placeholder"
+           [class.bg]="inputStatus" (blur)="onBlur()">
+    <div [ngClass]="myClass2">
+      <span class="glyphicon glyphicon-th"></span>
+    </div>
+  </div>
+  <span class="input-group-btn">
+        <button class="btn btn-default" type="button" (click)="handleChange()">暂无</button>
+      </span>
+</div>
+<span class="xn-input-alert">{{alert}}</span>

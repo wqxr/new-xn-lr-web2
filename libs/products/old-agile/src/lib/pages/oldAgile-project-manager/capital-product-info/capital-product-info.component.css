@@ -1,0 +1,51 @@
+.item-box {
+    position: relative;
+    display: flex;
+    margin-bottom: 10px;
+}
+.item-label label {
+    min-width: 150px;
+    padding-right: 8px;
+    font-weight: normal;
+    line-height: 34px;
+    text-align:right;
+}
+.item-control {
+    flex: 1;
+}
+.box-body {
+    min-height: 550px;
+}
+
+.table-head table,.table-body table{
+    margin-bottom: 0px
+}
+.table-body{
+    width:100%;
+    max-height:250px;
+    overflow-y:scroll;
+    min-height:50px;
+}
+table thead,tbody tr {
+    display:table;
+    width:100%;
+    table-layout:fixed;
+}
+.table-head table tr th {
+    border:1px solid #cccccc30;
+    text-align: center;
+}
+.table-body table tr td{
+    border:1px solid #cccccc30;
+    text-align: center;
+}
+.table-left-btn {
+    margin: 7px 0px;
+}
+.disabled {
+    pointer-events: none;
+    filter: alpha(opacity=50); /*IE滤镜，透明度50%*/
+    -moz-opacity: 0.5; /*Firefox私有，透明度50%*/
+    opacity: 0.5; /*其他，透明度50%*/
+}
+

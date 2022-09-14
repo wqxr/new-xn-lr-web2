@@ -1,0 +1,37 @@
+<div [formGroup]="form">
+  <table class="table table-bordered table-hover text-center table-striped">
+    <thead>
+    <tr>
+      <th *ngFor="let head of heads.headText">
+        <span>{{head.label}}</span>
+      </th>
+      <th>
+        上传付款确认书
+      </th>
+    </tr>
+    </thead>
+    <tbody>
+    <ng-container *ngIf="items.length">
+      <tr *ngFor="let item of items; let i = index;">
+        <td *ngFor="let head of heads.headText">
+          <span *ngIf="head.type==='order'">{{i+1}}</span>
+          <span *ngIf="head.type==='default'">{{item[head.value]}}</span>
+          <span *ngIf="head.type==='money'">{{item[head.value] | number:'1.2-3'}}</span>
+          <span *ngIf="head.type==='view'">
+            <div *ngFor="let sub of item[head.value] | xnJson">
+              <a href="javaScript:void(0)" class="xn-click-a" (click)="viewFile(sub)">{{sub?.fileName}}</a>
+            </div>
+          </span>
+        </td>
+        <td>
+          <div style="padding: 2px 5px" class="btn btn-default btn-file xn-table-upload">
+            <span class="hidden-xs xn-input-font">点击上传</span>
+            <input type="file" (change)="onUpload($event,i)" multiple>
+          </div>
+        </td>
+      </tr>
+    </ng-container>
+    </tbody>
+  </table>
+  <span class="xn-input-alert">{{alert}}</span>
+</div>

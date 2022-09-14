@@ -1,0 +1,88 @@
+<modal #modal [backdrop]="'static'" [keyboard]="false" [animation]="false" (onDismiss)="onOk()">
+  <modal-header [showClose]="true" style='text-align:center'>
+    <h4 class="modal-title title">白名单记录</h4>
+    <div><span class='title'>企业名称</span><span style='margin-left: 50px;' class='title'>{{orgName}}</span></div>
+  </modal-header>
+  <modal-body>
+    <div style="height: 300px;
+    overflow-y: scroll;">
+      <ul>
+        <li>白名单变动记录</li>
+        <li>
+          <table class="table table-bordered table-striped text-center">
+            <thead>
+              <tr class="table-head">
+                <th>
+                  <span>白名单状态</span>
+                </th>
+                <th>
+                  <span>变动时间</span>
+                </th>
+                <th>
+                  <span>变更人</span>
+                </th>
+                <th>
+                  <span>变更流程</span>
+                </th>
+              </tr>
+            </thead>
+            <tbody>
+              <ng-container *ngIf="datalist01.length;else block">
+                <tr *ngFor="let item of datalist01;let i=index">
+                  <!-- 行选则 -->
+                  <td>{{item.whiteStatus}}</td>
+                  <!-- 列内容 -->
+                  <td>{{item.date}}</td>
+                  <td>{{item.person}}</td>
+                  <td>
+                    <a href='javascript:void(0)' class='editor_view' (click)="openCompanyDetail(item)">{{item.recordId}}</a>
+                  </td>
+                </tr>
+              </ng-container>
+            </tbody>
+          </table>
+        </li>
+
+      </ul>
+
+    </div>
+    <div>
+      <ul style="height: 300px;
+      overflow-y: scroll;">
+        <li>风控模型白名单更新记录：</li>
+        <li>
+          <table class="table table-bordered table-striped text-center">
+            <thead>
+              <tr class="table-head">
+                <th>
+                  <span>白名单状态</span>
+                </th>
+                <th>
+                  <span>更新时间</span>
+                </th>
+              </tr>
+            </thead>
+            <tbody>
+              <ng-container *ngIf="datalist02.length;else block">
+                <tr *ngFor="let item of datalist02;let i=index">
+                  <!-- 行选则 -->
+                  <td>{{item.whiteStatus}}</td>
+                  <!-- 列内容 -->
+                  <td>{{item.date}}</td>
+                </tr>
+              </ng-container>
+            </tbody>
+          </table>
+        </li>
+      </ul>
+    </div>
+  </modal-body>
+  <modal-footer>
+    <button type="button" class="btn btn-danger" (click)="oncancel()">确定</button>
+  </modal-footer>
+  <ng-template #block>
+    <td colspan="11">
+      <div class="empty-message"></div>
+    </td>
+  </ng-template>
+</modal>

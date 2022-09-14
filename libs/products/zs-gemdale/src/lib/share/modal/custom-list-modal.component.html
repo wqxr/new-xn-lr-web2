@@ -1,0 +1,55 @@
+<modal #modal [backdrop]="'static'" [keyboard]="false" [animation]="false" (onDismiss)="oncancel()">
+  <modal-header [showClose]="true" style='text-align:left'>
+    <h4 class="modal-title">自定义列表</h4>
+  </modal-header>
+  <modal-body>
+    <div>
+      <div style="margin-bottom: 10px;">请选择：<span style="color: #999;">（点击可拖动字段排序 , 点击序号可冻结字段）</span></div>
+      <div>
+        <table class="table table-bordered table-hover text-center table-display relative" [style.left.px]="headLeft">
+          <thead>
+            <tr>
+              <th style='width:19.5%;'>序号</th>
+              <th>字段名称</th>
+              <th class="input-check" style='width:19%'>全选/取消
+                <input type="checkbox" name="all" [checked]="isAllChecked()" [disabled]="!datalist01.length"
+                  (change)="checkAll()" /></th>
+            </tr>
+          </thead>
+        </table>
+      </div>
+      <div class="table-height" (scroll)="onScroll($event)">
+        <table #configDate class="table table-bordered table-hover text-center table-display" [sortablejs]='datalist01'>
+          <tbody [sortablejs]='datalist01' [sortablejsOptions]="{store:{get:getData(),set:setData()}}">
+            <tr *ngFor='let item of datalist01;let i=index'>
+              <td style='width:20%;cursor: pointer;' (click)="fixedHead(item,i+1)">{{i+1}}&nbsp;&nbsp;&nbsp;&nbsp;<i
+                  Class="glyphicon glyphicon-pushpin" [ngStyle]="{'color':canFixedNumber>i ? '#cc0000' : '#ddd' }"
+                  *ngIf="5>i"></i></td>
+              <td>{{item.label}}</td>
+              <td style='width: 16.5%;'>
+                <input type="checkbox" [disabled]="item['fixed']" name="single" [checked]="item['checked']"
+                  (change)="singleChecked(item)" />
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <div style="margin-top: 15px;display: flex;justify-content: space-between;">
+        <div style='text-align:left'>当前已冻结<span style='color:red'>{{canFixedNumber}}</span>个字段<span
+            style="color: #999;">（最多5个）</span>
+        </div>
+        <!-- <div style='text-align:left'>当前已选择<span style='color:red'>{{selectedItems.length}}</span>个字段</div> -->
+        <div style='text-align:right'>总共<span style='color:red'>{{selectedItems.length}}/</span>{{datalist01.length}}个字段
+        </div>
+      </div>
+    </div>
+  </modal-body>
+  <modal-footer>
+    <button type="button" class="btn btn-default" (click)="oncancel()">取消</button>
+    <button type="button" class="btn btn-success" (click)="onOk()">确定</button>
+  </modal-footer>
+</modal>
+<!-- <h2>Drag / drop the item</h2>
+      <div [sortablejs]="items">
+        <div *ngFor="let item of items">{{ item }}</div>
+      </div> -->

@@ -1,0 +1,367 @@
+<modal #modal [backdrop]="'static'" [keyboard]="false" [animation]="false">
+  <modal-header [showClose]="false" style="text-align: left">
+    <h4 class="modal-title">{{ params?.title }}</h4>
+  </modal-header>
+  <modal-body>
+    <div class="height">
+      <ng-container *ngIf="params?.type !== 'platVerify'">
+        <div class="btn-group" role="group" style="margin-bottom: 20px">
+          <ng-container *ngFor="let tab of tabConfig.tabList; let i = index">
+            <button
+              type="button"
+              class="btn"
+              [ngClass]="{ active: defaultValue === tab.value }"
+              (click)="initData(tab.value)"
+            >
+              {{ tab.label }}
+            </button>
+          </ng-container>
+        </div>
+      </ng-container>
+      <div class="height">
+        <div class="head-height table-head">
+          <table
+            class="
+              table table-bordered table-hover
+              text-center
+              table-display
+              relative
+            "
+            style="width: 100%"
+            [style.left.px]="headLeft"
+          >
+            <thead>
+              <tr>
+                <!-- 表头 -->
+                <th style="width: 50px">序号</th>
+                <th
+                  *ngFor="let head of heads"
+                  style="width: 150px; word-wrap: break-word"
+                >
+                  {{ head.label }}
+                </th>
+              </tr>
+            </thead>
+          </table>
+        </div>
+        <div class="table-height" (scroll)="onScroll($event)">
+          <table
+            class="table table-bordered table-hover text-center table-display"
+            style="width: 100%"
+          >
+            <tbody style="width: 100%">
+              <ng-container *ngIf="datalist.length; else block">
+                <tr *ngFor="let item of datalist; let i = index">
+                  <!--序号-->
+                  <td style="width: 50px">{{ i + 1 }}</td>
+                  <!-- 列内容 -->
+                  <td
+                    *ngFor="let head of heads"
+                    style="
+                      width: 150px;
+                      word-wrap: break-word;
+                      vertical-align: middle;
+                    "
+                  >
+                    <!-- 接口变动表 -->
+                    <ng-container *ngIf="defaultValue === 'A'; else changePart">
+                      <!-- 根据head type 类型配置显示方式 -->
+                      <ng-container [ngSwitch]="head.type">
+                        <!-- 推送时间-->
+                        <ng-container *ngSwitchCase="'date'">
+                          <p>{{ item.updatetime | xnDate: "datetime" }}</p>
+                        </ng-container>
+                        <!-- 接口名称-->
+                        <ng-container *ngSwitchCase="'callType'">
+                          <p>
+                            {{ item.callType | xnSelectTransform: "callType" }}
+                          </p>
+                        </ng-container>
+                        <!-- 推送内容-->
+                        <ng-container *ngSwitchCase="'callStatus'">
+                          <p>
+                            {{
+                              item.callStatus | xnSelectTransform: "callStatus"
+                            }}
+                          </p>
+                        </ng-container>
+                        <!-- 描述信息-->
+                        <ng-container *ngSwitchCase="'msg'">
+                          <p
+                            [ngStyle]="{
+                              color: item.status === 1 ? 'red' : 'black'
+                            }"
+                          >
+                            {{ item.msg }}
+                          </p>
+                        </ng-container>
+                        <!-- 接口结果-->
+                        <ng-container *ngSwitchCase="'status'">
+                          <p
+                            [ngStyle]="{
+                              color: item.status === 1 ? 'red' : 'black'
+                            }"
+                          >
+                            {{
+                              item.status | xnSelectTransform: "interFaceStatus"
+                            }}
+                          </p>
+                        </ng-container>
+                        <!--默认-->
+                        <ng-container *ngSwitchDefault>
+                          <ng-container
+                            *ngIf="item[head.value] && item[head.value] !== ''"
+                          >
+                            <div
+                              [innerHTML]="
+                                item[head.value]
+                                  | xnGatherType: { head: head, row: item }
+                              "
+                            ></div>
+                          </ng-container>
+                        </ng-container>
+                      </ng-container>
+                    </ng-container>
+
+                    <!-- 数据变动表 -->
+                    <ng-template #changePart>
+                      <!-- 根据head type 类型配置显示方式 -->
+                      <ng-container *ngIf="head.value !== 'field'; else part1">
+                        <!-- 根据item字段名 配置显示方式 -->
+                        <ng-container [ngSwitch]="item.fieldType">
+                          <div
+                            [ngClass]="{ change: item.isChanged[head.value]?.length > 0 }"
+                          >
+                            <!--invoiceList-->
+                            <ng-container *ngSwitchCase="'invoice'">
+                              <ng-container
+                                *ngIf="
+                                  item[head.value] && item[head.value] !== ''
+                                "
+                              >
+                                <ng-container
+                                  *ngIf="
+                                    invoiceListFilter(item[head.value])
+                                      .length >= 1
+                                  "
+                                >
+                                  <div>
+                                    <a
+                                      class="xn-click-a"
+                                      href="javaScript:void(0)"
+                                      (click)="viewMore(item[head.value])"
+                                      [innerHtml]="
+                                        invoiceListFilter(item[head.value]) | xnArrayTruncate: 2:'等;'
+                                      "
+                                    >
+                                    </a>
+                                  </div>
+                                </ng-container>
+                              </ng-container>
+                            </ng-container>
+
+                            <ng-container *ngSwitchCase="'date'">
+                              <ng-container
+                                *ngIf="
+                                  item[head.value] && item[head.value] !== ''
+                                "
+                              >
+                                <div>
+                                  {{ item[head.value] | xnDate: "date" }}
+                                </div>
+                              </ng-container>
+                            </ng-container>
+
+                            <ng-container *ngSwitchCase="'datetime'">
+                              <ng-container
+                                *ngIf="
+                                  item[head.value] && item[head.value] !== ''
+                                "
+                              >
+                                <div>
+                                  {{ item[head.value] | xnDate: "datetime" }}
+                                </div>
+                              </ng-container>
+                            </ng-container>
+
+                            <ng-container *ngSwitchCase="'longdatetime'">
+                              <ng-container
+                                *ngIf="
+                                  item[head.value] && item[head.value] !== ''
+                                "
+                              >
+                                <div>
+                                  {{
+                                    item[head.value] | xnDate: "longdatetime"
+                                  }}
+                                </div>
+                              </ng-container>
+                            </ng-container>
+
+                            <ng-container *ngSwitchCase="'select'">
+                              <!-- 根据item.fieldName 配置对应的xnSelectTransform -->
+                              <ng-container [ngSwitch]="item.fieldName">
+                                <!--买方确认函电子章  -->
+                                <ng-container *ngSwitchCase="'isSignFlag'">
+                                  <ng-container
+                                    *ngIf="item[head.value] !== null"
+                                  >
+                                    <div
+                                      [innerHTML]="
+                                        item[head.value]
+                                          | xnSelectTransform: 'vankeSignStatus'
+                                      "
+                                    ></div>
+                                  </ng-container>
+                                </ng-container>
+                                <!--买方确认函电子章  -->
+                                <ng-container *ngSwitchCase="'isSignBuyer'">
+                                  <ng-container
+                                    *ngIf="item[head.value] !== null"
+                                  >
+                                    <div
+                                      [innerHTML]="
+                                        item[head.value]
+                                          | xnSelectTransform: 'vankeSignStatus'
+                                      "
+                                    ></div>
+                                  </ng-container>
+                                </ng-container>
+                                <!--买方确认函是否下载 -->
+                                <ng-container *ngSwitchCase="'hasDownBuyer'">
+                                  <ng-container
+                                    *ngIf="item[head.value] !== null"
+                                  >
+                                    <div
+                                      [innerHTML]="
+                                        item[head.value]
+                                          | xnSelectTransform
+                                            : 'verifyPayConfimStatus'
+                                      "
+                                    ></div>
+                                  </ng-container>
+                                </ng-container>
+                                <!--付款确认书是否下载  -->
+                                <ng-container *ngSwitchCase="'hasDownConfirm'">
+                                  <ng-container
+                                    *ngIf="item[head.value] !== null"
+                                  >
+                                    <div
+                                      [innerHTML]="
+                                        item[head.value]
+                                          | xnSelectTransform
+                                            : 'verifyPayConfimStatus'
+                                      "
+                                    ></div>
+                                  </ng-container>
+                                </ng-container>
+                                <!--默认-->
+                                <ng-container *ngSwitchDefault>
+                                  <ng-container
+                                    *ngIf="
+                                      item[head.value] === 0 ||
+                                      !!item[head.value]
+                                    "
+                                  >
+                                    <div
+                                      [innerHTML]="
+                                        item[head.value]
+                                          | xnSelectTransform: item.fieldName
+                                      "
+                                    ></div>
+                                  </ng-container>
+                                </ng-container>
+                              </ng-container>
+                            </ng-container>
+
+                            <ng-container *ngSwitchCase="'rate'">
+                              <ng-container
+                                *ngIf="
+                                  item[head.value] === 0 || !!item[head.value]
+                                "
+                              >
+                                <div>
+                                  {{ item[head.value] | xnMoney: "true" }}%
+                                </div>
+                              </ng-container>
+                            </ng-container>
+
+                            <ng-container *ngSwitchCase="'money'">
+                              <ng-container
+                                *ngIf="
+                                  item[head.value] !== undefiend &&
+                                  item[head.value] !== null &&
+                                  item[head.value] !== 0
+                                "
+                              >
+                                <div>{{ item[head.value] | xnMoney }}</div>
+                              </ng-container>
+                            </ng-container>
+
+                            <!--默认-->
+                            <ng-container *ngSwitchDefault>
+                              <div
+                                [innerHTML]="
+                                  item[head.value]
+                                    | xnGatherType: { head: head, row: item }
+                                "
+                              ></div>
+                            </ng-container>
+                          </div>
+                        </ng-container>
+                      </ng-container>
+                      <ng-template #part1>
+                        <div
+                          [innerHTML]="
+                            item[head.value]
+                              | xnGatherType: { head: head, row: item }
+                          "
+                        ></div>
+                      </ng-template>
+                    </ng-template>
+                  </td>
+                </tr>
+              </ng-container>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- 变动数据切换 -->
+      <div
+        style="margin-top: 20px; text-align: right; padding-right: 30px"
+        *ngIf="defaultValue === 'A'"
+      >
+        <button
+          type="button"
+          class="btn"
+          style="margin-right: 10px"
+          [disabled]="pageConfig.start === 0"
+          (click)="preChange()"
+        >
+          <i class="glyphicon glyphicon-menu-left" style="font-size: 14px"></i>
+        </button>
+        <button
+          type="button"
+          class="btn"
+          [disabled]="pageConfig.total <= pageConfig.start + pageConfig.length"
+          (click)="nextChange()"
+        >
+          <i class="glyphicon glyphicon-menu-right" style="font-size: 14px"></i>
+        </button>
+      </div>
+
+      <!-- 暂无数据 -->
+      <ng-template #block>
+        <tr>
+          <td [attr.colspan]="calcAttrColspan()">
+            <div class="empty-message"></div>
+          </td>
+        </tr>
+      </ng-template>
+    </div>
+  </modal-body>
+  <modal-footer>
+    <button type="button" class="btn btn-primary" (click)="onOk()">确定</button>
+  </modal-footer>
+</modal>

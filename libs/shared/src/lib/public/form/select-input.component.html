@@ -1,0 +1,7 @@
+<div [formGroup]="form">
+  <select class="form-control xn-input-font"  [formControlName]="row.name" [ngClass]="myClass" (blur)="onBlur()">
+    <option value="">请选择</option>
+    <option *ngFor="let option of row.selectOptions" value="{{option.value}}">{{option.label}}</option>
+  </select>
+</div>
+<span class="xn-input-alert">{{alert}}</span>

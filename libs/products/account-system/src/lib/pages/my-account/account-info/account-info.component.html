@@ -1,0 +1,9 @@
+<xn-page-header-wrapper>
+  <form nz-form nzLayout="vertical" [formGroup]="form">
+    <xn-formly [form]="form" [options]="options" [model]="model" [fields]="showFields">
+    </xn-formly>
+  </form>
+  <xn-footer-toolbar style="align-items: center;">
+    <button nz-button nzType="default" (click)="goBack()">返回</button>
+  </xn-footer-toolbar>
+</xn-page-header-wrapper>

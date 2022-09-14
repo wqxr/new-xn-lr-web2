@@ -1,0 +1,43 @@
+<modal #modal [backdrop]="'static'" [keyboard]="false" [animation]="false">
+  <form class="form-horizontal" (ngSubmit)="handleSubmit()" [formGroup]="mainForm" *ngIf="!!mainForm">
+    <modal-header [showClose]="false">
+      <h4 class="modal-title">{{pageTitle}}</h4>
+    </modal-header>
+    <modal-body>
+      <div class="edit-content">
+        <table class="table text-center" style="margin-bottom:0">
+          <tbody *ngFor="let row of shows">
+            <!-- 内容项 -->
+            <tr>
+              <!-- 每行标题 -->
+              <td class="bold-text">{{auditStandard[row.itemId[0]]}}</td>
+              <td>
+                <span [class]="row.standardCss">
+                  {{row.itemId[1]==="invoiceNumber" ?
+                  row.referenceStandard:auditStandard["referenceStandard"]+'：'+row.referenceStandard}}
+                </span>
+              </td>
+              <td class="bold-text">{{row.itemId[1]==="invoiceNumber" ? row[row.itemId[1]] :
+                auditStandard[row.itemId[1]]}}</td>
+            </tr>
+            <tr>
+              <!-- 每行内容 -->
+              <td>{{row[row.itemId[0]]}}</td>
+              <td><span [class]="row.relationCss">{{row.relation}}</span></td>
+              <td>{{row.itemId[1]==="invoiceNumber" ? '' : row[row.itemId[1]]}}</td>
+            </tr>
+          </tbody>
+        </table>
+        <!-- <hr class="simple" color="#6f5499" style="width: 90%;margin:0 5%" /> -->
+      </div>
+    </modal-body>
+    <div class="modal-footer">
+      <div class="clearfix">
+        <div class="button-group">
+          <button type="button" class="btn btn-default" (click)="handleCancel()">关闭</button>
+          <!-- <button type="submit" class="btn btn-success" [disabled]="!mainForm.valid">通过</button> -->
+        </div>
+      </div>
+    </div>
+  </form>
+</modal>

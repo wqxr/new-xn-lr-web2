@@ -1,0 +1,6 @@
+<div [formGroup]="form">
+  <input #input class="form-control xn-input-font xn-input-border-radius" [ngClass]="myClass" type="text"
+         [placeholder]="row.placeholder" [formControlName]="row.checkerId" (blur)="onBlur()"
+         autocomplete="off">
+</div>
+<span class="xn-money-alert" #moneyAlertRef>{{moneyAlert}}</span>

@@ -1,0 +1,149 @@
+<modal #modal [backdrop]="'static'" [keyboard]="false" [animation]="false" (onDismiss)="onOk()">
+  <modal-header [showClose]="true">
+    <h4 class="modal-title">编辑</h4>
+  </modal-header>
+  <modal-body>
+
+    <form class="form-horizontal" (ngSubmit)="onSubmit()" #articleForm="ngForm">
+      <div class="panel panel-default">
+        <div class="panel panel-primary xn-panel-sm">
+          <div class="panel-body">
+
+            <div class="form-group">
+              <div class="col-sm-3 xn-control-label">
+                标题
+                <span class="required-label">*</span>
+              </div>
+              <div class="col-sm-8">
+                <!--<xn-input [form]="mainForm"></xn-input>-->
+                <input *ngIf="!attachTemp" readonly class="input" class="form-control" required [(ngModel)]="articalParams.title" name="title">
+                <input *ngIf="attachTemp" class="input" class="form-control" required [(ngModel)]="articalParams.title" name="title">
+              </div>
+            </div>
+            <div *ngIf="articalParams.columnId === '169'">
+              <div class="form-group" *ngFor="let row of dateRow">
+                <div class="col-sm-3 xn-control-label">
+                  {{row.title}}
+                  <span *ngIf="row.require !== false" class="required-label">*</span>
+                </div>
+                <div class="col-sm-4">
+                  <xn-input [row]="row" [form]="dateMainForm"></xn-input>
+                </div>
+              </div>
+            </div>
+            <div class="form-group" *ngIf="articalParams.columnId !== '169'">
+              <div class="col-sm-3 xn-control-label">
+                内容
+                <span class="required-label">*</span>
+              </div>
+              <div class="col-sm-8">
+                <div class="button-list">
+                  <a (click)="changeText('justifyLeft')" class="btn btn-default">
+                    <i class="fa fa-align-left"></i>
+                  </a>
+                  <a (click)="changeText('justifyCenter')" class="btn btn-default">
+                    <i class="fa fa-align-center"></i>
+                  </a>
+                  <a (click)="changeText('justifyRight')" class="btn btn-default">
+                    <i class="fa fa-align-right"></i>
+                  </a>
+                  <a (click)="changeText('bold')" class="btn btn-default">
+                    <i class="fa fa-bold"></i>
+                  </a>
+                  <a (click)="addLink($event)" class="btn btn-default">
+                    <i class="fa fa-link"></i>
+                  </a>
+
+                  <button class="btn btn-default btn-file">
+                    <input #file type="file" name="photo" accept="image/*" class="photo-input" (change)="uploadPhoto($event)" (click)="beforeUploadPhoto($event)"
+                    />
+                    <i class="fa fa-file-photo-o"></i>
+                  </button>
+
+                  <a (click)="addPaste($event)" class="btn btn-default">
+                    <i class="fa fa-clipboard">纯文本粘贴</i>
+                  </a>
+
+                  <div class="editor-modal" *ngIf="showLink" (click)="editorClick($event)">
+                    <div class="editor-input">
+                      <div class="editor-group">链接文字：
+                        <input type="text" [(ngModel)]="link.title" required name="linktitle" placeholder="请输入文字" class="editor-link-input"
+                          (input)="initLinkValue()">
+                      </div>
+                      <div class="editor-group">链接地址：
+                        <input type="text" [(ngModel)]="link.ref" required name="linkref" placeholder="www.example.com"
+                          class="editor-link-input" (input)="initLinkValue()">
+                      </div>
+                      <div class="editor-group">链接在本窗口打开：
+                        <label class="link-radio">
+                          <input type="radio" [(ngModel)]="linkRadio" name="linkRadio" value="yes">是
+                        </label>
+                        <label class="link-radio">
+                          <input type="radio" [(ngModel)]="linkRadio" name="linkRadio" value="no">否
+                        </label>
+                      </div>
+                    </div>
+                    <!--<input type="text" placeholder="www.example.com" class="editor-link-input">-->
+                    <button type="button" class="btn editor-confirm" [disabled]="!linkValue" (click)="getLink()">确认</button>
+                  </div>
+
+                  <div class="ke-dialog-default ke-dialog" *ngIf="showTextArea" (click)="textAreaClick($event)">
+                    <div class="ke-dialog-content">
+                      <div class="ke-dialog-header">
+                        粘贴为无格式文本
+                        <span class="ke-dialog-icon-close" title="关闭"></span>
+                      </div>
+                      <div class="ke-dialog-body">
+                        <div class="dialog-inner">
+                          <div class="dialog-title">
+                            请使用快捷键(Ctrl+V)把内容粘贴到下面的方框里。
+                          </div>
+                          <textarea class="ke-textarea" #KeTextArea></textarea>
+                        </div>
+                      </div>
+                      <div class="ke-dialog-footer">
+                        <span class="ke-button-common ke-button-outer ke-dialog-yes" title="确定">
+                          <input class="ke-button-common ke-button" type="button" value="确定" (click)="submitTextArea()">
+                        </span>
+                        <span class="ke-button-common ke-button-outer ke-dialog-no" title="取消">
+                          <input class="ke-button-common ke-button" type="button" value="取消" (click)="showTextArea=false">
+                        </span>
+                      </div>
+                    </div>
+                    <div class="ke-dialog-shadow"></div>
+                  </div>
+
+                </div>
+                <div #editor class="editor form-control" contenteditable="true" required name="editor">
+                  <!--{{ articalParams.content }}-->
+                </div>
+              </div>
+            </div>
+
+            <div *ngIf="false">
+              <div class="form-group" *ngFor="let row of shows">
+                <div class="col-sm-3 xn-control-label">
+                  {{row.title}}
+                  <span *ngIf="row.require !== false" class="required-label">*</span>
+                </div>
+                <div class="col-sm-6">
+                  <xn-input [row]="row" [form]="mainForm"></xn-input>
+                </div>
+                <div class="col-sm-3 xn-control-desc">
+                  {{row.memo}}
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- /.panel-body -->
+        </div>
+        <!-- /.panel -->
+      </div>
+    </form>
+
+  </modal-body>
+  <modal-footer>
+    <button type="button" class="btn btn-danger" (click)="onSubmit();$event.stopPropagation();">确定修改</button>
+  </modal-footer>
+</modal>

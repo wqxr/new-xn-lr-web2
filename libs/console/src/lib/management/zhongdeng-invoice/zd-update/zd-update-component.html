@@ -1,0 +1,51 @@
+
+    <section class="content-header">
+      <span>更新企业中登数据</span>
+    </section>
+    <section class="content">
+      <div class="box">
+        <div class="box-body">
+          <div class='bg-update'>
+            <div class="form-inline clearfix">
+              <ul class='ulclass'>
+                <li [ngClass]="{'active':type===1}">
+                  <span (click)='singleSearch(1)'>单个企业更新</span>
+                </li>
+                <li [ngClass]="{'active':type===2}">
+                  <span (click)='singleSearch(2)'>批量企业更新</span>
+                </li>
+              </ul>
+              <form class="search-zd">
+                <div  *ngIf='type===1'>
+                  <input type="text" id="searchZDInvoice" class="form-control search-input" name="searchZDInvoice"
+                    placeholder="请输入公司名称" [(ngModel)]='company'>
+                </div>
+                <div  *ngIf='type===2'>
+                  <div class="btn btn-default btn-file specialbtn">
+                    <span class="hidden-xs xn-input-font">点击上传Excel文件</span>
+                    <input type="hidden">
+                    <input type="file" (change)="onUploadExcel($event)">
+                  </div>
+                </div>
+                <div class="clearfix" style='width:80%' *ngIf='type===1'>
+                  <button type="button" class="btn btn-primary btn-sm btnadd" (click)="updateInvoice()">查询中登网
+                  </button>
+                </div>
+                <div class="clearfix">
+                  <div>
+                    <div>{{lastSearchDate}}</div>
+                    <div><a href="javascript:void(0);" (click)="downList()">批量查询记录</a><a style='margin-left:20%'
+                        *ngIf='type===2' class="xn-click-a" (click)='downTemplate()'>模板下载</a>
+                    </div>
+
+                  </div>
+                </div>
+              </form>
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+
+    </section>

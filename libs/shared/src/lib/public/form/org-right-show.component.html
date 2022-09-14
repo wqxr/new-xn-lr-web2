@@ -1,0 +1,15 @@
+<div class="org-right">
+  <div>
+    <!-- <dl *ngFor="let item of selectedOrgPermissionInfo;index as i;">
+      <dt>{{ item.org }}<span *ngIf="item.defaultOrg">【默认】</span></dt>
+      <dd>{{ item.permission }}</dd>
+    </dl> -->
+    <dl *ngFor="let item of selectedOrgPermissionInfo;index as i;">
+      <dt>{{ item.org }}<span *ngIf="item.defaultOrg">【默认】</span></dt>
+    </dl>
+    <span></span>
+    <ng-container *ngIf='noTree'>
+      <treeview [config]="config" [items]="items"></treeview>
+    </ng-container>
+  </div>
+</div>

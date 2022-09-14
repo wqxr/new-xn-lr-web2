@@ -1,0 +1,27 @@
+<section class="content-header" [hidden]="hiddenTitle">
+  <h1>
+    {{pageTitle}}
+    <small>{{pageDesc}}</small>
+  </h1>
+</section>
+<!--总部-->
+<app-page-lv-vanke-public-component [hiddenBtn]="hiddenTitle" [type]="levelModel.level" [total]="wkHeadquarterTotal"
+                                    [wkLvInfo]="wkHeadquarterInfo"
+                                    [api]="vankeApiConfig.wkHeadApi" [tableTitle]="headerTitle"
+                                    [add]="processConfig.wkHeaderAdd" [edit]="processConfig.wkHeaderEdit"
+                                    [showView]="showEditOperator" [size]="pageSize">
+</app-page-lv-vanke-public-component>
+<!--// 城市公司-->
+<app-page-lv-vanke-public-component [hiddenBtn]="hiddenTitle" [type]="levelModel.level1" [total]="wkCityTotal" [wkLvInfo]="wkCityInfo"
+                                    [api]="vankeApiConfig.wkCityApi" [tableTitle]="cityTitle"
+                                    [add]="processConfig.wkCityAdd" [edit]="processConfig.wkCityEdit"
+                                    [showView]="showEditOperator" [size]="pageSize">
+</app-page-lv-vanke-public-component>
+<!--// 项目公司-->
+<app-page-lv-vanke-public-component [hiddenBtn]="hiddenTitle" [type]="levelModel.level2" [total]="wkProjectTotal" [wkLvInfo]="wkProjectInfo"
+                                    [api]="vankeApiConfig.wkProjectApi" [tableTitle]="projectTitle"
+                                    [add]="processConfig.wkProjectAdd" [edit]="processConfig.wkProjectEdit"
+                                    [showView]="showEditOperator" [size]="pageSize">
+</app-page-lv-vanke-public-component>
+
+

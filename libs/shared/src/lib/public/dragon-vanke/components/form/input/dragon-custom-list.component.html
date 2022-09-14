@@ -1,0 +1,49 @@
+<div class="custom-list">
+    <span class="span-left">当前已选择{{selectedItems?.length}}个字段</span>
+    <span class="span-right text-red" (click)="clearAll()"><a href="javascript:void(0)">清空选择</a></span>
+    <div class="custom-table">
+
+        <div style="width:100%;">
+            <div class="table-head">
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <!-- 表头 -->
+                            <th style='width:100px' class="input-check">全选/取消
+                                <input type="checkbox" name="all" [checked]="isAllChecked()" [disabled]="!lists.length" (change)="checkAll()"/>
+                            </th>
+                            <th style='width:50px'>序号</th>
+                            <th *ngFor="let head of tableListConfig.heads">
+                                {{head.label}}
+                            </th>
+                        </tr>
+                    </thead>
+                </table>
+            </div>
+            <div class="table-body">
+                <table class="table">
+                    <tbody>
+                        <ng-container *ngIf="lists && lists.length">
+                            <tr *ngFor="let item of lists;let i=index">
+                                <!-- 行选择 -->
+                                <td style='width:100px' class="input-check">
+                                    <input type="checkbox" name="single" [checked]="item['checked']" (change)="singleChecked($event, item, i)"/>
+                                </td>
+                                <!--序号-->
+                                <td style='width:50px'>{{i + 1}}</td>
+                                <!-- 列内容 -->
+                                <td>
+                                    <div [innerHTML]="item.label"></div>
+                                </td>
+                            </tr>
+                        </ng-container>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        <!-- 分页 -->
+        <xn-pagination [rows]="pageConfig.pageSize" [first]="pageConfig.first" [totalRecords]="pageConfig.total"
+          [pageSizeOptions]="[5,10,20,30,50,100]" (pageChange)="onPage($event)">
+        </xn-pagination>
+    </div>
+</div>

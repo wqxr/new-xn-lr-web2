@@ -1,0 +1,38 @@
+<xn-basic-layout
+  [title]="settings.title"
+  [navTheme]="settings.navTheme"
+  [fixSiderbar]="true"
+  [fixedHeader]="settings.fixedHeader"
+  [autoHideHeader]="settings.autoHideHeader"
+  [contentWidth]="settings.contentWidth"
+  [layout]="settings.layout"
+  [menuData]="menuData"
+  [mode]="'inline'"
+  [logo]="logo"
+  [rightContentRender]="rightContentRender"
+  (onMenuHeaderClick)="menuHeaderClick($event)"
+  (onCollapse)="collapse($event)"
+>
+  <router-outlet></router-outlet>
+  <nz-back-top></nz-back-top>
+</xn-basic-layout>
+
+<ng-template #rightContentRender let-context>
+  <header-right-content
+    [theme]="context?.theme"
+    [layout]="context?.layout"
+  ></header-right-content>
+</ng-template>
+
+<ng-template #linkIconTemplate>
+  <i nz-icon nzType="github" nzTheme="outline"></i>
+</ng-template>
+
+<ng-template #copyRightTemplate>
+  <ng-container>
+    Copyright <i nz-icon nzType="copyright"></i> {{ footer.copyright }}
+  </ng-container>
+</ng-template>
+<ng-template #logo>
+  <i nz-icon nzIconfont="iconlogo-white"></i>
+</ng-template>

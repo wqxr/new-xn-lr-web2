@@ -1,0 +1,190 @@
+<div class="select-pos " *ngFor="let row of shows">
+  <div style="width: 25%" class="clearfix">
+    <span class="xn-control-label" style="float: left;margin-right: 10px"
+          [class.required-label]="row.required !== false">
+    {{row.title}}
+  </span>
+    <div style="overflow: hidden">
+      <xn-input [row]="row" [form]="mainForm"></xn-input>
+    </div>
+  </div>
+</div>
+<table class="table table-bordered table-hover text-center">
+  <caption class="table-caption">应收账款管理</caption>
+  <thead>
+  <tr class="label-text">
+    <th>账龄结构</th>
+    <th>本期余额</th>
+    <th>上期余额</th>
+    <th>较上期</th>
+  </tr>
+  </thead>
+  <tbody>
+  <ng-container *ngFor="let item of accountsLists">
+    <tr>
+      <td>{{item.agingStructure}}</td>
+      <td>{{item.currentBalance}}</td>
+      <td>{{item.preBalance}}</td>
+      <td>{{item.previousPeriod}}</td>
+    </tr>
+  </ng-container>
+  <tr>
+    <td>合计</td>
+    <td colspan="3"></td>
+  </tr>
+  </tbody>
+</table>
+<table class="table table-bordered table-hover text-center">
+  <caption class="table-caption">应付账款管理</caption>
+  <thead>
+  <tr class="label-text">
+    <th>账龄结构</th>
+    <th>本期余额</th>
+    <th>上期余额</th>
+    <th>较上期</th>
+  </tr>
+  </thead>
+  <tbody>
+  <ng-container *ngFor="let item of accountsLists">
+    <tr>
+      <td>{{item.agingStructure}}</td>
+      <td>{{item.currentBalance}}</td>
+      <td>{{item.preBalance}}</td>
+      <td>{{item.previousPeriod}}</td>
+    </tr>
+  </ng-container>
+  <tr>
+    <td>合计</td>
+    <td colspan="3"></td>
+  </tr>
+  </tbody>
+</table>
+
+<div>
+  <table class="table table-bordered table-hover text-center">
+    <thead>
+    <tr class="label-text">
+      <th></th>
+      <th>本期</th>
+      <th>上期</th>
+      <th>更新率</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr>
+      <td>交易对手</td>
+      <td></td>
+      <td></td>
+      <td></td>
+    </tr>
+    </tbody>
+  </table>
+</div>
+
+<div>
+  <table class="table table-bordered table-hover text-center">
+    <caption class="table-caption">流动性管理</caption>
+    <thead>
+    <tr class="label-text">
+      <th></th>
+      <th>本期</th>
+      <th>上期</th>
+      <th>较上期</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr>
+      <td>速动比</td>
+      <td></td>
+      <td></td>
+      <td></td>
+    </tr>
+    <tr>
+      <td>流动比</td>
+      <td></td>
+      <td></td>
+      <td></td>
+    </tr>
+    </tbody>
+  </table>
+</div>
+
+<div>
+  <table class="table table-bordered table-hover text-center">
+    <caption class="table-caption">再融资能力</caption>
+    <thead>
+    <tr class="label-text">
+      <th></th>
+      <th>本期</th>
+      <th>上期</th>
+      <th>较上期</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr>
+      <td>直接融资</td>
+      <td></td>
+      <td></td>
+      <td></td>
+    </tr>
+    <tr>
+      <td>间接融资</td>
+      <td></td>
+      <td></td>
+      <td></td>
+    </tr>
+    </tbody>
+
+  </table>
+</div>
+
+<div>
+  <table class="table table-bordered table-hover text-center">
+    <caption class="table-caption">同类行业对比</caption>
+    <thead>
+    <tr class="label-text">
+      <th></th>
+      <th>贸易周期</th>
+      <th>融资周期</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr>
+      <td>核心企业</td>
+      <td></td>
+      <td></td>
+    </tr>
+    <tr>
+      <td>同行企业平均</td>
+      <td></td>
+      <td></td>
+    </tr>
+    </tbody>
+  </table>
+</div>
+
+<div>
+  <table class="table table-bordered table-hover text-center">
+    <caption class="table-caption">同类产品对比</caption>
+    <thead>
+    <tr class="label-text">
+      <th></th>
+      <th>贸易周期</th>
+      <th>融资周期</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr>
+      <td>核心企业</td>
+      <td></td>
+      <td></td>
+    </tr>
+    <tr>
+      <td>同行企业平均</td>
+      <td></td>
+      <td></td>
+    </tr>
+    </tbody>
+  </table>
+</div>
+

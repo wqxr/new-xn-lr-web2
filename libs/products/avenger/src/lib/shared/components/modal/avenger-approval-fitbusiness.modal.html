@@ -1,0 +1,43 @@
+<modal #modal [backdrop]="'static'" [keyboard]="false" [animation]="false" (onDismiss)="onOk()">
+  <modal-header [showClose]="true" style='text-align:center'>
+
+    <h4 class="modal-title">选择交易</h4>
+  </modal-header>
+  <modal-body>
+    <div style="padding: 5px 60px">
+      <table class="table table-bordered text-center">
+        <thead>
+          <tr>
+            <th class="input-check">选择</th>
+            <th>交易Id</th>
+            <th>申请付款单位</th>
+            <th>收款单位</th>
+            <th>应收账款金额</th>
+            <th>起息日</th>
+            <th>保理融资到期日</th>
+            <th>合同编号</th>
+
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor='let item of selectedItems;'>
+            <td>
+              <input type="radio" name="single" [checked]="item['checked']" (change)="singleChecked(item,i)" />
+            </td>
+            <td>{{item.mainFlowId}}</td>
+            <td>{{item.projectCompany}}</td>
+            <td>{{item.debtUnit}}</td>
+            <td>{{item.receivable}}</td>
+            <td>{{item.valueDate | xnDate :'date'}}</td>
+            <td>{{item.factoringEndDate | xnDate :'date'}}</td>
+            <td>{{item.contractNum}}</td>
+        </tr>
+        </tbody>
+      </table>
+    </div>
+  </modal-body>
+  <modal-footer>
+    <button type="button" class="btn" (click)="oncancel()">取消</button>
+    <button type="button" class="btn btn-success" (click)="onOk()">确定</button>
+  </modal-footer>
+</modal>

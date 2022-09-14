@@ -1,0 +1,14 @@
+<div [formGroup]="form">
+  <div class="input-group">
+    <div class="input-group">
+      <input #input class="form-control xn-input-font xn-input-border-radius" [ngClass]="myClass" type="text"
+             [placeholder]="row.placeholder"  (blur)="onBlur()" (input)="onInput()" autocomplete="off"
+             [disabled]="inputStatus">
+    </div>
+    <span class="input-group-btn">
+        <button class="btn btn-default" type="button" (click)="handleChange()">暂无</button>
+      </span>
+  </div>
+
+</div>
+<span class="xn-money-alert" #moneyAlertRef>{{moneyAlert}}</span>

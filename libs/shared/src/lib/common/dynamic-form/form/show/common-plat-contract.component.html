@@ -1,0 +1,143 @@
+<div>
+  <div style="width: 100%; margin-bottom: 20px">
+    <div class="table-head">
+      <table class="table" [ngClass]="{ specialTable: !heads.length }">
+        <thead>
+          <tr>
+            <ng-container *ngFor="let head of heads">
+              <th [ngStyle]="{ width: head.type === 'id' ? '6%' : 'auto' }">
+                {{ head.label }}
+              </th>
+            </ng-container>
+          </tr>
+        </thead>
+      </table>
+    </div>
+    <div class="table-body">
+      <table class="table" [ngClass]="{ specialTable: !heads.length }">
+        <tbody>
+          <ng-container *ngIf="items.length; else block1">
+            <tr *ngFor="let item of items; let i = index">
+              <td *ngFor="let head of heads" [ngStyle]="{ width: head.type === 'id' ? '6%' : 'auto' }">
+                <ng-container [ngSwitch]="head.type">
+                  <ng-container *ngSwitchCase="'date'">
+                    <p>{{ item[head.value] | xnDate: "date" }}</p>
+                  </ng-container>
+                  <ng-container *ngSwitchCase="'id'">
+                    <p>{{ i + 1 }}</p>
+                  </ng-container>
+                  <ng-container *ngSwitchCase="'mainFlowId'">
+                    <a href="javaScript:void (0)" (click)="
+                        hwModeService.DragonviewProcess(item?.mainFlowId)
+                      ">{{ item.mainFlowId }}</a>
+                  </ng-container>
+                  <!-- 原告 被告 -->
+                  <ng-container *ngSwitchCase="'list'">
+                    <ng-container *ngIf="
+                        item[head.value] &&
+                        item[head.value] !== '' &&
+                        item[head.value] !== []
+                      ">
+                      <div [innerHTML]="
+                          item[head.value] | xnArrayListToString: 'Name'
+                        "></div>
+                    </ng-container>
+                  </ng-container>
+                  <ng-container *ngSwitchCase="'itemName'">
+                    <ng-container *ngIf="
+                        item[head.value] &&
+                        item[head.value] !== '' &&
+                        item[head.value] !== []
+                      ">
+                      <div style="text-align: left" [innerHTML]="
+                          item[head.value] | xnArrayListToString: 'index_name'
+                        "></div>
+                    </ng-container>
+                  </ng-container>
+                  <ng-container *ngSwitchCase="'itemValue'">
+                    <ng-container *ngIf="
+                        item[head.value] &&
+                        item[head.value] !== '' &&
+                        item[head.value] !== []
+                      ">
+                      <div style="text-align: left" [innerHTML]="
+                          item[head.value] | xnArrayListToString: 'index_value'
+                        "></div>
+                    </ng-container>
+                  </ng-container>
+                  <ng-container *ngSwitchCase="'manualApproval'">
+                    <ng-container *ngIf="
+                        item[head.value] &&
+                        item[head.value] !== '' &&
+                        item[head.value] !== []
+                      ">
+                      <div *ngFor="let value of item[head.value]">
+                        <div style="text-align: left">
+                          <ng-container *ngIf="value.check_status === 1">
+                            <i nz-icon nzType="check-circle" nzTheme="twotone" nzTwotoneColor="#60db7d"></i>
+                          </ng-container>
+                          <ng-container *ngIf="value.check_status !== 1">
+                            <i nz-icon nzType="info-circle" nzTheme="twotone" nzTwotoneColor="#dbcd5d"></i>
+                          </ng-container>
+                          {{ value.standard_name }}
+                        </div>
+                      </div>
+                    </ng-container>
+                  </ng-container>
+                  <ng-container *ngSwitchCase="'listClassify'">
+                    <div *ngIf="
+                        item[head.value] &&
+                        item[head.value] !== '' &&
+                        item[head.value] !== []
+                      ">
+                      <div *ngFor="let value of item[head.value]">
+                        <div class="td-link" (click)="viewFile(value.file_info)">
+                          <span>查看文件</span>
+                        </div>
+                      </div>
+                    </div>
+                  </ng-container>
+                  <ng-container *ngSwitchCase="'file'">
+                    <div *ngFor="let value of item[head.value] | xnJson">
+                      <div class="td-link" (click)="viewFile(value)">
+                        <span>查看文件</span>
+                      </div>
+                    </div>
+                  </ng-container>
+                  <ng-container *ngSwitchCase="'level-certifile'">
+                    <div *ngFor="let value of item[head.value]">
+                        <span>{{value.certify_classes}}</span>--<span>{{value.certify_grade}}</span>
+                    </div>
+                  </ng-container>
+                  <ng-container *ngSwitchCase="'operate'">
+                    <a href="javaScript:void(0)" (click)="enterCertiFiles(i,item.files)">查看</a>
+                  </ng-container>
+                  <ng-container *ngSwitchDefault>
+                    <div [innerHTML]="
+                        item[head.value]
+                          | xnGatherType: { head: head, row: item }
+                      "></div>
+                  </ng-container>
+                </ng-container>
+              </td>
+              <td *ngIf="!heads.length" style="
+                  border: none !important;
+                  padding-top: 0px;
+                  padding-left: 3px;
+                ">
+                <div style="text-align: left">{{ item.contractNeed }}</div>
+              </td>
+            </tr>
+          </ng-container>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+<ng-template #block1>
+  <tr>
+    <td [attr.colspan]="calcAttrColspan()">
+      <div class="empty-message"></div>
+    </td>
+  </tr>
+</ng-template>

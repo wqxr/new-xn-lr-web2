@@ -1,0 +1,65 @@
+<div [formGroup]="form">
+  <div class="form-group" style='height:35px'>
+    <span class="col-sm-3 control-label" [ngClass]="{ 'title-text': row.required }">期数</span>
+    <div class="col-sm-9">
+      <input class="form-control xn-input-font xn-input-border-radius" type="text" [value]="data.periods" name="periods"
+        (input)="handleEdit($event, 'periods')" autocomplete="off" />
+    </div>
+  </div>
+  <div class="form-group" style='height:35px' *ngIf="data.applyExpires!==undefined">
+    <span class="col-sm-3 control-label" [ngClass]="{ 'title-text': row.required }">申请期限(天)</span>
+    <div class="col-sm-9">
+      <input class="form-control xn-input-font xn-input-border-radius" type="text" [value]="data.applyExpires" name="applyExpires"
+        (input)="handleEdit($event, 'applyExpires')" autocomplete="off" />
+    </div>
+  </div>
+  <div class="form-group" style='height:35px' >
+    <span class="col-sm-3 control-label" [ngClass]="{ 'title-text': row.required }">买卖协议编号</span>
+    <div class="col-sm-9">
+      <input type="text" class="form-control xn-input-font xn-input-border-radius" name="salesAgreementNumber"
+        (input)="handleEdit($event, 'salesAgreementNumber')" [value]="data.salesAgreementNumber" autocomplete="off" />
+    </div>
+  </div>
+  <div class="form-group" style='height:35px' *ngIf="data.factoringProcedureRate!==undefined">
+    <span class="col-sm-3 control-label" [ngClass]="{ 'title-text': row.required }">保理手续费率(%)</span>
+    <div class="col-sm-9">
+      <input class="form-control xn-input-font xn-input-border-radius" type="text" [value]="data.factoringProcedureRate" name="factoringProcedureRate"
+        (input)="handleEdit($event, 'factoringProcedureRate')" autocomplete="off" />
+        <span class="xn-input-alert">{{factoringProcedureRateAlet}}</span>
+    </div>
+  </div>
+  <div class="form-group" style='height:35px'>
+    <span class="col-sm-3 control-label" [ngClass]="{ 'title-text': row.required }">服务协议编号</span>
+    <div class="col-sm-9">
+      <input class="form-control xn-input-font xn-input-border-radius" type="text" name="serviceAgreementNumber"
+        [value]="data.serviceAgreementNumber" (input)="handleEdit($event, 'serviceAgreementNumber')"
+        autocomplete="off" />
+    </div>
+  </div>
+  <div class="form-group" style='height:35px' *ngIf="data.succeededRate!==undefined">
+    <span class="col-sm-3 control-label" [ngClass]="{ 'title-text': row.required }">承购费率(%)</span>
+    <div class="col-sm-9">
+      <input class="form-control xn-input-font xn-input-border-radius" type="text" [value]="data.succeededRate" name="succeededRate"
+        (input)="handleEdit($event, 'succeededRate')" autocomplete="off" />
+        <span class="xn-input-alert">{{succeededRateAlet}}</span>
+    </div>
+  </div>
+  <div class="form-group" style='height:35px'>
+    <span class="col-sm-3 control-label" [ngClass]="{ 'title-text': row.required }">专项计划编号
+    </span>
+    <div class="col-sm-9">
+      <input class="form-control xn-input-font xn-input-border-radius" type="text" name="capitalManageNum"
+        [value]="data.capitalManageNum" (input)="handleEdit($event, 'capitalManageNum')"
+        autocomplete="off" />
+    </div>
+  </div>
+  <div class="form-group" style='height:35px'  *ngIf="data.capitalPeriodNum!==undefined">
+      <span class="col-sm-3 control-label" [ngClass]="{ 'title-text': row.required }">专项计划期数
+      </span>
+      <div class="col-sm-9">
+        <input class="form-control xn-input-font xn-input-border-radius" type="text" name="capitalPeriodNum"
+          [value]="data.capitalPeriodNum" (input)="handleEdit($event, 'capitalPeriodNum')"
+          autocomplete="off" />
+      </div>
+    </div>
+</div>

@@ -1,0 +1,26 @@
+<section class="content-header">
+  <h1>
+    {{pageTitle}}> {{customerInfo.orgName}}
+  </h1>
+</section>
+
+<section class="content">
+  <div class="box-header clearfix">
+    <div class="pull-left">
+      <app-panel-change-component [SelectItem]="customerEnum | xnSelectItem" [type]="type"
+                                  (change)="onItemClick($event)">
+      </app-panel-change-component>
+    </div>
+    <a class="btn btn-default pull-right" (click)="onBack()">返回企业列表</a>
+  </div>
+  <div class="box">
+    <div class="box-body">
+      <app-survey-in-info [customerInformation]="customerInfo" *ngIf="type==='info'"></app-survey-in-info>
+      <app-financing-map *ngIf="type === 'grade'"></app-financing-map>
+      <app-progress-in-credit *ngIf="type === 'credit'" [customerInfo]="customerInfo"></app-progress-in-credit>
+      <app-survey-in-financial [customerInfo]="customerInfo" *ngIf="type === 'financial'"></app-survey-in-financial>
+      <app-survey-in-opponent [customerInfo]="customerInfo" *ngIf="type === 'opponent'"></app-survey-in-opponent>
+      <app-survey-in-core *ngIf="type === 'core'" [customerInfo]="customerInfo"></app-survey-in-core>
+    </div>
+  </div>
+</section>

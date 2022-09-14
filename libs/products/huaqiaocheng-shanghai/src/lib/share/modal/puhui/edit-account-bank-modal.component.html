@@ -1,0 +1,125 @@
+<section>
+  <modal #modal [backdrop]="'static'" [keyboard]="false" [animation]="false">
+    <modal-header showClose="true">
+      <h4 class="modal-title">{{ params.title }}</h4>
+    </modal-header>
+    <modal-body>
+      <div class="clearfix" style="max-height: calc( 100vh - 400px);overflow-y: auto;overflow-x:hidden;">
+        <!-- 绑定账号 -->
+        <div class="form-horizontal" *ngIf="showEditForm">
+          <div class="form-group" *ngFor="let row of editShowFields">
+            <div class="col-sm-3 xn-control-label" [class.required-star]="!!row.required">
+              {{ row.title }}
+            </div>
+            <div class="col-sm-8" style="display: flex;">
+              <div style="flex: 1;">
+                <app-dynamic-input [row]="row" [form]="editForm" [svrConfig]="svrConfig" formModule="dragon-input">
+                </app-dynamic-input>
+              </div>
+              <!-- 获取验证码按钮 -->
+              <ng-container *ngIf="row.checkerId === 'operatorMobile'">
+                <div>
+                  <button type="button" class="btn btn-primary" [disabled]="showCodeBtn" (click)="sendCode()">
+                    {{ btnText }}
+                  </button>
+                </div>
+              </ng-container>
+            </div>
+            <div class="col-sm-2 xn-control-desc">
+              {{ row.memo }}
+            </div>
+          </div>
+        </div>
+        <!-- 确认电子账户 -->
+        <div class="form-horizontal" *ngIf="showResultFrom">
+          <h4 style="color: #f59a23;text-align: center;padding: 15px;">请于
+            <span style="font-weight: bold;"> {{ paymentDate }} </span>通过以下绑定银行对公账户向普惠记账簿电子账户打入验证金额
+          </h4>
+          <div class="form-group" *ngFor="let row of resultShowFields">
+            <ng-container>
+              <div *ngIf="row.checkerId === 'account'" style="padding: 5px 50px;">
+                <h4>绑定对公账号信息</h4>
+              </div>
+              <div *ngIf="row.checkerId === 'acctNo'" style="padding: 5px 50px;">
+                <h4>普惠记账簿电子账户</h4>
+              </div>
+            </ng-container>
+            <div>
+              <div class="col-sm-3 xn-control-label" [class.required-star]="!!row.required">
+                {{ row.title }}
+              </div>
+              <div class="col-sm-8">
+                <app-dynamic-input [row]="row" [form]="resultForm" [svrConfig]="svrConfig" formModule="dragon-input">
+                </app-dynamic-input>
+              </div>
+              <div class="col-sm-2 xn-control-desc">
+                {{ row.memo }}
+              </div>
+            </div>
+            <div class="col-sm-12" *ngIf="row.checkerId === 'actiDeadline' && needReActive">
+              <div class="col-sm-3"></div>
+              <div class="col-sm-8" style="text-align: right;">
+                <a href="javascript: void(0)" (click)="reActiveAct()">已过打款激活日期，申请重新激活</a>
+              </div>
+              <div class="col-sm-2"></div>
+            </div>
+          </div>
+        </div>
+        <!-- 重新激活电子账户信息 -->
+        <div class="form-horizontal" *ngIf="showReActiveFrom">
+          <h4 style="color: #f59a23;text-align: center;padding: 15px;">请于
+            <span style="font-weight: bold;"> {{ paymentDate }} </span>通过以下绑定银行对公账户向普惠记账簿电子账户打入验证金额
+          </h4>
+          <div class="form-group" *ngFor="let row of reActiveShowFields">
+            <ng-container>
+              <div *ngIf="row.checkerId === 'modifyBindBankAccountNo'" style="padding: 5px 50px;">
+                <h4>绑定对公账号信息</h4>
+              </div>
+              <div *ngIf="row.checkerId === 'acctNo'" style="padding: 5px 50px;">
+                <h4>普惠记账簿电子账户</h4>
+              </div>
+            </ng-container>
+            <div>
+              <div class="col-sm-3 xn-control-label" [class.required-star]="!!row.required">
+                {{ row.title }}
+              </div>
+              <div class="col-sm-8">
+                <app-dynamic-input [row]="row" [form]="reActiveFrom" [svrConfig]="svrConfig" formModule="dragon-input">
+                </app-dynamic-input>
+              </div>
+              <div class="col-sm-2 xn-control-desc">
+                {{ row.memo }}
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </modal-body>
+    <modal-footer>
+      <!-- left -->
+      <div class="col-sm-6" style="text-align: left;">
+        <button *ngIf="showEditForm" type="button" class="btn btn-default" (click)="handleCancel()">
+          取消
+        </button>
+        <button *ngIf="showResultFrom" type="button" class="btn btn-primary" (click)="toFrist()">
+          上一步
+        </button>
+      </div>
+      <!-- right -->
+      <div class="col-sm-6" style="text-align: right;">
+        <button *ngIf="showEditForm" type="button" class="btn btn-success" [disabled]="!editForm?.valid"
+          (click)="activeAccount()">
+          下一步
+        </button>
+        <button *ngIf="showResultFrom" type="button" class="btn btn-success" (click)="showAccount()">
+          确定
+        </button>
+        <!-- 确认重新打款账号信息 -->
+        <button *ngIf="reActiveFrom" type="button" class="btn btn-success" (click)="showAccount()">
+          确定
+        </button>
+      </div>
+    </modal-footer>
+
+  </modal>
+</section>

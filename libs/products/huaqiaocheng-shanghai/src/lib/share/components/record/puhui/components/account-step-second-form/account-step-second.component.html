@@ -1,0 +1,27 @@
+<section *ngIf="svrConfig">
+  <form class="form-horizontal">
+    <div class="panel panel-default">
+      <div class="panel-body">
+        <div class="form-group" *ngFor="let row of secondRows; let i = index">
+          <ng-container>
+            <div>
+              <app-dynamic-input [row]="row" [form]="mainForm" [formModule]="formModule" [svrConfig]="svrConfig">
+              </app-dynamic-input>
+            </div>
+          </ng-container>
+        </div>
+      </div>
+      <div class="panel-footer text-right">
+        <button type="button" class="btn btn-default pull-left" (click)="goBack()">
+          返回
+        </button>
+        <button type="button" [disabled]="!mainForm?.valid && !readonly" class="btn btn-primary" (click)="toFirst()">
+          上一步
+        </button>
+        <button type="submit" class="btn btn-primary" [disabled]="!mainForm?.valid && !readonly" (click)="toThird()">
+          下一步
+        </button>
+      </div>
+    </div>
+  </form>
+</section>

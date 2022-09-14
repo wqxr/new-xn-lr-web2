@@ -1,0 +1,42 @@
+<section class="content">
+  <form class="form-horizontal" novalidate>
+    <div class="box">
+      <div class="box-header">
+        <h3 class="box-title">{{base.superConfig.showName}}详情</h3>
+      </div>
+      <!-- /.box-header -->
+
+      <div class="box-body" *ngIf="rows">
+        <div class="form-group" *ngFor="let row of rows">
+          <div class="col-sm-3 xn-control-label">
+            {{row.title}}
+            <span *ngIf="row.required !== false && row.required !== 0" class="required-label">*</span>
+          </div>
+          <div class="col-sm-6">
+            <xn-show-input [row]="row"></xn-show-input>
+          </div>
+          <div class="col-sm-3 xn-control-desc">
+            {{row.memo}}
+          </div>
+        </div>
+      </div>
+      <!-- /.box-body -->
+    </div>
+    <!-- /.box -->
+
+    <div class="row" style="padding-top: 20px">
+      <ng-container *ngIf="base.canEdit(record)">
+        <div class="col-md-4 col-md-offset-2">
+            <button type="button" class="btn btn-primary btn-lg btn-block" (click)="base.onCancel()">返回</button>
+        </div>
+        <div class="col-md-4">
+          <button type="button" class="btn btn-default btn-lg btn-block" (click)="base.onNavigateEdit(record)">编辑</button>
+        </div>
+      </ng-container>
+      <div class="col-md-4 col-md-offset-4" *ngIf="!base.canEdit(record)">
+        <button type="button" class="btn btn-primary btn-lg btn-block" (click)="base.onCancel()">返回</button>
+      </div>
+    </div>
+  </form>
+</section>
+<!-- /.content -->

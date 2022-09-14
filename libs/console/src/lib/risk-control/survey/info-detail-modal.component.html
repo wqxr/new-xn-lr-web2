@@ -1,0 +1,87 @@
+<modal #modal [backdrop]="'static'" [keyboard]="false" [animation]="false">
+  <modal-header [showClose]="false">
+    <h4 class="modal-title">{{pageTitle}}</h4>
+  </modal-header>
+  <modal-body>
+    <div class="text-content">
+      <div *ngIf="label==='referee'" [innerHTML]="params.referee.Content | xnHtml"></div>
+      <div *ngIf="label==='courtNotice'">
+        <table class="table table-bordered">
+          <tr>
+            <td class="label-text">当事人：</td>
+            <td>{{params.courtNotice.Party | xnText }}</td>
+            <td class="label-text">公告类型：</td>
+            <td>{{params.courtNotice.Category | xnText}}</td>
+          </tr>
+          <tr>
+            <td class="label-text">刊登日期：</td>
+            <td>{{params.courtNotice.PublishDate | xnText : 'date'}}</td>
+            <td class="label-text">刊登面板：</td>
+            <td>{{params.courtNotice?.PublishBroad | xnText}}</td>
+          </tr>
+          <tr>
+            <td class="label-text">上传日期：</td>
+            <td>{{params.courtNotice.SubmitDate | xnText : 'date'}}</td>
+            <td class="label-text">公告人：</td>
+            <td>{{params.courtNotice.Court | xnText}}</td>
+          </tr>
+          <tr>
+            <td class="label-text">内容：</td>
+            <td colspan="3">{{params.courtNotice.Content | xnText}}</td>
+          </tr>
+        </table>
+      </div>
+      <div *ngIf="label==='opening'">
+        <table class="table table-bordered">
+          <tr>
+            <td class="label-text">案由：</td>
+            <td colspan="3">{{params.opening.Case_Reason | xnText}}</td>
+          </tr>
+          <tr>
+            <td class="label-text">案号：</td>
+            <td>{{params.opening.Case_No | xnText}}</td>
+            <td class="label-text">开庭日期：</td>
+            <td>{{params.opening.Open_Time | xnText : 'date'}}</td>
+          </tr>
+          <tr>
+            <td class="label-text">地区：</td>
+            <td>{{params.opening.Province | xnText}}</td>
+            <td class="label-text">审判长/主审人：</td>
+            <td>{{params.opening.Chief_Judge | xnText}}</td>
+          </tr>
+          <tr>
+            <td class="label-text">上诉人：</td>
+            <td colspan="3">
+              <ng-container *ngIf="params.opening.Prosecutor.length">
+                <span *ngFor="let item of params.opening.Prosecutor"
+                      class="text-prosecutor">{{item.Name | xnText}}</span>
+              </ng-container>
+            </td>
+          </tr>
+          <tr>
+            <td class="label-text">被上诉人：</td>
+            <td colspan="3">
+              <ng-container *ngIf="params.opening.Defendant.length">
+                <span *ngFor="let item of params.opening.Defendant"
+                      class="text-prosecutor">{{item.Name | xnText}}</span>
+              </ng-container>
+            </td>
+          </tr>
+          <tr>
+            <td class="label-text">法院：</td>
+            <td>{{params.opening.Execute_Gov | xnText}}</td>
+            <td class="label-text">法庭：</td>
+            <td>{{params.opening.Execute_Unite | xnText}}</td>
+          </tr>
+          <tr>
+            <td class="label-text">公告内容：</td>
+            <td colspan="3">{{params.opening?.Content | xnText}}</td>
+          </tr>
+        </table>
+      </div>
+    </div>
+  </modal-body>
+  <modal-footer>
+    <button type="button" class="btn btn-primary" (click)="onCancel()">关闭</button>
+  </modal-footer>
+</modal>

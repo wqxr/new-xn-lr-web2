@@ -1,0 +1,106 @@
+<section class="content" style='padding: 0'>
+  <div class="box">
+    <div class="box-header">
+      <h3 class="box-title">{{supers.showName}}</h3>
+    </div>
+    <div class="box-body">
+
+      <!-- 表头搜索项 -->
+      <xn-search-form
+        [model]="searchModel"
+        [fields]="showFields"
+        (search)="onSearch($event)"
+        (reset)="onReset()"
+      ></xn-search-form>
+
+      <table class="table table-bordered table-striped home-comm-list-table"
+             [ngClass]="!!supers.tableText ? supers.tableText : 'text-center'">
+        <thead>
+        <tr class="table-head">
+          <ng-container *ngFor="let head of heads">
+            <th *ngIf="head.sort" [ngClass]="onSortClass(head.checkerId)" (click)="onSort(head.checkerId)">
+              {{head.title}}
+            </th>
+            <th *ngIf="!head.sort">{{head.title}}</th>
+          </ng-container>
+          <th style="min-width: 80px" *ngIf="supers.canDo">操作</th>
+        </tr>
+        </thead>
+        <tbody>
+        <!-- 内容项 -->
+        <ng-container *ngIf="rows && rows.length;else block">
+          <tr *ngFor="let row of rows">
+            <!-- 每行内容 -->
+            <td *ngFor="let head of heads" [ngClass]="onTextClass(head['type'])" style="word-wrap:break-word">
+              <!-- 每列内容 ,long-title 可点击标签-->
+              <ng-container
+                *ngIf="head['type']!=='long-title' && head['type'] !=='contract' && head['type']!=='feedback'
+                && head['type'] !=='pauseStatus'&&head['type']!=='flowId' && head['type']!=='file' && head['type']!=='reviewType' && head['type'] !=='acceptState' && head['type']!=='select'">
+
+                <div *ngIf="head.checkerId!=='mainFlowId'"
+                     [innerHTML]="row[head.checkerId] | xnGatherType: {head:head,row:row}"></div>
+
+                <a *ngIf="head.checkerId==='mainFlowId'" href="javaScript:void (0)"
+                   (click)="toolKitSrv.viewProcess(row[head.checkerId])">{{row[head.checkerId]}}</a>
+
+              </ng-container>
+              <!-- 首页代办流程名称 -->
+              <a *ngIf="head['type']==='long-title'" href="javaScript:void (0)"
+                 (click)="doProcess(row)">{{row[head.checkerId]}}</a>
+
+              <ng-container *ngIf="head['type'] ==='file'">
+                <ng-container *ngIf=" row[head.checkerId]&& row[head.checkerId]!==''">
+                  <div>
+                    <a href="javaScript:void(0)" (click)="viewFiles(row[head.checkerId])">
+                      {{(row[head.checkerId]| xnJson).fileName}}</a>
+                  </div>
+                </ng-container>
+              </ng-container>
+
+              <ng-container *ngIf="head['type']==='select'">
+                <div>{{row[head.checkerId] | xnSelectTransform:'todoCurrentSteps'}}</div>
+              </ng-container>
+              <ng-container *ngIf="head['type']==='feedback'">
+                <div>{{row[head.checkerId] | xnSelectTransform:'feedback'}}</div>
+              </ng-container>
+              <ng-container *ngIf="head['type']==='reviewType'">
+                <div>{{row[head.checkerId] | xnSelectTransform:'cfcaOperateType'}}</div>
+              </ng-container>
+              <ng-container *ngIf="head['type']==='flowId'">
+                <div>{{row[head.checkerId] | xnSelectTransform:'commonPlatStatus'}}</div>
+                <div>{{row[head.checkerId] | xnSelectTransform:'differentPlatStatus'}}</div>
+              </ng-container>
+
+            </td>
+            <!-- 操作项 -->
+            <td *ngIf="supers.canDo">
+              <ng-container *ngIf="base.superConfig.list?.rowButtons.length">
+                <ng-container *ngFor="let btn of base.superConfig.list?.rowButtons">
+                  <a *ngIf="btn.type === 'a' && btn.can && onBtnShow(btn, row)" (click)="doProcess(row)"
+                     class="xn-click-a small-font">{{btn.title}}</a>
+                </ng-container>
+              </ng-container>
+            </td>
+          </tr>
+        </ng-container>
+        </tbody>
+      </table>
+      <xn-pagination
+        *ngIf="supers.showPage"
+        [rows]="pageConfig.pageSize"
+        [first]="pageConfig.first"
+        [totalRecords]="pageConfig.total"
+        [pageSizeOptions]="[10,20,30,50,100]"
+        (pageChange)="onPage($event)"
+      ></xn-pagination>
+    </div>
+  </div>
+</section>
+<!-- 列表为空时 -->
+<ng-template #block>
+  <tr>
+    <td [attr.colspan]="base.superConfig?.canDo?heads.length+1:heads.length">
+      <div class="empty-message"></div>
+    </td>
+  </tr>
+</ng-template>

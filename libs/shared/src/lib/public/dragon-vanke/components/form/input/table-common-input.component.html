@@ -1,0 +1,135 @@
+<div>
+  <div class="height" style="width:100%">
+    <div class="head-height">
+      <table class="table table-bordered table-hover text-center table-display relative" style='width:100%'
+        [style.left.px]="headLeft">
+        <thead style='width:99%'>
+          <tr>
+            <!-- 全选按钮 -->
+            <th style='width:50px' *ngIf="TabConfig.canChecked" class="input-check">全选/取消
+              <input type="checkbox" name="all" [checked]="isAllChecked()" [disabled]="!datavalue.length"
+                (change)="checkAll()" />
+            </th>
+            <th style='width:50px'>序号</th>
+            <!-- 表头，搜索功能 -->
+            <ng-container *ngFor="let head of heads">
+              <th style='width:100px'>
+                {{head.label}}
+              </th>
+            </ng-container>
+            <!-- 行操作 -->
+            <th style='width:150px' *ngIf="TabConfig.rowButtons.length">
+              操作
+            </th>
+          </tr>
+        </thead>
+      </table>
+    </div>
+  </div>
+  <div class="table-height" (scroll)="onScroll($event)">
+    <table class="table table-bordered table-hover text-center table-display" style='width:100%'>
+      <tbody style='width:100%'>
+        <ng-container *ngIf="datavalue.length;">
+          <tr *ngFor="let item of datavalue;let i=index">
+            <!-- 行选则 -->
+            <td style='width:50px' *ngIf="TabConfig.canChecked" class="input-check">
+              <input type="checkbox" name="single" [checked]="item['checked']" (change)="singleChecked(item,i)" />
+            </td>
+            <!--序号-->
+            <td style='width:50px'>{{i + 1}}</td>
+            <!-- <td>{{item?.second_wk_01_contract}}</td> -->
+            <!-- 列内容 -->
+            <td *ngFor="let head of heads" style="width:100px;word-wrap:break-word;word-break: break-all;">
+              <!-- 根据head type 类型配置显示方式 -->
+              <ng-container [ngSwitch]="true">
+                <!-- mainFlowId-->
+                <ng-container *ngSwitchCase="head.type==='mainFlowId'">
+                  <div (click)='viewProgress(item[head.value])' [tooltip]='helpDealContract' content-type="template"
+                    [options]="myOptions" (mouseover)='viewDetail(item.mainFlowId)'>
+                    <a class="xn-click-a">{{item[head.value]}}</a>
+                  </div>
+                </ng-container>
+                <!--invoiceNum-->
+                <ng-container *ngSwitchCase="head.type==='invoiceNum'">
+                  <ng-container *ngIf="arrayLength(item[head.value]);else block2">
+                    <a class="xn-click-a" href="javaScript:void(0)" (click)="viewMore(item[head.value])"
+                      [innerHtml]="(item[head.value] | xnArrayTruncate:2:'等;')">
+                    </a>
+                  </ng-container>
+                  <ng-template #block2>
+                    <div [innerHtml]="(item[head.value] | xnArrayTruncate:2:'等;')"></div>
+                  </ng-template>
+                </ng-container>
+                <!--contract-->
+                <!--图片文件file-->
+                <ng-container *ngSwitchCase="head.type==='file'">
+                  <ng-container *ngIf="item[head.value] && item[head.value]!==''">
+                    <div *ngFor="let sub1 of item[head.value] | xnJson;let j=index">
+                      <ng-container *ngIf="!!sub1.fileName && j===0">
+                        <a href="javaScript:void(0)" (click)="viewFiles(item[head.value])">
+                          {{(item[head.value] | xnJson).length>1 ? (item[head.value] | xnJson)[0].fileName + '，...' : (item[head.value] | xnJson)[0].fileName}}
+                        </a>
+                      </ng-container>
+                    </div>
+                  </ng-container>
+                </ng-container>
+                <ng-container *ngSwitchCase="head.type==='date'">
+                  <ng-container *ngIf="item[head.value] && item[head.value]!==''">
+                    <div>
+                      {{item[head.value] | xnDate: 'date'}}
+                    </div>
+                  </ng-container>
+                </ng-container>
+                <!-- 应收账款金额 -->
+                <ng-container *ngSwitchCase="head.type==='receive'">
+                  <ng-container
+                    *ngIf="!!item[head.value]">
+                    <div>{{item[head.value].toFixed(2) | xnMoney}}</div>
+                  </ng-container>
+                </ng-container>
+                <!-- 资产转让折扣率 -->
+                <ng-container *ngSwitchCase="head.type==='discountRate'">
+                  <ng-container *ngIf=" item[head.value]&& item[head.value]!==''">
+                    <div>{{item[head.value] | number: '1.2-2'}}%</div>
+                  </ng-container>
+                </ng-container>
+                <!-- 金额类型 -->
+                <ng-container *ngSwitchCase="head.type==='money'">
+                  <ng-container
+                    *ngIf=" item[head.value] !==undefiend &&item[head.value] !==null && item[head.value]!==0">
+                    <div>{{item[head.value].toFixed(2) | xnMoney}}</div>
+                  </ng-container>
+                </ng-container>
+                <!-- 渠道 -->
+                <ng-container *ngSwitchCase="head.type==='financingType'">
+                  <div>
+                    {{{ 'type':item['productType'],'selectBank':item['bankType'] } | xnSelectDeepTransform:'productType_dw'}}
+                  </div>
+                </ng-container>
+                <ng-container *ngSwitchCase="head.type==='xnMainFlowStatus'">
+                  <ng-container *ngIf="item[head.value] && item[head.value]!==''">
+                    <div>
+                      {{item[head.value] | xnMainFlowStatus : item['isProxy']}}
+                    </div>
+                  </ng-container>
+                </ng-container>
+                <ng-container *ngSwitchDefault>
+                  <div [innerHTML]="item[head.value] | xnGatherType: {head:head,row:item}"></div>
+                </ng-container>
+              </ng-container>
+            </td>
+            <!-- 行按钮 -->
+            <td style='width:150px' *ngIf="TabConfig.rowButtons.length">
+              <div class="operate-btn">
+                <ng-container *ngFor="let btn of TabConfig.rowButtons">
+                  <a href="javaScript:void(0)" (click)="handleRowClick(btn)">{{btn.label}}</a>
+                </ng-container>
+              </div>
+            </td>
+          </tr>
+        </ng-container>
+      </tbody>
+    </table>
+  </div>
+  <p style='margin-top:10px'>共<span style='color:red'>{{datavalue.length}}</span>笔交易</p>
+</div>

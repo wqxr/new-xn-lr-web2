@@ -1,0 +1,44 @@
+<section class="content-header">
+  <h1>
+    {{pageTitle}}
+  </h1>
+</section>
+
+<section class="content">
+  <form class="form-horizontal" (ngSubmit)="onSubmit()" [formGroup]="mainForm">
+    <div class="panel panel-default">
+      <div class="panel-heading">
+        <span class="panel-title">当前：修改中登类别</span>
+      </div>
+      <div class="panel-body">
+        <div>
+          <div class="col-sm-5">
+            <h3>修改中登类别</h3>
+            <div class="xn-radio-row" >
+              <label class="xn-input-font labelcss" *ngFor="let option of zhondengOptions">
+                <ng-container>
+                  <input type="radio" formControlName="classify"  value="{{option.value}}"
+                    class="flat-red">&nbsp;&nbsp;{{option.label}}
+                </ng-container>
+              </label>
+            </div>
+          </div>
+          <div class="col-sm-12" style='margin-top:15px'>
+            <div class="col-sm-5" style="padding-left:0px">
+              <h3>补充中登信息</h3>
+              <zd-change-info [formGroups]="mainForm.controls['innvoiceInfo']" [registerNo]='params.registerNo'></zd-change-info>
+            </div>
+            <div class="col-sm-7">
+              <zd-mfiles [registerNo]='params.registerNo'></zd-mfiles>
+            </div>
+          </div>
+        </div>
+        <div class="panel-footer text-right" style='clear:both'>
+          <button type="button" class="btn btn-default pull-left" (click)="onCancel()">返回</button>
+          <button type="submit" class="btn btn-primary" [disabled]="!mainForm.valid">提交</button>
+        </div>
+      </div>
+    </div>
+  </form>
+
+</section>

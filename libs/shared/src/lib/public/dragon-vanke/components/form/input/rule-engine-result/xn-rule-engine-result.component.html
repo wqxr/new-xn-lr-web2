@@ -1,0 +1,80 @@
+<section>
+  <div class="check-title">
+    <button
+      type="button"
+      (click)="changeTab('通过')"
+      class="success-btn"
+      [ngClass]="{ 'active-btn': activeTab('通过') }"
+    >
+      通过 <i nz-icon nzType="check-circle" nzTheme="outline"></i>
+    </button>
+    <button
+      type="button"
+      (click)="changeTab('异常')"
+      class="error-btn"
+      [ngClass]="{ 'active-btn': activeTab('异常') }"
+    >
+      异常 <i nz-icon nzType="exclamation-circle" nzTheme="outline"></i>
+    </button>
+  </div>
+  <!-- 通过 -->
+  <button *ngIf='!readonly' type="button" class="success-btn active-btn special-btn" (click)='saveFileds()'>保存</button>
+  <div *ngIf="activeTab('通过')" class="system-judge">
+    <ng-container *ngIf="showSuccessFileds.length; else empty">
+      <ng-container *ngFor="let show of showSuccessFileds; let i = index">
+        <div
+          class="judge-type"
+          *ngIf="i === 0 && show.checkerId !== 'manualReview'"
+        >
+          <span class="judge-title">系统判断规则</span>
+        </div>
+        <div class="judge-type" *ngIf="show.checkerId === 'manualReview'">
+          <span class="judge-title">人工审核规则</span>
+        </div>
+        <div class="panel-body">
+          <div class="form-group col-sm-12">
+            <app-dynamic-input
+              [row]="show"
+              [form]="ruleSuccessFrom"
+              [svrConfig]=""
+              formModule="dragon-input"
+            >
+            </app-dynamic-input>
+          </div>
+        </div>
+      </ng-container>
+    </ng-container>
+  </div>
+  <!-- 异常 -->
+  <div *ngIf="activeTab('异常')" class="system-judge">
+    <ng-container *ngIf="showErrorFileds.length; else empty">
+      <ng-container *ngFor="let show of showErrorFileds; let i = index">
+        <div
+          class="judge-type"
+          *ngIf="i === 0 && show.checkerId !== 'manualReview'"
+        >
+          <span class="judge-title">系统判断规则</span>
+        </div>
+        <div class="judge-type" *ngIf="show.checkerId === 'manualReview'">
+          <span class="judge-title">人工审核规则</span>
+        </div>
+        <div class="panel-body">
+          <div class="form-group col-sm-12">
+            <app-dynamic-input
+              [row]="show"
+              [form]="ruleErrorFrom"
+              [svrConfig]=""
+              formModule="dragon-input"
+            >
+            </app-dynamic-input>
+          </div>
+        </div>
+      </ng-container>
+    </ng-container>
+  </div>
+</section>
+<ng-template #empty>
+  <div>
+    <nz-empty></nz-empty>
+  </div>
+</ng-template>

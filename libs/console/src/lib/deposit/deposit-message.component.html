@@ -1,0 +1,27 @@
+<section class="content">
+  <div class="box">
+    <div class="box-header">
+      <h3 class="box-title">{{tableTitle}}</h3>
+    </div>
+    <div class="box-body">
+      <div class="form-group row" *ngFor="let row of rows">
+        <div class="col-sm-3 xn-control-label">
+          {{row.title}}
+        </div>
+        <div class="col-sm-6">
+          <xn-show-input [row]="row" [form]="mainForm"></xn-show-input>
+        </div>
+        <div class="col-sm-3 xn-control-desc">
+          {{row.memo}}
+        </div>
+      </div>
+      <div>
+        <xn-contract [contracts]="contracts"></xn-contract>
+      </div>
+    </div>
+    <div class="box-footer text-right">
+      <a class="btn btn-default " (click)="goBack()">返回</a>
+    </div>
+  </div>
+</section>
+<!--<xn-contract [contracts]="contracts"></xn-contract>-->

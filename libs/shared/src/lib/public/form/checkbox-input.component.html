@@ -1,0 +1,12 @@
+<div class="xn-radio-row" [formGroup]="form" [ngClass]="myClass">
+  <label [hidden]="option.disable" class="xn-input-font" *ngFor="let option of row.selectOptions; let i = index">
+    <input #checkbox
+           type="checkbox"
+           class="flat-red"
+           [checked]="isChecked(option.value)"
+           [attr.disabled]="option.disable"
+           (click)="updateSelection($event,option.value,i);">&nbsp;&nbsp;{{option.label}}
+  </label>
+  <button *ngIf="showClearBtn" type="button" class="close" (click)="onClear()"><span>&times;</span></button>
+</div>
+<span class="xn-input-alert">{{alert}}</span>

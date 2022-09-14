@@ -1,0 +1,25 @@
+<div [formGroup]="form">
+  <div class="col-md-12" style='margin-bottom: 10px;'>
+    <select class="form-control xn-input-font" [value]="enterprise" [ngClass]="firstClass"
+      (change)="onFirstChange($event)">
+      <option value="">请选择</option>
+      <option *ngFor="let option of firstOptions" value="{{option.value}}">{{option.label}}</option>
+    </select>
+  </div>
+
+  <div *ngIf="secondOptions.length>0" style='width:100%;display:inline-flex'>
+    <div class="col-sm-2 xn-control-label required-star" style="padding-left: 0px;text-align: left;width: 15%;">
+      万科类型
+    </div>
+    <div class='col-sm-10' style='padding: 0px;width: 85%;'>
+      <div class="col-md-12">
+        <select class="form-control xn-input-font" [value]="wkType" [ngClass]="secondClass"
+          (change)="onSecondChange($event)">
+          <option value="">请选择</option>
+          <option *ngFor="let option of secondOptions" value="{{option.value}}">{{option.label}}</option>
+        </select>
+      </div>
+    </div>
+  </div>
+</div>
+<span class="xn-input-alert">{{alert}}</span>

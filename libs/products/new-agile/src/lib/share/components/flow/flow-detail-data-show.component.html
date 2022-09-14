@@ -1,0 +1,69 @@
+<div class="box no-top box-zichan">
+  <div class="number-money-record" *ngIf="!showRecord">
+    <div class="record-box">
+      <div class="arrow arrow-left" [ngClass]="onArrowCss('left')" (click)="prevPage()"></div>
+      <div class="record-ul">
+        <div class="record-li" *ngFor="let asset of pageAssets; let i = index">
+          <div class="asset-wrap" [ngClass]="onCss(i)" (click)="onClick(i)">
+            <div class="asset-name">{{asset.name}}</div>
+            <div class="asset-code-wrap">
+              <div class="asset-code-tit-wrap clear">
+                <h1 class="asset-code-tit">订单总金额</h1>
+                <div class="asset-code-time">{{asset.amount}}</div>
+              </div>
+              <div class="asset-code">
+                <h1 class="asset-code-tit">规格型号</h1>
+                <div class="asset-code-time">{{asset.specification}}</div>
+              </div>
+            </div>
+            <div class="asset-info-wrap">
+              <div class="asset-info-group">
+                <h2 class="asset-info-tit">数量
+                  <span class="assetUnit">({{asset.unit}})</span>
+                </h2>
+                <div class="asset-info-content">{{asset.quantity}}</div>
+              </div>
+              <div class="asset-info-group asset-info-group-trade">
+                <h2 class="asset-info-tit">金额</h2>
+                <div class="asset-info-content asset-info-trade">
+                  {{asset.price}}
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="arrow arrow-right" [ngClass]="onArrowCss('right')" (click)="nextPage()"></div>
+    </div>
+
+    <div *ngIf="nowAsset && nowAsset.storehouseList" class="storage-box">
+      <div class="record-line" *ngFor="let log of nowAsset.storehouseList; let i = index;">
+        <div class="record-title">
+          <span class="number">仓库信息{{i + 1}}</span>
+        </div>
+        <div class="record-message">
+          <p class="change-text">入仓ID：{{log.stockInID}}</p>
+          <p class="change-text">入仓人：{{log.stockInUser}}</p>
+          <p class="change-text">入仓人联系方式：{{log.stockInUserContact}}</p>
+          <p class="change-text">入库物流公司：{{log.stockInExpressCompany}}</p>
+          <p class="change-text">入库物流单号：{{log.stockInTrackingNo}}</p>
+          <p class="change-time">入仓时间: {{log.stockInTime | xnDate: 'date'}}</p>
+
+          <p class="change-text">出仓ID：{{log.stockOutID}}</p>
+          <p class="change-text">出仓人：{{log.stockOutUser}}</p>
+          <p class="change-text">出仓人联系方式：{{log.stockOutUserContact}}</p>
+          <p class="change-text">出库物流公司：{{log.stockOutExpressCompany}}</p>
+          <p class="change-text">出库物流单号：{{log.stockOutTrackingNo}}</p>
+          <p class="change-time">出仓时间: {{log.stockOutTime | xnDate: 'date'}}</p>
+
+          <p class="change-text">仓库名称：{{log.storagehouseName}}</p>
+          <p class="change-text">仓库地址：{{log.storageAddress}}</p>
+          <p class="change-text">仓库所有人：{{log.storageOwner}}</p>
+          <p class="change-text">仓库类型：{{log.storageType | xnStorageType}}</p>
+
+        </div>
+      </div>
+    </div>
+  </div>
+
+</div>

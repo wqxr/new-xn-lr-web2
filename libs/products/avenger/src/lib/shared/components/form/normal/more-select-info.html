@@ -1,0 +1,61 @@
+<div class="edit-content" *ngIf='isreadonly===false' >
+<div class="flex-row">
+  <div class="this-title titlestyle">保理使用费支付方</div>
+  <div class="this-padding this-flex-1" style='width:17%;margin-left:20px'>
+    <select class="form-control xn-input-font" [value]='formValue.factoringUser' [ngClass]="myClass" (blur)="onBlur()" (change)="inputChange($event,'factoringUser')">
+      <option *ngFor="let option of row.selectOptions" value="{{option.value}}">{{option.label}}</option>
+    </select>
+  </div>
+
+
+  <div class="this-title" style="margin-left:20px">保理服务费支付方</div>
+  <div class="this-padding this-flex-1" style='width:17%;margin-left:20px'>
+    <select class="form-control xn-input-font" [value]='formValue.factoringServicer' [ngClass]="myClass" (blur)="onBlur()" (change)="inputChange($event,'factoringServicer')">
+      <option *ngFor="let option of row.selectOptions" value="{{option.value}}">{{option.label}}</option>
+    </select>
+</div>
+
+
+<div class="this-title titlestyle" style="margin-left:20px">平台服务费支付方</div>
+<div class="this-padding this-flex-1" style='width:17%;margin-left:20px'>    <select class="form-control xn-input-font" [value]='formValue.platformServicer' [ngClass]="myClass" (blur)="onBlur()" (change)="inputChange($event,'platformServicer')">
+      <option *ngFor="let option of row.selectOptions" value="{{option.value}}">{{option.label}}</option>
+    </select>
+  </div>
+
+</div>
+<span class="xn-input-alert">{{alert}}</span>
+</div>
+
+<table class="table-hover table table-bordered file-row-table" *ngIf='isreadonly===true'>
+    <tr>
+      <td style="width: 130px">保理使用费支付方</td>
+      <td class='readonlystyle'>{{valuelist.factoringUser | xnSelectTransform:'payCompany'}}</td>
+      <td style="width: 130px">保理服务费支付方</td>
+      <td class='readonlystyle'>{{valuelist.factoringServicer | xnSelectTransform:'payCompany'}}</td>
+      <td style="width: 130px">平台服务费支付方</td>
+      <td class='readonlystyle'>{{valuelist.platformServicer | xnSelectTransform:'payCompany'}}</td>
+    </tr>
+  </table>
+<!-- <div class="flex-row" *ngIf='isreadonly===true'>
+  <div  style="display: flex;">
+    <div class="this-title titlestyle">
+      保理使用费支付方</div>
+    <div class="this-padding this-flex-1" style='width:17%;margin-left:20px'>
+      <input #input class="form-control xn-input-font xn-input-border-radius"
+      [value]="valuelist.factoringUser | xnSelectTransform:'payCompany'"   readonly>
+    </div>
+    <div class="this-title titlestyle" style="margin-left:20px">
+      保理服务费支付方</div>
+    <div class="this-padding this-flex-1" style='width:17%;margin-left:20px'>
+      <input #input class="form-control xn-input-font xn-input-border-radius"
+      [value]="valuelist.factoringServicer | xnSelectTransform:'payCompany'" readonly>
+    </div>
+    <div class="this-title titlestyle" style="margin-left:20px">
+
+      平台服务费支付方</div>
+    <div class="this-padding this-flex-1" style='width:17%;margin-left:20px'>
+      <input #input class="form-control xn-input-font xn-input-border-radius"
+      [value]="valuelist.factoringServicer | xnSelectTransform:'payCompany'" readonly>
+    </div>
+  </div>
+</div> -->

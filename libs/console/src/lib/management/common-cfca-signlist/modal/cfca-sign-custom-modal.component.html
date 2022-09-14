@@ -1,0 +1,83 @@
+<modal #modal [backdrop]="'static'" [keyboard]="false" [animation]="false">
+  <modal-header [showClose]="false">
+    <h4 class="modal-title">合同签署</h4>
+  </modal-header>
+  <modal-body>
+    <div>
+      <ul class="nav nav-tabs">
+        <li class="active" *ngIf="caType===2">
+          <a class="xn-click-a">SZCA签章列表</a>
+        </li>
+        <li class="active" *ngIf="caType===1">
+          <a class="xn-click-a">CFCA签章列表</a>
+        </li>
+      </ul>
+    </div>
+    <!-- 上层信息 -->
+    <div class="form-group clearfix">
+      <div class="col-sm-3 text-padding">
+        <div class="list-group list-group-position">
+          <ng-container *ngFor="let item of params;let i=index">
+            <button type="button" [class.active]="activecaCode===i" [disabled]="activecaCode===i"
+              class="list-group-item" (click)="switchView([item,i])">
+              <i class="fa  fa-check-circle-o fa-2x" [class.fa-color]="item?.status===1"></i>
+              {{item?.fileName}}
+            </button>
+          </ng-container>
+        </div>
+        <div class="text-center">
+          <!--当所有合同都签署，即状态为1时-->
+          <button type="button" class="btn btn-default btn-block" (click)="contractSign()"
+            [disabled]="invalid(params)">完成
+          </button>
+        </div>
+      </div>
+      <!-- 下层图片 -->
+
+      <div class="col-sm-9 text-padding" [ngStyle]="{'display':caType===1?'none':''}">
+        <h4 class="modal-title">PDF文件数字签章</h4>
+        <div #szca class="pdf-container">
+        </div>
+        <div>
+          <a href="https://www.lrscft.com/exe/lrscft-setup-1.0.2.exe">下载链融科技供应链服务平台桌面应用程序</a>
+        </div>
+        <!--查看合同-->
+
+      </div>
+      <div class="col-sm-9 text-padding" [ngStyle]="{'display':caType===2?'none':''}">
+        <div style="width:100%">
+          <ng-container *ngIf="!signSuccess">
+            <div class="pdf-container" id='thisCanvas1'>
+            </div>
+          </ng-container>
+
+          <ng-container *ngIf="signSuccess">
+            <div class="display-content">
+              <div class="pdf-container" style='overflow-y: scroll;' id="thisCanvas1">
+              </div>
+            </div>
+          </ng-container>
+        </div>
+
+      </div>
+    </div>
+    <div class="modal-footer">
+      <div class="clearfix">
+        <div class="button-group">
+          <button id="left" type="button" class="btn btn-sm btn-default">左旋
+            <i class="fa  fa-undo"></i></button>
+          <button id="right" type="button" class="btn btn-sm btn-default">右旋
+            <i class="fa fa-repeat"></i></button>
+          <button id="large" type="button" class="btn btn-sm btn-default">放大<i class="fa fa-search-plus"></i></button>
+          <button id="small" type="button" class="btn btn-sm btn-default">缩小<i class="fa fa-search-minus"></i></button>
+          <button type="button" class="btn btn-success" (click)="onSave()">下载文件</button>
+          <button type="button" class="btn btn-sm btn-primary" [disabled]="invalidSign()"
+            (click)="customCfca()">阅读并签章</button>
+          <button type="button" class="btn btn-default" (click)="onCancel()">关闭</button>
+
+        </div>
+      </div>
+    </div>
+  </modal-body>
+
+</modal>

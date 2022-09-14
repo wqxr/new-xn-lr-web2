@@ -1,0 +1,48 @@
+<div [formGroup]="form">
+  <div *ngIf="svrConfig.flow.flowId!=='supplier_sign_500' && svrConfig.flow.flowId!=='supplier_sign_501' " style="padding: 2px 5px" class="btn btn-default btn-file xn-table-upload block">
+          <span class="hidden-xs xn-input-font" (click)="handleAdd()">新增</span>
+        </div>
+  <table class="table table-bordered text-center">
+    <thead>
+      <tr class="table-head">
+        <!-- 全选按钮 -->
+        <!-- title -->
+
+        <th *ngFor="let head of currentTab.headText">
+          {{head.label}}
+        </th>
+        <!-- 行操作 -->
+        <th>操作</th>
+
+      </tr>
+    </thead>
+
+    <tbody>
+        <ng-container  *ngIf="data.length;else block" >
+            <tr *ngFor="let sub of data;let i=index">
+              <td>
+                <span>{{i+1}}</span>
+              </td>
+              <td>
+                  {{sub.documentType | xnSelectTransform:'Certificateperformance' }}
+              </td>
+              <td><a  href='javascript:void(0)' (click)="fileView(sub)" *ngFor="let sub of sub.certificatecontractPic | xnJson; let i=index">{{sub.fileName}}</a></td>
+              <td  *ngIf="svrConfig.flow.flowId!=='supplier_sign_500' && svrConfig.flow.flowId!=='supplier_sign_501' "><a href='javascript:void(0)' (click)="cleardata(i)">删除</a></td>
+              <td *ngIf="svrConfig.flow.flowId==='supplier_sign_501' || svrConfig.flow.flowId==='supplier_sign_500'"><a href="javaScript:void(0)" (click)='showContract(sub)'>查看</a></td>
+
+
+            </tr>
+          </ng-container>
+
+    </tbody>
+  </table>
+</div>
+<span class="xn-input-alert">{{alert}}</span>
+
+<ng-template #block>
+  <tr>
+    <td [attr.colspan]="4">
+      <div class="empty-message"></div>
+    </td>
+  </tr>
+</ng-template>

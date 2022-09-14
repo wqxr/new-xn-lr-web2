@@ -1,0 +1,52 @@
+<div nz-row>
+  <div nz-col nzSpan="4">
+    <nz-select
+      class="no-error-border-filed"
+      [ngClass]="provinceError ? 'error' : ''"
+      [nzShowSearch]="true"
+      [nzDisabled]="to.nzDisabled"
+      [ngModel]="province" (ngModelChange)="provinceChange($event)" nzPlaceHolder="选择省">
+      <nz-option
+        *ngFor="let item of provinceOptions"
+        [nzValue]="item.value"
+        [nzLabel]="item.label"
+      ></nz-option>
+    </nz-select>
+  </div>
+  <div nz-col nzSpan="4">
+    <nz-select
+      class="no-error-border-filed"
+      [ngClass]="cityError ? 'error' : ''"
+      [nzShowSearch]="true"
+      [nzDisabled]="to.nzDisabled"
+      [ngModel]="city" (ngModelChange)="cityChange($event)" nzPlaceHolder="选择市">
+      <nz-option
+        *ngFor="let item of cityOptions"
+        [nzValue]="item.value"
+        [nzLabel]="item.label"
+      ></nz-option>
+    </nz-select>
+  </div>
+  <div nz-col nzSpan="4">
+    <nz-select
+      class="no-error-border-filed"
+      [ngClass]="regionError ? 'error' : ''"
+      [nzShowSearch]="true"
+      [nzDisabled]="to.nzDisabled"
+      [ngModel]="region" (ngModelChange)="areaChange($event)" nzPlaceHolder="选择区">
+      <nz-option
+        *ngFor="let item of regionOptions"
+        [nzValue]="item.value"
+        [nzLabel]="item.label"
+      ></nz-option>
+    </nz-select>
+  </div>
+  <div nz-col nzSpan="12">
+    <input
+      class="no-error-border-filed"
+      [ngClass]="detailError ? 'error' : ''"
+      [disabled]="to.nzDisabled"
+      (ngModelChange)="detailChange($event)"
+      nz-input [ngModel]="detail" placeholder="详细地址，具体到门牌号"/>
+  </div>
+</div>

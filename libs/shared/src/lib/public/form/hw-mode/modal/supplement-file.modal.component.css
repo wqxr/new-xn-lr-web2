@@ -1,0 +1,90 @@
+.flex-row {
+  display: flex;
+  margin-bottom: -15px;
+  padding-top: 15px;
+}
+
+.this-left {
+  width: 300px;
+}
+
+.this-right {
+  flex: 1;
+  padding-left: 10px;
+}
+
+.pdf-container {
+  height: calc(100vh - 280px);
+  width: 100%;
+  border: 0;
+  overflow-y: scroll;
+}
+
+.this-pdf {
+  max-width: 100%;
+  border: none;
+}
+
+.this-img {
+  width: 100%;
+}
+
+.btn-ro {
+  display: inline-block;
+  position: relative;
+  vertical-align: middle;
+  width: 120px;
+  height: 40px;
+}
+
+.button-rotate {
+  position: absolute;
+  top: 0px;
+  cursor: pointer;
+  z-index: 10
+}
+
+.fa-s {
+  font-size: 34px
+}
+
+.rotate-left {
+  right: 60px;
+}
+
+.rotate-right {
+  right: 10px;
+}
+
+.img-container {
+  max-height: calc(100vh - 260px);
+  overflow-x: hidden;
+  text-align: center;
+  position: relative
+}
+
+.img-wrapper {
+  transition: all 0.5s ease-in-out;
+}
+
+.page {
+  display: inline-block;
+  vertical-align: middle
+}
+
+.required-star::after {
+  content: '*';
+  color: #ff5500;
+}
+
+.title-text {
+  padding-bottom: 5px;
+}
+
+.mr {
+  margin-right: 20px;
+}
+
+.padding {
+  padding: 15px 100px 15px 0;
+}

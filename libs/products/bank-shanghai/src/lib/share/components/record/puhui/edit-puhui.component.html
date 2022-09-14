@@ -1,0 +1,361 @@
+<section class="content-header">
+  <h1>
+    {{ pageTitle }}
+  </h1>
+</section>
+
+<!-- Main content -->
+<section class="content">
+  <div class="app-flow-process">
+    <!--主流程记录-->
+    <ng-container *ngIf="flowProcess.length">
+      <xn-puhui-flow-process-component [flowProcess]="flowProcess">
+      </xn-puhui-flow-process-component>
+    </ng-container>
+  </div>
+  <form class="form-horizontal" *ngIf="svrConfig" (ngSubmit)="onSubmit()" [formGroup]="mainForm">
+    <div class="panel panel-default">
+      <div class="panel-heading">
+        <span class="panel-title">{{ svrConfig.flow.flowName }}: {{ svrConfig.record.title }}
+        </span>
+      </div>
+      <!-- /.box-header -->
+      <div class="panel-body">
+        <div class="panel panel-info xn-panel-sm">
+          <div class="panel-heading">
+            <span class="panel-title">
+              流程基本信息
+            </span>
+          </div>
+          <div class="panel-body">
+            <div class="form-group" *ngFor="let info of baseInfo">
+              <!-- 标题 -->
+              <ng-container>
+                <div class="col-sm-2 xn-control-label">
+                  {{ info.title }}
+                </div>
+                <div class="col-sm-8">
+                  <app-dynamic-show [row]="info" [form]="mainForm" [svrConfig]="svrConfig" formModule="dragon-show">
+                  </app-dynamic-show>
+                </div>
+                <div class="col-sm-2 xn-control-desc"></div>
+              </ng-container>
+            </div>
+          </div>
+          <!-- /.panel-body -->
+        </div>
+        <!-- 流程基本信息 -->
+
+        <ng-container *ngIf="hasActions">
+          <ng-container *ngFor="let action of newSvrConfig.actions">
+            <div class="{{ panelCssClass(action) }}">
+              <!-- action.operator>0 流程非未通过状态 -->
+              <ng-container *ngIf="action.operator">
+                <div class="panel-heading" style="cursor:pointer" (click)="collapse(action)">
+                  <div class="panel-title  clearfix">
+                    <!--面板折叠提示-->
+                    <div class="col-sm-6 clear-padding">
+                      <span *ngIf="action['collapse'] && action['collapse'] === true;else block"
+                        class="fa fa-minus-square"></span>
+                      <ng-template #block><span class="fa fa-plus-square"></span></ng-template>
+                      <span>第{{ action.recordSeq }}步:
+                        {{ action.procedureName }} ({{ action.operator | xnOperator: action.procedureId }})</span>
+                    </div>
+                    <div class="col-sm-2 clear-padding ">
+                      <small>
+                        <span class="red">{{action['collapse'] && action['collapse'] === true? '点击隐藏': '点击显示'}}</span>
+                      </small>
+                    </div>
+                    <div class="col-sm-4 clear-padding  text-right">
+                      <small>
+                        <{{ action.operatorName }}>在{{ action.operatorTime | xnDate }}处理
+                      </small>
+                    </div>
+                  </div>
+                </div>
+                <div class="panel-body" *ngIf="action['collapse'] && action['collapse'] === true">
+                  <!-- 提交/审核通过 -->
+                  <ng-container *ngIf="action.operator === operatePass">
+                    <ng-container *ngFor="let checker of action.checkers">
+                      <div class="form-group" *ngIf="checker.data">
+                        <!-- 标题 -->
+                        <ng-container *ngFor="let item of titleModel">
+                          <div *ngIf="checker.checkerId === item.checkerId"
+                            style="display: flex;justify-content: space-between;align-items: center; padding: 10px 50px;">
+                            <h3>{{item.title}}</h3>
+                          </div>
+                        </ng-container>
+                        <!-- 股东信息、受益人信息特殊处理 -->
+                        <ng-container *ngIf="showMaxRow(checker)">
+                          <div>
+                            <app-dynamic-show [row]="checker" [form]="mainForm" [svrConfig]="svrConfig"
+                              formModule="dragon-show"></app-dynamic-show>
+                          </div>
+                        </ng-container>
+                        <!-- 正常展示的show -->
+                        <ng-container *ngIf="!showMaxRow(checker)">
+                          <div class="col-sm-2 xn-control-label">
+                            {{ checker.title }}
+                          </div>
+                          <div class="col-sm-8">
+                            <app-dynamic-show [row]="checker" [form]="mainForm" [svrConfig]="svrConfig"
+                              formModule="dragon-show"></app-dynamic-show>
+                          </div>
+                          <div class="col-sm-2 xn-control-desc">
+                            {{ checker.memo }}
+                          </div>
+                        </ng-container>
+                      </div>
+                    </ng-container>
+                  </ng-container>
+                  <!-- 退回原因 -->
+                  <ng-container *ngIf="action.operator">
+                    <ng-container *ngIf="!showPuhuiMemo(action) && !showShRejectMemo(action)">
+                      <xn-sh-memo-component [memo]="action.memo">
+                      </xn-sh-memo-component>
+                    </ng-container>
+                    <!-- 供应商资料补正原因 -->
+                    <ng-container *ngIf="showPuhuiMemo(action)">
+                      <div class="form-group">
+                        <div class="col-sm-2 xn-control-label">
+                          退回原因
+                        </div>
+                        <div class="col-sm-8">
+                          <table class="table table-bordered text-center">
+                            <thead>
+                              <tr>
+                                <th style="width: 60px;">序号</th>
+                                <th style="width: 90px;">类别</th>
+                                <th>审核结果说明</th>
+                              </tr>
+                            </thead>
+                            <tbody>
+                              <ng-container *ngFor="let item of (action.memo | xnJson); let i = index">
+                                <tr>
+                                  <td style="vertical-align: middle;">{{ i + 1 }}</td>
+                                  <td style="vertical-align: middle;">{{ item.title }}</td>
+                                  <td style="vertical-align: middle;">{{ item.checkReson }}</td>
+                                </tr>
+                              </ng-container>
+                            </tbody>
+                          </table>
+                        </div>
+                        <div class="col-sm-2 xn-control-desc">
+                        </div>
+                      </div>
+                      <!-- <xn-puhui-memo [memo]="action.memo"></xn-puhui-memo> -->
+                    </ng-container>
+                    <!-- 上海银行退回原因 -->
+                    <ng-container *ngIf="showShRejectMemo(action)">
+                      <div class="form-group">
+                        <div class="col-sm-2 xn-control-label">
+                          退回原因
+                        </div>
+                        <div class="col-sm-8">
+                          <table class="table table-bordered text-center">
+                            <thead>
+                              <tr>
+                                <th style="width: 60px;">序号</th>
+                                <th style="width: 90px;">类别</th>
+                                <th>审核结果说明</th>
+                              </tr>
+                            </thead>
+                            <tbody>
+                              <ng-container *ngFor="let item of (action.memo | xnJson); let i = index">
+                                <tr>
+                                  <td style="vertical-align: middle;">{{ i + 1 }}</td>
+                                  <td style="vertical-align: middle;">{{ item.type }}</td>
+                                  <td style="vertical-align: middle;">{{ item.desc }}</td>
+                                </tr>
+                              </ng-container>
+                            </tbody>
+                          </table>
+                        </div>
+                        <div class="col-sm-2 xn-control-desc">
+                        </div>
+                      </div>
+                    </ng-container>
+                  </ng-container>
+                  <!-- 面板折叠按钮 -->
+                  <div class="text-right">
+                    <a class="a-handle" href="javaScript:void (0)" (click)="collapse(action)">
+                      <span class="fa fa-angle-double-up"></span>
+                    </a>
+                  </div>
+                </div>
+              </ng-container>
+              <!-- /.panel-body -->
+            </div>
+          </ng-container>
+          <!-- /.panel -->
+        </ng-container>
+        <!--当前需要处理的项-->
+        <div class="panel panel-primary xn-panel-sm">
+          <div class="panel-heading">
+            <span class="panel-title">当前: {{ svrConfig.procedure.procedureName }}
+              <small class="pull-right">需要您处理</small>
+            </span>
+          </div>
+          <!-- 审核菜单tab页 -->
+          <div class="panel-body" style='position: relative;'>
+
+            <!-- 供应商/平台复核 -->
+            <ng-container *ngIf="!showSupplierStepForm()">
+              <ng-container *ngIf="svrConfig.procedure.procedureId === review;else platFormTemplate">
+                <div class="form-group" *ngFor="let row of checkShows">
+                  <ng-container>
+                    <div class="col-sm-2 xn-control-label" [ngClass]="{
+                      'required-label-strong': hwModeService.checkRequiredAndReadonly(row).bold,
+                      'required-star': hwModeService.checkRequiredAndReadonly(row).star
+                    }">
+                      {{ row.title }}
+                    </div>
+                    <div class="col-sm-8">
+                      <app-dynamic-input [row]="row" [form]="mainForm" [svrConfig]="svrConfig"
+                        [formModule]="fromModule">
+                      </app-dynamic-input>
+                    </div>
+                    <div *ngIf="!showMaxRow(row)" class="col-sm-2 xn-control-desc">
+                      {{ row.memo }}
+                      <span *ngIf="!!row.other && getRowOther(row).type === 1"
+                        [ngStyle]="{'color': getRowOther(row).color}">
+                        *{{getRowOther(row).value}}
+                      </span>
+                    </div>
+                  </ng-container>
+                </div>
+              </ng-container>
+            </ng-container>
+
+            <!-- 供应商资料补正,需要分步缓存表单数据 -->
+            <ng-container *ngIf="showSupplierStepForm()">
+              <account-step-first *ngIf="step === firstStep" [readonly]="isEditCheck(firstStep)"
+                [svrConfig]="svrConfig">
+              </account-step-first>
+              <account-step-second *ngIf="step === secondStep" [readonly]="isEditCheck(secondStep)" [newFlow]="newFlow"
+                [svrConfig]="svrConfig">
+              </account-step-second>
+              <account-step-third *ngIf="step === thirdStep" [readonly]="isEditCheck(thirdStep)" [newFlow]="newFlow"
+                [svrConfig]="svrConfig">
+              </account-step-third>
+            </ng-container>
+
+            <!--tips-->
+            <div class="text-right red" *ngIf="hwModeService.checkersTips(shows)">
+              * 为必填项
+            </div>
+          </div>
+          <!-- /.panel-body -->
+        </div>
+        <!-- /.panel -->
+      </div>
+      <!-- /.panel-body -->
+
+      <div *ngIf="!showSupplierStepForm()" class="panel-footer text-right">
+        <button type="button" class="btn btn-default pull-left" (click)="onCancel()">
+          返回
+        </button>
+        <button [disabled]="showAddData()"
+          *ngIf="flowId==='sub_sh_prattwhitney_platform_verify'&& svrConfig.procedure.procedureId === operate"
+          type="button" class="btn btn-primary" (click)="addRegisteData()">
+          资料补正
+        </button>
+        <button type="button" class="btn btn-default" (click)="cancelModal.open()"
+          *ngIf="![0, '0'].includes(svrConfig.rejectType) && svrConfig.procedure.procedureId === review">
+          拒绝
+        </button>
+        <button type="submit" class="btn btn-primary" [disabled]="canSubmit()">
+          {{[0, '0'].includes(svrConfig.rejectType) ? '提交' : '同意'}}
+        </button>
+      </div>
+      <!-- /.panel-footer -->
+      <!-- 拒绝弹窗 -->
+      <modal #cancelModal [backdrop]="'static'">
+        <modal-header [showClose]="true">
+          <h4 class="modal-title">流程审核不通过</h4>
+        </modal-header>
+        <modal-body>
+          <div class="form-horizontal form-group row">
+            <div class="col-sm-2 xn-control-label">
+              备注
+            </div>
+            <div class="col-sm-8">
+              <xn-input [row]="cancelChecker" [form]="mainForm"></xn-input>
+            </div>
+          </div>
+        </modal-body>
+        <modal-footer>
+          <button type="button" class="btn btn-default pull-left" (click)="cancelModal.dismiss()">
+            取消
+          </button>
+          <button type="button" class="btn btn-danger" (click)="onReject()" *ngIf="svrConfig.rejectType !== 0">
+            退回到上一步
+          </button>
+        </modal-footer>
+      </modal>
+    </div>
+  </form>
+</section>
+
+<!-- 平台审核的表单特殊展示 -->
+<ng-template #platFormTemplate>
+  <nz-tabset nzTabPosition="left" nzSize="small" (nzSelectChange)="onTabChange($event)">
+    <ng-container *ngFor="let item of titleModel; let i = index">
+      <nz-tab *ngIf="item.needCheck" [nzTitle]="titleTemplate">
+        <ng-template #titleTemplate>
+          <div class="checkerTitle">
+            <span style="margin-right: 20px;">{{ item.title }}</span>
+            <button type="button" class="btn btn-xs" [ngClass]="[checkStatusClass(item)]">
+              {{ item.checkStatus | xnSelectTransform:'checkStatus' }}
+            </button>
+          </div>
+        </ng-template>
+        <ng-content *ngTemplateOutlet="formTemplate"></ng-content>
+      </nz-tab>
+    </ng-container>
+  </nz-tabset>
+</ng-template>
+
+<ng-template #formTemplate>
+  <div class="form-group" *ngFor="let row of checkShows">
+    <ng-container *ngIf="row.options.readonly && row.value">
+      <!-- 标题,审核状态 -->
+      <ng-container *ngFor="let item of titleModel">
+        <div *ngIf="row.checkerId === item.checkerId" style="display: flex;justify-content: space-between;align-items: center;
+          padding: 10px 50px; border-bottom: 1px solid #f0f0f0;margin-bottom: 5px;">
+          <h3>{{ item.title }}</h3>
+          <div *ngIf="item.needCheck && flowId === 'sub_sh_prattwhitney_platform_verify'">
+            <span style="font-weight: bold;">审核状态：</span>
+            <span style="margin-right: 20px; font-weight: bold;"
+              [ngStyle]="{'color': item.checkStatus=== passStatus?'#008d4c':item.checkStatus=== unPassStatus?'#dd4b39':'#000'}">
+              {{item.checkStatus | xnSelectTransform:'checkStatus'}}
+            </span>
+            <button *ngIf="item.checkStatus !== unPassStatus" class="btn btn-danger"
+              (click)="editCheckInfo(item,unPassStatus)">不通过</button>
+            <button *ngIf="item.checkStatus !== passStatus" class="btn btn-success"
+              (click)="editCheckInfo(item,passStatus)">通过</button>
+          </div>
+        </div>
+      </ng-container>
+      <ng-container *ngIf="showRow(row)">
+        <div class="col-sm-2 xn-control-label" *ngIf="!showMaxRow(row)" [ngClass]="{
+          'required-label-strong': hwModeService.checkRequiredAndReadonly(row).bold,
+          'required-star': hwModeService.checkRequiredAndReadonly(row).star
+        }">
+          {{ row.title }}
+        </div>
+        <div [ngClass]="[showMaxRow(row)?'col-sm-12':'col-sm-8']">
+          <app-dynamic-input [row]="row" [form]="mainForm" [svrConfig]="svrConfig" [formModule]="fromModule">
+          </app-dynamic-input>
+        </div>
+        <div *ngIf="!showMaxRow(row)" class="col-sm-2 xn-control-desc">
+          {{ row.memo }}
+          <span *ngIf="!!row.other && getRowOther(row).type === 1" [ngStyle]="{'color': getRowOther(row).color}">
+            *{{getRowOther(row).value}}
+          </span>
+        </div>
+      </ng-container>
+    </ng-container>
+
+  </div>
+</ng-template>

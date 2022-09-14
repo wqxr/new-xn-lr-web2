@@ -1,0 +1,293 @@
+<form class="form-horizontal" #myForm="ngForm">
+  <ng-container *ngFor="let info of infos; let i = index">
+    <p>中登登记序号{{i+1}}</p>
+    <div class="panel panel-default">
+      <div class="panel-body">
+        <div class="col-sm-5">
+          <div class="form-group">
+            <div class="col-sm-4 xn-control-label">
+              登记业务类型 <span class="required-label">*</span>
+            </div>
+            <div class="col-sm-8">
+              <select class="form-control" required name="registerType" [disabled]="!manual[i]&&infos.status===3"
+                [(ngModel)]="registerType" (change)="changeType(registerType, i)">
+                <option value="0">请选择</option>
+                <option [value]="option.value" *ngFor="let option of type">{{option.label}}</option>
+              </select>
+            </div>
+          </div>
+        </div>
+
+        <div class="col-sm-5">
+          <div class="form-group">
+            <div class="col-sm-4 xn-control-label">
+              登记期限（月） <span class="required-label">*</span>
+            </div>
+            <div class="col-sm-8">
+              <input type="number" min="1" max="360" #numInput [readonly]='!manual[i]&&infos.status===3'
+                placeholder="请输入1-360之间的数字" class="form-control registerNum" name="registerDays"
+                [(ngModel)]="registerDays" required autocomplete="off" (input)="changeDays(registerDays, i)">
+              <!-- <select class="form-control" required name="registerDays" [(ngModel)]="registerDays"
+                    (change)="changeDays(registerDays, i)">
+                    <option value="">请选择</option>
+                    <option [value]="option.value" *ngFor="let option of days">{{option.label}}</option>
+                  </select> -->
+              <!-- <select class="form-control" required name="registerDays" [disabled]="!manual[i]&&infos.status===3"
+                [(ngModel)]="registerDays" (change)="changeDays(registerDays, i)">
+                <option value="0">请选择</option>
+                <option [value]="option.value" *ngFor="let option of days">{{option.label}}</option>
+              </select> -->
+            </div>
+          </div>
+        </div>
+
+        <div class="col-sm-5">
+          <div class="form-group">
+            <div class="col-sm-4 xn-control-label">
+              融资合同编号
+            </div>
+            <div class="col-sm-8">
+              <!-- <span *ngIf="!manual[i]" class="form-control xn-input-font xn-input-border-radius"
+                style="display: inline-table">{{info.contractIdStr}}</span> -->
+              <textarea class="form-control xn-input-textarea xn-input-font xn-input-border-radius"
+                name="contractIdStrs[i]" [(ngModel)]="contractIdStrs[i]" required
+                autocomplete="off">{{contractIdStrs[i]}}</textarea>
+            </div>
+          </div>
+        </div>
+
+        <div class="col-sm-5">
+          <div class="form-group">
+            <div class="col-sm-4 xn-control-label">
+              转让财产价值（元）<span class="required-label">*</span>
+            </div>
+            <div class="col-sm-8">
+              <span *ngIf="!manual[i]" class="form-control xn-input-font xn-input-border-radius"
+                style="display: inline-table">{{info.amountTotal}}</span>
+              <input *ngIf="manual[i]" type="text" class="form-control" name="amountTotals[i]"
+                [(ngModel)]="amountTotals[i]" [readonly]='!manual[i]' required autocomplete="off"
+                value="amountTotals[i]">
+            </div>
+          </div>
+        </div>
+
+        <div class="col-sm-10">
+          <div class="form-group">
+            <div class="col-sm-2 xn-control-label">
+              转让财产描述 <span class="required-label">*</span>
+            </div>
+            <div class="col-sm-10">
+              <div *ngIf="infos.status!==5" class="form-control xn-input-font xn-input-border-radius desc">{{info.desc}}
+              </div>
+              <textarea *ngIf="infos.status===5"
+                class="form-control xn-input-textarea xn-input-font xn-input-border-radius" name="descs[i]"
+                [(ngModel)]="descs[i]" [readonly]='infos.status!==5' required autocomplete="off">{{descs[i]}}</textarea>
+            </div>
+          </div>
+        </div>
+
+        <div class="col-sm-10">
+          <div class="form-group">
+            <div class="col-sm-2 xn-control-label">
+              <p>登记资产列表 <span class="required-label">*</span></p>
+              <p><a href="javaScript:void(0)" (click)="viewPersonInfo(1)">出让人信息</a></p>
+              <p><a href="javaScript:void(0)" (click)="viewPersonInfo(2)">受让人信息</a></p>
+            </div>
+            <div class="col-sm-10">
+              <table class="table table-bordered table-striped text-center"
+                style="clear:both;table-layout:fixed;width:100%">
+                <thead>
+                  <tr>
+                    <th style="width: 30px">序号</th>
+                    <th>交易ID</th>
+                    <th>总部公司</th>
+                    <th>申请付款单位</th>
+                    <th>收款单位</th>
+                    <th style='width:13%'>企业类型</th>
+                    <th>应收账款金额（元）</th>
+                    <th>付款确认书编号</th>
+                    <th>发票号码</th>
+                    <th>保理融资到期日</th>
+                    <th>转让金额</th>
+                    <th style="width: 130px">查询证明文件</th>
+                    <th>验证一致性</th>
+                  </tr>
+                </thead>
+                <tbody *ngIf="show[i]">
+                  <ng-container>
+                    <tr *ngFor="let item of info.list;let j = index" style="word-wrap:break-word">
+                      <td>{{j + 1}}</td>
+                      <td>{{item.mainFlowId}}</td>
+                      <td>{{item.headquarters}}</td>
+                      <td>{{item.projectCompany}}</td>
+                      <td>{{item.debtUnit}}</td>
+                      <td>
+                        <select class="form-control xn-input-font" style='width:100%' [(ngModel)]='companyTypesValue[j]'
+                          [disabled]="!manual[i]&&infos.status===3" [name]='j+1' (change)='getCompanytype($event,j)'>
+                          <option value="0">请选择</option>
+                          <option *ngFor="let option of companyType" value="{{option.value}}">
+                            {{option.label}}</option>
+                        </select>
+                      </td>
+                      <td>{{item.receive}}</td>
+                      <td>{{item.payConfirmId}}</td>
+                      <td>
+                        <ng-container *ngIf="arrayLength(item.invoiceNum).length>1;else block2">
+                          <div>
+                            <a class="xn-click-a" href="javaScript:void(0)"
+                              (click)="viewMore(arrayLength(item.invoiceNum))"
+                              [innerHtml]="(arrayLength(item.invoiceNum) | xnArrayTruncate:2:'等;')">
+                            </a>
+                          </div>
+                        </ng-container>
+                        <ng-template #block2>
+                          <div [innerHtml]="(arrayLength(item.invoiceNum) | xnArrayTruncate:2:'等;')"></div>
+                        </ng-template>
+                      </td>
+                      <td>{{item.factoringEndDate}}</td>
+                      <td>{{item.changePrice}}</td>
+                      <td *ngIf="!manual[i] && infos.status===3"><a href="javaScript:void(0)"
+                          (click)="viewFiles(files[j]['file'])">文件</a></td>
+                      <td *ngIf="manual[i]">
+                        <div class="btn btn-default btn-file xn-table-upload asset">
+                          <span class="hidden-xs xn-input-font">上传文件</span>
+                          <input type="file" (change)="onUploadFile($event, item.mainFlowId, j,i)"
+                            (click)="onBeforeUpload($event, j)">
+                        </div>
+                        <span class="xn-input-alert">{{alert[j]}}</span>
+                        <table class="table table-hover file-row-table" *ngIf="files && files[j]['file']">
+                          <tbody style='word-break: break-word;'>
+                            <tr>
+                              <td>
+                                <a class="xn-click-a"
+                                  (click)="onView(files[j]['file'])">{{files[j]['file'].fileName}}</a>
+                              </td>
+                              <td>
+                                <button type="button" [disabled]="delButtonStatus" class="specialclose close"
+                                  (click)="onRemove(item.mainFlowId, j)">
+                                  <span>&times;</span></button>
+                              </td>
+                            </tr>
+                          </tbody>
+                        </table>
+                      </td>
+                      <td *ngIf='!manual[i] && infos.status!==3'></td>
+                      <td>
+                        <span *ngIf="flags[j]===0">主体信息未验证</span>
+                        <span *ngIf="flags[j]===1">主体信息一致</span>
+                        <span class="text-danger" *ngIf="flags[j]===2">主体信息不一致</span>
+                      </td>
+                    </tr>
+                  </ng-container>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+        <div class="col-sm-2" style="cursor: pointer">
+          <span *ngIf="show[i]"><a herf="javascript:void(0);" (click)="isNotShow(i)">收起</a></span>
+          <span *ngIf="!show[i]"><a herf="javascript:void(0);" (click)="isShow(i)">展开</a></span>
+        </div>
+
+        <div class="col-sm-5">
+          <div class="form-group">
+            <div class="col-sm-4 xn-control-label">
+              登记编码 <span class="required-label">*</span>
+            </div>
+            <div class="col-sm-8">
+              <input type="text" class="form-control registerNum" name="registerNum" [readonly]='!manual[i]'
+                [(ngModel)]="registerNum" required autocomplete="off">
+            </div>
+          </div>
+        </div>
+
+        <div class="col-sm-5">
+          <div class="form-group">
+            <div class="col-sm-4 xn-control-label">
+              修改码 <span class="required-label">*</span>
+            </div>
+            <div class="col-sm-8">
+              <input type="text" class="form-control modifiedCode" [readonly]='!manual[i]' name="modifiedCode"
+                [(ngModel)]="modifiedCode" required autocomplete="off">
+            </div>
+          </div>
+        </div>
+
+        <div class="col-sm-5">
+          <div class="form-group">
+            <div class="col-sm-4 xn-control-label">
+              登记证明文件 <span class="required-label">*</span>
+            </div>
+            <!--登记完成或者登记失败显示文件-->
+            <div class="col-sm-8">
+              <span *ngIf="(infos.status===3 || infos.status===2) && !! infos[i].registerFile"
+                class="form-control xn-input-font xn-input-border-radius" style="display: inline-table">
+                <a href="javaScript:void(0)" (click)="viewFiles(infos[i].registerFile)">文件</a>
+              </span>
+              <!--登记中或者没有没有文件显示空-->
+
+              <span *ngIf="info.status===1 && !!!info.registerFile"
+                class="form-control xn-input-font xn-input-border-radius" style="display: inline-table">
+              </span>
+              <input *ngIf="!manual[i] && infos.status!==3 " type="text" class="form-control" name="registerFile"
+                [(ngModel)]="registerFile" disabled>
+              <ng-container *ngFor='let row1 of checker1'>
+                <app-dynamic-input *ngIf="manual[i]" [row]="row1" [form]="form1" [formModule]="formModule" required>
+                </app-dynamic-input>
+              </ng-container>
+            </div>
+          </div>
+        </div>
+
+        <div class="col-sm-5">
+          <div class="form-group">
+            <div class="col-sm-4 xn-control-label">
+              中登附件
+            </div>
+            <div class="col-sm-8">
+              <span *ngIf="showRegisterFile(i);else block1"
+                class="form-control xn-input-font xn-input-border-radius" style="display: inline-table">
+                <a href="javaScript:void(0)" (click)="viewFiles(infos[i].registerFile)">文件</a>
+              </span>
+              <ng-template #block1>
+                <app-dynamic-input [row]="checker1[1]" [form]="form1" formModule="avenger-input" required>
+                </app-dynamic-input>
+              </ng-template>
+
+            </div>
+          </div>
+        </div>
+
+        <div class="col-sm-10">
+          <div class="form-group">
+            <div class="col-sm-2 xn-control-label">
+              备注
+            </div>
+            <div class="col-sm-10">
+              <input class="input" class="form-control" name="memo" [readonly]='!manual[i]' [(ngModel)]="memo"
+                autocomplete="off">
+            </div>
+          </div>
+        </div>
+
+        <div class="col-sm-10">
+          <div class="form-group">
+            <div class="col-sm-2"></div>
+            <div class="col-sm-10">
+              <div class="button-group">
+                <button type="button" class="btn btn-primary" [disabled]='infos.status===3|| systemShow(i)'
+                  (click)='systemRegister(i)'>系统登记</button>
+                <button type="button" class="btn btn-primary" (click)="manualRegister(i)" *ngIf="!isFinish[i]"
+                  [disabled]='manualShow()'>人工登记</button>
+                <button type="button" class="btn btn-primary handRe" (click)="manualRegisterFinish(i)"
+                  *ngIf="isFinish[i]" style="width: 130px" [disabled]='manualShow()'>完成人工登记</button>
+                <button type="button" class="btn btn-primary cancelRe" (click)="cancelRegister(i)">取消登记</button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </ng-container>
+</form>

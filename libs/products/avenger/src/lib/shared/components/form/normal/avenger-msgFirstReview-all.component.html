@@ -1,0 +1,483 @@
+  <ng-container *ngIf="row.type==='msgFirstReview'">
+    <table class="table table-bordered table-hover file-row-table" width="100%">
+      <thead>
+        <tr>
+          <th>初审复核人</th>
+          <th>审核意见</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>{{msgFirstReviewtype.reviewFirst}}</td>
+          <td>{{msgFirstReviewtype.reviewFirstMemo}}</td>
+        </tr>
+      </tbody>
+    </table>
+  </ng-container>
+  <ng-container *ngIf="row.type==='ownYaosu'">
+    <table class="table table-bordered table-hover file-row-table" width="100%">
+      <thead>
+        <tr>
+          <th *ngFor="let head of Tabconfig[0].headText">{{head.label}}</th>
+        </tr>
+      </thead>
+      <tbody>
+        <ng-container *ngIf="items.length;">
+          <tr *ngFor="let item of items; let i=index">
+            <td *ngFor="let head of Tabconfig[0].headText">
+              <ng-container *ngIf="head.value==='mainFlowId'">
+                <a href="javaScript:void(0)"
+                  (click)="hwModeService.viewProcess(item[head.value],50)">{{item[head.value]}}</a>
+              </ng-container>
+              <ng-container *ngIf="head.value!=='mainFlowId'">
+                <div [innerHTML]="item[head.value]"></div>
+              </ng-container>
+            </td>
+          </tr>
+        </ng-container>
+        <tr *ngIf="items.length===0">
+          <td [attr.colspan]="calcAttrColspan(Tabconfig[0])">
+            <div class="empty-message"></div>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </ng-container>
+  <ng-container *ngIf="row.type==='historyBusiness'">
+    <table class="table table-bordered table-hover file-row-table" width="100%">
+      <thead>
+        <tr>
+          <th>序号</th>
+          <th *ngFor="let head of Tabconfig[1].headText">{{head.label}}</th>
+        </tr>
+      </thead>
+      <tbody>
+        <ng-container *ngIf="historydata.length!==0">
+          <tr>
+            <td>1</td>
+            <td>{{historydata[0].supplierName}}</td>
+            <td>{{historydata[0].historyCounts}}</td>
+            <td>{{historydata[0].historyAmount}}</td>
+            <td>{{historydata[0].historyAverageAmount}}</td>
+            <td>{{historydata[0].backAbnormalCounts}}</td>
+          </tr>
+          <tr *ngIf="historydata.length===0">
+            <td [attr.colspan]="calcAttrColspan(6)">
+              <div class="empty-message"></div>
+            </td>
+          </tr>
+        </ng-container>
+      </tbody>
+    </table>
+    <p>详情列表</p>
+    <table class="table table-bordered table-hover file-row-table" width="100%">
+      <thead>
+        <tr>
+          <th>序号</th>
+          <th *ngFor="let head of Tabconfig[2].headText">{{head.label}}</th>
+        </tr>
+      </thead>
+      <tbody>
+        <ng-container *ngIf="items.length;">
+          <tr *ngFor="let item of items; let i=index">
+            <td>{{i+1}}</td>
+            <td *ngFor="let head of Tabconfig[2].headText">
+              <ng-container *ngIf="head.type==='mainFlowId'">
+                <a href="javaScript:void(0)"
+                  (click)="hwModeService.viewProcess(item[head.value],50)">{{item[head.value]}}</a>
+              </ng-container>
+              <ng-container *ngIf="head.value!=='mainFlowId'">
+                <div [innerHTML]="item[head.value] | xnGatherType: {head:head,row:item}"></div>
+              </ng-container>
+
+            </td>
+          </tr>
+        </ng-container>
+        <tr *ngIf="items.length===0">
+          <td [attr.colspan]="calcAttrColspan(Tabconfig[2])">
+            <div class="empty-message"></div>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+    <div style="height:40px">
+      <xn-pagination [rows]="pageConfighistory.pageSize" [first]="pageConfighistory.first"
+        [totalRecords]="pageConfighistory.total" [pageSizeOptions]="[5,10,20,30,50,100]"
+        (pageChange)="onPagehistory($event)"></xn-pagination>
+    </div>
+  </ng-container>
+  <ng-container *ngIf="row.type==='yujingMsg'">
+    <table class="table table-bordered table-hover file-row-table" width="100%">
+      <thead>
+        <tr>
+          <th>序号</th>
+          <th *ngFor="let head of Tabconfig[3].headText">{{head.label}}</th>
+          <th>操作</th>
+        </tr>
+      </thead>
+      <tbody>
+        <ng-container *ngIf="Tabconfig[3].data.length;">
+          <tr *ngFor="let item of Tabconfig[3].data; let i=index">
+            <td>{{i+1}}</td>
+            <td *ngFor="let head of Tabconfig[3].headText">
+              <div [innerHTML]="item[head.value]"></div>
+            </td>
+            <td *ngIf="item.warnStatus === '预警'"> <a href='javascript:void(0)'
+              (click)='processWarningInfo(item)'>处理预警信息</a>
+            </td>
+            <td *ngIf="item.warnStatus === '取消'">
+              <div [innerHTML]= "'/'"></div>
+            </td>
+          </tr>
+        </ng-container>
+        <tr *ngIf="Tabconfig[3].data.length===0">
+          <td [attr.colspan]="calcAttrColspan(Tabconfig[3])">
+            <div class="empty-message"></div>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+    <div style="height:40px">
+      <xn-pagination [rows]=" Tabconfig[3].pageConfig.pageSize" [first]=" Tabconfig[3].pageConfig.first"
+        [totalRecords]=" Tabconfig[3].pageConfig.total" [pageSizeOptions]="[5,10,20,30,50,100]"
+        (pageChange)="onPage($event,Tabconfig[3])"></xn-pagination>
+    </div>
+  </ng-container>
+  <ng-container *ngIf="row.type==='alertMsg'">
+    <table class="table table-bordered table-hover file-row-table" width="100%">
+      <thead>
+        <tr>
+          <th>序号</th>
+          <th *ngFor="let head of Tabconfig[4].headText">{{head.label}}</th>
+        </tr>
+      </thead>
+      <tbody>
+        <ng-container *ngIf="Tabconfig[4].data.length">
+          <tr *ngFor="let item of Tabconfig[4].data; let i=index">
+            <td>{{i+1}}</td>
+            <td *ngFor="let head of Tabconfig[4].headText">
+              <div [innerHTML]="item[head.value]"></div>
+            </td>
+          </tr>
+        </ng-container>
+        <tr *ngIf="Tabconfig[4].data.length===0">
+          <td [attr.colspan]="calcAttrColspan(Tabconfig[4])">
+            <div class="empty-message"></div>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+    <div style="height:40px">
+      <xn-pagination [rows]="Tabconfig[4].pageConfig.pageSize" [first]="Tabconfig[4].pageConfig.first"
+        [totalRecords]="Tabconfig[4].pageConfig.total" [pageSizeOptions]="[5,10,20,30,50,100]"
+        (pageChange)="onPage($event,Tabconfig[4])"></xn-pagination>
+    </div>
+  </ng-container>
+  <ng-container *ngIf="row.type==='stockHolderMsg'">
+    <p>万科供应商股东出资信息</p>
+    <table class="table table-bordered table-hover file-row-table" width="100%">
+      <thead>
+        <tr>
+          <th>序号</th>
+          <th *ngFor="let head of Tabconfig[5].headText">{{head.label}}</th>
+        </tr>
+      </thead>
+      <tbody>
+        <ng-container *ngIf="Tabconfig[5].data.length;">
+          <tr *ngFor="let item of Tabconfig[5].data; let i=index">
+            <td>{{i+1}}</td>
+            <td *ngFor="let head of Tabconfig[5].headText">
+              <div *ngIf="head.value==='moneytype'">人民币</div>
+              <div *ngIf="head.value!=='moneytype'" [innerHTML]="item[head.value] || '/'"></div>
+            </td>
+          </tr>
+        </ng-container>
+        <tr *ngIf="Tabconfig[5].data.length===0">
+          <td [attr.colspan]="calcAttrColspan(Tabconfig[5])">
+            <div class="empty-message"></div>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+    <div style="height:40px">
+      <xn-pagination [rows]="Tabconfig[5].pageConfig.pageSize" [first]="Tabconfig[5].pageConfig.first"
+        [totalRecords]="Tabconfig[5].pageConfig.total" [pageSizeOptions]="[5,10,20,30,50,100]"
+        (pageChange)="onPage($event,Tabconfig[5])"></xn-pagination>
+    </div>
+    <p>上游客户股东出资信息</p>
+    <table class="table table-bordered table-hover file-row-table" width="100%">
+      <thead>
+        <tr>
+          <th>序号</th>
+          <th *ngFor="let head of Tabconfig[6].headText">{{head.label}}</th>
+        </tr>
+      </thead>
+      <tbody>
+        <ng-container *ngIf="Tabconfig[6].data.length;">
+          <tr *ngFor="let item of Tabconfig[6].data; let i=index">
+            <td>{{i+1}}</td>
+
+            <td *ngFor="let head of  Tabconfig[6].headText">
+              <div *ngIf="head.value==='moneytype'">人民币</div>
+
+              <div *ngIf="head.value!=='moneytype'" [innerHTML]="item[head.value] || '/'"></div>
+              <!-- <div *ngIf="item[head.value]===''">-</div> -->
+
+
+            </td>
+          </tr>
+        </ng-container>
+        <tr *ngIf="Tabconfig[6].data.length===0">
+          <td [attr.colspan]="calcAttrColspan(Tabconfig[6])">
+            <div class="empty-message"></div>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+    <div style="height:40px">
+      <xn-pagination [rows]="Tabconfig[6].pageConfig.pageSize" [first]="Tabconfig[6].pageConfig.first"
+        [totalRecords]="Tabconfig[6].pageConfig.total" [pageSizeOptions]="[5,10,20,30,50,100]"
+        (pageChange)="onPage($event,Tabconfig[6])"></xn-pagination>
+    </div>
+  </ng-container>
+
+  <ng-container *ngIf="row.type==='accountsCheck'">
+    <table class="table table-bordered table-striped text-center">
+      <tbody>
+        <ng-container>
+          <tr>
+            <td>序号</td>
+            <td>项目</td>
+            <td>检查结果</td>
+            <td>财报周期</td>
+          </tr>
+          <ng-container *ngIf='Tabconfig[7].data.length>0;'>
+            <tr *ngFor="let item of Tabconfig[7].data;let i=index">
+              <td>{{i+1}}</td>
+              <td>{{item.itemDesc}}</td>
+              <td>{{item.outcomeDesc}}</td>
+              <td>{{item.dateKey}}</td>
+            </tr>
+          </ng-container>
+          <tr *ngIf="Tabconfig[7].data.length===0">
+            <td [attr.colspan]="4">
+              <div class="empty-message"></div>
+            </td>
+          </tr>
+        </ng-container>
+
+      </tbody>
+    </table>
+    <xn-pagination [rows]="Tabconfig[7].pageConfig.pageSize" [first]="Tabconfig[7].pageConfig.first"
+      [totalRecords]="Tabconfig[7].pageConfig.total" [pageSizeOptions]="[5,10,20,30,50,100]"
+      (pageChange)="onPagefinacate($event,Tabconfig[7])">
+    </xn-pagination>
+  </ng-container>
+  <!-- <ng-container *ngIf="row.type==='accountsTarget'">
+    <table class="table table-bordered table-striped text-center">
+      <tbody>
+        <ng-container>
+          <tr>
+            <td>项目</td>
+            <td>最新一份财报的时间范围</td>
+            <td>倒数第二份财报的时间范围</td>
+            // 第三份财报隐藏
+             <td>倒数第三份财报的时间范围</td>
+          </tr>
+          <tr *ngIf='keydetail.length>0'>
+            <td>经营活动现金净流量/总债务</td>
+            <td><i class="fa" [style.color]='keydetail[0].CASH_FLOW_DIVI_TOTAL_DEBT.healthAssessment'
+                [ngClass]="{'fa-arrow-down':keydetail[0].CASH_FLOW_DIVI_TOTAL_DEBT.healthAssessment==='#FF0000','fa-arrow-up':keydetail[0].CASH_FLOW_DIVI_TOTAL_DEBT.healthAssessment==='#008000','fa-arrow-right':keydetail[0].CASH_FLOW_DIVI_TOTAL_DEBT.healthAssessment==='#FFFF00'}"></i>{{keydetail[0].CASH_FLOW_DIVI_TOTAL_DEBT.value}}
+            </td>
+            <td><i class="fa" [style.color]='keydetail[1].CASH_FLOW_DIVI_TOTAL_DEBT.healthAssessment'
+                [ngClass]="{'fa-arrow-down':keydetail[1].CASH_FLOW_DIVI_TOTAL_DEBT.healthAssessment==='#FF0000','fa-arrow-up':keydetail[1].CASH_FLOW_DIVI_TOTAL_DEBT.healthAssessment==='#008000','fa-arrow-right':keydetail[1].CASH_FLOW_DIVI_TOTAL_DEBT.healthAssessment==='#FFFF00'}"></i>{{keydetail[1].CASH_FLOW_DIVI_TOTAL_DEBT.value}}
+            </td>
+             <td [style.color]='keydetail[2].CASH_FLOW_DIVI_TOTAL_DEBT.healthAssessment'>{{keydetail[2].CASH_FLOW_DIVI_TOTAL_DEBT.value}}</td>
+          </tr>
+          <tr *ngIf='keydetail.length>0'>
+            <td>净资产收益率(%)</td>
+            <td><i class="fa" [style.color]='keydetail[0].EQUITY_YIELD.healthAssessment'
+                [ngClass]="{'fa-arrow-down':keydetail[0].EQUITY_YIELD.healthAssessment==='#FF0000','fa-arrow-up':keydetail[0].EQUITY_YIELD.healthAssessment==='#008000','fa-arrow-right':keydetail[0].EQUITY_YIELD.healthAssessment==='#FFFF00'}"></i>{{keydetail[0].EQUITY_YIELD.value}}
+            </td>
+            <td><i class="fa" [style.color]='keydetail[1].EQUITY_YIELD.healthAssessment'
+                [ngClass]="{'fa-arrow-down':keydetail[1].EQUITY_YIELD.healthAssessment==='#FF0000','fa-arrow-up':keydetail[1].EQUITY_YIELD.healthAssessment==='#008000','fa-arrow-right':keydetail[1].EQUITY_YIELD.healthAssessment==='#FFFF00'}"></i>{{keydetail[1].EQUITY_YIELD.value}}
+            </td>
+           <td [style.color]='keydetail[2].EQUITY_YIELD.healthAssessment'>{{keydetail[2].EQUITY_YIELD.value}}</td>
+          </tr>
+          <tr *ngIf='keydetail.length>0'>
+            <td>销售（营业）利润率</td>
+            <td><i class="fa" [style.color]='keydetail[0].SALE_BENE_RATE.healthAssessment'
+                [ngClass]="{'fa-arrow-down':keydetail[0].SALE_BENE_RATE.healthAssessment==='#FF0000','fa-arrow-up':keydetail[0].SALE_BENE_RATE.healthAssessment==='#008000','fa-arrow-right':keydetail[0].SALE_BENE_RATE.healthAssessment==='#FFFF00'}"></i>{{keydetail[0].SALE_BENE_RATE.value}}
+            </td>
+            <td><i class="fa" [style.color]='keydetail[1].SALE_BENE_RATE.healthAssessment'
+                [ngClass]="{'fa-arrow-down':keydetail[1].SALE_BENE_RATE.healthAssessment==='#FF0000','fa-arrow-up':keydetail[1].SALE_BENE_RATE.healthAssessment==='#008000','fa-arrow-right':keydetail[1].SALE_BENE_RATE.healthAssessment==='#FFFF00'}"></i>{{keydetail[1].SALE_BENE_RATE.value}}
+            </td>
+           <td [style.color]='keydetail[2].SALE_BENE_RATE.healthAssessment'>{{keydetail[2].SALE_BENE_RATE.value}}</td>
+          </tr>
+          <tr *ngIf='keydetail.length>0'>
+            <td>流动资产周转率（次）</td>
+            <td><i class="fa" [style.color]='keydetail[0].LIQUIDITY_CYCLE.healthAssessment'
+                [ngClass]="{'fa-arrow-down':keydetail[0].LIQUIDITY_CYCLE.healthAssessment==='#FF0000','fa-arrow-up':keydetail[0].LIQUIDITY_CYCLE.healthAssessment==='#008000','fa-arrow-right':keydetail[0].LIQUIDITY_CYCLE.healthAssessment==='#FFFF00'}"></i>{{keydetail[0].LIQUIDITY_CYCLE.value}}
+            </td>
+            <td><i class="fa" [style.color]='keydetail[1].LIQUIDITY_CYCLE.healthAssessment'
+                [ngClass]="{'fa-arrow-down':keydetail[1].LIQUIDITY_CYCLE.healthAssessment==='#FF0000','fa-arrow-up':keydetail[1].LIQUIDITY_CYCLE.healthAssessment==='#008000','fa-arrow-right':keydetail[1].LIQUIDITY_CYCLE.healthAssessment==='#FFFF00'}"></i>{{keydetail[1].LIQUIDITY_CYCLE.value}}
+            </td>
+          <td [style.color]='keydetail[2].LIQUIDITY_CYCLE.healthAssessment'>{{keydetail[2].LIQUIDITY_CYCLE.value}}</td>
+          </tr>
+          <tr *ngIf='keydetail.length>0'>
+            <td>销售（营业）增长率</td>
+            <td><i class="fa" [style.color]='keydetail[0].SALE_INCREASE_RATE.healthAssessment'
+                [ngClass]="{'fa-arrow-down':keydetail[0].SALE_INCREASE_RATE.healthAssessment==='#FF0000','fa-arrow-up':keydetail[0].SALE_INCREASE_RATE.healthAssessment==='#008000','fa-arrow-right':keydetail[0].SALE_INCREASE_RATE.healthAssessment==='#FFFF00'}"></i>{{keydetail[0].SALE_INCREASE_RATE.value}}
+            </td>
+            <td><i class="fa" [style.color]='keydetail[1].SALE_INCREASE_RATE.healthAssessment'
+                [ngClass]="{'fa-arrow-down':keydetail[1].SALE_INCREASE_RATE.healthAssessment==='#FF0000','fa-arrow-up':keydetail[1].SALE_INCREASE_RATE.healthAssessment==='#008000','fa-arrow-right':keydetail[1].SALE_INCREASE_RATE.healthAssessment==='#FFFF00'}"></i>{{keydetail[1].SALE_INCREASE_RATE.value}}
+            </td>
+           <td [style.color]='keydetail[2].SALE_INCREASE_RATE.healthAssessment'>{{keydetail[2].SALE_INCREASE_RATE.value}}</td>
+          </tr>
+          <tr *ngIf='keydetail.length>0'>
+            <td>总债务/ebitda</td>
+            <td><i class="fa" [style.color]='keydetail[0].TOTAL_DEBT.healthAssessment'
+                [ngClass]="{'fa-arrow-down':keydetail[0].TOTAL_DEBT.healthAssessment==='#FF0000','fa-arrow-up':keydetail[0].TOTAL_DEBT.healthAssessment==='#008000','fa-arrow-right':keydetail[0].TOTAL_DEBT.healthAssessment==='#FFFF00'}"></i>{{keydetail[0].TOTAL_DEBT.value}}
+            </td>
+            <td><i class="fa" [style.color]='keydetail[1].TOTAL_DEBT.healthAssessment'
+                [ngClass]="{'fa-arrow-down':keydetail[1].TOTAL_DEBT.healthAssessment==='#FF0000','fa-arrow-up':keydetail[1].TOTAL_DEBT.healthAssessment==='#008000','fa-arrow-right':keydetail[1].TOTAL_DEBT.healthAssessment==='#FFFF00'}"></i>{{keydetail[1].TOTAL_DEBT.value}}
+            </td>
+             <td [style.color]='keydetail[2].TOTAL_DEBT.healthAssessment'>{{keydetail[2].TOTAL_DEBT.value}}</td>
+          </tr>
+          <tr *ngIf="keydetail.length===0">
+            <td [attr.colspan]="3">
+              <div class="empty-message"></div>
+            </td>
+          </tr>
+        </ng-container>
+      </tbody>
+    </table>
+  </ng-container> -->
+  <ng-container *ngIf="row.type==='basicMsg'">
+    <table class="table table-bordered table-hover file-row-table" width="100%">
+      <tbody>
+        <tr>
+          <td style="width:10%">万科供应商企业名称</td>
+          <td style="width:40%">{{suppliercomp.name}}</td>
+          <td style="width:10%">上游客户企业名称</td>
+          <td style="width:40%">{{ustreamcomp.name}}</td>
+        </tr>
+        <tr>
+          <td>统一社会信用代码</td>
+          <td>{{suppliercomp.CreditCode}}</td>
+          <td>统一社会信用代码</td>
+          <td>{{ustreamcomp.CreditCode}}</td>
+        </tr>
+        <tr>
+          <th>法定代表人</th>
+          <td>{{suppliercomp.OperName}}</td>
+          <th>法定代表人</th>
+          <td>{{ustreamcomp.OperName}}</td>
+        </tr>
+        <tr>
+          <td>成立日期</td>
+          <td>{{suppliercomp.StartDate}}</td>
+          <td>成立日期</td>
+          <td>{{ustreamcomp.StartDate}}</td>
+        </tr>
+        <tr>
+          <td>注册资本</td>
+          <td>{{suppliercomp.RegistCapi}}</td>
+          <td>注册资本</td>
+          <td>{{ustreamcomp.RegistCapi}}</td>
+        </tr>
+        <tr>
+          <td>所属行业</td>
+          <td>{{suppliercomp.industry}}</td>
+          <td>所属行业</td>
+          <td>{{ustreamcomp.industry}}</td>
+        </tr>
+        <tr>
+          <td>企业类型</td>
+          <td>{{suppliercomp.EconKind}}</td>
+          <td>企业类型</td>
+          <td>{{ustreamcomp.EconKind}}</td>
+        </tr>
+        <tr>
+          <td>注册地址</td>
+          <td>{{suppliercomp.address}}</td>
+          <td>注册地址</td>
+          <td>{{ustreamcomp.address}}</td>
+        </tr>
+        <tr>
+          <td>营业期限</td>
+          <td>{{suppliercomp.businessTerm}}</td>
+          <td>营业期限</td>
+          <td>{{ustreamcomp.businessTerm}}</td>
+        </tr>
+        <tr>
+          <td>经营范围</td>
+          <td>{{suppliercomp.Scope}}</td>
+          <td>经营范围</td>
+          <td>{{ustreamcomp.Scope}}</td>
+        </tr>
+        <tr>
+          <td>登记机关</td>
+          <td>{{suppliercomp.BelongOrg}}</td>
+          <td>登记机关</td>
+          <td>{{ustreamcomp.BelongOrg}}</td>
+        </tr>
+        <tr>
+          <td>核准日期</td>
+          <td>{{suppliercomp.approvalDate}}</td>
+          <td>核准日期</td>
+          <td>{{ustreamcomp.approvalDate}}</td>
+        </tr>
+      </tbody>
+    </table>
+  </ng-container>
+  <!--诉讼信息-->
+  <ng-container *ngIf="row.type==='lawsuitMsg'">
+    <ng-container *ngFor="let table of lawsuitMsgtable">
+      <p>{{table.title}}</p>
+      <table class="table table-bordered table-hover file-row-table" width="100%">
+        <thead>
+          <tr>
+            <th>序号</th>
+            <th *ngFor="let head of table.headText">{{head.label}}</th>
+
+          </tr>
+        </thead>
+        <tbody>
+          <ng-container *ngIf="table.data.length;">
+            <tr *ngFor="let item of table.data; let i=index">
+              <td>{{i+1}}</td>
+              <td *ngFor="let head of table.headText">
+                <div [innerHTML]="item[head.value] | xnGatherType: {head:head,row:item}"></div>
+              </td>
+            </tr>
+          </ng-container>
+          <tr *ngIf="table.data.length===0">
+            <td [attr.colspan]="calcAttrColspan(table)">
+              <div class="empty-message"></div>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+      <div style="height:40px">
+        <xn-pagination [rows]="table.pageConfig.pageSize" [first]="table.pageConfig.pageIndex"
+          [totalRecords]="table.pageConfig.total" [pageSizeOptions]="[5,10,20,30,50]"
+          (pageChange)="onPagelawsuit($event,table.get_url,table.pageConfig,table)">
+        </xn-pagination>
+      </div>
+    </ng-container>
+  </ng-container>
+  <ng-container *ngIf="row.type==='amountChangeTrend'">
+    <div class="tab-pane active" style="padding: 15px 0">
+      <div style="width:100%">
+        <div #chart2 id='chart2' class="chart-height-400" style='width:100% !important'></div>
+      </div>
+    </div>
+  </ng-container>
+  <ng-container *ngIf="row.type==='businessPeriodTrend'">
+    <div class="tab-pane active" style="padding: 15px 0">
+      <div style="width:100%">
+        <div #chart1 id='chart1' class="chart-height-400" style='width:100% !important'></div>
+      </div>
+    </div>
+  </ng-container>

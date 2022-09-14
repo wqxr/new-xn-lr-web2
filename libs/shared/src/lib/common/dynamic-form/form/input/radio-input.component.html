@@ -1,0 +1,11 @@
+<div class="xn-radio-row" [formGroup]="form" [ngClass]="myClass">
+  <label class="xn-input-font" *ngFor="let option of row.selectOptions">
+    <ng-container *ngIf="!option.disable">
+      <input type="radio" [formControlName]="row.name" value="{{option.value}}"
+        [attr.disabled]="option.disable || row.options?.readonly" class="flat-red">&nbsp;&nbsp;{{option.label}}
+    </ng-container>
+  </label>
+  <button *ngIf="showClearBtn" type="button" class="close" (click)="onClear()"><span>&times;</span></button>
+  <span  style='margin-left:30px' *ngIf="row.flowId==='sub_cfca_financing_sign'">线下鲜章时，下载合同文本线下盖鲜章（不使用CA数字证书）</span>
+</div>
+<span class="xn-input-alert" *ngIf="row.flowId !== 'vanke_platform_verify'">{{alert}}</span>

@@ -1,0 +1,52 @@
+<section *ngIf="svrConfig">
+  <form class="form-horizontal">
+    <div class="panel panel-default">
+      <div class="panel-body">
+        <div class="form-group" *ngFor="let row of thirdRows; let i = index">
+          <!-- 表单组标题 -->
+          <ng-container>
+            <div *ngIf="i === 0" class="checkerTitle">
+              <h3 class="checkerHead">经办人信息</h3>
+              <a (click)="downloadTp()">下载普惠记账簿开户指引</a>
+            </div>
+          </ng-container>
+          <!-- 新增的表单组 -->
+          <ng-container>
+            <div class="col-sm-2 xn-control-label required-label-strong required-star">
+              {{ row.title }}
+              <i *ngIf="row.checkerId==='appApplyType'" style='font-size: 16px;' class='fa fa-question-circle'
+                [tooltip]='appApplyTypeTip' content-type="template">
+              </i>
+            </div>
+            <div class="col-sm-8">
+              <app-dynamic-input [row]="row" [form]="mainForm" [formModule]="formModule" [svrConfig]="svrConfig">
+              </app-dynamic-input>
+            </div>
+            <div class="col-sm-2 xn-control-desc">
+              {{row.memo}}
+            </div>
+          </ng-container>
+        </div>
+      </div>
+      <div class="panel-footer text-right">
+        <button type="button" class="btn btn-default pull-left" (click)="goBack()">
+          返回
+        </button>
+        <button type="button" [disabled]="!mainForm?.valid && !readonly" class="btn btn-primary" (click)="toSecond()">
+          上一步
+        </button>
+        <button type="submit" class="btn btn-primary" [disabled]="!mainForm?.valid && !readonly" (click)="submitForm()">
+          提交申请
+        </button>
+      </div>
+    </div>
+  </form>
+</section>
+<!-- 办理类型提示说明 -->
+<ng-template #appApplyTypeTip>
+  <div>
+    <h5>帮助提示：</h5>
+    <p style="text-align: left;">企业授权经办：需要法人信息、视频及法人授权经办者的信息</p>
+    <p>法人亲办：提供法人相关信息即可</p>
+  </div>
+</ng-template>

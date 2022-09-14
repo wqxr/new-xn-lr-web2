@@ -1,0 +1,32 @@
+<div class="block-chain-browser-layout">
+  <header>
+    <div class="portal-panel">
+      <a title="区块链浏览器" routerLink="/block-chain-info/index"><img src="assets/images/bg/logo-white.png"/></a>
+    </div>
+  </header>
+  <main>
+    <div class="portal-panel">
+      <nav>
+        <div class="block-chain-browser-layout-breadcrumb">
+          <nz-breadcrumb [nzSeparator]="nzSeparator" [nzAutoGenerate]="true"></nz-breadcrumb>
+          <ng-template #nzSeparator>
+            <i>></i>
+          </ng-template>
+        </div>
+        <div class="search">
+          <nz-input-group [nzSuffix]="suffixIconSearch">
+            <input type="text" nz-input placeholder="基础资产ID/审批流ID/Hash" [(ngModel)]="searchVal" (keyup.enter)="onEnter()"/>
+          </nz-input-group>
+          <ng-template #suffixIconSearch>
+            <i nz-icon nzType="search" style="cursor: pointer;" (click)="onEnter()" title="点击搜索"></i>
+          </ng-template>
+        </div>
+      </nav>
+      <div style="padding-bottom: 40px;">
+        <router-outlet></router-outlet>
+      </div>
+    </div>
+  </main>
+  <portal-bar type="black"></portal-bar>
+</div>
+<!--<portal-bar type="black"></portal-bar>-->

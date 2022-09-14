@@ -1,0 +1,63 @@
+<section class="content-header">
+  <h1>{{tabConfig.title}}</h1>
+</section>
+<section class="content">
+  <div class="box">
+    <div class="box-body">
+      <div class="tab-content">
+        <div class="tab-pane active" style="padding: 15px 0;">
+          <div class="col-md-10 col-md-offset-2" style="margin-bottom: 20px;">
+            <h4>抽样模型配置</h4>
+          </div>
+          <div class="item-box col-md-10 col-md-offset-2" *ngFor="let row of shows">
+            <div [class.required-star]="row.required !== false && row.required !== 0"
+              style="min-width: 70px;line-height: 35px;margin-right: 25px;text-align: right;">
+              {{row.title}}</div>
+            <div class="item-control">
+              <app-dynamic-input [row]="row" [form]="form" [formModule]="formModule"></app-dynamic-input>
+            </div>
+          </div>
+          <div class="item-box col-md-10 col-md-offset-2" *ngFor="let row of shows">
+            <div class="required-star" style="min-width: 92px;line-height: 35px;margin-right: 25px;text-align: right;">
+              抽样规则</div>
+            <div class="item-control">
+              <button class="btn btn-default" type="button" style="color: #3c8dbc;" (click)="selectRule()">选择规则</button>
+            </div>
+          </div>
+          <div style='clear:both;max-height: 580px;overflow-y: scroll;'>
+            <div class="item-box col-md-7 col-md-offset-3" *ngFor="let item of ruleList;let i=index">
+              <div style="min-width: 65px;line-height: 35px;margin-right: 25px;text-align: right;">
+                规则{{i+1}}
+              </div>
+              <div class="item-control" style="display: flex;">
+                <div (click)="toLookRule(item)" style="width:70%;margin-right: 5px;">
+                  <textarea rows="1" style="resize:none;cursor: pointer;color: #3c8dbc;background-color: #fff;"
+                    class="form-control xn-show-input-textarea xn-input-font xn-input-border-radius"
+                    readonly>{{item.ruleName}}</textarea>
+                </div>
+                <div>
+                  <select class="form-control xn-input-font" [(ngModel)]="item.type"
+                    (change)="selectChange($event,item)">
+                    <option value="">请选择</option>
+                    <option value="1">从剩余资产池抽样</option>
+                    <option value="0">从整体资产池抽样</option>
+                  </select>
+                  <div *ngIf="item.type===''|| item.type===undefined">
+                    <span class="xn-input-alert">必填字段</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="panel-footer col-md-12">
+            <button class="btn btn-default pull-left" type="button" (click)="back()">返回</button>
+            <button class="btn btn-primary" type="submit" [disabled]='!form.valid || !allSelect()' (click)="toSubmit()">
+              提交
+            </button>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+</section>

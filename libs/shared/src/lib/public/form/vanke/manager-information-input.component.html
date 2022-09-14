@@ -1,0 +1,50 @@
+<div [formGroup]="form">
+  <div class="form-group">
+    <span class="col-sm-3 control-label" [ngClass]="{'title-text':row.required}">期数</span>
+    <div class="col-sm-9">
+      <input class="form-control xn-input-font xn-input-border-radius" type="text" [value]="data.periods" name="periods"
+             (input)="handleEdit($event,'periods')" [disabled]="!!dataObj.periods&&dataObj.periods!==''" autocomplete="off">
+    </div>
+  </div>
+  <div class="form-group">
+    <span class="col-sm-3 control-label" [ngClass]="{'title-text':row.required}">买卖协议编号</span>
+    <div class="col-sm-9">
+      <input type="text" class="form-control xn-input-font xn-input-border-radius" name="salesAgreementNumber"
+             (input)="handleEdit($event,'salesAgreementNumber')"
+             [value]="data.salesAgreementNumber" autocomplete="off">
+    </div>
+  </div>
+  <div class="form-group">
+    <span class="col-sm-3 control-label" [ngClass]="{'title-text':row.required}">服务协议编号</span>
+    <div class="col-sm-9">
+      <input class="form-control xn-input-font xn-input-border-radius" type="text" name="serviceAgreementNumber"
+             [value]="data.serviceAgreementNumber" (input)="handleEdit($event,'serviceAgreementNumber')"
+             autocomplete="off">
+    </div>
+  </div>
+  <div class="form-group" *ngIf="data.headquarters === '深圳市龙光控股有限公司'">
+    <span class="col-sm-6 control-label" [ngClass]="{'title-text':row.required}">《付款确认书（总部致保理商）》编号</span>
+    <div class="col-sm-6">
+      <input class="form-control xn-input-font xn-input-border-radius" type="text" name="payConfirmId"
+             [value]="data.payConfirmId" (input)="handleEdit($event,'payConfirmId')"
+             autocomplete="off">
+    </div>
+  </div>
+  <div class="form-group">
+    <span class="col-sm-3 control-label" [ngClass]="{'title-text':row.required}">资产管理计划编号</span>
+    <div class="col-sm-9">
+      <input class="form-control xn-input-font xn-input-border-radius" type="text" name="capitalManageNum"
+             [value]="data.capitalManageNum" (input)="handleEdit($event,'capitalManageNum')"
+             autocomplete="off">
+      <span style="color: #e15f63;padding-top: 2px;">{{data.err}}</span>
+    </div>
+  </div>
+  <div class="form-group">
+    <span class="col-sm-3 control-label" [ngClass]="{'title-text':row.required}">资产管理计划期数</span>
+    <div class="col-sm-9">
+      <input class="form-control xn-input-font xn-input-border-radius" type="text" name="capitalPeriodNum"
+             [value]="data.capitalPeriodNum" (input)="handleEdit($event,'capitalPeriodNum')"
+             autocomplete="off" maxlength="20" placeholder="最多输入20个字符">
+    </div>
+  </div>
+</div>

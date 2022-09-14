@@ -1,0 +1,192 @@
+<section>
+  <div>
+    <p class="rule-index">
+      应用节点:
+      <span>{{ pointInfo.pointName }}</span>
+    </p>
+    <div *ngFor="let rs of rsList; let i = index">
+      <div nz-row>
+        <div nz-col nzSpan="16" class="rule-clump">
+          规则集名称:
+          <span>{{ rs.rsName }}</span>
+          <span>{{ rs.rsCode }}</span>
+        </div>
+        <div
+          *ngIf="!readonly"
+          nz-col
+          nzSpan="8"
+          style="text-align: right; margin-bottom: 5px"
+        >
+          <button
+            style="margin-right: 15px"
+            nz-button
+            [nzSize]="size"
+            nzType="primary"
+            [disabled]="!selectedItems?.length"
+            (click)="batchUploadFile($event)"
+          >
+            补充文件
+          </button>
+          <button
+            nz-button
+            [nzSize]="size"
+            nzType="primary"
+            [disabled]="!selectedItems?.length"
+            (click)="batchAddMark($event)"
+          >
+            添加备注
+          </button>
+        </div>
+      </div>
+      <xn-table
+        [data]="rs.ruleList"
+        [columns]="headsColumns"
+        [size]="'middle'"
+        [scroll]="{ y: '400px' }"
+        [page]="{ show: false }"
+        [widthMode]="{ type: 'strict', strictBehavior: 'truncates' }"
+        [rowClassName]="rowClassName"
+        (change)="handleTableChange($event, rs.rsCode)"
+      >
+        <!-- 结果 -->
+        <ng-template
+          xn-table-row="ResultTpl"
+          let-item
+          let-index="index"
+          let-column="column"
+        >
+          <i
+            style="color: #fb9e17"
+            nz-icon
+            nzType="exclamation-circle"
+            nzTheme="outline"
+          ></i>
+        </ng-template>
+        <!-- 异常原因 -->
+        <ng-template
+          xn-table-row="SpeechTpl"
+          let-item
+          let-index="index"
+          let-column="column"
+        >
+          <div
+            [id]="'speechId' + index"
+            style="min-height: 100px; overflow: hidden; line-height: 20px"
+          >
+            <ng-container
+              *ngIf="item[column.index] && item[column.index].length > 100"
+            >
+              <span nz-tooltip [nzTooltipTitle]="item[column.index]">{{
+                item[column.index]
+              }}</span>
+            </ng-container>
+            <ng-container
+              *ngIf="item[column.index] && item[column.index].length <= 100"
+            >
+              <span>{{ item[column.index] }}</span>
+            </ng-container>
+          </div>
+        </ng-template>
+        <!--指标内容 -->
+        <ng-template
+          xn-table-row="indexTpl"
+          let-item
+          let-index="index"
+          let-column="column"
+        >
+          <div [id]="'setdiv' + index">
+            <p *ngFor="let indexInfo of item[column.index]">
+              <span>{{ indexInfo["indexName"] }}</span
+              >:
+              <span
+                style="font-weight: bold"
+                nz-tooltip
+                [nzTooltipTitle]="indexInfo['indexValue']"
+                >{{ indexInfo["indexValue"] }}</span
+              >
+            </p>
+          </div>
+        </ng-template>
+        <!-- 规则校验类型 -->
+        <ng-template
+          xn-table-row="VaildTypeTpl"
+          let-item
+          let-index="index"
+          let-column="column"
+        >
+          <span>{{
+            item[column.index] | xnSelectTransform: vaildTypeOptions
+          }}</span>
+        </ng-template>
+        <!-- 规则名称,悬浮展示规则表达式 -->
+        <ng-template
+          xn-table-row="ruleNameTpl"
+          let-item
+          let-index="index"
+          let-column="column"
+        >
+          <span nz-tooltip [nzTooltipTitle]="item['expressionCn']">{{
+            item[column.index]
+          }}</span>
+        </ng-template>
+        <!-- 操作 -->
+        <ng-template
+          xn-table-row="ActionTpl"
+          let-item
+          let-index="index"
+          let-column="column"
+        >
+          <ng-container *ngIf="!item.file">
+            <p
+              *ngIf="
+                actionType(item['validateType'], ruleValidTypeEnum.HARD_CONTROL)
+              "
+            >
+              <a
+                href="javaScript:void(0)"
+                (click)="uploadApprovalForm(item, i, index, 'UPLOAD_FILE')"
+                >上传特殊事项审批表</a
+              >
+            </p>
+            <p *ngIf="showMark(item, ruleHandTypeEnum.ADD_FILE)">
+              <a href="javaScript:void(0)" (click)="addFile(item, i, index)"
+                >补充文件</a
+              >
+            </p>
+          </ng-container>
+          <!-- 有文件 -->
+          <ng-container *ngIf="item.file">
+            <p>
+              <a href="javaScript:void(0)" (click)="onViewFile(item.file)"
+                >查看文件</a
+              >
+            </p>
+            <p *ngIf="!readonly">
+              <a
+                href="javaScript:void(0)"
+                (click)="uploadApprovalForm(item, i, index, 'CHANGE_FILE')"
+                >修改文件</a
+              >
+            </p>
+          </ng-container>
+          <!-- 强提醒+添加备注 -->
+          <ng-container *ngIf="showMark(item, ruleHandTypeEnum.ADD_REMARK)">
+            <p *ngIf="!item.userRemark">
+              <a href="javaScript:void(0)" (click)="addMark(item, i, index)"
+                >添加备注</a
+              >
+            </p>
+            <p *ngIf="item.userRemark">
+              <a href="javaScript:void(0)" (click)="editMark(item, i, index)"
+                >修改备注</a
+              >
+            </p>
+          </ng-container>
+          <p *ngIf="item.userRemark">
+            <a nz-tooltip [nzTooltipTitle]="item.userRemark">查看备注</a>
+          </p>
+        </ng-template>
+      </xn-table>
+    </div>
+  </div>
+</section>

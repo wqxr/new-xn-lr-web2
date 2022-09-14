@@ -1,0 +1,16 @@
+<div class="row" [ngClass]="myClass">
+  <div class="col-md-2 text-left">
+    <span>{{resultObj.queryStatus | xnSelectTransform:'queryStatus'}}</span>
+  </div>
+  <div class="col-md-8 text-left">
+    <span><i class="fa fa-fw fa-calendar-plus-o"></i> 上次查询时间：{{!!resultObj.relationUpdateTime ? (resultObj.relationUpdateTime | xnDate:'longdatetime') : '无'}}
+      <i class="fa fa-fw fa-user-o"></i> {{resultObj.relationOperatorUserName || '无'}}
+    </span>
+  </div>
+  <!-- <div class="col-md-2 text-right">
+    <span>
+      <i class="fa fa-fw fa-pencil-square-o"></i><a href="javascript: void(0)" (click)="onEdit()">修改</a>
+    </span>
+  </div> -->
+</div>
+<span class="xn-input-alert" *ngIf="!!resultObj.overDays">{{resultObj.overDays}}</span>

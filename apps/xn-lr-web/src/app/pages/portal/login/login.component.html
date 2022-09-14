@@ -1,0 +1,26 @@
+<portal-nav></portal-nav>
+<div class="login" [ngStyle]="style">
+  <div class="portal-panel">
+    <div class="portal-login-box">
+      <div class="login-inner-box">
+        <div class="login-title">链融科技平台</div>
+        <div class="login-form" [ngStyle]="{height: isNeedPsw ? 'auto' : '380px'}">
+          <form (ngSubmit)="onLogin()" autocomplete="off" onkeydown="if(event.keyCode==13){return false;}">
+            <div class="txt">登录</div>
+            <div class="account"><img src="assets/images/icon/cellphone.png" alt="" /><input [maxlength]="accountMexLen"  type="text" placeholder="手机号码" [(ngModel)]="account" name="account" (keydown)="getfocus($event)" [autocomplete]="isWebKit" (keyup)="onKeyUp('account')" (paste)="onPaste('account')"></div>
+            <div class="password"><img src="assets/images/icon/password.png" alt="" /><input  #getpassword [maxlength]="codeMexLen" [(ngModel)]="code" type="text" placeholder="验证码" (keydown)="getSms($event)" name="code" autocomplete="off" (keyup)="onKeyUp('code')"  (paste)="onPaste('code')"><a (click)="getCode()" [ngClass]="{ 'color': codeTip !== '获取验证码'}">{{codeTip}}</a></div>
+            <div class="password" style="margin-top: 20px;" *ngIf="isNeedPsw"><img src="assets/images/icon/lock.png" alt="" /><input [(ngModel)]="password" type="password" placeholder="密码" autofocus name="password" maxlength="10"></div>
+            <div><button type="submit">
+              <span *ngIf="loading;else login"><i nz-icon nzType="loading" nzTheme="outline" style="margin-right: 12px;"></i>正在登录...</span>
+              <ng-template #login>
+                <span>登录</span>
+              </ng-template>
+            </button></div>
+            <div class="registry"><a routerLink="/registry">没有账号？立即注册</a></div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+  <portal-bar type="blue"></portal-bar>
+</div>

@@ -1,0 +1,76 @@
+<modal #modal [backdrop]="'static'" [keyboard]="false" [animation]="false" (onDismiss)="onOk()">
+    <modal-header [showClose]="true" style='text-align:center'>
+      <h4 class="modal-title" style='height:5px'>审批结果</h4>
+    </modal-header>
+
+    <modal-body>
+      <div class="form-group" style='margin-bottom:20px;padding: 10px 10px;
+      margin-right: 140px;' >
+        <div class="col-sm-4 xn-control-label">
+          交易ID
+        </div>
+        <div class="col-sm-8">
+          <input type='text' class="form-control xn-input-font xn-input-border-radius" readonly [value]='items.mainFlowId'>
+        </div>
+      </div>
+      <div class="form-group" style='margin-bottom:20px;padding: 10px 10px;
+      margin-right: 140px;' >
+        <div class="col-sm-4 xn-control-label">
+          应收账款金额
+        </div>
+        <div class="col-sm-8">
+          <input type='text' class="form-control xn-input-font xn-input-border-radius" readonly [value]='items.receivable | xnMoney'>
+        </div>
+      </div>
+        <div class="form-group" style='margin-bottom:20px;padding: 10px 10px;
+        margin-right: 140px;' >
+        <div class="col-sm-4 xn-control-label">
+          起息日
+        </div>
+        <div class="col-sm-8" >
+          <input type='text' class="form-control xn-input-font xn-input-border-radius" readonly [value]="items.valueDate|xnDate:'date'">
+        </div>
+        </div>
+        <div class="form-group" style='margin-bottom:20px;padding: 10px 10px;
+        margin-right: 140px;' >
+        <div class="col-sm-4 xn-control-label">
+          保理融资到期日
+        </div>
+        <div class="col-sm-8">
+          <input type='text' class="form-control xn-input-font xn-input-border-radius" readonly [value]="items.factoringEndDate |xnDate:'date'">
+        </div>
+        </div>
+      <div style="padding: 20px 60px">
+        <table class="table table-bordered text-center">
+          <thead>
+            <tr>
+              <th>项目</th>
+              <th>信贷有权人</th>
+              <th>财务有权人</th>
+
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>审批结果</td>
+              <td>{{items.creditStatus | xnSelectTransform:'approvalstatus'}}</td>
+              <td>{{items.financeStatus | xnSelectTransform:'approvalstatus'}}</td>
+            </tr>
+            <tr>
+              <td>审批时间</td>
+              <td>{{items.creditTime |xnDate}}</td>
+              <td>{{items.financeTime | xnDate}}</td>
+            </tr>
+            <tr>
+              <td>审批备注信息</td>
+              <td>{{items.creditInfo}}</td>
+              <td>{{items.financeInfo}}</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </modal-body>
+    <modal-footer>
+      <button type="button" class="btn btn-success" (click)="onOk()">确定</button>
+    </modal-footer>
+  </modal>

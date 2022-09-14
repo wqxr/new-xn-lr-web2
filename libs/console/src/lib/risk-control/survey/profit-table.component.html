@@ -1,0 +1,147 @@
+<table class="table table-bordered table-striped table-max">
+  <!--利润表-->
+  <tbody>
+  <tr>
+    <th colspan="5">利润表（单位：元）</th>
+  </tr>
+  <tr>
+    <th>一、营业收入</th>
+    <td *ngFor="let item of profit.F021_THS014"> {{item}}</td>
+  </tr>
+  <tr>
+    <td>减:营业成本</td>
+    <td *ngFor="let item of profit.F039_THS014"> {{item}}</td>
+  </tr>
+  <tr>
+    <td>营业税金及附加</td>
+    <td *ngFor="let item of profit.F040_THS014"> {{item}}</td>
+  </tr>
+  <tr>
+    <td>销售费用</td>
+    <td *ngFor="let item of profit.F041_THS014"> {{item}}</td>
+  </tr>
+  <tr>
+    <td>管理费用</td>
+    <td *ngFor="let item of profit.F042_THS014"> {{item}}</td>
+  </tr>
+  <tr>
+    <td>财务费用</td>
+    <td *ngFor="let item of profit.F043_THS014"> {{item}}</td>
+  </tr>
+  <tr>
+    <td>资产减值损失</td>
+    <td *ngFor="let item of profit.F044_THS014 "> {{item}}</td>
+  </tr>
+  <tr>
+    <td>加:公允价值变动收益(损失以"-"号填列)</td>
+    <td *ngFor="let item of profit.F057_THS014"> {{item}}</td>
+  </tr>
+  <tr>
+    <td>投资收益(损失以"-"号填列)</td>
+    <td *ngFor="let item of profit.F058_THS014"> {{item}}</td>
+  </tr>
+  <tr>
+    <td>其中:对联营企业和合营企业的投资收益</td>
+    <td *ngFor="let item of profit.F059_THS014"> {{item}}</td>
+  </tr>
+  <tr>
+    <td>资产处置收益（损失以“-”号填列）</td>
+    <td *ngFor="let item of profit.F101_THS014">{{item}}</td>
+  </tr>
+  <tr>
+    <td>其他收益</td>
+    <td *ngFor="let item of profit.F100_THS014"> {{item}}</td>
+  </tr>
+  <tr>
+    <th>二、营业利润(亏损以"-"号填列)</th>
+    <td *ngFor="let item of profit.F061_THS014"> {{item}}</td>
+  </tr>
+  <tr>
+    <td>加:营业外收入</td>
+    <td *ngFor="let item of profit.F062_THS014"> {{item}}</td>
+  </tr>
+  <tr>
+    <td>减:营业外支出</td>
+    <td *ngFor="let item of profit.F063_THS014"> {{item}}</td>
+  </tr>
+  <tr>
+    <th>三、利润总额(亏损总额以"-"号填列)</th>
+    <td *ngFor="let item of profit.F065_THS014 "> {{item}}</td>
+  </tr>
+  <tr>
+    <td>减:所得税费用</td>
+    <td *ngFor="let item of profit.F066_THS014"> {{item}}</td>
+  </tr>
+  <tr>
+    <th>四、净利润(净亏损以"-"号填列)</th>
+    <td *ngFor="let item of profit.F067_THS014"> {{item}}</td>
+  </tr>
+  <tr>
+    <td>持续经营净利润（净亏损以“－”号填列）</td>
+    <td *ngFor="let item of profit.F102_THS014">{{item}}</td>
+  </tr>
+  <tr>
+    <td>终止经营净利润（净亏损以“－”号填列）</td>
+    <td *ngFor="let item of profit.F103_THS014">{{item}}</td>
+  </tr>
+  <tr>
+    <th colspan="5">五、每股收益</th>
+  </tr>
+  <tr>
+    <td>(一)基本每股收益</td>
+    <td *ngFor="let item of profit.F083_THS014"> {{item}}</td>
+  </tr>
+  <tr>
+    <td>(二)稀释每股收益</td>
+    <td *ngFor="let item of profit.F084_THS014 "> {{item}}</td>
+  </tr>
+  <tr>
+    <th>六、其他综合收益的税后净额</th>
+    <td *ngFor="let item of profit.F070_THS014"> {{item}}</td>
+  </tr>
+  <tr>
+    <td>(一)以后不能重分类进损益的其他综合收益</td>
+    <td *ngFor="let item of profit.F088_THS014"> {{item}}</td>
+  </tr>
+  <tr>
+    <td>1.重新计量设定受益计划净负债或净资产的变动</td>
+    <td *ngFor="let item of profit.F089_THS014"> {{item}}</td>
+  </tr>
+  <tr>
+    <td>2.权益法下在被投资单位不能重分类进损益的其他综合收益中享有的份额</td>
+    <td *ngFor="let item of profit.F090_THS014"> {{item}}</td>
+  </tr>
+  <tr>
+    <td>(二)以后将重分类进损益的其他综合收益</td>
+    <td *ngFor="let item of profit.F091_THS014 "> {{item}}</td>
+  </tr>
+  <tr>
+    <td>1.权益法下在被投资单位以后将重分类进损益的其他综合收益中享有的份额</td>
+    <td *ngFor="let item of profit.F092_THS014"> {{item}}</td>
+  </tr>
+  <tr>
+    <td>2.可供出售金融资产公允价值变动损益</td>
+    <td *ngFor="let item of  profit.F093_THS014"> {{item}}</td>
+  </tr>
+  <tr>
+    <td>3.持有至到期投资重分类为可供出售金融资产损益</td>
+    <td *ngFor="let item of profit.F094_THS014"> {{item}}</td>
+  </tr>
+  <tr>
+    <td>4.现金流量套期损益的有效部分</td>
+    <td *ngFor="let item of profit.F095_THS014"> {{item}}</td>
+  </tr>
+  <tr>
+    <td>5.外币财务报表折算差额</td>
+    <td *ngFor="let item of profit.F096_THS014"> {{item}}</td>
+  </tr>
+  <tr>
+    <th>七、综合收益总额</th>
+    <td *ngFor="let item of profit.F071_THS014"> {{item}}</td>
+  </tr>
+  <tr>
+    <td>营业总成本</td>
+    <td *ngFor="let item of profit.F038_THS014"> {{item}}</td>
+  </tr>
+  </tbody>
+</table>

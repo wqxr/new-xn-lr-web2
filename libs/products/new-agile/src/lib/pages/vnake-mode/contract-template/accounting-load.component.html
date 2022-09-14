@@ -1,0 +1,33 @@
+<!-- Content Header (Page header) -->
+<section class="content-header">
+  <h1>
+    {{pageTitle}}
+    <small>{{pageDesc}}</small>
+  </h1>
+</section>
+<section class="content">
+  <form class="form-horizontal" (ngSubmit)="onSubmit()" [formGroup]="mainForm" *ngIf="!!mainForm">
+    <div class="panel panel-default">
+      <div class="panel-heading">
+        <span class="panel-title">{{panelTile}}</span>
+      </div>
+      <div class="panel-body">
+        <div class="form-group" *ngFor="let row of rows">
+          <div class="col-sm-2 xn-control-label">
+            {{row.title}} <span *ngIf="row.required !== false && row.required !== 0" class="required-label">*</span>
+          </div>
+          <div class="col-sm-8">
+            <xn-input [row]="row" [form]="mainForm"></xn-input>
+          </div>
+          <div class="col-sm-2 xn-control-desc">
+            {{row.memo}}
+          </div>
+        </div>
+      </div>
+      <div class="panel-footer text-right">
+        <button type="button" class="btn btn-default pull-left" (click)="xn.user.navigateBack()">返回</button>
+        <button type="submit" class="btn btn-primary" [disabled]="!mainForm.valid">提交并下载</button>
+      </div>
+    </div>
+  </form>
+</section>

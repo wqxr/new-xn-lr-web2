@@ -1,0 +1,124 @@
+<div class="input-group" style="width: 100%" [formGroup]="form">
+  <table class="table table-bordered table-hover file-row-table" aria-rowindex='' width="100%">
+    <thead>
+    <tr>
+      <th align="center">
+        <span style="line-height: 20px;"> 序号</span>
+      </th>
+      <th>
+        <span style="line-height: 20px;">发票扫描件</span>
+      </th>
+      <th>
+        <span style="line-height: 20px;">发票号码</span>
+      </th>
+      <th>
+        <span style="line-height: 20px;">发票金额</span>
+      </th>
+      <th>
+        <span style="line-height: 20px;">开票日期</span>
+      </th>
+      <th *ngIf="mode === 'edit' || mode === 'view' || mode === 'upload_lack'">
+        <span style="line-height: 20px;">状态</span>
+      </th>
+      <th>
+        <div style="padding: 2px 5px" class="btn btn-default btn-file xn-table-upload"
+             *ngIf="mode === 'upload' || mode === 'upload_edit'|| mode === 'upload_lack'">
+          <span class="hidden-xs xn-input-font">上传发票</span>
+          <input type="file" (change)="onUpload($event)" (click)="onBeforeUpload($event)" multiple>
+        </div>
+        <div style="padding: 2px 5px" class="btn btn-default btn-file xn-table-upload"
+             *ngIf="mode === 'upload' || mode === 'upload_edit'|| mode === 'upload_lack'">
+          <!--<span class="gray">|</span>-->
+          <span class="hidden-xs xn-input-font">上传Excel</span>
+          <input type="file" (change)="onUploadExcel($event)">
+        </div>
+        <!--批量验证excel上传的发票-->
+        <ng-container *ngIf="!(orgType===1 || orgType===2)">
+          <div style="padding: 2px 5px" class="btn btn-default btn-file xn-table-upload"
+               (click)="handleVerification()">
+            <span class="hidden-xs xn-input-font">批量验证(excel)</span>
+          </div>
+          <div style="padding: 2px 5px" class="btn btn-default btn-file xn-table-upload"
+               (click)="handleVerificationPic()">
+            <span class="hidden-xs xn-input-font">批量验证(图片)</span>
+          </div>
+        </ng-container>
+      </th>
+      <!--在平台不显示全选、删除-->
+
+      <th>
+        <span style="line-height:20px"></span>
+        <input type="checkbox" (change)="handleAllSelect()"
+               [checked]="checkedAllStatus">全选/取消&nbsp;&nbsp;
+        <ng-container *ngIf="orgType!==99">
+          <a style="padding: 2px 5px" class="btn btn-default btn-file xn-table-upload" href="javaScript:void (0)"
+             (click)="deleteAll()">删除</a>
+        </ng-container>
+      </th>
+
+    </tr>
+    </thead>
+    <tbody>
+    <ng-container *ngFor="let item of items; let i = index;">
+      <tr>
+        <td>
+          <span>{{i+1}}</span>
+        </td>
+        <td>
+          <a class="xn-click-a" (click)="onOpenImage(item)">{{item.fileName}}</a>
+        </td>
+        <td>{{ item.invoiceNum || ''}}</td>
+        <td>{{ item.invoiceAmount || '' | xnMoney}}</td>
+        <td>{{ item.invoiceDate }}</td>
+        <td *ngIf="mode === 'edit' || mode === 'view' || mode === 'upload_lack'">
+          <ng-container *ngIf="item?.tag&&item?.tag==='artificial';else block1">
+            <span class="tag-color">人工验证</span>
+          </ng-container>
+          <ng-template #block1>
+            <span>{{item.status | xnInvoiceStatus}}</span>
+          </ng-template>
+        </td>
+        <td>
+          <ng-container *ngIf="mode === 'upload'">
+            <a class="xn-click-a" (click)="onRemove(item.fileId)" *ngIf="item.fileId">删除</a>
+          </ng-container>
+          <ng-container *ngIf="mode === 'upload_edit'">
+            <a class="xn-click-a" (click)="onEdit(item, i)">补充</a>&nbsp;&nbsp;
+            <a class="xn-click-a" (click)="onRemove(item.fileId)" *ngIf="item.fileId">删除</a>
+          </ng-container>
+          <ng-container *ngIf="mode === 'edit'">
+            <a class="xn-click-a" (click)="onEdit(item, i)"
+               *ngIf="!(item && item.status && item.status === 1 || item.status === 3)">补充</a>&nbsp;&nbsp;
+            <a class="xn-click-a" (click)="onView(item.fileId, item)">查看</a>
+          </ng-container>
+          <ng-container *ngIf="mode === 'view'">
+            <a class="xn-click-a" (click)="onView(item.fileId, item)">查看</a>
+          </ng-container>
+          <ng-container *ngIf="mode === 'upload_lack'">
+            <a class="xn-click-a" (click)="onEdit(item, i)"
+               *ngIf="!(item && item.status && item.status === 1 || item.status === 3)">补充</a>&nbsp;&nbsp;
+            <a class="xn-click-a" (click)="onView(item.fileId, item)">查看</a>&nbsp;&nbsp;
+            <a class="xn-click-a" (click)="onRemove(item.fileId)" *ngIf="item.fileId">删除</a>
+          </ng-container>
+          <ng-container *ngIf="mode === 'upload' || mode === 'upload_edit'|| mode === 'upload_lack'">
+            <a class="xn-click-a" (click)="onRemoveExcel(item.invoiceNum)"
+               *ngIf="item.invoiceNum && !item.fileId">删除</a>
+          </ng-container>
+        </td>
+        <!--在平台不显示-->
+        <ng-container>
+          <td>
+            <input type="checkbox" (change)="handleSelect(i)" [checked]="item && item.clicked">
+          </td>
+        </ng-container>
+      </tr>
+    </ng-container>
+
+    <tr *ngIf="amountAll > 0">
+      <td colspan="2">发票金额合计</td>
+      <td colspan="6">{{amountAll | xnMoney}}</td>
+    </tr>
+    </tbody>
+  </table>
+</div>
+<span class="xn-input-alert">{{alert}}</span>

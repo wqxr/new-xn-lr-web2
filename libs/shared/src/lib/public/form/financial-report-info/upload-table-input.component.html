@@ -1,0 +1,25 @@
+<div [formGroup]="form" class="form">
+  <ng-container *ngIf="mainFormList.length">
+    <ng-container *ngFor="let mainForm of mainFormList;let i=index">
+      <div class="form-group" *ngFor="let row of defaultCheckers;let j=index">
+        <div class="col-sm-3 xn-control-label"
+             [class.required-star]="row.required !== false && row.required !== 0">
+          {{row.title + (1 + i)}}
+        </div>
+        <div class="col-sm-8">
+          <xn-input1 [row]="row" [form]="mainForm"></xn-input1>
+        </div>
+        <div class="col-sm-1 xn-control-desc">
+          <a class="xn-click-a" *ngIf="i===0 && j===0" (click)="handleAdd()"><span
+            class="glyphicon glyphicon-plus"></span></a>
+          <a class="xn-click-a" *ngIf="i>0 && j===0" (click)="handleRemove(i)"><span
+            class="glyphicon glyphicon-minus"></span></a>
+        </div>
+      </div>
+    </ng-container>
+    <div class="form-group text-right">
+      <button type="button" class="btn btn-primary" [disabled]="checkerForm()" (click)="handleSaveTable()">保存</button>
+    </div>
+  </ng-container>
+</div>
+<span class="xn-input-alert">{{alert}}</span>

@@ -1,0 +1,32 @@
+<section class="content-header">
+  <h1>
+    {{ pageTitle }}
+    <small>{{ pageDesc }}</small>
+  </h1>
+</section>
+
+<section class="content">
+  <div class="app-flow-process" *ngIf="flowId !== '' && showProgress">
+    <ng-container>
+      <xn-dragon-flow-process-component
+        [flowId]="flowId"
+      ></xn-dragon-flow-process-component>
+    </ng-container>
+  </div>
+  <ng-container *ngIf="svrConfig && !svrConfig.isStep">
+    <old-vanke-new-component
+      [mainForm]="mainForm"
+      [svrConfig]="svrConfig"
+      [rows]="rows"
+      [flowId]="flowId"
+    ></old-vanke-new-component>
+  </ng-container>
+  <ng-container *ngIf="svrConfig && svrConfig.isStep">
+    <vanke-new-step
+      [mainForm]="mainForm"
+      [svrConfig]="svrConfig"
+      [rows]="rows"
+      [flowId]="flowId"
+    ></vanke-new-step>
+  </ng-container>
+</section>

@@ -1,0 +1,27 @@
+<section>
+  <div class="panel-body">
+    <div class="form-group" *ngFor="let row of earningOwnerList; let i = index">
+      <ng-container>
+        <div *ngIf="showShrhld(row)">
+          <div *ngIf="row.checkerId==='earningOwner' && ['sub_sh_prattwhitney_input', 'sub_so_prattwhitney_input'].includes(flowId)" class="checkerTitle">
+            <h3 class="checkerHead">受益人信息</h3>
+            <button *ngIf="!row.options.readonly" type="button" class="btn btn-primary" [disabled]="disAddForm()"
+              (click)="addShrhld()">新增受益人</button>
+          </div>
+          <div *ngIf="row.checkerId==='earningOwner' && ['sub_sh_prattwhitney_input', 'sub_so_prattwhitney_input'].includes(flowId)" class="checkerTitle">
+            <p style="color: #f59a23;">温馨提示：<span>可通过查询企查查网站（www.qcc.com）-基础信息-股东信息处显示的最终受益人填写该部分信息</span></p>
+          </div>
+          <div *ngIf="showShrhldBtn(row)"
+            style="display: flex;justify-content:flex-end; align-items: center; padding: 0 50px;">
+            <button type="button" class="btn btn-danger" (click)="delShrhld(i)">删除</button>
+          </div>
+        </div>
+      </ng-container>
+      <!-- 股东信息 -->
+      <div class="col-sm-12">
+        <app-dynamic-input [row]="row" [form]="earningOwnerListForm" formModule="dragon-input">
+        </app-dynamic-input>
+      </div>
+    </div>
+  </div>
+</section>

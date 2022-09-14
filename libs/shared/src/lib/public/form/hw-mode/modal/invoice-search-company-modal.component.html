@@ -1,0 +1,21 @@
+<modal #modal [backdrop]="'static'" [keyboard]="false" [animation]="false">
+    <modal-header>
+      <h4 class="modal-title">批量查询</h4>
+    </modal-header>
+    <modal-body>
+      <div class="input-group" >
+        <span class="form-control xn-input-font xn-input-first-border-radius">{{filename}}</span>
+        <div class="input-group-btn">
+          <div class="btn btn-default btn-file">
+            <span class="hidden-xs xn-input-font">选择...</span>
+            <input type="hidden">
+            <input type="file" (change)="onUploadExcel($event)">
+          </div>
+        </div>
+      </div>
+    </modal-body>
+    <modal-footer>
+      <button type="button" class="btn btn-default" (click)="oncancel()">确定</button>
+      <!-- <button type="submit" class="btn btn-primary">开始查询</button> -->
+    </modal-footer>
+</modal>

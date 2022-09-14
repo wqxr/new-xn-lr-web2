@@ -1,0 +1,64 @@
+<section class="content-header">
+  <h1>
+    {{pageTitle}}
+    <small>{{pageDesc}}</small>
+  </h1>
+</section>
+
+<section class="content">
+  <div class="box">
+    <div class="box-header">
+      <h3 class="box-title">{{tableTitle}}</h3>
+    </div>
+    <!-- /.box-header -->
+    <div class="box-body">
+
+      <table class="table table-bordered table-striped">
+        <thead>
+          <tr>
+            <th class="col-sm-4 text-center">角色列表</th>
+            <th class="col-sm-8 text-center">权限列表</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>
+              <table class="table table-bordered table-striped inner-table">
+                <tbody>
+                  <tr *ngFor="let item of items; let i = index" (click)="roleClick(item.roleId)" [ngClass]="onCss(item.roleId)">
+                    <td>{{ item.name }}</td>
+                  </tr>
+                </tbody>
+              </table>
+            </td>
+            <td class="row">
+              <!-- <ul class="main-power">
+                <li class="form-group row-power" *ngFor="let row of powerShows">
+                  <label class="xn-input-font normal" *ngFor="let option of row.selectOptions;">
+                    <input #checkbox type="checkbox" class="flat-red" [checked]="option.is" (click)="updateSelection($event, row.name);">&nbsp;&nbsp;{{option.label}}
+                  </label>
+                </li>
+              </ul> -->
+              <div class="main-power">
+                <div class="form-group row-power" *ngFor="let row of powerShows">
+                  <label class="xn-input-font normal" *ngFor="let option of row.selectOptions;">
+                    <input #checkbox type="checkbox" class="flat-red" [checked]="option.is" (click)="updateSelection($event, row.name);">&nbsp;&nbsp;{{option.label}}
+                    <div class="hoverBox">
+                      <div class="o-hidden">
+                        {{ option.desc }}
+                      </div>
+                    </div>
+                  </label>
+                </div>
+              </div>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+
+    </div>
+    <!-- /.box-body -->
+  </div>
+
+</section>
+<!-- /.content -->

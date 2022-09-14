@@ -1,0 +1,339 @@
+<ng-container *ngIf="row.type==='honor-fit'">
+
+  <div style="padding: 2px 5px" class="btn btn-default btn-file xn-table-upload block"
+    *ngFor='let item of Tabconfig.tabList[0].headButtons'>
+    <ng-container>
+      <span class="hidden-xs xn-input-font">上传Excel</span>
+      <input type="file" (change)="uploadExcel($event,1)" (click)="beforeUpload($event)">
+    </ng-container>
+
+  </div>
+  <ng-container style='margin-left:30px;'>
+    <a href="javaScript:void(0)" (click)="downloadTp02()">下载模板</a>
+  </ng-container>
+  <div class="table-height" (scroll)="onScroll($event)">
+
+    <table class="table table-bordered table-hover file-row-table" width="100%" (scroll)="onScroll($event)">
+      <thead>
+        <tr>
+          <th>序号</th>
+          <th *ngFor="let head of Tabconfig.tabList[0].headText">{{head.label}}</th>
+          <th>操作</th>
+        </tr>
+      </thead>
+      <tbody>
+        <ng-container *ngIf="datavalue.length">
+          <tr *ngFor="let item of datavalue; let i=index">
+
+            <td>{{i+1}}</td>
+            <td *ngFor="let head of Tabconfig.tabList[0].headText">
+              <ng-container [ngSwitch]="head.type">
+                <ng-container *ngSwitchCase="'fitResult'">
+                  <ng-container>
+                    <div>
+                      <div [ngStyle]="{'color': (item.result===0 || item.result===2)? 'red':'black'}"
+                        [innerHTML]="item[head.value] | xnSelectTransform:'fitResult'"></div>
+                    </div>
+                  </ng-container>
+                </ng-container>
+                <ng-container *ngSwitchDefault>
+                  <div [innerHTML]="item[head.value] | xnGatherType: {head:head,row:item}"></div>
+                </ng-container>
+              </ng-container>
+            </td>
+            <td><a href='javascript:void(0)' (click)="cleardata(i)">删除</a> &nbsp;&nbsp;<a href='javascript:void(0)'
+                (click)='chosebusiness(item)' *ngIf='item.result===2'>选择</a></td>
+
+          </tr>
+        </ng-container>
+        <tr *ngIf="datavalue.length===0">
+          <td [attr.colspan]="calcAttrColspan(Tabconfig.tabList[0])">
+            <div class="empty-message"></div>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+
+  <table class="table-hover table table-bordered file-row-table">
+    <tbody>
+      <tr>
+        <th style="width: 60px">匹配成功数量
+        <td>{{successnum}}</td>
+      </tr>
+      <tr>
+        <th style="width: 60px;">匹配失败数量</th>
+        <td>{{failnum}}</td>
+      </tr>
+    </tbody>
+  </table>
+
+</ng-container>
+<ng-container *ngIf="row.type==='return-info'">
+  <div class="btn btn-default" type="button" (click)="downloadTp()">
+    <span style="color: #3c8dbc;font-size: 12px">下载模板</span>
+  </div>
+  <div class="btn btn-default btn-file xn-table-upload block">
+    <ng-container>
+      <span class="hidden-xs xn-input-font">上传Excel</span>
+      <input type="file" (change)="uploadExcel($event,2)" (click)="beforeUpload($event)">
+    </ng-container>
+  </div>
+  <div class="table-height" (scroll)="onScroll($event)">
+
+    <table class="table table-bordered table-hover file-row-table" width="100%" (scroll)="onScroll($event)">
+      <thead>
+        <tr>
+          <th>序号</th>
+          <th *ngFor="let head of Tabconfig.tabList[2].headText">{{head.label}}</th>
+          <th>操作</th>
+        </tr>
+      </thead>
+      <tbody>
+        <ng-container *ngIf="datavalue.length">
+          <tr *ngFor="let item of datavalue; let i=index">
+
+            <td>{{i+1}}</td>
+            <td *ngFor="let head of Tabconfig.tabList[2].headText">
+              <ng-container [ngSwitch]="head.type">
+                <ng-container *ngSwitchCase="'fitResult'">
+                  <ng-container>
+                    <div>
+                      <div [ngStyle]="{'color': (item.result===0 || item.result===2)? 'red':'black'}"
+                        [innerHTML]="item[head.value] | xnSelectTransform:'fitResult'"></div>
+                    </div>
+                  </ng-container>
+                </ng-container>
+                <ng-container *ngSwitchDefault>
+                  <div [innerHTML]="item[head.value] | xnGatherType: {head:head,row:item}"></div>
+                </ng-container>
+              </ng-container>
+            </td>
+            <td><a href='javascript:void(0)' (click)="cleardata(i)">删除</a> &nbsp;&nbsp;<a href='javascript:void(0)'
+                (click)='chosebusiness(item)' *ngIf='item.result===2'>选择</a></td>
+
+          </tr>
+        </ng-container>
+        <tr *ngIf="datavalue.length===0">
+          <td [attr.colspan]="calcAttrColspan(Tabconfig.tabList[2])">
+            <div class="empty-message"></div>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+
+  <table class="table-hover table table-bordered file-row-table">
+    <tbody>
+      <tr>
+        <th style="width: 60px">匹配成功数量
+        <td>{{successnum}}</td>
+      </tr>
+      <tr>
+        <th style="width: 60px;">匹配失败数量</th>
+        <td>{{failnum}}</td>
+      </tr>
+    </tbody>
+  </table>
+</ng-container>
+<div *ngIf="row.type==='bank-single1'">
+  <table class="table-hover table table-bordered file-row-table">
+    <tbody>
+      <tr>
+        <th style="width: 60px">收款单位户名</th>
+        <td>{{datavalue.accountName}}</td>
+      </tr>
+      <tr>
+        <th style="width: 60px;">收款单位账号</th>
+        <td>{{datavalue.accountNumber}}</td>
+      </tr>
+      <tr>
+        <th style="width: 60px">收款单位开户行</th>
+        <td>{{datavalue.bankName}}</td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+<ng-container *ngIf="row.type==='compare-info' || row.type==='compare-info-yjl'">
+  <div>
+    <p style='width: 50%;'>原收款信息:</p>
+    <table class="table-hover table table-bordered file-row-table" style="border:0;cellspacing:0;cellpadding:0">
+      <tbody>
+        <tr>
+          <th style="width: 20%">收款单位户名
+          <td>{{datavalue?.old.receiveOrg}}</td>
+        </tr>
+        <tr>
+          <th>收款单位账号</th>
+          <td>{{datavalue?.old.receiveAccount}}</td>
+        </tr>
+        <tr>
+          <th>收款单位开户行</th>
+          <td>{{datavalue?.old.receiveBank}}</td>
+        </tr>
+        <!-- <tr>
+        <th>收款单位开户行行号</th>
+        <td>{{datavalue?.old.receiveBankNo}}</td>
+      </tr> -->
+        <tr>
+          <th>变更原因</th>
+          <td>
+            <select class="form-control xn-input-font" [ngModel]='datavalue?.changeReason' (blur)="onBlur()"
+              (change)="inputChange($event)">
+              <option value="">请选择</option>
+              <option *ngFor="let option of selectOptions" value="{{option.value}}">{{option.label}}</option>
+            </select>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+    <div style='display:inline-flex'>
+      <p style='width: 50%;'>新收款信息:</p>
+      <div style="padding: 10px 5px;float:left;width: 120px" class="btn btn-default btn-file xn-table-upload block"
+        (click)="handleAdd()">
+        <span class="hidden-xs xn-input-font">选择</span>
+      </div>
+    </div>
+    <div class="xn-input-alert" *ngIf='alert1'>{{alert1}}</div>
+    <table class="table table-bordered text-center" style='margin-top:20px'>
+      <!-- <tr *ngIf="datavalue.changeReason==='1' || datavalue.changeReason==='4' ">
+        <th style="width:20%" class='required-star'>收款单位户名</th>
+        <td><input #input class="form-control xn-input-font xn-input-border-radius" [(ngModel)]="datavalue.new.receiveOrg"
+            type="text" (blur)='onBlur()'>
+        </td>
+      </tr>
+      <tr *ngIf="datavalue.changeReason==='3' || datavalue.changeReason==='4' ||datavalue.changeReason==='0'">
+        <th style="width:20%" class='required-star'>收款单位账号</th>
+        <td><input #input class="form-control xn-input-font xn-input-border-radius"
+            [(ngModel)]="datavalue.new.receiveAccount" type="text" (blur)='onBlur()'></td>
+      </tr>
+      <tr *ngIf="datavalue.changeReason==='2' ||  datavalue.changeReason==='4' ||datavalue.changeReason==='0'">
+        <th style="width:20%" class='required-star'>收款单位开户行</th>
+        <td><input #input class="form-control xn-input-font xn-input-border-radius"
+            [(ngModel)]="datavalue.new.receiveBank" type="text" (blur)='onBlur()'></td>
+      </tr>
+      <tr
+       // *ngIf="datavalue.changeReason==='2' ||datavalue.changeReason==='3' ||  datavalue.changeReason==='4' ||datavalue.changeReason==='0' ||datavalue.changeReason==='1'">
+        <th style="width:20%" class='required-star'>收款单位开户行行号</th>
+        <td><input #input class="form-control xn-input-font xn-input-border-radius"
+            [(ngModel)]="datavalue.new.receiveBankNo" type="text" (blur)='onBlur()'></td>
+      </tr> -->
+      <tbody>
+        <tr>
+          <td style='width:20%'>
+            收款单位户名
+          </td>
+          <td>
+            {{datavalue?.new.receiveOrg}}
+            <!-- <input class="form-control xn-input-font xn-input-border-radius" readonly type="text" [value]='items.accountName'  (blur)="onBlur()" (change)="inputChange($event,'accountName')"/> -->
+          </td>
+        </tr>
+        <tr>
+          <td>
+            收款单位账号
+          </td>
+          <td>
+            {{datavalue?.new.receiveAccount}}
+            <!-- <input class="form-control xn-input-font xn-input-border-radius" readonly type="text" [value]='items.cardCode'  (blur)="onBlur()" (change)="inputChange($event,'cardCode')"/> -->
+          </td>
+        </tr>
+        <tr>
+          <td>
+            收款单位开户行
+          </td>
+          <td>
+            {{datavalue?.new.receiveBank}}
+            <!-- <input class="form-control xn-input-font xn-input-border-radius" readonly type="text" [value]='items.bankName'  (blur)="onBlur()" (change)="inputChange($event,'bankName')"/> -->
+          </td>
+        </tr>
+    </table>
+  </div>
+  <span class="xn-input-alert">{{alert}}</span>
+
+</ng-container>
+<table *ngIf="row.type==='text-info'" class="table table-bordered table-hover file-row-table" width="100%">
+  <tbody>
+    <tr *ngIf='datavalue.length!==0'>
+      <td *ngFor='let item of datavalue; let i=index'>
+        <a class="xn-click-a" (click)="showContract(item)">
+          《{{item.label}}》
+        </a>
+      </td>
+    </tr>
+    <tr *ngIf='datavalue.length===0'>
+      <td style='padding:0px'>
+        <input #input class="form-control xn-input-font xn-input-border-radius" type="text" autocomplete="off" />
+      </td>
+    </tr>
+  </tbody>
+</table>
+
+
+<!--退款流程的费用详情-->
+<ng-container *ngIf="row.type==='fee-info'">
+  <table class="table table-bordered table-hover file-row-table" width="100%">
+    <thead>
+      <tr>
+        <th *ngFor="let head of Tabconfig.tabList[3].headText">{{head.label}}</th>
+
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>保理使用费</td>
+        <td>{{datavalue.factoringUseFee.sureReceive}}</td>
+        <td>{{datavalue.factoringUseFee.factRecevie}}</td>
+        <td>{{datavalue.factoringUseFee.gap}}</td>
+        <td>{{datavalue.factoringUseFee.dt}}</td>
+      </tr>
+      <tr>
+        <td>保理服务费</td>
+        <td>{{datavalue.factoringServiceFee.sureReceive}}</td>
+        <td>{{datavalue.factoringServiceFee.factRecevie}}</td>
+        <td>{{datavalue.factoringServiceFee.gap}}</td>
+        <td>{{datavalue.factoringServiceFee.dt}}</td>
+      </tr>
+      <tr>
+        <td>平台服务费</td>
+        <td>{{datavalue.platformServiceFee.sureReceive}}</td>
+        <td>{{datavalue.platformServiceFee.factRecevie}}</td>
+        <td>{{datavalue.platformServiceFee.gap}}</td>
+        <td>{{datavalue.platformServiceFee.dt}}</td>
+      </tr>
+      <tr *ngIf="datavalue.factoringServiceFee===undefined">
+        <td [attr.colspan]="calcAttrColspan(Tabconfig.tabList[3])">
+          <div class="empty-message"></div>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</ng-container>
+<!--重新审批流程 业务经办人页面交易清单-->
+<ng-container *ngIf="row.type==='deal-info'">
+  <table class="table table-bordered table-hover file-row-table" width="100%">
+    <thead>
+      <tr>
+        <td>序号</td>
+        <th *ngFor="let head of Tabconfig.tabList[4].headText">{{head.label}}</th>
+
+      </tr>
+    </thead>
+    <tbody>
+      <ng-container *ngIf="datavalue.length;">
+        <tr *ngFor="let item of datavalue; let i=index">
+          <td>{{i+1}}</td>
+          <td *ngFor="let head of Tabconfig.tabList[4].headText">
+            <div [innerHTML]="item[head.value] | xnGatherType: {head:head,row:item}"></div>
+          </td>
+        </tr>
+      </ng-container>
+      <tr *ngIf="datavalue.length===0">
+        <td [attr.colspan]="calcAttrColspan(Tabconfig[4].headText)">
+          <div class="empty-message"></div>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</ng-container>

@@ -1,0 +1,54 @@
+<modal #modal [backdrop]="'static'" [keyboard]="false" [animation]="false">
+  <modal-header [showClose]="false">
+    <h4 class="modal-title">查看信息</h4>
+  </modal-header>
+  <modal-body>
+    <div class="row">
+      <!-- 左侧 -->
+      <div class="flex amount">
+        <div class="this-text">
+          金额
+          <span class="required-label">*</span>
+        </div>
+        <div class="this-control">
+          <input class="form-control xn-input-border-radius" [(ngModel)]="amount" type="text" readonly>
+        </div>
+      </div>
+
+      <!-- 右侧 -->
+      <div *ngIf="fileType === 'img'">
+
+        <div class="img-container" #imgContainer>
+          <div class="img-wrapper" #outerImg>
+            <img #innerImg class="this-img" src="{{fileSrc}}" *ngIf="!!fileSrc">
+          </div>
+        </div>
+
+      </div>
+
+      <div *ngIf="fileType === 'pdf'">
+        <div class="pdf-container">
+          <iframe class="this-pdf"></iframe>
+        </div>
+      </div>
+    </div>
+
+  </modal-body>
+  <div class="modal-footer">
+    <div class="page">
+      <xn-page [total]="total" [size]="pageSize" [showTotal]="false" (change)="onPage($event)"></xn-page>
+    </div>
+    <div class="btn-ro">
+      <a class="button-rotate rotate-left" title="点击旋转图片" (click)="rotateImg('left')" *ngIf="!!fileSrc">
+        <i class="fa fa-undo fa-s"></i>
+      </a>
+      <a class="button-rotate rotate-right" title="点击旋转图片" (click)="rotateImg('right')" *ngIf="!!fileSrc">
+        <i class="fa fa-repeat fa-s"></i>
+      </a>
+    </div>
+
+    <span style="padding-right: 30px; color: #e15f63">{{errorMsg}}</span>
+    <button type="button" class="btn btn-default" (click)="onCancel()">取消</button>
+    <button type="button" class="btn btn-danger" (click)="onOk()">确定</button>
+  </div>
+</modal>

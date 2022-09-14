@@ -1,0 +1,95 @@
+<modal #modal [backdrop]="'static'" [keyboard]="false" [animation]="false">
+  <modal-header [showClose]="false" style='text-align:left'>
+    <h4 class="modal-title">{{params?.title}}</h4>
+  </modal-header>
+  <modal-body>
+    <div class="col-sm-12 form-group text-right">
+      <!-- 右头按钮 -->
+      <button type="button" type="button" class="btn btn-primary" (click)="multipChageReason()">批量输入发票更换原因</button>
+    </div>
+    <div class="height">
+      <div class="head-height table-head">
+        <table class="table table-bordered table-hover text-center table-display relative" style='width:100%'
+          [style.left.px]="headLeft">
+          <thead>
+            <tr>
+              <ng-container>
+                <th style='width:95px'>
+                  <input type="checkbox" name="all" [checked]="isAllChecked()" (change)="checkAll()"
+                    [disabled]="!datalist.length" />全选/取消
+                </th>
+              </ng-container>
+              <!-- 表头 -->
+              <th style="width: 50px;">序号</th>
+              <th *ngFor="let head of heads" style="width: 150px;word-wrap:break-word">
+                {{head.label}}
+              </th>
+              <th style='width:200px'>操作</th>
+            </tr>
+          </thead>
+        </table>
+      </div>
+      <div class="table-height" (scroll)="onScroll($event)">
+        <table class="table table-bordered table-hover text-center table-display" style='width:100%'>
+          <tbody style='width:100%'>
+            <ng-container *ngIf="datalist.length;else block">
+              <tr *ngFor="let item of datalist;let i=index">
+                <ng-container>
+                  <td style='width:95px'>
+                    <input type="checkbox" [checked]="item?.checked" (change)="singelChecked($event, item, i)" />
+                  </td>
+                </ng-container>
+                <!--序号-->
+                <td style='width:50px'>{{i + 1}}</td>
+                <!-- 列内容 -->
+                <td *ngFor="let head of heads" style="width: 150px;word-wrap:break-word;vertical-align: middle;">
+                  <!-- 根据head type 类型配置显示方式 -->
+                  <ng-container [ngSwitch]="head.type">
+                    <!-- 时间-->
+                    <ng-container *ngSwitchCase="'date'">
+                      <p>{{item[head.value] | xnDate: 'date'}}</p>
+                    </ng-container>
+                    <!-- 金额 -->
+                    <ng-container *ngSwitchCase="'money'">
+                      <ng-container
+                        *ngIf=" item[head.value] !==undefiend &&item[head.value] !==null && item[head.value]!==0">
+                        <div>{{item[head.value].toFixed(2) | xnMoney}}</div>
+                      </ng-container>
+                    </ng-container>
+                    <!--默认-->
+                    <ng-container *ngSwitchDefault>
+                      <ng-container *ngIf=" item[head.value]&& item[head.value]!==''">
+                        <div [innerHTML]="item[head.value] | xnGatherType: {head:head,row:item}"></div>
+                      </ng-container>
+                    </ng-container>
+                  </ng-container>
+                </td>
+                <!-- 行按钮 -->
+                <td style='width:200px'>
+                  <a href="javaScript:void(0)" (click)="inputChangeReason(item,i)">输入更换原因</a>
+                </td>
+              </tr>
+            </ng-container>
+          </tbody>
+        </table>
+      </div>
+    </div>
+    <div class="print">
+      <p>勾选笔数：{{selectedItems.length}}</p>
+    </div>
+
+    <!-- 暂无数据 -->
+    <ng-template #block>
+      <tr>
+        <td [attr.colspan]="calcAttrColspan()">
+          <div class="empty-message"></div>
+        </td>
+      </tr>
+    </ng-template>
+
+  </modal-body>
+  <modal-footer>
+    <button type="button" class="btn btn-default" (click)="onCancel()">取消</button>
+    <button type="button" class="btn btn-primary" (click)="onOk()">确定</button>
+  </modal-footer>
+</modal>

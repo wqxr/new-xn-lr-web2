@@ -1,0 +1,22 @@
+<div class="row" [formGroup]="form">
+  <div class="col-md-6 xn-dselect-first select-editable">
+    <select class="form-control xn-input-font" [value]="firstValue" [ngClass]="firstClass"
+            (blur)="onFirstBlur($event)" (change)="onFirstChange($event)">
+      <option value="">{{row.options.ref.firstPlaceHolder}}</option>
+      <option *ngFor="let option of row.options.ref.first" value="{{option.value}}">{{option.label}}</option>
+    </select>
+    <input placeholder="请选择" type="text" (keyup)="handleInput1($event)"
+           class="form-control xn-input-font xn-input-border-radius" name="firstValue" [value]="firstInputValue">
+  </div>
+
+  <div class="col-md-6 xn-dselect-second select-editable">
+    <select class="form-control xn-input-font" [value]="secondValue"
+            [ngClass]="secondClass" (blur)="onSecondBlur($event)" (change)="onSecondChange($event)">
+      <option value="">{{row.options.ref.secondPlaceHolder}}</option>
+      <option *ngFor="let option of secondOptions" value="{{option.value}}">{{option.label}}</option>
+    </select>
+    <input placeholder="请选择" type="text" (keyup)="handleInput2($event)"
+           class="form-control xn-input-font xn-input-border-radius" name="secondValue" [value]="secondInputValue">
+  </div>
+</div>
+<span class="xn-input-alert">{{alert}}</span>

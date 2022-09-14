@@ -1,0 +1,31 @@
+<modal #modal [backdrop]="'static'" [keyboard]="false" [animation]="false" (onDismiss)="onOk()">
+  <modal-header [showClose]="true">
+    <h4 class="modal-title">
+      {{text}}用户
+    </h4>
+  </modal-header>
+
+  <modal-body>
+    <form nz-form [nzNoColon]="false" [formGroup]="form">
+      <formly-form
+        [form]="form"
+        [model]="model"
+        [options]="options"
+        [fields]="fields"
+      >
+      </formly-form>
+    </form>
+  </modal-body>
+
+  <modal-footer>
+    <button
+      nz-button
+      nzDanger
+      [nzLoading]="isLoading"
+      [disabled]="!form.valid"
+      (click)="onSubmit()"
+    >
+      确定{{text}}
+    </button>
+  </modal-footer>
+</modal>

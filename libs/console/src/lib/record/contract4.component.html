@@ -1,0 +1,12 @@
+<ng-container *ngFor="let info of rows">
+  <div class="form-group" *ngIf="!info.hide">
+    <div class="col-sm-3 control-label">
+    </div>
+    <div class="col-sm-6">
+      <a class="xn-click-a" (click)="showContract(info.id, info.secret,info.label)">{{info.label}}</a>
+      <!-- <a class="xn-click-a download" (click)="downContract(info.id, info.secret, info.label)">下载</a> -->
+    </div>
+    <div class="col-sm-3 control-desc">
+    </div>
+  </div>
+</ng-container>

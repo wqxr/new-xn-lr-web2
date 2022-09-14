@@ -1,0 +1,58 @@
+<div>
+  <form class="form-horizontal" (ngSubmit)="onSubmit()" [formGroup]="mainForm">
+    <div class="panel panel-default">
+      <div class="panel-heading">
+        <span class="panel-title"
+          >{{ svrConfig.flow.flowName }} - {{ svrConfig.procedure.procedureName
+          + '(新)' }}</span
+        >
+      </div>
+      <div class="panel-body bgcolor">
+        <flow-commom-edit
+          [svrConfig]="svrConfig"
+          [mainForm]="mainForm"
+          [shows]="rows"
+        ></flow-commom-edit>
+      </div>
+      <xn-footer-toolbar [extra]="leftButtons" style="align-items: center">
+        <ng-container *ngIf="buttonList?.rightButtons">
+          <button
+            *ngFor="let btn of buttonList.rightButtons"
+            [nzDanger]="btn.danger"
+            nz-button
+            [nzType]="btn.color"
+            type="button"
+            (click)="handleHeadClick(btn)"
+          >
+            {{btn.label}}
+          </button>
+        </ng-container>
+        <button
+          nz-button
+          nzType="primary"
+          type="submit"
+          [disabled]="!mainForm.valid && !loadingback"
+        >
+          提交
+        </button>
+      </xn-footer-toolbar>
+      <ng-template #leftButtons>
+        <button nz-button nzType="default" type="button" (click)="onCancel()">
+          返回
+        </button>
+        <ng-container *ngIf="buttonList?.leftButtons">
+          <button
+            *ngFor="let btn of buttonList.leftButtons"
+            nz-button
+            [nzDanger]="btn.danger"
+            [nzType]="btn.color"
+            type="button"
+            (click)="handleHeadClick(btn)"
+          >
+            {{btn.label}}
+          </button>
+        </ng-container>
+      </ng-template>
+    </div>
+  </form>
+</div>

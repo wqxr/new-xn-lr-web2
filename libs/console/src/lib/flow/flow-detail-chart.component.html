@@ -1,0 +1,91 @@
+<div class="box no-top maoyi">
+  <div class="circles-box">
+    <div class="circles">
+      <div class="row form-group chart-flex">
+        <div class="arrows arrow-left" [ngClass]="onArrowCss('left')" (click)="prevPage()"></div>
+        <div class="chart-box">
+          <div *ngFor="let asset of pageAssets; let i = index" class="chart">
+            <div #chart class="chart-height-260 cursor box-bing" [ngClass]="onCss(i)" (click)="onClick(i)"></div>
+          </div>
+        </div>
+        <div class="arrows arrow-right" [ngClass]="onArrowCss('right')" (click)="nextPage()"></div>
+      </div>
+    </div>
+  </div>
+  <div class="circles-info clear">
+    <div class="picture">
+      <!--<div class="picture-arrow picture-left arrows arrow-left" [ngClass]="onLogCss('left')" (click)="prevLog()"></div>-->
+      <div class="sm-circle sm-circle1">
+        <div class="col-sm-12 chart-height-200" #chartLeft></div>
+      </div>
+      <div class="sm-circle sm-circle2">
+        <div class="col-sm-12 chart-height-200" #chartUp></div>
+      </div>
+      <div class="sm-circle sm-circle3">
+        <div class="col-sm-12 chart-height-200" #chartRight></div>
+      </div>
+      <div class="sm-circle sm-circle4">
+        <div class="col-sm-12 chart-height-200" #chartDown></div>
+
+        <div class="camera" *ngIf="nowAsset?.stock_in > 0" (click)="view(nowAsset.relationPlatformSeq)"></div>
+        <div class="store-title">仓库</div>
+      </div>
+      <div class="text1">
+        <div class="record-text" *ngFor="let item of nowAsset && nowAsset.supply_orderTimeArr && nowAsset.supply_orderTimeArr.slice(-3)">
+          {{item.transactionTime | xnDate: 'stringtodate'}}采购{{item.amount}}{{nowAsset.assetUnit}}
+        </div>
+      </div>
+      <div class="text2">
+        <div class="record-text" *ngFor="let item of nowAsset && nowAsset.stock_inTimeArr && nowAsset.stock_inTimeArr.slice(-3)">
+          {{item.transactionTime | xnDate: 'stringtodate'}}入库{{item.amount}}{{nowAsset.assetUnit}}
+        </div>
+      </div>
+      <!-- 如果有委托显示 -->
+      <ng-container *ngIf="entrustmentList&&entrustmentList.length">
+        <div class="text3-top">
+          <div class="record-text" *ngFor="let item of entrustmentList">
+            {{item.transactionData.entrustmentDate | xnDate: 'stringtodate'}}委托{{item.transactionData.entrustmentName}}下单{{item.amount}}
+            {{item.transactionData.commodities[0].unit}}
+          </div>
+        </div>
+      </ng-container>
+
+      <div class="text3">
+        <div class="record-text" *ngFor="let item of nowAsset && nowAsset.purchase_orderTimeArr && nowAsset.purchase_orderTimeArr.slice(-3)">
+          {{item.transactionTime | xnDate: 'stringtodate'}}订单{{item.amount}}{{nowAsset.assetUnit}}
+        </div>
+      </div>
+
+      <div class="text4">
+        <div class="record-text" *ngFor="let item of nowAsset && nowAsset.stock_outTimeArr && nowAsset.stock_outTimeArr.slice(-3)">
+          {{item.transactionTime | xnDate: 'stringtodate'}}出库{{item.amount}}{{nowAsset.assetUnit}}
+        </div>
+      </div>
+      <div class="text5">
+        <div class="record-text" *ngFor="let item of nowAsset && nowAsset.purchase_financeTimeArr && nowAsset.purchase_financeTimeArr.slice(-3)">
+          {{item.transactionTime | xnDate: 'stringtodate'}}付款{{item.amount}}元
+        </div>
+      </div>
+      <div class="text6">
+        <div class="record-text" *ngFor="let item of nowAsset && nowAsset.supply_financeTimeArr && nowAsset.supply_financeTimeArr.slice(-3)">
+          {{item.transactionTime | xnDate: 'stringtodate'}}付款{{item.amount}}元
+        </div>
+      </div>
+      <div class="xn-arrow-left arrow1">
+        <span class="arrow"></span>
+      </div>
+      <div class="xn-arrow-left arrow2">
+        <span class="arrow"></span>
+      </div>
+      <div class="xn-arrow-down-right arrow3">
+        <span class="line"></span>
+        <span class="arrow"></span>
+      </div>
+      <div class="xn-arrow-right-up arrow4">
+        <span class="line"></span>
+        <span class="arrow"></span>
+      </div>
+      <div class="picture-arrow picture-right arrows arrow-right" *ngIf="nowAsset.logs?.length > 0" (click)="nextLog()"></div>
+    </div>
+  </div>
+</div>

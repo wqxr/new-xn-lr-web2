@@ -1,0 +1,25 @@
+<modal #modal [backdrop]="'static'">
+    <modal-header [showClose]="true">
+      <h4 class="modal-title">流程审核不通过</h4>
+    </modal-header>
+    <modal-body>
+      <div class="form-horizontal form-group row">
+        <div class="col-sm-2 xn-control-label">备注</div>
+        <div class="col-sm-8">
+          <textarea class="form-control xn-input-textarea xn-input-font xn-input-border-radius" rows="6"
+            [(ngModel)]='demos'  autocomplete="off"></textarea>
+        </div>
+      </div>
+    </modal-body>
+    <modal-footer>
+      <button type="button" class="btn btn-default pull-left" (click)="oncancel()">
+        取消
+      </button>
+      <button type="button" class="btn btn-danger" (click)="onOk(3)" *ngIf="params?.rejectType === 0">
+        中止流程
+      </button>
+      <button type="button" class="btn btn-danger" (click)="onOk(2)" *ngIf="params?.rejectType !== 0">
+        退回到上一步
+      </button>
+    </modal-footer>
+  </modal>

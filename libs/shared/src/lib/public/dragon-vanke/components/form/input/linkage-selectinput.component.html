@@ -1,0 +1,16 @@
+<div class="row">
+    <div class="col-md-6 xn-dselect-first">
+      <select class="form-control xn-input-font" [ngClass]="myClass" [(ngModel)]="selectValue" (blur)="onBlur($event)"
+      [disabled]="readonly" (change)="selectChange($event)">
+        <option value="">请选择</option>
+        <option *ngFor="let option of row.selectOptions" value="{{option.value}}">{{option.label}}</option>
+      </select>
+    </div>
+    <ng-container *ngIf="isSecondShow">
+      <div class="col-md-6 xn-dselect-second">
+        <input class="form-control xn-input-font xn-input-border-radius" type="text" [readonly]="readonly"
+         placeholder="请输入" [(ngModel)]="inputValue" autocomplete="off" (input)="inputChange($event)">
+      </div>
+    </ng-container>
+  </div>
+  <span class="xn-input-alert">{{alert}}</span>

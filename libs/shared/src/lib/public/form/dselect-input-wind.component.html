@@ -1,0 +1,15 @@
+<div class="row" [formGroup]="form">
+  <div class="col-md-6 xn-dselect-first">
+    <select class="form-control xn-input-font" [value]="firstValue" [ngClass]="firstClass" (blur)="onFirstBlur($event)" (change)="onFirstChange($event)">
+      <option value="">{{row.selectOptions.firstPlaceHolder}}</option>
+      <option *ngFor="let option of row.selectOptions.first" value="{{option.value}}">{{option.label}}</option>
+    </select>
+  </div>
+
+  <div class="col-md-6 xn-dselect-second">
+    <select class="form-control xn-input-font" *ngIf="secondOptions.length>0" [value]="secondValue" [ngClass]="secondClass" (blur)="onSecondBlur($event)" (change)="onSecondChange($event)">
+      <option value="">{{row.selectOptions.secondPlaceHolder}}</option>
+      <option *ngFor="let option of secondOptions" value="{{option.value}}">{{option.label}}</option>
+    </select>
+  </div>
+</div>

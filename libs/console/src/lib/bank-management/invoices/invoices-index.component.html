@@ -1,0 +1,75 @@
+<section class="content-header">
+  <h1>
+    发票管理
+  </h1>
+</section>
+
+<section class="content">
+  <div class="box">
+    <div class="box-body">
+      <div class="tab-content">
+        <div class="tab-pane active">
+          <div class="form-group col-sm-6 flex" *ngFor="let row of shows">
+            <div class="xn-control-label search-title">
+              {{row.title}}：
+            </div>
+            <div class="label flex-g">
+              <xn-input [row]="row" [form]="mainForm"></xn-input>
+            </div>
+          </div>
+          <div class="text-right content-p col-sm-12">
+            <a class="btn btn-primary" (click)="loadList()">导出清单</a>
+            <a class="btn btn-primary" (click)="searchMsg()">查询</a>
+            <a class="btn btn-danger" (click)="reset()">重置</a>
+          </div>
+          <div class="content-p">
+            <table class="table table-bordered table-striped text-center table-hover">
+              <thead>
+              <tr>
+                <th>交易ID</th>
+                <th>《应收账款转让协议书》编号</th>
+                <th>出票人名称</th>
+                <th>发票代码</th>
+                <th>发票号码</th>
+                <th>出票日期</th>
+                <th>不含税金额</th>
+                <th>含税金额</th>
+                <th>发票状态</th>
+                <th>发票回款日</th>
+              </tr>
+              </thead>
+              <tbody>
+              <ng-container *ngIf="data.length;else block">
+                <tr *ngFor="let item of data">
+                  <td>
+                    <a href="javaScript:void (0)" (click)="viewProcess(item)">{{item.mainFlowId}}</a>
+                  </td>
+                  <td>{{item.receiveId}}</td>
+                  <td>{{item.supplierOrgName}}</td>
+                  <td>{{item.invoiceCode}}</td>
+                  <td>{{item.invoiceNum}}</td>
+                  <td>{{item.invoiceDate}}</td>
+                  <td>{{item.amount | xnMoney}}</td>
+                  <td>{{item.totalAmount |xnMoney}}</td>
+                  <!--发票状态-->
+                  <td>{{item.status | xnInvoiceStatus1}}</td>
+                  <!--发票回款日-->
+                  <td>{{item.invoiceRepaymentDate}}</td>
+                </tr>
+              </ng-container>
+              </tbody>
+            </table>
+          </div>
+          <ng-template #block>
+            <td colspan="7">
+              <div class="empty-message"></div>
+            </td>
+          </ng-template>
+          <xn-page [total]="total" [size]="pageSize" (change)="onPage($event)"></xn-page>
+        </div>
+
+      </div>
+    </div>
+  </div>
+</section>
+

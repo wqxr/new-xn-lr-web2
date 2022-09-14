@@ -1,0 +1,138 @@
+<modal #modal [backdrop]="'static'" [keyboard]="false" [animation]="false">
+  <modal-header [showClose]="false">
+    <h4 class="modal-title">补充发票信息</h4>
+  </modal-header>
+  <modal-body>
+    <div class="edit-content">
+      <form [formGroup]="form">
+        <!-- 发票类型-->
+        <div class="flex-row invoiceType" style="margin-bottom: 8px;">
+          <label class="this-title">
+            <span class="required-label">*</span>发票类型
+          </label>
+          <div class="this-padding this-flex-1">
+            <span style="margin-right: 50px;">
+              <label for="invoiceType2">增值税专用发票</label><input formControlName="invoiceType" id="invoiceType2"
+                name="invoiceType" type="radio" [value]="1" (change)="onChangeInvoiceType(1)">
+            </span>
+            <span>
+              <label for="invoiceType1">增值税普通发票</label><input formControlName="invoiceType" id="invoiceType1"
+                name="invoiceType" type="radio" [value]="2" (change)="onChangeInvoiceType(2)">
+            </span>
+          </div>
+        </div>
+        <!-- 发票代码 发票号码 开票日期-->
+        <div class="flex-row">
+          <label class="this-title" for="invoiceCode">
+            <span class="required-label">*</span>发票代码
+          </label>
+          <div class="this-padding this-flex-1">
+            <input class="form-control xn-input-border-radius" id="invoiceCode" name="invoiceCode"
+              formControlName="invoiceCode" type="text" autocomplete="off" (keyup)="onKeyUp('invoiceCode')">
+            <div class="xn-input-alert" *ngIf="invoiceCode.invalid && (invoiceCode.touched || invoiceCode.dirty)">
+              <span *ngIf="invoiceCode.errors.lengthError">{{invoiceCode.errors.lengthError}}</span>
+            </div>
+          </div>
+          <label class="this-title" for="invoiceNum">
+            <span class="required-label">*</span>发票号码
+          </label>
+          <div class="this-padding this-flex-1">
+            <input class="form-control xn-input-border-radius" id="invoiceNum" name="invoiceNum"
+              formControlName="invoiceNum" type="text" autocomplete="off" (keyup)="onKeyUp('invoiceNum')">
+            <div class="xn-input-alert" *ngIf="invoiceNum.invalid && (invoiceNum.touched || invoiceNum.dirty)">
+              <span *ngIf="invoiceNum.errors.lengthError">{{invoiceNum.errors.lengthError}}</span>
+            </div>
+          </div>
+        </div>
+        <div class="flex-row">
+          <label class="this-title" for="invoiceDate">
+            <span class="required-label">*</span>开票日期
+          </label>
+          <div class="this-padding this-flex-1">
+            <input #dateInput class="form-control xn-input-border-radius" id="invoiceDate" name="invoiceDate"
+              formControlName="invoiceDate" type="text" placeholder="格式: 20170731" autocomplete="off"
+              (keyup)="onKeyUp('invoiceDate')">
+            <div class="xn-input-alert" *ngIf="invoiceDate.invalid && (invoiceDate.touched || invoiceDate.dirty)">
+              <span *ngIf="invoiceDate.errors.dateError">{{invoiceDate.errors.dateError}}</span>
+            </div>
+          </div>
+          <label class="this-title" for="amount">
+            <span class="required-label">*</span>{{invoiceLabel}}
+          </label>
+          <div class="this-padding this-flex-1">
+            <input class="form-control xn-input-border-radius" id="amount" name="amount" formControlName="amount"
+              type="text" autocomplete="off" (keyup)="onKeyUp('amount')">
+            <div class="xn-input-alert" *ngIf="amount.invalid && (amount.touched || amount.dirty)">
+              <span *ngIf="amount.errors.moneyError">{{amount.errors.moneyError}}</span>
+            </div>
+            <div *ngIf="!isSpecialInvoice" class="xn-control-desc">请输入发票校验码<span
+                style="color:#ff0000; font-size:18px; background-color: #cccccc">后六位</span></div>
+          </div>
+        </div>
+        <div class="flex-row" *ngIf="isVerify">
+          <div *ngIf="!isSpecialInvoice" style="display: flex;width: 50%;">
+            <label class="this-title" for="amount2">
+              <span class="required-label">*</span>发票开具金额(不含税)
+            </label>
+            <div class="this-padding this-flex-1">
+              <input class="form-control xn-input-border-radius" id="amount2" name="amount2" formControlName="amount2"
+                type="text" autocomplete="off" (keyup)="onKeyUp('amount2')">
+              <div class="xn-input-alert" *ngIf="amount2.invalid && (amount2.touched || amount2.dirty)">
+                <span *ngIf="amount2.errors.moneyError">{{amount2.errors.moneyError}}</span>
+              </div>
+            </div>
+          </div>
+          <div style="display: flex;width: 50%;">
+            <label class="this-title" for="amount">
+              <span class="required-label">*</span>含税金额
+            </label>
+            <div class="this-padding this-flex-1">
+              <input class="form-control xn-input-border-radius" id="invoiceAmount" name="invoiceAmount"
+                formControlName="invoiceAmount" type="text" autocomplete="off" (keyup)="onKeyUp('invoiceAmount')">
+              <div class="xn-input-alert"
+                *ngIf="invoiceAmount.invalid && (invoiceAmount.touched || invoiceAmount.dirty)">
+                <span *ngIf="invoiceAmount.errors.moneyError">{{invoiceAmount.errors.moneyError}}</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </form>
+
+      <div class="edit-content-flex">
+        <!-- 发票图片 -->
+        <div class="form-group text-center">
+          <div class="img-container" #imgContainer>
+            <div class="img-wrapper" #outerImg>
+              <img #innerImg class="this-img" *ngIf="params&&params.fileId" src="{{fileSrc}}">
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </modal-body>
+  <modal-footer>
+    <div class="clearfix">
+      <div class="button-group">
+        <span style="padding-right: 30px; color: #e15f63">{{errorMsg}}</span>
+        <button type="button" class="btn btn-danger" (click)="onManualEntry()"
+          [disabled]="!isVerify || disabled">确认人工录入</button>
+        <!-- <button type="button" class="btn btn-danger" (click)="onManualCheck()" [disabled]="disabled">人工审核发票</button>-->
+        <button type="button" class="btn btn-danger" (click)="onVerify()" [disabled]="disabled">去验证发票</button>
+        <button type="button" class="btn btn-danger" *ngIf="!hiddenBtn" (click)="imageVerification()"
+          [disabled]="imgVerifyDisabled">{{imageVerificationLoading?'验证中...':'图片验证'}}</button>
+        <button type="button" class="btn btn-default" (click)="onClose()">取消</button>
+      </div>
+      <div class="button-group" *ngIf="fileId && fileId !== ''">
+        <button id="left" type="button" class="btn btn-sm btn-default" (click)="rotateImg('left')">左旋
+          <i class="fa  fa-undo"></i></button>
+        <button id="right" type="button" class="btn btn-sm btn-default" (click)="rotateImg('right')">右旋
+          <i class="fa fa-repeat"></i></button>
+        <button id="large" type="button" class="btn btn-sm btn-default" (click)="scaleImg('large')">放大<i
+            class="fa fa-search-plus"></i></button>
+        <button id="small" type="button" class="btn btn-sm btn-default" (click)="scaleImg('small')">缩小<i
+            class="fa fa-search-minus"></i></button>
+      </div>
+    </div>
+
+  </modal-footer>
+</modal>

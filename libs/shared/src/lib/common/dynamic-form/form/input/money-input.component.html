@@ -1,0 +1,7 @@
+<div [formGroup]="form" style="display: flex;">
+  <input #input class="form-control xn-input-font xn-input-border-radius" style="border-top-right-radius: 0;
+  border-bottom-right-radius: 0;" [ngClass]="myClass" type="text" [placeholder]="row.placeholder"
+    [formControlName]="row.checkerId" (blur)="onBlur()" autocomplete="off">
+  <div class="input-group-addon" style="width: 39px;background-color: #fff;padding: 8px;">元</div>
+</div>
+<span class="xn-money-alert" #moneyAlertRef>{{moneyAlert}}</span>

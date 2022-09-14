@@ -1,0 +1,165 @@
+<div id="portal-inner-box">
+  <div *ngIf="!showBreadcrumb && isHomePage;else isNotHomePage">
+    <portal-nav  (navigation)="handleNavigation($event)"></portal-nav>
+    <nz-carousel nzAutoPlay [nzDots]="!store.isPhone">
+      <div nz-carousel-content  [ngClass]="store.isPhone ?'h5-portal h5-carouseldiv' : 'portal carouseldiv'" [ngStyle]="style[0]">
+        <div [ngClass]="[store.isPhone ? 'h5-portal-panel' : 'portal-panel', 'caption-box']">
+          <div class="caption">
+            <div class="title">{{currentNav.desc}}</div>
+            <div>产融联盟专业服务商</div>
+            <span class='redStyle'></span>
+          </div>
+        </div>
+      </div>
+      <div nz-carousel-content [ngClass]="store.isPhone ? 'h5-portal h5-carouseldiv' :'portal carouseldiv'" [ngStyle]="style[1]" >
+        <div [ngClass]="[store.isPhone ? 'h5-portal-panel' : 'portal-panel', 'caption-box']">
+          <div class="caption">
+            <div class='come'>我来啦~</div>
+            <div class="title">链融保理通小程序</div>
+            <p *ngIf="!store.isPhone" class='detail'>
+              <span style='margin-left:0px'>合同签署</span> |
+              <span>查询业务进度</span> |
+              <span>业务资料拍照上传</span> |
+              <span>微信提醒业务进度</span>
+            </p>
+            <div *ngIf="store.isPhone" class='detail'>
+              <p>
+                <span style='margin-left:0px'>合同签署</span> |
+                <span>微信提醒业务进度</span>
+              </p>
+              <p>
+                <span>查询业务进度</span> |
+                <span>业务资料拍照上传</span>
+              </p>
+            </div>
+            <span class='redStyle'></span>
+          </div>
+        </div>
+      </div>
+      <div nz-carousel-content [ngClass]="store.isPhone ? 'h5-portal h5-carouseldiv' :'portal carouseldiv'" [ngStyle]="style[2]" >
+        <div [ngClass]="[store.isPhone ? 'h5-portal-panel' : 'portal-panel', 'caption-box']">
+          <div class="caption">
+            <div class="title">保函通</div>
+            <div class='banner-title'>
+              <div class="title-desc">
+                <span>一键申请</span>
+                <span> 快速出函</span>
+              </div>
+            </div>
+            <span class='redStyle'></span>
+            <div class="link-button" *ngIf="!store.isPhone">
+              <button type="button" (click)="toBannerDetail($event, 'portal/bht-detail')">
+                点击查看 <i nz-icon nzType="right" nzTheme="outline"></i>
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div nz-carousel-content [ngClass]="store.isPhone ? 'h5-portal h5-carouseldiv' :'portal carouseldiv'" [ngStyle]="style[3]" >
+        <div [ngClass]="[store.isPhone ? 'h5-portal-panel' : 'portal-panel', 'caption-box']" style="position: relative;">
+          <div class="caption">
+            <div class='top-desc'>
+              <span>全线上化</span>
+              <nz-divider nzType="vertical" class="divider"></nz-divider>
+              <span>自动审批</span>
+              <nz-divider nzType="vertical" class="divider"></nz-divider>
+              <span>秒级出账</span>
+            </div>
+            <div class="top-desc-line"></div>
+            <div class="banner-title">
+              <div class="title">润秒贴</div>
+              <div class="title-desc">
+                <span *ngIf="!store.isPhone" style="color: #667086;">/</span>
+                <span>智慧银票</span>
+                <span> 极致体验</span>
+              </div>
+            </div>
+            <span class='redStyle'></span>
+            <div class="link-button" *ngIf="!store.isPhone">
+              <button type="button" (click)="toBannerDetail($event, 'portal/runmiaotie')">
+                点击查看 <i nz-icon nzType="right" nzTheme="outline"></i>
+              </button>
+            </div>
+          </div>
+          <div class="banner-footer">
+            <div class="line-left"></div>
+            <div class="footer-content">
+              <span class="content-left">链融科技票据通合作方</span>
+              <img src="assets/images/x-h5.png" alt="">
+              <span class="content-right">华润银行</span>
+            </div>
+            <div class="line-right"></div>
+          </div>
+        </div>
+      </div>
+
+    </nz-carousel>
+  </div>
+  <ng-template #isNotHomePage>
+    <div [ngClass]="[store.isPhone ? 'h5-portal' : 'portal']" [ngStyle]="style">
+      <portal-nav (navigation)="handleNavigation($event)" ></portal-nav>
+      <div *ngIf="!isProDetailPage" [ngClass]="[store.isPhone ? 'h5-portal-panel' : 'portal-panel', 'caption-box']">
+        <ng-container *ngIf='!isHomePage'>
+          <div class="theme">{{currentNav.desc || currentNav.title}}</div>
+        </ng-container>
+      </div>
+    </div>
+  </ng-template>
+  <div [ngClass]="[store.isPhone ? 'h5-breadcrumb' : 'breadcrumb']" *ngIf="showBreadcrumb">
+    <portal-nav (navigation)="handleNavigation($event)"></portal-nav>
+    <div class="portal-panel" *ngIf="!store.isPhone">
+      <nz-breadcrumb [nzSeparator]="nzSeparator" [nzAutoGenerate]="true"></nz-breadcrumb>
+      <ng-template #nzSeparator>
+        <i>></i>
+      </ng-template>
+    </div>
+  </div>
+  <div [ngStyle]="contentStyle" [ngClass]="[store.isPhone ? 'h5-portal-content' : 'portal-content']">
+    <router-outlet></router-outlet>
+  </div>
+  <div [ngClass]="[store.isPhone ? 'h5-bottom-bar' : 'bottom-bar']">
+    <div [ngClass]="[store.isPhone ? 'h5-portal-panel' : 'portal-panel']">
+      <div class="bottom-bar-content">
+        <div class="message">
+          <div class="title">
+            <span *ngIf="!store.isPhone">关于链融科技</span>
+            <span>联系我们</span>
+          </div>
+          <div class="item">
+            <span *ngIf="!store.isPhone"><a [routerLink]="['/portal/about']">关于我们</a></span>
+            <span *ngIf="!store.isPhone"><a [routerLink]="['/portal/product/system']">平台产品</a></span>
+            <span>0755-29966132 （工作日8:30 - 18:00）</span>
+          </div>
+          <div class="item">
+            <span *ngIf="!store.isPhone"><a [routerLink]="['/portal/news']">新闻中心</a></span>
+            <span *ngIf="!store.isPhone"><a [routerLink]="['/portal/technology']" [queryParams]="{hash: 'service'}">服务方案</a></span>
+            <span>深圳市福田区莲花街道海田路民生金融大厦14F</span>
+          </div>
+          <div class="item" *ngIf="!store.isPhone">
+            <span><a [routerLink]="['/portal/help']">帮助中心</a></span>
+            <span><a [routerLink]="['/portal/technology']" [queryParams]="{hash: 'system'}">技术体系</a></span>
+            <span><a href="https://www.lrscft.com/exe/lrscft-setup-1.0.2.exe">下载链融科技供应链服务平台桌面应用程序</a></span>
+          </div>
+        </div>
+        <div class="code codelist" [ngClass]="[store.isPhone ? 'qr-content' : '']">
+          <div>
+            <img
+              [src]="[store.isPhone ? 'assets/images/pic/footer-QRcode-h5.png' : 'assets/images/pic/footer-QRcode.png']"
+              alt="链融科技公众号" />
+            <div>链融科技公众号</div>
+          </div>
+          <div>
+            <img src="assets/images/pic/xiaochengxu.jpg" alt="小程序二维码" />
+            <div>链融保理通小程序</div>
+          </div>
+
+        </div>
+        <!-- <div class="code">
+
+        </div> -->
+      </div>
+    </div>
+    <portal-bar [type]="store.isPhone ? 'h5' : 'black'"></portal-bar>
+  </div>
+  <div class="bottom-bar-btn" *ngIf="store.isPhone" (click)="toTop()">回到顶部</div>
+</div>

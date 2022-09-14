@@ -1,0 +1,35 @@
+<div [ngClass]="[store.isPhone ? 'h5-product-solution' : 'product-solution']">
+  <div [ngClass]="[store.isPhone ? 'h5-portal-panel' : 'portal-panel']">
+    <div class="solution-box">
+      <p>链融科技依托平台、场景、联盟和服务优势，为核心企业、金融机构、第三方机构提供平台技术支持、供应链资产服务、
+        特定场景金融科技应用等私有化专业服务，实现生态善赢。</p>
+      <div class="img-box">
+        <img [src]="[store.isPhone ? 'assets/images/pic/solution-bg02-h5.png' : 'assets/images/pic/solution.png']" alt="">
+        <div class="left-txt">
+          <div>平台私有化方案</div>
+          <div>惠普通平台</div>
+          <div>证券通平台</div>
+          <div>保理通平台</div>
+          <div>...<span *ngIf="store.isPhone">...</span></div>
+        </div>
+        <div class="right-txt" *ngIf="!store.isPhone">
+          <div>技术私有化方案</div>
+          <div>智能风控</div>
+          <div>资产管理</div>
+          <div>区块链技术</div>
+          <div>...</div>
+        </div>
+      </div>
+      <div class="img-box" *ngIf="store.isPhone">
+        <img [src]="['assets/images/pic/solution-bg01-h5.png']" alt="">
+        <div class="right-txt">
+          <div>技术私有化方案</div>
+          <div>智能风控</div>
+          <div>资产管理</div>
+          <div>区块链技术</div>
+          <div>......</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

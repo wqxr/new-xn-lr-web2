@@ -1,0 +1,12 @@
+<section class="content-header">
+  <h4>额度控制</h4>
+</section>
+<section class="content">
+  <app-contract-control-enterprise-list-component
+    [enterprise]="enterprise.core" [data]="info['core']"
+    (pageChange)="pageChange($event,'core')" (searchValue)="searchValue($event,'core')"></app-contract-control-enterprise-list-component>
+  <app-contract-control-enterprise-list-component
+    [enterprise]="enterprise.supplier" [data]="info['supplier']"
+    (pageChange)="pageChange($event,'supplier')" (searchValue)="searchValue($event,'supplier')"></app-contract-control-enterprise-list-component>
+</section>
+

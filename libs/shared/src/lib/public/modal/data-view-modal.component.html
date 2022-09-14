@@ -1,0 +1,11 @@
+<modal #modal [backdrop]="'static'" [keyboard]="false" [animation]="false" (onDismiss)="onOk()">
+  <modal-header [showClose]="true">
+    <h4 class="modal-title">实时查看数据</h4>
+  </modal-header>
+  <modal-body>
+    <xn-flow-detail-data-show [assets]="numDataShow"></xn-flow-detail-data-show>
+  </modal-body>
+  <modal-footer>
+    <button type="button" class="btn btn-danger" (click)="onOk()">确定</button>
+  </modal-footer>
+</modal>

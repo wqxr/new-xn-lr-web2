@@ -1,0 +1,26 @@
+<xn-page-header-wrapper>
+  <nz-card nz-Title="银行账户信息" *ngIf="loading; else loadingTemplate">
+    <div class="head-box" nz-row>
+      <div nz-col nzSpan="12">
+        <span style="margin-right: 5px;">
+          <i style="color: #4380d0; font-size: 20px;" nz-icon nzType="exclamation-circle" nzTheme="outline"></i>
+        </span>
+        <span>请填写以下信息：</span>
+      </div>
+    </div>
+    <form style="position: relative;" nz-form nzLayout="horizontal" [formGroup]="form">
+      <xn-formly [form]="form" [options]="options" [model]="model" [fields]="showFields">
+      </xn-formly>
+      <p class="add-account">未找到已有账号？<a (click)="addBankAccount()">点此新增</a></p>
+    </form>
+  </nz-card>
+  <xn-footer-toolbar style="align-items: center;">
+    <button nz-button nzType="default" (click)="goBack()">返回</button>
+    <button nz-button nzType="primary" [disabled]="!form.valid" (click)="submitFrom()">提交</button>
+  </xn-footer-toolbar>
+</xn-page-header-wrapper>
+
+<ng-template #loadingTemplate>
+  <nz-skeleton [nzActive]="true"></nz-skeleton>
+</ng-template>
+

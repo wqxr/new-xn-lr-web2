@@ -1,0 +1,97 @@
+<modal #modal [backdrop]="'static'" [keyboard]="false" [animation]="false" (onDismiss)="onOk()">
+    <modal-header [showClose]="true">
+      <h4 class="modal-title" >{{title}} &nbsp;&nbsp; <span *ngIf='params?.type===2'> 提交时间：{{getTime | xnDate:'date'}}&nbsp;&nbsp;{{userName}}</span></h4>
+    </modal-header>
+    <modal-body>
+      <div class="edit-content">
+        <span *ngIf='params?.type===1'>数字证书注销后，将无法使用数字证书进行电子合同签署操作，请谨慎操作</span>
+        <table class="table table-bordered table-hover text-center table-display">
+          <thead>
+            <th>文件</th>
+            <th *ngIf='params?.type===1'>文件要求</th>
+            <th>内容</th>
+            <th>模板</th>
+            <th>操作</th>
+          </thead>
+          <tbody>
+            <!-- 内容项 -->
+            <tr>
+              <td>注销授权书</td>
+              <td *ngIf='params?.type===1'><span class='spanColor'>盖公章上传彩色扫描件</span></td>
+              <td>
+                <ng-container *ngIf='certificateFile.length>0'>
+                  <div *ngFor="let file of certificateFile">
+                    <ng-container *ngIf="!!file.fileName">
+                      <a class="xn-click-a" (click)="onView(file)">{{file?.fileName}}</a> &nbsp; &nbsp; <a *ngIf='params?.type===1' class="xn-click-a" (click)="deleteFile('certificateFile')">x</a>
+                    </ng-container>
+                    <ng-container *ngIf="!!file.label">
+                      <a class="xn-click-a" (click)="showContract(file.id, file.secret,file.label)">{{file.label}}</a> &nbsp; &nbsp; <a *ngIf='params?.type===1' class="xn-click-a" (click)="deleteFile('certificateFile')">x</a>
+                    </ng-container>
+                  </div>
+                </ng-container>
+
+              </td>
+              <td><a   href='assets/lr/doc/cfca-mode/安心签数字证书注销授权书.docx'>下载</a></td>
+              <td *ngIf='params?.type===1'>
+                <app-mfile-change [row]='fileUpload[0]' [form]="mainForm"></app-mfile-change><span class='spanColor'>请上传pdf或者图片</span>
+              </td>
+              <td *ngIf='params?.type===2'>
+                <ng-container *ngIf='certificateFile.length>0'>
+                  <div *ngFor="let file of certificateFile">
+                    <ng-container *ngIf="!!file.fileName">
+                      <a class="xn-click-a" (click)="onView(file)">预览</a>
+                    </ng-container>
+                    <ng-container *ngIf="!!file.label">
+                      <a class="xn-click-a" (click)="showContract(file.id, file.secret,file.label)">预览</a>
+                    </ng-container>
+                  </div>
+                </ng-container>
+              </td>
+            </tr>
+            <tr>
+              <td>营业执照</td>
+              <td *ngIf='params?.type===1'><span class='spanColor'>盖公章上传彩色扫描件</span></td>
+              <td>
+                <ng-container *ngIf='businessFile.length>0'>
+                  <div *ngFor="let file of businessFile">
+                    <ng-container *ngIf="!!file.fileName">
+                      <a class="xn-click-a" (click)="onView(file)">{{file?.fileName}}</a>&nbsp; &nbsp; <a *ngIf='params?.type===1' class="xn-click-a" (click)="deleteFile('businessFile')">x</a>
+                    </ng-container>
+                    <ng-container *ngIf="!!file.label">
+                      <a class="xn-click-a" (click)="showContract(file.id, file.secret,file.label)">{{file.label}}</a>&nbsp; &nbsp; <a *ngIf='params?.type===1' class="xn-click-a" (click)="deleteFile('businessFile')">x</a>
+                    </ng-container>
+                  </div>
+                </ng-container>
+
+              </td>
+              <td><a href='javascript:void(0)'>/</a></td>
+              <td *ngIf='params?.type===1'>
+                <app-mfile-change [row]='fileUpload[1]' [form]="mainForm"></app-mfile-change><span class='spanColor'>请上传pdf或者图片</span>
+              </td>
+              <td *ngIf='params?.type===2'>
+                <ng-container *ngIf='businessFile.length>0'>
+                  <div *ngFor="let file of businessFile">
+                    <ng-container *ngIf="!!file.fileName">
+                      <a class="xn-click-a" (click)="onView(file)">预览</a>
+                    </ng-container>
+                    <ng-container *ngIf="!!file.label">
+                      <a class="xn-click-a" (click)="showContract(file.id, file.secret,file.label)">预览</a>
+                    </ng-container>
+                  </div>
+                </ng-container>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </modal-body>
+    <modal-footer  *ngIf='params?.type===1'>
+      <button type="button" class="btn btn-danger" (click)="cancel()">取消</button>
+      <button type="button" class="btn btn-success" [disabled]="!onValid()" (click)="onSubmit()">提交</button>
+    </modal-footer>
+    <modal-footer *ngIf='params?.type===2'>
+      <button type="button" class="btn btn-success" (click)="onSave()">全部下载</button>
+      <button type="button" class="btn btn-danger" (click)="onCancel()">取消</button>
+      <button type="button" class="btn btn-success" [disabled]="!onValid()" (click)="onSearch()">查验</button>
+    </modal-footer>
+  </modal>

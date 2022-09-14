@@ -1,0 +1,108 @@
+<xn-page-header-wrapper>
+  <form
+    style="position: relative"
+    nz-form
+    nzLayout="vertical"
+    [formGroup]="form"
+  >
+    <xn-formly
+      [form]="form"
+      [options]="options"
+      [model]="model"
+      [fields]="showFields"
+    >
+    </xn-formly>
+    <p class="tip-account">
+      <span
+        style="cursor: pointer"
+        nz-popover
+        nzPopoverTitle="提示"
+        [nzPopoverContent]="contentTemplate"
+        nzPopoverPlacement="right"
+        nzPopoverTrigger="hover"
+        ><i nz-icon nzType="question-circle" nzTheme="outline"></i>
+      </span>
+    </p>
+
+    <div *ngIf="pageType === PageType.EDIT" class="select-account">
+      <button nz-button nzType="primary" (click)="choseBankAccount($event)">
+        选择
+      </button>
+    </div>
+    <div *ngIf="!isCheckStatus()" class="record-link">
+      <a (click)="viewRecord()">查看流程记录</a>
+    </div>
+  </form>
+
+  <nz-card nzTitle="协议">
+    <label
+      nz-checkbox
+      [nzDisabled]="isCheckStatus() || pageType === PageType.CONFIRM"
+      [(ngModel)]="checkRead"
+      (ngModelChange)="viewFile()"
+      >已同意并签署<a>《上海银行在线资金管理业务电子协议》</a></label
+    >
+    <!-- <label>
+      <a (click)="viewFile()">《上海银行在线资金管理业务电子协议》</a>
+    </label> -->
+  </nz-card>
+
+  <!-- 审核信息 -->
+  <div *ngIf="isCheckStatus()">
+    <xn-account-check-card
+      [accountId]="accountId"
+      [recordType]="recordType"
+      [form]="checkForm"
+      [model]="checkModel"
+    >
+    </xn-account-check-card>
+  </div>
+
+  <xn-footer-toolbar [extra]="leftButtons" style="align-items: center">
+    <ng-container *ngIf="!isCheckStatus()">
+      <button nz-button nzType="default" (click)="cancelApply()">
+        取消开户
+      </button>
+    </ng-container>
+    <!-- 补充开户信息 -->
+    <ng-container *ngIf="pageType === PageType.EDIT">
+      <button
+        nz-button
+        nzType="primary"
+        [disabled]="!form.valid || !checkRead || noAccountNo()"
+        (click)="submitForm()"
+      >
+        提交
+      </button>
+    </ng-container>
+    <!-- 提交审核信息 -->
+    <ng-container *ngIf="isCheckStatus()">
+      <button
+        nz-button
+        nzType="primary"
+        [disabled]="!checkForm.valid"
+        (click)="submitCheckForm()"
+      >
+        提交
+      </button>
+    </ng-container>
+
+    <!-- 确认开户 -->
+    <ng-container *ngIf="pageType === PageType.CONFIRM">
+      <button nz-button nzType="primary" (click)="confirmOpenAccount()">
+        确认开户
+      </button>
+    </ng-container>
+  </xn-footer-toolbar>
+</xn-page-header-wrapper>
+<ng-template #leftButtons>
+  <button nz-button nzType="default" (click)="goBack()">返回</button>
+</ng-template>
+
+<ng-template #contentTemplate>
+  <div style="padding: 12px">
+    <span
+      >该银行账户用于与电子账本进行绑定，绑定后可将电子账本余额提现至此绑定银行账户。</span
+    >
+  </div>
+</ng-template>

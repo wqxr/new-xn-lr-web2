@@ -1,0 +1,24 @@
+<modal #modal [backdrop]="'static'" [keyboard]="false" [animation]="false">
+  <form class="form-horizontal" (ngSubmit)="onSubmit()" [formGroup]="mainForm" *ngIf="!!mainForm">
+    <modal-header [showClose]="false">
+      <h4 class="modal-title">新增合同</h4>
+    </modal-header>
+    <modal-body>
+      <div class="form-group" *ngFor="let row of rows">
+        <div class="col-sm-3 xn-control-label">
+          {{row.title}} <span *ngIf="row.required !== false && row.required !== 0" class="required-label">*</span>
+        </div>
+        <div class="col-sm-6">
+          <xn-input [row]="row" [form]="mainForm"></xn-input>
+        </div>
+        <div class="col-sm-3 xn-control-desc">
+          {{row.memo}}
+        </div>
+      </div>
+    </modal-body>
+    <modal-footer>
+      <button type="button" class="btn btn-default" (click)="onCancel()">取消</button>
+      <button type="submit" class="btn btn-success" [disabled]="!mainForm.valid">提交</button>
+    </modal-footer>
+  </form>
+</modal>

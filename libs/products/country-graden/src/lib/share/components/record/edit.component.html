@@ -1,0 +1,442 @@
+<section class="content-header">
+  <h1>
+    {{ pageTitle }}
+    <small>{{ pageDesc }}</small>
+  </h1>
+</section>
+
+<!-- Main content -->
+<section class="content">
+  <div class="app-flow-process" *ngIf="flowId !== '' && isshowProgress === false">
+    <!--主流程记录-->
+    <ng-container>
+      <xn-graden-flow-process-component [mainFlowId]="mainFlowId" [flowId]="flowId">
+      </xn-graden-flow-process-component>
+    </ng-container>
+  </div>
+
+  <form class="form-horizontal" *ngIf="svrConfig" (ngSubmit)="onSubmit()" [formGroup]="mainForm">
+    <div class="panel panel-default">
+      <div class="panel-heading">
+        <span class="panel-title">{{ svrConfig.flow.flowName }}: {{ svrConfig.record.title }}
+        </span>
+      </div>
+      <!-- /.box-header -->
+      <div class="panel-body">
+        <div class="panel panel-info xn-panel-sm">
+          <div class="panel-heading">
+            <span class="panel-title">
+              流程基本信息
+            </span>
+          </div>
+          <div class="panel-body">
+            <div class="form-group" *ngFor="let info of baseInfo">
+              <div class="col-sm-3 xn-control-label">
+                {{ info.title }}
+              </div>
+              <div class="col-sm-6">
+                <app-dynamic-show [row]="info" [form]="mainForm" [svrConfig]="svrConfig" formModule="dragon-show">
+                </app-dynamic-show>
+              </div>
+              <div class="col-sm-3 xn-control-desc"></div>
+            </div>
+          </div>
+          <!-- /.panel-body -->
+        </div>
+        <!-- 流程基本信息 -->
+
+        <ng-container *ngIf="hasActions">
+          <ng-container *ngFor="let action of newSvrConfig.actions">
+            <div class="{{ panelCssClass(action) }}">
+              <ng-container *ngIf="action.operator !== 0">
+                <div class="panel-heading" style="cursor:pointer" (click)="collapse(action)">
+                  <div class="panel-title  clearfix">
+                    <!--面板折叠提示-->
+                    <div class="col-sm-6 clear-padding">
+                      <span *ngIf="
+                            action['collapse'] && action['collapse'] === true;
+                            else block
+                          " class="fa fa-minus-square"></span>
+                      <ng-template #block><span class="fa fa-plus-square"></span></ng-template>
+                      <span>第{{ action.recordSeq }}步:
+                        {{ action.procedureName }} ({{
+                            action.operator | xnOperator: action.procedureId
+                          }})</span>
+                    </div>
+                    <div class="col-sm-2 clear-padding ">
+                      <small><span class="red">{{
+                            action['collapse'] && action['collapse'] === true
+                              ? '点击隐藏'
+                              : '点击显示'
+                          }}</span>
+                      </small>
+                    </div>
+                    <div class="col-sm-4 clear-padding  text-right">
+                      <small>
+                        <{{ action.operatorName }}>在{{
+                            action.operatorTime | xnDate
+                          }}处理
+                      </small>
+                    </div>
+                  </div>
+                </div>
+                <div class="panel-body" *ngIf="action['collapse'] && action['collapse'] === true">
+                  <ng-container *ngIf="action.operator === 1">
+                    <ng-container *ngFor="let checker of action.checkers">
+                      <div class="form-group" *ngIf="checker.type !== 'sms'">
+                        <div class="col-sm-3 xn-control-label" [ngClass]="{
+                              'required-label-strong': hwModeService.checkRequiredAndReadonly(
+                                checker
+                              ).bold,
+                              'required-star': hwModeService.checkRequiredAndReadonly(
+                                checker
+                              ).star
+                            }">
+                          {{ checker.title }}
+                        </div>
+                        <div class="col-sm-6">
+                          <app-dynamic-show [row]="checker" [form]="mainForm" [svrConfig]="svrConfig"
+                            formModule="dragon-show"></app-dynamic-show>
+                        </div>
+                        <div class="col-sm-3 xn-control-desc">
+                          {{ checker.memo }}
+                        </div>
+                      </div>
+                    </ng-container>
+                    <xn-graden-memo-component [memo]="action.memo" *ngIf="flowId !== 'platform_sign_510'">
+                    </xn-graden-memo-component>
+                    <xn-dragon-contract [contracts]="
+                          action.contracts
+                            | xnContractFilter: newSvrConfig.flow.flowId
+                        ">
+                    </xn-dragon-contract>
+                  </ng-container>
+                  <!-- /通过的步骤 -->
+
+                  <xn-graden-memo-component [memo]="action.memo" *ngIf="action.operator === 2 || action.operator === 3">
+                  </xn-graden-memo-component>
+                  <!-- /驳回 -->
+                  <div class="text-right">
+                    <a class="a-handle" href="javaScript:void (0)" (click)="collapse(action)">
+                      <span class="fa fa-angle-double-up"></span>
+                    </a>
+                  </div>
+                </div>
+              </ng-container>
+              <!-- /.panel-body -->
+            </div>
+          </ng-container>
+          <!-- /.panel -->
+        </ng-container>
+        <!--当前需要处理的项-->
+        <div class="panel panel-primary xn-panel-sm">
+          <div class="panel-heading">
+            <span class="panel-title">当前: {{ svrConfig.procedure.procedureName }}
+              <small class="pull-right">需要您处理</small>
+            </span>
+          </div>
+          <div class="panel-body" style='position: relative;'>
+            <div class="form-group" *ngFor="let row of shows">
+              <div class="col-sm-3 xn-control-label" [ngClass]="{
+                    'required-label-strong': hwModeService.checkRequiredAndReadonly(
+                      row
+                    ).bold,
+                    'required-star': hwModeService.checkRequiredAndReadonly(row)
+                      .star
+                  }">
+                {{ row.title }}
+              </div>
+              <div class="col-sm-6">
+                <app-dynamic-input [row]="row" [form]="mainForm" [svrConfig]="svrConfig" [formModule]="fromModule">
+                </app-dynamic-input>
+              </div>
+              <div class="col-sm-3 xn-control-desc" *ngIf="row.mome!==''">
+                {{ row.memo }}
+              </div>
+              <div class="col-sm-3 xn-control-desc"
+                *ngIf=" row.other !==undefined && row.other!=='' && getOtherHelp(row).type===1  && otherJudge(row)"
+                [ngStyle]="{'color':getOtherHelp(row).color}">
+                *{{getOtherHelp(row).value }}
+              </div>
+              <div class="qr pull-left" *ngIf=" row.other !==undefined && row.other!=='' && getOtherHelp(row).type===2">
+                <div class="qrbtn" #accountDistannce>
+                  <a class="btn btn-primary xn-click-a "
+                    (click)="changeAccount(getOtherHelp(row).value,row)">{{getOtherHelp(row).value }}</a>
+                </div>
+              </div>
+            </div>
+            <!--tips-->
+            <div class="text-right red" *ngIf="hwModeService.checkersTips(shows)">
+              * 为必填项
+            </div>
+            <div *ngIf='showIconReject' (click)='showRejectInfo()' class='rejectClass'>
+              <a class="btn btn-app" href="javaScript:void(0)">
+                <i class="fa fa-bullhorn text-yellow"></i> 退回原因
+              </a>
+            </div>
+            <div *ngIf='showBgyChangesIcon()' (click)='showBgyChangesInfo(true)' class='changesClass'>
+              <a *ngIf='showIconBgyChanges' style="color: red;" class="btn btn-app" href="javaScript:void(0)">
+                <i class="fa fa-bullhorn text-red"></i> 数据变动
+              </a>
+              <a *ngIf='!showIconBgyChanges' class="btn btn-app" href="javaScript:void(0)">
+                <i class="fa fa-bullhorn"></i> 数据未变动
+              </a>
+            </div>
+          </div>
+          <!-- /.panel-body -->
+        </div>
+        <!-- /.panel -->
+      </div>
+      <!-- /.panel-body -->
+
+      <div class="panel-footer text-right">
+        <button type="button" class="btn btn-default pull-left" (click)="onCancel()">
+          返回
+        </button>
+        <button type="button" class="btn btn-default" (click)="cancelModal.open()" *ngIf="svrConfig.rejectType === 0">
+          中止流程
+        </button>
+        <button type="button" class="btn btn-primary"
+         *ngIf="svrConfig.record.flowId ==='dragon_platform_verify' && Showintelligence"
+        (click)="showAuditStandard(2)">智能审单
+      </button>
+        <button type="button" class="btn btn-primary"
+          *ngIf="svrConfig.record.flowId ==='bgy_platform_verify'"
+          (click)="showAuditStandard(1)">审核标准
+        </button>
+        <button type="button" class="btn btn-default" (click)='temporaryStorage()' *ngIf='showTempClick()'>
+          暂存
+        </button>
+        <button type="button" class="btn btn-default" (click)='suspend()'
+          *ngIf="svrConfig.record.flowId ==='bgy_platform_verify' && svrConfig.procedure.procedureId==='operate'">
+          暂停
+        </button>
+        <button type="button" class="btn btn-default" (click)="cancelModal.open()"
+          *ngIf="svrConfig.rejectType !==0 && svrConfig.record.flowId!=='bgy_financing'
+          && svrConfig.record.flowId!=='bgy_platform_verify' && svrConfig.record.flowId!=='sub_supplier_add'
+          && svrConfig.record.flowId!=='sub_factor_add_material' ">
+          拒绝
+        </button>
+        <button type="button" class="btn btn-default" (click)="cancelModal.open()"
+          *ngIf="svrConfig.rejectType !== 0 && ( svrConfig.record.flowId==='bgy_financing'
+          ||svrConfig.record.flowId==='bgy_platform_verify'|| svrConfig.record.flowId==='sub_law_manager_survey')
+          && svrConfig.procedure.procedureId==='review' ">
+          拒绝
+        </button>
+        <button type="button" class="btn btn-default" (click)="openrejectplatWindow()"
+          *ngIf="svrConfig.rejectType !== 0
+          && svrConfig.record.flowId==='bgy_platform_verify'
+          && svrConfig.procedure.procedureId==='operate'">
+          拒绝
+        </button>
+        <button type="button" class="btn btn-default" (click)="addSurveyInfo()"
+        *ngIf="svrConfig.record.flowId==='sub_law_manager_survey' && svrConfig.procedure.procedureId==='operate'">
+          补充资料
+        </button>
+        <button type="button" class="btn btn-primary disabled" (click)="onRegistration()"
+          *ngIf="svrConfig.flow.flowId === 'financing_supplier6'">
+          中登登记
+        </button>
+        <button type="submit" class="btn btn-primary" *ngIf="svrConfig.rejectType === 0"
+          [disabled]="(!mainForm.valid || loadingback) && svrConfig.record.flowId!=='bgy_financing' && svrConfig.record.flowId!=='bgy_platform_verify'">
+          提交
+        </button>
+        <button type="submit" class="btn btn-primary" *ngIf="svrConfig.rejectType !== 0"
+          [disabled]="(!mainForm.valid || loadingback) && svrConfig.record.flowId!=='bgy_financing' && svrConfig.record.flowId!=='bgy_platform_verify'">
+          同意
+        </button>
+      </div>
+      <!-- /.panel-footer -->
+
+      <modal #cancelModal [backdrop]="'static'">
+        <modal-header [showClose]="true">
+          <h4 class="modal-title">流程审核不通过</h4>
+        </modal-header>
+        <modal-body>
+          <div class="form-horizontal form-group row">
+            <div class="col-sm-2 xn-control-label">
+              备注
+            </div>
+            <div class="col-sm-8">
+              <xn-input [row]="cancelChecker" [form]="mainForm"></xn-input>
+            </div>
+          </div>
+        </modal-body>
+        <modal-footer>
+          <button type="button" class="btn btn-default pull-left" (click)="cancelModal.dismiss()">
+            取消
+          </button>
+          <button type="button" class="btn btn-danger" (click)="onTerminate()" *ngIf="svrConfig.rejectType ===0">
+            中止流程
+          </button>
+          <button type="button" class="btn btn-danger" (click)="onReject()" *ngIf="svrConfig.rejectType !== 0">
+            退回到上一步
+          </button>
+        </modal-footer>
+      </modal>
+    </div>
+  </form>
+  <ng-template #helpDealContract>
+    <div>
+      <div>
+        <span>帮助提示：</span>
+        <ul class='helpUl'>
+          <li>请上传完整合同正页</li>
+          <li>合同文件为PDF 格式</li>
+          <li>清晰彩色扫描件/照片（黑白扫描件须加盖公章，骑缝章）</li>
+          <li>如有补充协议，请与原合同一并上传</li>
+          <li>如为分包合同，请与总包合同一并上传</li>
+        </ul>
+      </div>
+
+    </div>
+  </ng-template>
+  <ng-template #helpInvoiceNormal>
+    <div>
+      <div>
+        <span>帮助提示：</span>
+        <ul class='helpUl'>
+          <li>请上传与本次付款对应的发票</li>
+          <li>请上传彩色扫描件（每页发票都需包含发票专用章、全国统一发票监制章）</li>
+          <li>如为黑白件，需加盖公章</li>
+          <li>点击“批量上传图片”后，“全选”并进行批量查验</li>
+          <li>若显示“验证失败”，请点击“手工查验”并补录信息</li>
+        </ul>
+        <p>
+          <a href="javaScript:void(0)" target="_blank"
+            href='../../../../../../assets/lr/html/dragon-invoice.html'>点击查看示例</a></p>
+      </div>
+
+    </div>
+  </ng-template>
+  <ng-template #helpCertificate>
+    <div>
+      <div>
+        <span>帮助提示：</span>
+        <ul class='helpUl'>
+          <li>施工总承包、专业承包，提供《建筑业企业资质证书》【如果只有总承包资质，不能直接承接专业承包工程】</li>
+          <li>工程造价类，提供《造价咨询企业资质证书》</li>
+          <li>电梯、锅炉安装类，提供《特种设备安装改造维修许可证》</li>
+          <li>勘察类，提供《工程勘察资质证书》</li>
+          <li>设计类，提供《工程设计资质证书》； </li>
+          <li>贸易类无相关资质证明的，提供其他相关文件或营业执照</li>
+        </ul>
+        <p>
+          <a href="javaScript:void(0)" target="_blank"
+            href='../../../../../../assets/lr/html/dragon-certifile.html'>点击查看示例</a></p>
+      </div>
+
+    </div>
+  </ng-template>
+  <ng-template #helpOther>
+    <div>
+      <div>
+        <span>帮助提示：</span>
+        <ul class='helpUl'>
+          <li>工程类提供形象进度统计表，如已竣工结算，提供有竣工验收合格的文件。如需要，提供相关说明文件。 </li>
+          <li>贸易类提供结算单。如需要，提供相关说明文件。</li>
+        </ul>
+        <p>
+          <a href="javaScript:void(0)" target="_blank"
+            href='../../../../../../assets/lr/html/dragon-other.html'>点击查看示例</a></p>
+      </div>
+
+    </div>
+  </ng-template>
+  <ng-template #vankehelpDealContract>
+    <div>
+      <div>
+        <span>帮助提示：</span>
+        <ul class='helpUl'>
+          <li>请上传关键页：<br>
+            1、工程类：①封面页；②标的页（甲乙基本信息及工程概况）；<br>
+            ③合同价格页；④合同价款支付页（进度结算支付比例约定，支付方式约定，一般为专用条款中“合同价款支付”这一章节所在页）；⑤合同双方签署页（主合同签署页）。<br>
+            2、贸易类合同提供：<br>
+            A.集采+订单：集采协议（①封面页；②集采首页；③付款条款页；④集采有效期页；⑤集采签署页），⑥采筑截图合同详情截图 + B2B/PDC订单截图<br>
+            B.采购合同：与工程类提供的关键页一致。
+
+          </li>
+          <li>清晰彩色扫描件/照片</li>
+          <li>如有补充协议，请与原合同一并上传；如为分包合同，请与总包合同一并上传</li>
+        </ul>
+        <p>
+          <a href="javaScript:void(0)" target="_blank"
+            href='../../../../../../assets/lr/html/vanke-contract.html'>点击查看示例</a></p>
+      </div>
+    </div>
+  </ng-template>
+  <ng-template #vankehelpInvoiceNormal>
+    <div>
+      <div>
+        <span>帮助提示：</span>
+        <ul class='helpUl'>
+          <li>文件要求：<br>
+            1、发票信息及章需清晰；<br>
+            2、全国统一发票监制章（必需）+发票专用章（记账联不要求）；<br>
+            3、必需是纸质发票样式，彩色扫描件。
+          </li>
+          <li>进度款：只传与产值单对应的发票。</li>
+          <li>竣工/结算款：传对应合同项下的所有发票或是确认有余额的发票，若无法确认发票余额情况，可到微信交流群联系对接人员。</li>
+          <li>点击“批量上传图片”后，“全选”并进行批量查验</li>
+          <li>若显示“验证失败”，请点击“手工查验”并补录信息</li>
+        </ul>
+        <p>
+          <a href="javaScript:void(0)" target="_blank"
+            href='../../../../../../assets/lr/html/vanke-invoice.html'>点击查看示例</a></p>
+      </div>
+
+    </div>
+  </ng-template>
+  <ng-template #vankehelpCertificate>
+    <div>
+      <div>
+        <span>帮助提示：</span>
+        <ul class='helpUl'>
+          <li>文件要求：<br>
+            1、彩色扫描件；若是黑白复印件，需要加盖企业公章。<br>
+            2、资质需要覆盖基础交易合同施工内容；有效期覆盖本次应收账款确认时间。<br>
+            3、以图片格式（jpg. jpeg. png.）或PDF格式上传。<br>
+          </li>
+          <li>工程类合同需要提供资质证书；</li>
+          <li>采购类合同需要提供营业执照。</li>
+        </ul>
+        <p>
+          <a href="javaScript:void(0)" target="_blank"
+            href='../../../../../../assets/lr/html/vanke-certifile.html'>点击查看示例</a></p>
+      </div>
+    </div>
+  </ng-template>
+  <ng-template #helpLy>
+    <div>
+      <div>
+        <span>帮助提示：</span>
+        <ul class='helpUl'>
+          <li>文件要求：<br>
+            1、线下文件：彩色扫描件；若是黑白复印件，需要加盖企业公章。<br>
+            2、以图片格式（jpg. jpeg. png.）或PDF格式上传<br>
+          </li>
+          <li>进度款：提供产值确认单（线上文件：采筑系统的过程产值确认单与付款申请表 或是 线下文件）。</li>
+          <li>竣工款：提供竣工验收单与采筑系统的付款申请表。</li>
+          <li>结算款：提供竣工结算造价协议（有合同甲乙双方盖章）。</li>
+        </ul>
+        <p>
+          <a href="javaScript:void(0)" target="_blank"
+            href='../../../../../../assets/lr/html/vanke-lvyue.html'>点击查看示例</a></p>
+      </div>
+    </div>
+  </ng-template>
+  <ng-template #vankehelpOther>
+    <div>
+      <div>
+        <span>帮助提示：</span>
+        <ul class='helpUl'>
+          <li>上传其他辅助证明材料，如图纸、监理报告等，非必填 </li>
+        </ul>
+        <!-- <p>
+          <a href="javaScript:void(0)" target="_blank"
+            href='../../../../../../../assets/lr/html/helpInvoice.html'>点击查看示例</a></p> -->
+      </div>
+
+    </div>
+  </ng-template>
+</section>

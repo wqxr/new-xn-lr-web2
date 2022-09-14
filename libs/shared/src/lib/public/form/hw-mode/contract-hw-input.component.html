@@ -1,0 +1,30 @@
+<div class="input-group" style="width: 100%" [formGroup]="form">
+  <table class="table table-bordered table-hover file-row-table text-center" width="100%">
+    <thead>
+      <tr>
+        <td>合同编号</td>
+        <td>合同金额</td>
+        <td>图片文件</td>
+        <td>合同类型</td>
+        <td>
+          <a class="xn-click-a" (click)="onNew()">新增合同</a>
+        </td>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let item of items;let i=index">
+        <td>{{item?.files?.contractNum}}</td>
+        <td>{{item?.files?.contractAmount | xnMoney}}</td>
+        <td>
+          <a href="javaScript:void (0)" (click)="onView(item)">{{item?.files?.img[0]?.fileName}}</a>
+        </td>
+        <td>{{item?.files?.contractType}}</td>
+        <td>
+          <a href="javaScript:void (0)" (click)="remove(item)">删除</a>
+          <a href="javaScript:void (0)" (click)="edit(item,i)">编辑</a>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+<span class="xn-input-alert">{{alert}}</span>

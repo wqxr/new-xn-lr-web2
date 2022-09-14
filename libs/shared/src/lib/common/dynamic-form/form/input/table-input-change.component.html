@@ -1,0 +1,52 @@
+<div>
+  <div style="width:100%;margin-bottom: 20px;">
+    <div class="table-head">
+      <table class="table">
+        <thead>
+          <tr>
+            <th style='width:20%'>序号</th>
+            <ng-container *ngFor="let head of heads">
+              <th>{{ head.label }}</th>
+            </ng-container>
+          </tr>
+        </thead>
+      </table>
+    </div>
+    <div class="table-body">
+      <table class="table">
+        <tbody>
+          <ng-container *ngIf='items.length;else block1'>
+            <tr *ngFor="let item of items;let i=index">
+              <td style='width:20%'>{{ i+1 }}</td>
+              <td *ngFor="let head of heads">
+                <ng-container [ngSwitch]="head.type">
+                  <ng-container *ngSwitchCase="'opinion'">
+                    <textarea  class="form-control xn-input-textarea xn-input-font xn-input-border-radius" rows="3" *ngFor='let data of item[head.value] | xnJson ;let j=index' [(ngModel)]='data.opinion' (change)='getOpinion1(data,item.opinion,j,i)'></textarea>
+                  </ng-container>
+                  <ng-container *ngSwitchDefault>
+                    <ng-container *ngIf='head.input;else block1'>
+                      <textarea class="form-control xn-input-textarea xn-input-font xn-input-border-radius" rows="3"
+                        [(ngModel)]='item[head.value]' (change)='getOpinion(item,i)'></textarea>
+                    </ng-container>
+                    <ng-template #block1>
+                      <div [innerHTML]="item[head.value] | xnGatherType: {head:head,row:item}"></div>
+                    </ng-template>
+                  </ng-container>
+
+                </ng-container>
+
+              </td>
+            </tr>
+          </ng-container>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+<ng-template #block1>
+  <tr>
+    <td [attr.colspan]="calcAttrColspan()">
+      <div class="empty-message"></div>
+    </td>
+  </tr>
+</ng-template>

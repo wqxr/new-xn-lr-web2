@@ -1,0 +1,25 @@
+.table-head-btn {
+  margin-bottom: 5px;
+  width: 100%;
+}
+::ng-deep .ng2-pdf-viewer-container {
+  overflow-x: unset !important;
+}
+.th-padding {
+  padding: 12px 8px;
+}
+
+::ng-deep .ant-table-tbody > tr > td,::ng-deep .ant-table-thead > tr > th,::ng-deep .ant-table-tbody > tr > th {
+  border-bottom: 1px solid #f0f0f0 !important;
+  border-top: none !important;
+  border-left: none !important;
+  border-right: none !important;
+}
+
+::ng-deep .ant-table table {
+  border: none !important;
+}
+
+/* ::ng-deep .ant-table-thead > tr > th {
+  border: 1px solid #f0f0f0 !important;
+} */

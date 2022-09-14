@@ -1,0 +1,112 @@
+<modal #modal [backdrop]="'static'" [keyboard]="false" [animation]="false">
+  <modal-header [showClose]="true">
+    <h4 class="modal-title">{{params?.label}}</h4>
+  </modal-header>
+  <modal-body>
+    <div class="clearfix" style="clear:both;overflow:auto">
+        <div class="this-left" style="margin-top:40px">
+          <div class="form-group item-box col-sm-4" *ngFor="let row of shows">
+            <div class="item-label">
+              <label>{{row.title}}:</label>
+            </div>
+            <div class="item-control">
+              <xn-input [row]="row" [form]="form"></xn-input>
+            </div>
+          </div>
+        </div>
+        <ng-container *ngIf="params?.searches.length>0">
+          <div class="col-sm-12 form-group text-right">
+            <ng-container>
+              <button class="btn btn-primary" (click)="searchMsg()">查询</button>
+              <button class="btn btn-danger" (click)="reset()">重置</button>
+            </ng-container>
+          </div>
+        </ng-container>
+      <table class="table table-bordered  text-center table-striped">
+        <thead>
+          <tr>
+            <th style="width:6%">序号</th>
+            <ng-container *ngFor="let head of heads">
+              <th *ngIf="!head.hide">{{ head.label }}</th>
+            </ng-container>
+            <ng-container *ngIf="params?.multiple">
+              <th>
+                <input type="checkbox" name="all" [checked]="isAllChecked()" (change)="checkAll()"
+                  [disabled]="!data.length"/>全选/取消
+              </th>
+            </ng-container>
+          </tr>
+        </thead>
+      </table>
+      <div class="scroll-height">
+        <table class="table table-bordered  text-center table-striped">
+          <tbody>
+            <ng-container *ngIf="data.length; else block">
+              <tr *ngFor="let item of data; let i = index">
+                <!--序号-->
+                <td style="width:6%">{{i + 1}}</td>
+                <td *ngFor="let head of heads">
+                  <ng-container *ngIf="!head.hide">
+                    <ng-container [ngSwitch]="head.type">
+                      <!-- mainFlowId-->
+                      <ng-container *ngSwitchCase="'mainFlowId'">
+                        <a href="javaScript:void(0)"
+                          (click)="hwModeService.DragonviewProcess(item[head.value])">{{item[head.value]}}</a>
+                      </ng-container>
+                      <ng-container *ngSwitchCase="'date'">
+                        <ng-container *ngIf="item[head.value] && item[head.value]!==''">
+                          <div>{{item[head.value] | xnDate: 'datetime'}}</div>
+                        </ng-container>
+                      </ng-container>
+                      <!--图片文件file-->
+                      <ng-container *ngSwitchCase="'file'">
+                        <ng-container *ngIf="item[head.value] && item[head.value]!==''">
+                          <div *ngFor="let sub of item[head.value] | xnJson">
+                            <a href="javaScript:void(0)" (click)="viewFiles(sub)">{{sub.fileName}}</a>
+                          </div>
+                        </ng-container>
+                      </ng-container>
+                      <ng-container *ngSwitchCase="'capitalPoolName'">
+                        <ng-container *ngIf="item[head.value] && item[head.value]!==''">
+                          <div [ngStyle]="{'color':other['capitalPoolId'] === item['capitalPoolId']?'black':'red'}" [innerHTML]="item[head.value]"></div>
+                        </ng-container>
+                      </ng-container>
+                      <ng-container *ngSwitchCase="'operateId'">
+                        <div [innerHTML]="item[head.value] |xnSelectTransform:'operateType'"></div>
+                      </ng-container>
+                      <!--默认-->
+                      <ng-container *ngSwitchDefault>
+                        <div [innerHTML]="item[head.value] | xnGatherType: {head:head,row:item}"></div>
+                      </ng-container>
+                    </ng-container>
+                  </ng-container>
+                </td>
+                <ng-container *ngIf="params?.multiple">
+                  <td *ngIf="!head.hide">
+                    <input type="checkbox" [checked]="item?.checked" (change)="singelChecked($event, item, i)"/>
+                  </td>
+                </ng-container>
+              </tr>
+            </ng-container>
+          </tbody>
+        </table>
+      </div>
+      <xn-pagination [rows]="pageConfig.pageSize" [first]="pageConfig.first" [totalRecords]="pageConfig.total"
+        [pageSizeOptions]="[5, 10, 20, 30, 50, 100]" (pageChange)="onPage($event)"></xn-pagination>
+    </div>
+  </modal-body>
+  <modal-footer>
+    <button type="button" class="btn btn-default" (click)="onCancel()">返回</button>
+    <button *ngIf="params?.multiple" type="button" class="btn btn-primary"
+      [disabled]="!selectItems?.length" (click)="handleAdd()">添加
+    </button>
+  </modal-footer>
+</modal>
+
+<ng-template #block>
+  <tr>
+    <td [attr.colspan]="data.length">
+      <div class="empty-message"></div>
+    </td>
+  </tr>
+</ng-template>

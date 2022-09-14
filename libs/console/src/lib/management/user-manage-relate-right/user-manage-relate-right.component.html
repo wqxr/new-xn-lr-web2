@@ -1,0 +1,99 @@
+<section class="content-header">
+  <h1>
+    {{pageTitle}}
+    <small>{{pageDesc}}</small>
+    <button style="float: right" (click)="navToOld()" nz-button nzType="primary">返回到旧版</button>
+  </h1>
+</section>
+
+<section class="content">
+  <div class="box">
+    <div class="box-header">
+      <span>选择系统：</span>
+      <nz-select
+        style="width: 200px;"
+        [(ngModel)]="currSysId"
+        (ngModelChange)="selectChange($event)"
+        nzPlaceHolder="请选择系统"
+      >
+        <nz-option *ngFor="let item of sysOptions" [nzValue]="item.value" [nzLabel]="item.label"></nz-option>
+      </nz-select>
+      <button class=" btn btn-primary" (click)="onViewAdd()" style="float: right;">增加用户</button>
+    </div>
+    <div class="box-body">
+
+      <table class="table table-bordered table-striped">
+        <thead>
+        <tr>
+          <th>用户姓名</th>
+          <th>用户ID</th>
+          <th>用户角色</th>
+          <th>证件号码</th>
+          <th>手机号</th>
+          <th>邮件</th>
+          <th>操作</th>
+          <th>是否接收短信</th>
+        </tr>
+        </thead>
+        <tbody>
+        <ng-container *ngIf="items.length; else emptyRef">
+          <tr *ngFor="let item of items">
+            <td>{{item.userName}}</td>
+            <td>{{item.userId}}</td>
+            <td>
+              <ng-container *ngIf="item.userRoleList">
+                <div *ngFor="let role of item.userRoleList" class="wrap-role">
+                  <div nz-row>
+                    <div nz-col *ngIf="role.orgType" [nzSpan]="10">{{role.orgName}}</div>
+                    <div nz-col [nzSpan]="12">
+                      <p *ngFor="let role of role.roles" class="role-p">
+                        {{role.roleName}}
+                      </p>
+                    </div>
+                  </div>
+                </div>
+                <div *ngIf="item.userRoleList.length === 0"><p>{{readonlyMan}}</p></div>
+              </ng-container>
+            </td>
+            <td>{{item.cardType}}：{{item.cardNo}}</td>
+            <td>{{item.mobile}}</td>
+            <td>{{item.email}}</td>
+            <td>
+              <a class="xn-click-a" (click)="onViewEdit(item)">修改</a>
+              <a class="xn-click-a" *ngIf="!isAdmin(item.userRoleList)" (click)="onViewDelete(item)">删除</a>
+              <!-- 资料转移 -->
+              <a
+                class="xn-click-a"
+                *ngIf="isAdmin(item.userRoleList) && !isSelf(item)"
+                (click)="onAdminMove(item)">资料转移</a>
+
+              <a class="xn-click-a" *ngIf="isFactoryAdmin" (click)="onPower(item)">权限</a>
+              <a class="xn-click-a" *ngIf="item?.rightStatus===registerStatus.NotReg"
+                 (click)="rightUserOperate(item,'right_register')">注册到权限系统</a>
+              <a class="xn-click-a" *ngIf="item?.rightStatus===registerStatus.NotSync"
+                 (click)="rightUserOperate(item,'right_modify')">同步到权限系统</a>
+            </td>
+            <td>
+              <div>
+                <label style="color: #3c8dbc">
+                  <input type="checkbox" [checked]="item.isSms === 1"
+                         (click)="checkLogin($event, item.userId)">
+                  <span class="receive">接收短信</span>
+                </label>
+              </div>
+            </td>
+          </tr>
+        </ng-container>
+        <ng-template #emptyRef>
+          <tr>
+            <td colspan="8">
+              <nz-empty></nz-empty>
+            </td>
+          </tr>
+        </ng-template>
+        </tbody>
+      </table>
+
+    </div>
+  </div>
+</section>

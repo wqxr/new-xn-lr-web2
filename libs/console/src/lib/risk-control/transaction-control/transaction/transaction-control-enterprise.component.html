@@ -1,0 +1,57 @@
+<section class="content-header">
+  <h1>
+    交易控制
+  </h1>
+</section>
+
+<section class="content">
+  <div class="box">
+    <div class="box-header">
+      {{currentOrgName}}
+    </div>
+    <div class="box-body">
+      <div class="content-p">
+        <table class="table table-bordered table-striped text-center table-hover">
+          <thead>
+          <tr class="label-text">
+            <th>序号</th>
+            <th>交易类型</th>
+            <th>是否可用</th>
+            <th>是否收取保证金</th>
+            <th>保证金比例</th>
+            <th>融资期限（天）</th>
+            <th>区域</th>
+            <th>有效期</th>
+            <th>操作</th>
+          </tr>
+          </thead>
+          <tbody>
+          <ng-container *ngIf="data.length;else block">
+            <tr *ngFor="let item of data;let i=index">
+              <td>{{(currentPage-1)*pageSize+i+1}}</td>
+              <td>{{item?.mType}}</td>
+              <td>{{item?.used===1?'是':'否'}}</td>
+              <td>{{item?.deposited===1?'是':'否'}}</td>
+              <td>{{item?.depositRate | xnText}}</td>
+              <td>{{item?.finaningDay | xnText}}</td>
+              <td>{{item?.area | xnText}}</td>
+              <td>{{item?.indate | xnText :'date'}}</td>
+              <td><a href="javaScript:void (0)" (click)="edit(item)">编辑</a></td>
+            </tr>
+          </ng-container>
+          </tbody>
+        </table>
+      </div>
+      <ng-template #block>
+        <td colspan="9">
+          <div class="empty-message"></div>
+        </td>
+      </ng-template>
+      <xn-page [total]="total" [size]="pageSize" (change)="onPage($event)"></xn-page>
+    </div>
+    <div class="box-footer text-right">
+      <button type="button" class="btn btn-default" (click)="xn.user.navigateBack()">返回</button>
+    </div>
+  </div>
+</section>
+

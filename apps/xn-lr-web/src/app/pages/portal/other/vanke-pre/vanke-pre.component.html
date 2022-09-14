@@ -1,0 +1,191 @@
+<div [ngClass]="[store.isPhone ? 'h5-vanke-pre' : 'vanke-pre']">
+    <div id="navigation">
+        <div class="navigation-wrap" [ngClass]="[store.isPhone ? 'h5-portal-panel' : '']">
+            <a href="https://www.lrscft.com" target="_blank"><img class="logo" src="https://www.lrscft.com/assets/images/bg/logo-black.png" alt="logo" /></a>
+        </div>
+    </div>
+    <div id="outlet">
+        <div id="content-panel">
+            <div id="left-box" *ngIf="!store.isPhone">
+                <div class="nav-box">
+                    <div class="nav-item" *ngFor="let item of navList;let index = index;" (click)="onClick(index)">
+                        <a [id]="'nav' + (index + 1)" [ngClass]="['nav-title', index === current ? 'active' : '']" [href]="'/guide#content'+(index+1)">{{item.title}}</a>
+                    </div>
+                </div>
+            </div>
+            <div id="right-box">
+                <div id="content1" class="target-fix"></div>
+                <div class="title">进度款前置融资产品介绍</div>
+                <div class="pre-box">
+                    <div class="one" [ngClass]="[store.isPhone ? 'h5-portal-panel' : '']">
+                        <div class="title-box">
+                            <span class="innter-title">产品要素</span>
+                            <div class="serial">1</div>
+                            <div class="line"></div>
+                        </div>
+                        <div class="content-box">
+                            <div class="item">
+                                <div class="triangle"></div>
+                                <div>办理主体：核心企业的优质供应商。</div>
+                            </div>
+                            <div class="item">
+                                <div class="triangle"></div>
+                                <div>申请条件：供应商开出发票即可申请。</div>
+                            </div>
+                            <div class="item">
+                                <div class="triangle"></div>
+                                <div>放款金额：≤100万。</div>
+                            </div>
+                            <div class="item">
+                                <div class="triangle"></div>
+                                <div>利率：约1.08%/月（即年化13%）</div>
+                            </div>
+                            <div class="item">
+                                <div class="triangle"></div>
+                                <div>期限：平均用款时间约1个月，最长可用款6个月。</div>
+                            </div>
+                            <div class="item">
+                                <div class="triangle"></div>
+                                <div>还款来源：进度款保理款项。</div>
+                            </div>
+                            <div class="item">
+                                <div class="triangle"></div>
+                                <div>担保条件：实控人夫妇担保+进度款质押+2倍放款金额的结算款质押。</div>
+                            </div>
+                            <div class="item">
+                                <div class="triangle"></div>
+                                <div>放款主体：某全国性小额贷款公司。</div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="two" [ngClass]="[store.isPhone ? 'h5-portal-panel' : '']">
+                        <div id="content2" class="target-fix"></div>
+                        <div class="title-box">
+                            <span class="innter-title">产品优势</span>
+                            <div class="serial">2</div>
+                            <div class="line"></div>
+                        </div>
+                        <div class="content-box">
+                            <div class="item">
+                                <div class="triangle"></div>
+                                <div>提前收取最高比例为80%的进度款。</div>
+                            </div>
+                            <div class="item">
+                                <div class="triangle"></div>
+                                <div>线上化审批，迅速解决资金周转难题。</div>
+                            </div>
+                            <div class="item">
+                                <div class="triangle"></div>
+                                <div>锁定后续还款来源，减轻资金压力。</div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="three" [ngClass]="[store.isPhone ? 'h5-portal-panel' : '']">
+                        <div id="content3" class="target-fix"></div>
+                        <div class="title-box">
+                            <span class="innter-title">办理流程</span>
+                            <div class="serial">3</div>
+                            <div class="line"></div>
+                        </div>
+                        <div class="content-box">
+                            <div>
+                                <div class="item">
+                                    <div class="triangle"></div>
+                                    <div>第一步：准入申请</div>
+                                </div>
+                                <div class="item-content">
+                                    <div style="margin-bottom: 16px;">供应商下载<a (click)="onDownload()">《进度款前置融资业务申请书》</a>填写完整后，连同申请书附件发送链融平台邮箱【prefactoring@lrscft.com】，资金方完成审核准入并通知供应商。</div>
+                                    <table id="table" border="1">
+                                          <tr>
+                                            <th *ngIf="!store.isPhone">序号</th>
+                                            <th>材料分类</th>
+                                            <th>材料清单</th>
+                                            <th>材料要求</th>
+                                          </tr>
+                                          <tr>
+                                            <td *ngIf="!store.isPhone">1</td>
+                                            <td>申请书</td>
+                                            <td>进度款前置融资业务申请书</td>
+                                            <td>填写完整（没有的内容填“无”），加盖公章</td>
+                                          </tr>
+                                          <tr>
+                                            <td *ngIf="!store.isPhone" rowspan="2">2</td>
+                                            <td rowspan="2">征信报告</td>
+                                            <td>申请企业征信报告</td>
+                                            <td>最近3个月内查询</td>
+                                          </tr>
+                                          <tr>
+                                            <td>实际控制人征信报告</td>
+                                            <td>最近3个月内查询</td>
+                                          </tr>
+                                          <tr>
+                                            <td *ngIf="!store.isPhone" rowspan="2">3</td>
+                                            <td rowspan="2">财务报表</td>
+                                            <td>最近三年年度财务报表</td>
+                                            <td>加盖公章</td>
+                                          </tr>
+                                          <tr>
+                                            <td>最近一期财务报表</td>
+                                            <td>加盖公章</td>
+                                          </tr>
+                                          <tr>
+                                            <td *ngIf="!store.isPhone" rowspan="2">4</td>
+                                            <td rowspan="2">纳税文件</td>
+                                            <td>纳税申报表</td>
+                                            <td>上一年末及最近一期增值税申报表，加盖公章</td>
+                                          </tr>
+                                          <tr>
+                                            <td>缴税凭证</td>
+                                            <td>上一年末及最近一期缴税凭证</td>
+                                          </tr>
+                                    </table>
+                                </div>
+                            </div>
+    
+                            <div>
+                                <div class="item">
+                                    <div class="triangle"></div>
+                                    <div>第二步：融资申请</div>
+                                </div>
+                                <div class="item-content">
+                                    <div style="margin-bottom: 16px;">供应商在链融平台（<a href="https://www.lrscft.com" target="_blank">www.lrscft.com</a>）上传进度款发票、产值单、基础交易合同、资质证明，发起融资申请。</div>
+                                </div>
+                            </div>
+    
+                            <div>
+                                <div class="item">
+                                    <div class="triangle"></div>
+                                    <div>第三步：放款</div>
+                                </div>
+                                <div class="item-content">
+                                    <div style="margin-bottom: 16px;">审核通过，借款合同等完成签署后即放款。</div>
+                                </div>
+                            </div>
+    
+                            <div>
+                                <div class="item">
+                                    <div class="triangle"></div>
+                                    <div>第四步：还款</div>
+                                </div>
+                                <div class="item-content" style="padding-bottom: 0;">
+                                    <div style="margin-bottom: 16px;">供应商以进度款保理融资款项偿还本息。</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="four" style="height: 300px;" [ngClass]="[store.isPhone ? 'h5-portal-panel' : '']">
+                        <div id="content4" class="target-fix"></div>
+                        <div class="title-box">
+                            <span class="innter-title">联系客服</span>
+                            <div class="serial">4</div>
+                            <div class="line"></div>
+                        </div>
+                        <div class="content-box">
+                            <div style="margin-bottom: 16px;">如需详细资讯，请联系专属客户经理。</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

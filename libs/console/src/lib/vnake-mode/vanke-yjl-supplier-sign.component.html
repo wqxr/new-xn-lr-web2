@@ -1,0 +1,37 @@
+<section class="content">
+  <form class="form-horizontal" [formGroup]="mainForm" *ngIf="!!mainForm">
+    <div class="panel panel-default">
+      <div class="panel-heading">
+        <span class="panel-title">
+          供应商签署补充协议
+        </span>
+      </div>
+      <div class="panel-body">
+        <div class="panel panel-primary xn-panel-sm">
+          <div class="panel-body">
+            <ng-container *ngIf="shows&&shows.length">
+              <div class="form-group" *ngFor="let row of shows">
+                <div class="col-sm-3 xn-control-label">
+                  {{row.title}}
+                  <span *ngIf="row.required !== false && row.required !== 0" class="required-label">*</span>
+                </div>
+                <div class="col-sm-6">
+                  <xn-input [row]="row" [form]="mainForm"></xn-input>
+                </div>
+                <div class="col-sm-3 xn-control-desc">
+                  {{row.memo}}
+                </div>
+              </div>
+            </ng-container>
+            <xn-contract [contracts]="contracts"></xn-contract>
+          </div>
+        </div>
+      </div>
+      <div class="panel-footer text-right">
+        <button type="button" class="btn btn-default pull-left" (click)="handleCancel()">返回</button>
+        <button type="button" class="btn btn-primary" (click)="handleSubmit()">提交并签署合同
+        </button>
+      </div>
+    </div>
+  </form>
+</section>

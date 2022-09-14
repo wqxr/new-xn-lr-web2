@@ -1,0 +1,47 @@
+<section class="content-header">
+  <h1>
+    {{pageTitle}}
+    <small>{{pageDesc}}</small>
+  </h1>
+</section>
+
+<section class="content">
+  <div class="box">
+    <div class="box-header">
+      <h3 class="box-title">{{tableTitle}}</h3>
+    </div>
+    <!-- /.box-header -->
+    <div class="box-body">
+
+      <table class="table table-bordered table-striped">
+        <thead>
+        <tr>
+          <th>核心企业ID</th>
+          <th>指令顺序号</th>
+          <th>指令发送时间</th>
+          <th>付款方式</th>
+          <th>平台顺序号</th>
+          <th>操作</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr *ngFor="let item of items">
+          <td>{{item.appId}}</td>
+          <td>{{item.messageSeq}}</td>
+          <td>{{item.timestamp | xnDate:'datetime'}}</td>
+          <td>{{item.payType | xnPay}}</td>
+          <td>{{item.platformSeq}}</td>
+          <td>
+            <a class="xn-click-a" routerLink="/console/data/reporting-list/{{item.platformSeq}}">查看详情</a>
+          </td>
+        </tr>
+        </tbody>
+      </table>
+
+      <xn-page [total]="total" [size]="pageSize" (change)="onPage($event)"></xn-page>
+    </div>
+    <!-- /.box-body -->
+  </div>
+
+</section>
+<!-- /.content -->

@@ -1,0 +1,7 @@
+  <div  style='display:inline-flex'>
+    <input #invoiceStartInput class="form-control xn-input-font xn-input-border-radius half-width" type="text"
+        placeholder="起始发票号"  (input)="getinvoiceStart($event)"autocomplete="off" style='width:130px' />
+    <span style="font-size: 16px;color:#000;display: block;line-height: 33px;">-</span>
+    <input  #invoiceEndInput  class="form-control xn-input-font xn-input-border-radius half-width" type="text"
+     placeholder="结束发票号" (input)="getinvoiceEnd($event)" autocomplete="off" style='width:130px' />
+  </div>

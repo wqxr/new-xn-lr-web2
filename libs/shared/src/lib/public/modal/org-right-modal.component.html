@@ -1,0 +1,20 @@
+<modal #modal [backdrop]="'static'" [keyboard]="false" [animation]="false" (onDismiss)="onOk()">
+  <modal-header [showClose]="true">
+    <h4 class="modal-title">权限设置-{{orgName}}</h4>
+  </modal-header>
+  <modal-body>
+    <div class="row" style="height: 500px;">
+      <div class="col-xs-6 col-md-12" style="padding: 0 80px;">
+        <treeview [config]="config" [items]="items" (selectedChange)="onSelectedChange($event)"
+          (filterChange)="onFilterChange($event)">
+        </treeview>
+      </div>
+    </div>
+  </modal-body>
+  <modal-footer>
+    <button type="button" class="btn btn-default" (click)="onOk()">关闭</button>
+    <button type="button" class="btn btn-danger" [disabled]="submitDisabled" (click)="onSubmit()">
+      确定
+    </button>
+  </modal-footer>
+</modal>

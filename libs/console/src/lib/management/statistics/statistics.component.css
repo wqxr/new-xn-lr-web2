@@ -1,0 +1,114 @@
+.select-item {
+    display: inline-block;
+    width: 100px;
+}
+.type-select {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+    color: rgba(0, 0, 0, 0.65);
+    font-size: 14px;
+    font-variant: tabular-nums;
+    line-height: 1.5715;
+    list-style: none;
+    font-feature-settings: 'tnum';
+    position: relative;
+    display: inline-block;
+    cursor: pointer;
+    padding-left: 72px;
+    margin-right: 30px;
+}
+.type-select-content {
+    display: none;
+    position: absolute;
+    left: 72px;
+    top: 8px;
+    z-index: 1000;
+    padding-top: 30px;
+}
+.type-select:hover .type-select-content {
+    display: block;
+}
+.type-select:hover .inner-box {
+    border: 1px solid #1D67C7;
+}
+.type-select-content:hover {
+    display: block;
+}
+.inner-box {
+    position: relative;
+    background-color: #fff;
+    border: 1px solid #d9d9d9;
+    border-radius: 2px;
+    transition: all 0.3s;
+    width: 200px;
+    height: 32px;
+    padding: 0 11px;
+    color: rgba(0, 0, 0, 0.25);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+.inner-box:hover {
+    border: 1px solid #1D67C7;
+}
+.select-type {
+    width: 110px;
+    height: 300px;
+    background-color: #fff;
+    border: 1px solid #d9d9d9;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    padding: 20px 10px;
+}
+.select-type-item {
+    font-size: 14px;
+    height: 32px;
+    line-height: 32px;
+    text-align: center;
+    color: #1D67C7;
+    cursor: pointer;
+}
+.type-content {
+    width: 280px;
+    height: 300px;
+    background-color: #fff;
+    border: 1px solid #d9d9d9;
+    overflow-y: scroll;
+    padding: 12px 0 12px 12px;
+}
+.tag {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+    color: rgba(0, 0, 0, 0.65);
+    font-size: 14px;
+    font-variant: tabular-nums;
+    line-height: 1.5715;
+    list-style: none;
+    font-feature-settings: 'tnum';
+    display: inline-block;
+    height: auto;
+    margin-right: 8px;
+    margin-top: 8px;
+    padding: 0 10px;
+    font-size: 12px;
+    line-height: 24px;
+    white-space: nowrap;
+    background: #fafafa;
+    border: 1px solid #d9d9d9;
+    border-radius: 2px;
+    cursor: default;
+    opacity: 1;
+    transition: all 0.3s;
+}
+.close-icon {
+    font-size: 10px; 
+    color: rgba(0, 0, 0, 0.45);
+    margin-left: 3px;
+    cursor: pointer;
+}
+.close-icon:hover {
+    color: rgba(0, 0, 0, 0.8);
+}

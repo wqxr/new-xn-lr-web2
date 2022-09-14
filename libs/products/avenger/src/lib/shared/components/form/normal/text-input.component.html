@@ -1,0 +1,13 @@
+<div class="inMemo" *ngIf="inMemo !== ''">{{inMemo}}</div>
+<div [formGroup]="form">
+
+  <input #input class="form-control xn-input-font xn-input-border-radius" [ngClass]="myClass" type="text"
+         [formControlName]="row.name" [placeholder]="row.placeholder" (blur)="onBlur($event)" autocomplete="off" >
+         <ng-container *ngIf="row.name==='courseList' || row.name==='startList' || row.name==='endList'">
+            <button type="button" class="btn  btn-default" (click)="onOk()">默认列</button>
+
+        </ng-container>
+
+         <div><span class="xn-input-alert">{{alert}}</span>
+         </div>
+</div>

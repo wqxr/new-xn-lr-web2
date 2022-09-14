@@ -1,0 +1,19 @@
+{
+  "/api": {
+    "target": "https://test.lrscft.com",
+    "secure": false,
+    "changeOrigin": true
+  },
+  "/avenger": {
+    "target": "https://test.lrscft.com",
+
+    "secure": false,
+    "changeOrigin": true
+  },
+  "/dragon": {
+    "target": "https://test.lrscft.com",
+
+   "secure": false,
+    "changeOrigin": true
+  }
+}

@@ -1,0 +1,10 @@
+<ng-container *ngFor="let info of rows">
+  <div class="row" *ngIf="!info.hide">
+    <div class="col-sm-2 control-label">
+    </div>
+    <div class="col-sm-8">
+      <a class="xn-click-a" (click)="showContract(info.id, info.secret,info.label)">{{info.label}}</a>
+    </div>
+    <div class="col-sm-2 control-desc"></div>
+  </div>
+</ng-container>
